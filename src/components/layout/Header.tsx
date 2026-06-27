@@ -47,8 +47,8 @@ export default function Header() {
       <header
         className={`sticky top-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'glass shadow-lg py-3'
-            : 'bg-white/95 py-4'
+            ? 'bg-white/95 shadow-lg py-3 backdrop-blur-xl'
+            : 'bg-white py-4'
         }`}
       >
         <Container>
@@ -84,7 +84,7 @@ export default function Header() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.98 }}
                       transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                      className="absolute top-full left-0 w-[680px] glass rounded-2xl shadow-2xl border border-slate-200/50 p-6 mt-2"
+                      className="absolute top-full left-0 w-[680px] bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 mt-2"
                     >
                       <div className="grid grid-cols-3 gap-6">
                         {/* Popular Products */}
