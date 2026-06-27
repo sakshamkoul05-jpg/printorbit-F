@@ -1,52 +1,40 @@
 import Link from 'next/link';
-import { Phone, Mail, MapPin, Globe, ExternalLink, Share2, MessageCircle } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 import { OFFICES, PRODUCT_CATEGORIES } from '@/lib/constants';
 
 export default function Footer() {
   return (
-    <footer className="bg-black border-t border-gold/10">
-      {/* Gold divider */}
-      <div className="divider-gold" />
-
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer className="bg-navy">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center glow-gold">
-                <span className="text-black font-bold text-xl">P</span>
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center">
+                <span className="text-white font-bold text-sm">P</span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight">
-                  <span className="text-white">PRINT</span>
-                  <span className="text-gradient-gold">ORBIT</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-white-dim -mt-1">Premium Printing</span>
-              </div>
+              <span className="text-lg font-bold text-white">PrintOrbit</span>
             </Link>
-            <p className="text-sm text-white-dim mb-6 leading-relaxed">
-              Premium printing solutions for businesses, industries, and organizations. Crafted with precision, delivered with excellence.
+            <p className="text-sm text-white/50 mb-4 leading-relaxed">
+              Professional printing services for businesses and organizations across India.
             </p>
-            <div className="flex gap-3">
-              {[Globe, MessageCircle, Share2, ExternalLink].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-lg bg-black-light border border-gold/10 flex items-center justify-center text-white-dim hover:text-gold hover:border-gold/30 hover:shadow-[0_0_15px_rgba(212,168,83,0.1)] transition-all duration-300">
-                  <Icon className="w-4 h-4" />
-                </a>
+            <div className="space-y-2 text-sm text-white/50">
+              {OFFICES.map((office) => (
+                <p key={office.city} className="flex items-center gap-2">
+                  <MapPin className="w-3.5 h-3.5 text-white/30" />
+                  {office.city}
+                </p>
               ))}
             </div>
           </div>
 
           {/* Products */}
           <div>
-            <h3 className="text-white font-semibold mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-              Products
-            </h3>
-            <ul className="space-y-3">
-              {PRODUCT_CATEGORIES.map((cat) => (
+            <h3 className="font-semibold mb-4 text-white text-sm">Products</h3>
+            <ul className="space-y-2">
+              {PRODUCT_CATEGORIES.slice(0, 6).map((cat) => (
                 <li key={cat.slug}>
-                  <Link href={`/products/${cat.slug}`} className="text-sm text-white-dim hover:text-gold transition-colors duration-300 flex items-center gap-2 group">
-                    <span className="w-0 group-hover:w-2 h-px bg-gold transition-all duration-300" />
+                  <Link href={`/products/${cat.slug}`} className="text-sm text-white/50 hover:text-white transition-colors">
                     {cat.name}
                   </Link>
                 </li>
@@ -56,11 +44,8 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-              Quick Links
-            </h3>
-            <ul className="space-y-3">
+            <h3 className="font-semibold mb-4 text-white text-sm">Quick Links</h3>
+            <ul className="space-y-2">
               {[
                 { label: 'About Us', href: '/about' },
                 { label: 'Portfolio', href: '/portfolio' },
@@ -70,8 +55,7 @@ export default function Footer() {
                 { label: 'Request Quote', href: '/quote/request' },
               ].map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-white-dim hover:text-gold transition-colors duration-300 flex items-center gap-2 group">
-                    <span className="w-0 group-hover:w-2 h-px bg-gold transition-all duration-300" />
+                  <Link href={link.href} className="text-sm text-white/50 hover:text-white transition-colors">
                     {link.label}
                   </Link>
                 </li>
@@ -79,30 +63,22 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Offices */}
+          {/* Contact */}
           <div>
-            <h3 className="text-white font-semibold mb-6 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 bg-gold rounded-full" />
-              Our Offices
-            </h3>
-            <div className="space-y-6">
+            <h3 className="font-semibold mb-4 text-white text-sm">Contact Us</h3>
+            <div className="space-y-3">
               {OFFICES.map((office) => (
-                <div key={office.city} className="p-4 rounded-xl bg-black-light border border-gold/5 hover:border-gold/20 transition-colors">
-                  <p className="text-white font-medium text-sm mb-2">{office.city}, {office.state}</p>
-                  <div className="space-y-1.5 text-xs text-white-dim">
-                    <p className="flex items-center gap-2">
-                      <MapPin className="w-3 h-3 text-gold/50 flex-shrink-0" />
-                      {office.address}
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <Phone className="w-3 h-3 text-gold/50 flex-shrink-0" />
-                      {office.phone}
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <Mail className="w-3 h-3 text-gold/50 flex-shrink-0" />
-                      {office.email}
-                    </p>
-                  </div>
+                <div key={office.city} className="text-sm">
+                  <p className="text-white font-medium">{office.city}</p>
+                  <p className="text-white/40 mt-0.5">{office.address}</p>
+                  <p className="flex items-center gap-1.5 text-white/40 mt-1">
+                    <Phone className="w-3 h-3" />
+                    {office.phone}
+                  </p>
+                  <p className="flex items-center gap-1.5 text-white/40 mt-0.5">
+                    <Mail className="w-3 h-3" />
+                    {office.email}
+                  </p>
                 </div>
               ))}
             </div>
@@ -111,12 +87,12 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar */}
-      <div className="border-t border-gold/10">
-        <div className="max-w-7xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-white-dim">
+      <div className="border-t border-white/10">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/30">
           <p>&copy; {new Date().getFullYear()} PrintOrbit. All rights reserved.</p>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-gold transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-gold transition-colors">Terms of Service</a>
+          <div className="flex gap-4">
+            <a href="#" className="hover:text-white/60 transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white/60 transition-colors">Terms of Service</a>
           </div>
         </div>
       </div>

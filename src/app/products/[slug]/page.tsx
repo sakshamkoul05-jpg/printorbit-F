@@ -1,25 +1,21 @@
-'use client';
-
-import { motion } from 'motion/react';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
 import Button from '@/components/ui/Button';
-import { ArrowLeft, ShoppingCart, FileText, CheckCircle, Truck, Shield, Clock } from 'lucide-react';
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
-};
+import { ArrowLeft, ShoppingCart, FileText, Truck, Shield, Clock } from 'lucide-react';
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const category = PRODUCT_CATEGORIES.find((c) => c.slug === slug);
+  return {
+    title: category ? `${category.name} | PrintOrbit` : 'Product | PrintOrbit',
+    description: category?.description,
+  };
 }
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
@@ -37,127 +33,80 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
+    <div className="max-w-7xl mx-auto px-4 py-6">
       {/* Breadcrumb */}
-      <motion.nav
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-2 text-sm text-white-dim mb-8"
-      >
-        <Link href="/" className="hover:text-gold transition-colors">Home</Link>
-        <span className="text-gold/30">/</span>
-        <Link href="/products" className="hover:text-gold transition-colors">Products</Link>
-        <span className="text-gold/30">/</span>
-        <span className="text-white">{category.name}</span>
-      </motion.nav>
+      <nav className="flex items-center gap-2 text-xs text-slate-400 mb-6">
+        <Link href="/" className="hover:text-navy transition-colors">Home</Link>
+        <span>/</span>
+        <Link href="/products" className="hover:text-navy transition-colors">Products</Link>
+        <span>/</span>
+        <span className="text-navy">{category.name}</span>
+      </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         {/* Product Image */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6 }}
-          className="card-3d rounded-3xl aspect-square flex items-center justify-center overflow-hidden"
-        >
+        <div className="bg-slate-50 rounded-lg aspect-square flex items-center justify-center border border-slate-200">
           <div className="text-center">
-            <span className="text-6xl mb-4 block opacity-20">📦</span>
-            <span className="text-white-dim text-sm">{category.name}</span>
+            <span className="text-4xl mb-2 block text-slate-200">📦</span>
+            <span className="text-slate-400 text-sm">{category.name}</span>
           </div>
-        </motion.div>
+        </div>
 
         {/* Product Info */}
         <div>
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Link href="/products" className="inline-flex items-center gap-1 text-sm text-white-dim hover:text-gold mb-6 transition-colors">
-              <ArrowLeft className="w-4 h-4" />
-              Back to Products
-            </Link>
+          <Link href="/products" className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-navy mb-4 transition-colors">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to Products
+          </Link>
 
-            <span className="text-xs uppercase tracking-[0.3em] text-gold mb-3 block">Premium Collection</span>
-            <h1 className="text-4xl font-bold text-white mb-4">{category.name}</h1>
-            <p className="text-white-dim mb-8 leading-relaxed">{category.description}</p>
+          <h1 className="text-2xl font-bold text-navy mb-2">{category.name}</h1>
+          <p className="text-slate-500 mb-5 text-sm">{category.description}</p>
 
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.3 }}
-              className="card-3d rounded-2xl p-6 mb-8"
-            >
-              <span className="text-sm text-white-dim">Starting from</span>
-              <div className="text-4xl font-bold text-gradient-gold mt-1">₹499</div>
-              <span className="text-xs text-white-dim">*Min. order: 50 pcs</span>
-            </motion.div>
+          <div className="bg-slate-50 rounded-lg p-4 mb-5 border border-slate-100">
+            <span className="text-xs text-slate-400">Starting from</span>
+            <div className="text-2xl font-bold text-navy">₹499</div>
+            <span className="text-xs text-slate-400">*Min. order: 50 pcs</span>
+          </div>
 
-            {/* Features */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-              className="space-y-4 mb-8"
-            >
-              {features.map((feature, i) => (
-                <motion.div key={i} variants={fadeUp} className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gold/10 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-5 h-5 text-gold" />
-                  </div>
-                  <span className="text-sm text-white-muted">{feature.text}</span>
-                </motion.div>
-              ))}
-            </motion.div>
+          {/* Features */}
+          <div className="space-y-2.5 mb-5">
+            {features.map((feature, i) => (
+              <div key={i} className="flex items-center gap-2.5">
+                <feature.icon className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                <span className="text-sm text-slate-600">{feature.text}</span>
+              </div>
+            ))}
+          </div>
 
-            {/* Quantity Input */}
-            <div className="mb-8">
-              <label className="block text-sm font-medium text-white mb-2">Quantity</label>
-              <input
-                type="number"
-                defaultValue={50}
-                min={50}
-                className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white focus:outline-none focus:border-gold/30 transition-colors"
-              />
-            </div>
+          {/* Quantity */}
+          <div className="mb-5">
+            <label className="block text-sm font-medium text-navy mb-1.5">Quantity</label>
+            <input
+              type="number"
+              defaultValue={50}
+              min={50}
+              className="w-full px-3 py-2 border border-slate-200 rounded text-sm focus:outline-none focus:border-navy/30"
+            />
+          </div>
 
-            {/* Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4"
-            >
-              <Button variant="primary" size="lg" className="flex-1">
-                <FileText className="w-5 h-5 mr-2" />
-                Request Quote
-              </Button>
-              <Button variant="secondary" size="lg" className="flex-1">
-                <ShoppingCart className="w-5 h-5 mr-2" />
-                Add to Cart
-              </Button>
-            </motion.div>
-          </motion.div>
+          {/* Actions */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button variant="primary" size="lg" className="flex-1">
+              <FileText className="w-4 h-4 mr-2" />
+              Request Quote
+            </Button>
+            <Button variant="outline" size="lg" className="flex-1">
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Specifications */}
-      <section className="mt-20">
-        <div className="divider-gold mb-12" />
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-2xl font-bold text-white mb-8"
-        >
-          Product Specifications
-        </motion.h2>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-        >
+      <section className="mt-12">
+        <h2 className="text-lg font-bold text-navy mb-4">Product Specifications</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {[
             { label: 'Material Options', value: 'Premium Paper, Art Paper, Matte, Glossy' },
             { label: 'Finish Options', value: 'Matte, Glossy, Lamination, UV Coating' },
@@ -166,48 +115,29 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
             { label: 'Turnaround', value: '3-5 business days' },
             { label: 'Customization', value: 'Full color, double-sided printing' },
           ].map((spec) => (
-            <motion.div key={spec.label} variants={fadeUp} className="card-3d rounded-xl p-5">
-              <span className="text-xs uppercase tracking-wider text-white-dim">{spec.label}</span>
-              <p className="text-sm font-medium text-white mt-2">{spec.value}</p>
-            </motion.div>
+            <div key={spec.label} className="bg-white border border-slate-200 rounded-lg p-3">
+              <span className="text-xs text-slate-400 uppercase tracking-wider">{spec.label}</span>
+              <p className="text-sm font-medium text-navy mt-1">{spec.value}</p>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </section>
 
-      {/* Related Products */}
-      <section className="mt-20">
-        <div className="divider-gold mb-12" />
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-2xl font-bold text-white mb-8"
-        >
-          Related Products
-        </motion.h2>
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={staggerContainer}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-        >
-          {PRODUCT_CATEGORIES.filter((c) => c.slug !== slug)
-            .slice(0, 4)
-            .map((cat) => (
-              <motion.div key={cat.slug} variants={fadeUp}>
-                <Link
-                  href={`/products/${cat.slug}`}
-                  className="card-3d rounded-2xl p-6 group block"
-                >
-                  <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors duration-300">
-                    {cat.name}
-                  </h3>
-                  <p className="text-sm text-white-dim mt-2 leading-relaxed">{cat.description}</p>
-                </Link>
-              </motion.div>
-            ))}
-        </motion.div>
+      {/* Related */}
+      <section className="mt-12">
+        <h2 className="text-lg font-bold text-navy mb-4">Related Products</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {PRODUCT_CATEGORIES.filter((c) => c.slug !== slug).slice(0, 4).map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/products/${cat.slug}`}
+              className="block bg-white rounded-lg border border-slate-200 p-4 hover:border-navy/30 transition-colors group"
+            >
+              <h3 className="font-semibold text-navy text-sm group-hover:text-navy-light transition-colors">{cat.name}</h3>
+              <p className="text-xs text-slate-500 mt-1">{cat.description}</p>
+            </Link>
+          ))}
+        </div>
       </section>
     </div>
   );

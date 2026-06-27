@@ -3,125 +3,122 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X, Phone, Mail, Search, ShoppingCart, User } from 'lucide-react';
-import { NAV_LINKS } from '@/lib/constants';
+import { Menu, X, Phone, Mail, Search, ShoppingCart, ChevronDown } from 'lucide-react';
+import { NAV_LINKS, PRODUCT_CATEGORIES } from '@/lib/constants';
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [productsOpen, setProductsOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
       {/* Top Bar */}
-      <motion.div
-        initial={{ y: -40 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-black border-b border-gold/10"
-      >
+      <div className="bg-slate-50 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-8">
           <div className="flex items-center gap-4">
-            <a href="tel:+919876543210" className="flex items-center gap-1 text-white-muted text-xs hover:text-gold transition-colors">
+            <a href="tel:+919876543210" className="flex items-center gap-1.5 text-slate-500 hover:text-navy transition-colors text-xs">
               <Phone className="w-3 h-3" />
               <span>+91 98765 43210</span>
             </a>
-            <a href="mailto:info@printorbit.in" className="hidden sm:flex items-center gap-1 text-white-muted text-xs hover:text-gold transition-colors">
+            <a href="mailto:info@printorbit.in" className="hidden sm:flex items-center gap-1.5 text-slate-500 hover:text-navy transition-colors text-xs">
               <Mail className="w-3 h-3" />
               <span>info@printorbit.in</span>
             </a>
           </div>
-          <div className="flex items-center gap-4 text-xs text-white-dim">
+          <div className="flex items-center gap-3 text-xs text-slate-400">
             <span>Dharamshala</span>
-            <span className="text-gold/30">|</span>
+            <span className="text-slate-300">|</span>
             <span>Faridabad</span>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Main Header */}
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="glass"
-      >
+      <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                transition={{ type: 'spring', stiffness: 400 }}
-                className="w-10 h-10 rounded-lg bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center glow-gold"
-              >
-                <span className="text-black font-bold text-xl">P</span>
-              </motion.div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight">
-                  <span className="text-white">PRINT</span>
-                  <span className="text-gradient-gold">ORBIT</span>
-                </span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-white-dim -mt-1">Premium Printing</span>
+              <div className="w-8 h-8 bg-navy rounded flex items-center justify-center">
+                <span className="text-white font-bold text-sm">P</span>
               </div>
+              <span className="text-xl font-bold text-navy tracking-tight">PrintOrbit</span>
             </Link>
 
             {/* Desktop Nav */}
             <nav className="hidden lg:flex items-center gap-1">
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
+              <div
+                className="relative"
+                onMouseEnter={() => setProductsOpen(true)}
+                onMouseLeave={() => setProductsOpen(false)}
+              >
+                <button className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-navy transition-colors flex items-center gap-1 rounded hover:bg-slate-50">
+                  Products
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${productsOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {productsOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute top-full left-0 w-[520px] bg-white rounded-lg shadow-lg border border-slate-200 p-4 grid grid-cols-2 gap-1"
+                    >
+                      {PRODUCT_CATEGORIES.map((cat) => (
+                        <Link
+                          key={cat.slug}
+                          href={`/products/${cat.slug}`}
+                          className="px-3 py-2 text-sm text-slate-600 hover:bg-slate-50 hover:text-navy transition-colors rounded"
+                          onClick={() => setProductsOpen(false)}
+                        >
+                          {cat.name}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+              {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
+                <Link
                   key={link.href}
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + i * 0.05 }}
+                  href={link.href}
+                  className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-navy transition-colors rounded hover:bg-slate-50"
                 >
-                  <Link
-                    href={link.href}
-                    className="px-4 py-2 text-sm font-medium text-white-muted hover:text-gold transition-all duration-300 rounded-lg hover:bg-gold/5"
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden lg:flex items-center gap-3">
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2.5 text-white-muted hover:text-gold transition-colors rounded-lg hover:bg-gold/5"
-              >
+            <div className="hidden lg:flex items-center gap-2">
+              <button className="p-2 text-slate-400 hover:text-navy transition-colors rounded hover:bg-slate-50">
                 <Search className="w-5 h-5" />
-              </motion.button>
-              <Link href="/cart" className="p-2.5 text-white-muted hover:text-gold transition-colors rounded-lg hover:bg-gold/5 relative">
-                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                  <ShoppingCart className="w-5 h-5" />
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-gold text-black text-[10px] font-bold rounded-full flex items-center justify-center">
-                    0
-                  </span>
-                </motion.div>
+              </button>
+              <Link href="/cart" className="p-2 text-slate-400 hover:text-navy transition-colors rounded hover:bg-slate-50 relative">
+                <ShoppingCart className="w-5 h-5" />
+                <span className="absolute top-1 right-1 w-4 h-4 bg-red text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  0
+                </span>
               </Link>
-              <Link href="/auth/login" className="ml-2">
-                <motion.span
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-5 py-2 bg-gradient-to-r from-gold to-gold-dark text-black text-sm font-semibold rounded-lg inline-block hover:shadow-[0_0_20px_rgba(212,168,83,0.3)] transition-all duration-300"
-                >
-                  Sign In
-                </motion.span>
+              <Link href="/auth/login" className="ml-2 px-4 py-2 text-sm font-medium text-slate-600 hover:text-navy transition-colors border border-slate-200 rounded hover:border-slate-300">
+                Sign In
+              </Link>
+              <Link href="/quote/request" className="px-4 py-2 bg-navy text-white text-sm font-medium rounded hover:bg-navy-dark transition-colors">
+                Get Quote
               </Link>
             </div>
 
             {/* Mobile Hamburger */}
-            <motion.button
-              whileTap={{ scale: 0.9 }}
-              className="lg:hidden p-2 text-white-muted hover:text-gold transition-colors"
+            <button
+              className="lg:hidden p-2 text-slate-500 hover:text-navy transition-colors"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.button>
+            </button>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -130,36 +127,30 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden glass border-t border-gold/10 overflow-hidden"
+            transition={{ duration: 0.2 }}
+            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-1">
-              {NAV_LINKS.map((link, i) => (
-                <motion.div
+            <div className="px-4 py-3 space-y-1">
+              {NAV_LINKS.map((link) => (
+                <Link
                   key={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  href={link.href}
+                  className="block px-3 py-2.5 text-sm font-medium text-slate-600 hover:text-navy hover:bg-slate-50 rounded transition-colors"
+                  onClick={() => setMobileOpen(false)}
                 >
-                  <Link
-                    href={link.href}
-                    className="block px-4 py-3 text-sm font-medium text-white-muted hover:text-gold hover:bg-gold/5 rounded-lg transition-all"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
+                  {link.label}
+                </Link>
               ))}
-              <hr className="border-gold/10 my-3" />
-              <a href="tel:+919876543210" className="flex items-center gap-2 px-4 py-3 text-sm text-white-muted">
-                <Phone className="w-4 h-4 text-gold" />
+              <hr className="border-slate-100 my-2" />
+              <a href="tel:+919876543210" className="flex items-center gap-2 px-3 py-2.5 text-sm text-slate-500">
+                <Phone className="w-4 h-4" />
                 +91 98765 43210
               </a>
-              <div className="flex gap-3 pt-3">
-                <Link href="/auth/login" className="flex-1 px-4 py-2.5 bg-gradient-to-r from-gold to-gold-dark text-black text-sm font-semibold rounded-lg text-center">
+              <div className="flex gap-2 pt-2">
+                <Link href="/auth/login" className="flex-1 px-4 py-2.5 text-sm font-medium text-slate-600 border border-slate-200 rounded text-center hover:bg-slate-50">
                   Sign In
                 </Link>
-                <Link href="/quote/request" className="flex-1 px-4 py-2.5 border border-gold/30 text-gold text-sm font-medium rounded-lg text-center hover:bg-gold/5">
+                <Link href="/quote/request" className="flex-1 px-4 py-2.5 bg-navy text-white text-sm font-medium rounded text-center hover:bg-navy-dark">
                   Get Quote
                 </Link>
               </div>

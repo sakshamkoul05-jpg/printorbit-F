@@ -13,54 +13,54 @@ export default function LoginPage() {
   return (
     <div className="min-h-[70vh] flex items-center justify-center px-4 py-16">
       <div className="w-full max-w-md">
-        <div className="text-center mb-10">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center mx-auto mb-6 glow-gold-strong">
-            <span className="text-black text-2xl font-bold">P</span>
+        <div className="text-center mb-8">
+          <div className="w-12 h-12 bg-navy rounded flex items-center justify-center mx-auto mb-4">
+            <span className="text-white font-bold text-lg">P</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-white-dim">Sign in to your PrintOrbit account</p>
+          <h1 className="text-2xl font-bold text-navy mb-1">Welcome Back</h1>
+          <p className="text-sm text-slate-500">Sign in to your PrintOrbit account</p>
         </div>
 
-        <div className="card-3d rounded-2xl p-8">
-          <form className="space-y-5">
+        <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <form className="space-y-4">
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Email</label>
+              <label className="block text-sm font-medium text-navy mb-1.5">Email</label>
               <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white-dim" />
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors"
+                  className="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Password</label>
+              <label className="block text-sm font-medium text-navy mb-1.5">Password</label>
               <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white-dim" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
-                  className="w-full pl-11 pr-12 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors"
+                  className="w-full pl-10 pr-10 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors"
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white-dim hover:text-gold transition-colors">
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-navy transition-colors">
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
 
             <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 text-sm text-white-muted cursor-pointer">
-                <input type="checkbox" className="rounded border-gold/20 bg-black-light text-gold focus:ring-gold/30" />
+              <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
+                <input type="checkbox" className="rounded border-slate-300 text-navy focus:ring-navy/20" />
                 Remember me
               </label>
-              <a href="#" className="text-sm text-gold hover:text-gold-light transition-colors">
+              <a href="#" className="text-sm text-navy hover:text-navy-light transition-colors">
                 Forgot password?
               </a>
             </div>
@@ -70,10 +70,10 @@ export default function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-8 text-center">
-            <p className="text-sm text-white-dim">
+          <div className="mt-6 text-center">
+            <p className="text-sm text-slate-500">
               Don&apos;t have an account?{' '}
-              <Link href="/auth/register" className="text-gold hover:text-gold-light font-semibold transition-colors">
+              <Link href="/auth/register" className="text-navy hover:text-navy-light font-semibold transition-colors">
                 Sign up
               </Link>
             </p>

@@ -17,51 +17,50 @@ export default function ContactPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative py-24 hero-pattern noise-overlay">
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <span className="text-xs uppercase tracking-[0.3em] text-gold mb-4 block">Get In Touch</span>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Contact Us</h1>
-          <p className="text-white-dim max-w-2xl mx-auto text-lg">
-            Have a question or need a premium quote? Connect with our team.
+      <section className="bg-navy py-14">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Contact Us</h1>
+          <p className="text-white/50 max-w-xl mx-auto">
+            Have a question or need a quote? Connect with our team.
           </p>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             {/* Contact Form */}
             <div>
-              <h2 className="text-2xl font-bold text-white mb-8">Send us a Message</h2>
-              <form className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <h2 className="text-xl font-bold text-navy mb-6">Send us a Message</h2>
+              <form className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Name *</label>
+                    <label className="block text-sm font-medium text-navy mb-1.5">Name *</label>
                     <input type="text" value={formData.name} onChange={(e) => handleChange('name', e.target.value)}
-                      className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors" />
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors" />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Email *</label>
+                    <label className="block text-sm font-medium text-navy mb-1.5">Email *</label>
                     <input type="email" value={formData.email} onChange={(e) => handleChange('email', e.target.value)}
-                      className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors" />
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors" />
                   </div>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Phone</label>
+                    <label className="block text-sm font-medium text-navy mb-1.5">Phone</label>
                     <input type="tel" value={formData.phone} onChange={(e) => handleChange('phone', e.target.value)}
-                      className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors" />
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors" />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Subject *</label>
+                    <label className="block text-sm font-medium text-navy mb-1.5">Subject *</label>
                     <input type="text" value={formData.subject} onChange={(e) => handleChange('subject', e.target.value)}
-                      className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors" />
+                      className="w-full px-3 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs uppercase tracking-wider text-white-dim mb-2">Message *</label>
+                  <label className="block text-sm font-medium text-navy mb-1.5">Message *</label>
                   <textarea value={formData.message} onChange={(e) => handleChange('message', e.target.value)} rows={5}
-                    className="w-full px-4 py-3 bg-black-light border border-gold/10 rounded-xl text-white placeholder:text-white-dim focus:outline-none focus:border-gold/30 transition-colors resize-none" />
+                    className="w-full px-3 py-2.5 border border-slate-200 rounded text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-navy/30 transition-colors resize-none" />
                 </div>
                 <Button variant="primary" size="lg">
                   <Send className="w-4 h-4 mr-2" />
@@ -72,30 +71,27 @@ export default function ContactPage() {
 
             {/* Office Info */}
             <div>
-              <h2 className="text-2xl font-bold text-white mb-8">Our Offices</h2>
-              <div className="space-y-5">
+              <h2 className="text-xl font-bold text-navy mb-6">Our Offices</h2>
+              <div className="space-y-4">
                 {OFFICES.map((office) => (
-                  <div key={office.city} className="card-3d rounded-2xl p-6">
-                    <h3 className="text-lg font-bold text-white mb-3">{office.city}, {office.state}</h3>
-                    <div className="space-y-2 text-sm text-white-dim">
-                      <p className="flex items-center gap-2"><MapPin className="w-4 h-4 text-gold/50" />{office.address}</p>
-                      <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-gold/50" />{office.phone}</p>
-                      <p className="flex items-center gap-2"><Mail className="w-4 h-4 text-gold/50" />{office.email}</p>
+                  <div key={office.city} className="bg-white rounded-lg p-5 border border-slate-200">
+                    <h3 className="text-lg font-bold text-navy mb-2">{office.city}, {office.state}</h3>
+                    <div className="space-y-1.5 text-sm text-slate-500">
+                      <p className="flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400" />{office.address}</p>
+                      <p className="flex items-center gap-2"><Phone className="w-4 h-4 text-slate-400" />{office.phone}</p>
+                      <p className="flex items-center gap-2"><Mail className="w-4 h-4 text-slate-400" />{office.email}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 card-3d rounded-2xl p-6 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-br from-gold/10 to-transparent" />
-                <div className="relative z-10">
-                  <h3 className="text-lg font-bold text-white mb-2">Need Immediate Help?</h3>
-                  <p className="text-white-dim text-sm mb-4">Call us directly for urgent inquiries.</p>
-                  <a href="tel:+919876543210" className="inline-flex items-center gap-2 btn-luxury px-5 py-2.5 rounded-xl text-sm font-semibold">
-                    <Phone className="w-4 h-4" />
-                    +91 98765 43210
-                  </a>
-                </div>
+              <div className="mt-6 bg-slate-50 rounded-lg p-5 border border-slate-100">
+                <h3 className="text-lg font-bold text-navy mb-2">Need Immediate Help?</h3>
+                <p className="text-slate-500 text-sm mb-4">Call us directly for urgent inquiries.</p>
+                <a href="tel:+919876543210" className="inline-flex items-center gap-2 text-sm font-medium text-navy hover:text-navy-light transition-colors">
+                  <Phone className="w-4 h-4" />
+                  +91 98765 43210
+                </a>
               </div>
             </div>
           </div>

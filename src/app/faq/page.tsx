@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'FAQ | PrintOrbit',
-  description: 'Frequently asked questions about PrintOrbit premium printing services.',
+  description: 'Frequently asked questions about PrintOrbit printing services.',
 };
 
 const faqs = [
@@ -22,27 +22,26 @@ const faqs = [
 export default function FAQPage() {
   return (
     <>
-      <section className="relative py-24 hero-pattern noise-overlay">
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <span className="text-xs uppercase tracking-[0.3em] text-gold mb-4 block">Support</span>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">FAQ</h1>
-          <p className="text-white-dim max-w-2xl mx-auto text-lg">
-            Find answers to common questions about our premium printing services.
+      <section className="bg-navy py-14">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">FAQ</h1>
+          <p className="text-white/50 max-w-xl mx-auto">
+            Find answers to common questions about our printing services.
           </p>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-14">
         <div className="max-w-3xl mx-auto px-4">
-          <div className="space-y-4">
+          <div className="space-y-3">
             {faqs.map((faq, i) => (
-              <details key={i} className="card-3d rounded-2xl overflow-hidden group">
-                <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                  <h3 className="text-lg font-semibold text-white pr-4">{faq.question}</h3>
-                  <ChevronDown className="w-5 h-5 text-gold group-open:rotate-180 transition-transform flex-shrink-0" />
+              <details key={i} className="bg-white rounded-lg border border-slate-200 overflow-hidden group">
+                <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
+                  <h3 className="text-sm font-semibold text-navy pr-4">{faq.question}</h3>
+                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0" />
                 </summary>
-                <div className="px-6 pb-6">
-                  <p className="text-white-dim leading-relaxed">{faq.answer}</p>
+                <div className="px-5 pb-5">
+                  <p className="text-sm text-slate-500 leading-relaxed">{faq.answer}</p>
                 </div>
               </details>
             ))}

@@ -3,7 +3,7 @@ import { ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Portfolio | PrintOrbit',
-  description: 'View our premium printing projects and case studies.',
+  description: 'View our printing projects and case studies.',
 };
 
 const projects = [
@@ -18,29 +18,28 @@ const projects = [
 export default function PortfolioPage() {
   return (
     <>
-      <section className="relative py-24 hero-pattern noise-overlay">
-        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-          <span className="text-xs uppercase tracking-[0.3em] text-gold mb-4 block">Work</span>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Our Portfolio</h1>
-          <p className="text-white-dim max-w-2xl mx-auto text-lg">See our work across industries and product categories.</p>
+      <section className="bg-navy py-14">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Our Portfolio</h1>
+          <p className="text-white/50 max-w-xl mx-auto">See our work across industries and product categories.</p>
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.map((project) => (
-              <div key={project.id} className="card-3d rounded-2xl overflow-hidden group">
-                <div className="aspect-video bg-gradient-to-br from-gold/5 to-transparent flex items-center justify-center">
-                  <span className="text-4xl opacity-10">📄</span>
+              <div key={project.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden group hover:border-navy/30 transition-colors">
+                <div className="aspect-video bg-slate-50 flex items-center justify-center">
+                  <span className="text-3xl text-slate-200">📄</span>
                 </div>
-                <div className="p-6">
+                <div className="p-5">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] uppercase tracking-wider bg-gold/10 text-gold px-2.5 py-1 rounded-full font-medium">{project.industry}</span>
-                    <span className="text-[10px] uppercase tracking-wider bg-white/5 text-white-dim px-2.5 py-1 rounded-full">{project.type}</span>
+                    <span className="text-[10px] uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-medium">{project.industry}</span>
+                    <span className="text-[10px] uppercase tracking-wider bg-slate-50 text-slate-400 px-2 py-0.5 rounded">{project.type}</span>
                   </div>
-                  <h3 className="text-lg font-semibold text-white group-hover:text-gold transition-colors duration-300">{project.title}</h3>
-                  <button className="flex items-center gap-1.5 text-sm text-white-dim hover:text-gold mt-3 transition-colors">
+                  <h3 className="text-sm font-bold text-navy group-hover:text-navy-light transition-colors">{project.title}</h3>
+                  <button className="flex items-center gap-1 text-xs text-slate-500 hover:text-navy mt-2 transition-colors">
                     View Details <ExternalLink className="w-3 h-3" />
                   </button>
                 </div>
