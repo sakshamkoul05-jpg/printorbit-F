@@ -4,50 +4,42 @@ import { CLIENT_INDUSTRIES } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Our Clients | PrintOrbit',
-  description: 'Trusted by businesses and organizations across diverse industries.',
+  description: 'Trusted by elite businesses and organizations across diverse industries.',
 };
 
 const industryIcons: Record<string, React.ElementType> = {
-  'IT & Software': Building2,
-  'Manufacturing': Building2,
-  'Healthcare': Stethoscope,
-  'Education': GraduationCap,
-  'Retail & E-commerce': ShoppingCart,
-  'Real Estate': Home,
-  'Hospitality': Hotel,
-  'NGOs & Non-profits': Heart,
-  'Government': Landmark,
-  'Automotive': Car,
+  'IT & Software': Building2, 'Manufacturing': Building2, 'Healthcare': Stethoscope,
+  'Education': GraduationCap, 'Retail & E-commerce': ShoppingCart, 'Real Estate': Home,
+  'Hospitality': Hotel, 'NGOs & Non-profits': Heart, 'Government': Landmark, 'Automotive': Car,
 };
 
 const testimonials = [
-  { name: 'Rajesh Kumar', company: 'TechCorp Solutions', content: 'Excellent quality and fast delivery. PrintOrbit has been our go-to printing partner for 3 years.' },
-  { name: 'Priya Sharma', company: 'GreenEarth Foundation', content: 'They understood our NGO budget constraints and delivered amazing campaign materials at affordable prices.' },
-  { name: 'Amit Patel', company: 'Hotel Grand', content: 'Professional stationery and branding materials. The quality is consistently outstanding.' },
+  { name: 'Rajesh Kumar', company: 'TechCorp Solutions', content: 'Exceptional quality and impeccable service. PrintOrbit has been our exclusive printing partner for over 3 years.' },
+  { name: 'Priya Sharma', company: 'GreenEarth Foundation', content: 'They understood our vision perfectly and delivered campaign materials that exceeded our expectations.' },
+  { name: 'Amit Patel', company: 'Hotel Grand', content: 'The premium stationery and branding materials they create are consistently outstanding. True craftsmanship.' },
 ];
 
 export default function ClientsPage() {
   return (
     <>
-      <section className="bg-printorbit-navy text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">Industries We Serve</h1>
-          <p className="text-gray-300 max-w-2xl mx-auto text-lg">
-            Trusted by businesses and organizations across diverse sectors.
-          </p>
+      <section className="relative py-24 hero-pattern noise-overlay">
+        <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+          <span className="text-xs uppercase tracking-[0.3em] text-gold mb-4 block">Trust</span>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">Industries We Serve</h1>
+          <p className="text-white-dim max-w-2xl mx-auto text-lg">Trusted by elite businesses across diverse sectors.</p>
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-24">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {CLIENT_INDUSTRIES.map((industry) => {
               const Icon = industryIcons[industry] || Building2;
               return (
-                <div key={industry} className="bg-white border border-gray-100 rounded-xl p-6 text-center hover:border-printorbit-red/30 hover:shadow-lg transition-all">
-                  <Icon className="w-8 h-8 text-printorbit-red mx-auto mb-3" />
-                  <h3 className="font-semibold text-printorbit-navy text-sm">{industry}</h3>
-                  <CheckCircle className="w-4 h-4 text-green-500 mx-auto mt-2" />
+                <div key={industry} className="card-3d rounded-2xl p-6 text-center group">
+                  <Icon className="w-8 h-8 text-gold/50 group-hover:text-gold mx-auto mb-3 transition-colors duration-300" />
+                  <h3 className="font-semibold text-white text-sm group-hover:text-gold transition-colors">{industry}</h3>
+                  <CheckCircle className="w-4 h-4 text-emerald/50 group-hover:text-emerald mx-auto mt-3 transition-colors" />
                 </div>
               );
             })}
@@ -55,21 +47,25 @@ export default function ClientsPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-printorbit-light">
+      <section className="py-24">
+        <div className="divider-gold mb-24" />
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-printorbit-navy text-center mb-12">What Our Clients Say</h2>
+          <div className="text-center mb-16">
+            <span className="text-xs uppercase tracking-[0.3em] text-gold mb-4 block">Testimonials</span>
+            <h2 className="text-4xl font-bold text-white">What Our Clients Say</h2>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, i) => (
-              <div key={i} className="bg-white rounded-xl p-6 border border-gray-100">
-                <div className="flex mb-2">
+              <div key={i} className="card-3d rounded-2xl p-8">
+                <div className="flex mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
-                    <span key={star} className="text-yellow-400 text-sm">★</span>
+                    <span key={star} className="text-gold text-sm">★</span>
                   ))}
                 </div>
-                <p className="text-sm text-printorbit-slate mb-4">&ldquo;{t.content}&rdquo;</p>
-                <div>
-                  <p className="font-semibold text-printorbit-navy text-sm">{t.name}</p>
-                  <p className="text-xs text-printorbit-gray">{t.company}</p>
+                <p className="text-sm text-white-muted mb-6 leading-relaxed">&ldquo;{t.content}&rdquo;</p>
+                <div className="border-t border-gold/10 pt-4">
+                  <p className="font-semibold text-white text-sm">{t.name}</p>
+                  <p className="text-xs text-gold mt-0.5">{t.company}</p>
                 </div>
               </div>
             ))}

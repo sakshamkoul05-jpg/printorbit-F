@@ -13,18 +13,18 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'inline-flex items-center justify-center font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
+          'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:cursor-not-allowed',
           {
-            'bg-printorbit-red text-white hover:bg-printorbit-red-dark focus:ring-printorbit-red': variant === 'primary',
-            'bg-printorbit-blue text-white hover:bg-printorbit-blue-dark focus:ring-printorbit-blue': variant === 'secondary',
-            'border-2 border-printorbit-red text-printorbit-red hover:bg-printorbit-red hover:text-white focus:ring-printorbit-red': variant === 'outline',
-            'text-printorbit-slate hover:bg-printorbit-light focus:ring-printorbit-gray': variant === 'ghost',
-            'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500': variant === 'danger',
+            'btn-luxury': variant === 'primary',
+            'bg-black-card text-white border border-gold/20 hover:border-gold/40 hover:glow-gold': variant === 'secondary',
+            'border border-gold/30 text-gold hover:bg-gold/5': variant === 'outline',
+            'text-white-muted hover:text-gold hover:bg-gold/5': variant === 'ghost',
+            'bg-ruby text-white hover:bg-ruby/90': variant === 'danger',
           },
           {
-            'text-sm px-3 py-1.5': size === 'sm',
-            'text-sm px-4 py-2': size === 'md',
-            'text-base px-6 py-3': size === 'lg',
+            'text-xs px-3 py-1.5': size === 'sm',
+            'text-sm px-5 py-2.5': size === 'md',
+            'text-sm px-8 py-3.5': size === 'lg',
           },
           className
         )}
