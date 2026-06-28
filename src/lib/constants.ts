@@ -526,17 +526,17 @@ export const NAV_LINKS = [
 
 export const CATEGORY_BAR = [
   { label: 'View All', href: '/products' },
-  { label: 'Visiting Cards', href: '/products/business-cards' },
-  { label: 'Stationery, Letterheads & Notebooks', href: '/products/letterheads' },
-  { label: 'Stamps and Ink', href: '/products/stamps' },
-  { label: 'Signs, Posters & Marketing Materials', href: '/products/banners' },
-  { label: 'Labels, Stickers & Packaging', href: '/products/labels-stickers' },
-  { label: 'Clothing, Caps & Bags', href: '/products/tshirts' },
-  { label: 'Mugs, Albums & Gifts', href: '/products/mugs-drinkware' },
-  { label: 'Pens', href: '/products/pens' },
-  { label: 'Drinkware', href: '/products/mugs-drinkware' },
-  { label: 'Custom Polo T-shirts', href: '/products/polo-shirts' },
-  { label: 'Umbrellas & Rainwear', href: '/products/umbrellas' },
+  { label: 'Visiting Cards', href: '/products/standard-business-cards' },
+  { label: 'Stationery, Letterheads & Notebooks', href: '/products/a4-letterheads' },
+  { label: 'Stamps and Ink', href: '/products/a4-letterheads' },
+  { label: 'Signs, Posters & Marketing Materials', href: '/products/vinyl-banners' },
+  { label: 'Labels, Stickers & Packaging', href: '/products/die-cut-stickers' },
+  { label: 'Clothing, Caps & Bags', href: '/products/cotton-tshirts' },
+  { label: 'Mugs, Albums & Gifts', href: '/products/ceramic-mugs' },
+  { label: 'Pens', href: '/products/a4-letterheads' },
+  { label: 'Drinkware', href: '/products/ceramic-mugs' },
+  { label: 'Custom Polo T-shirts', href: '/products/cotton-tshirts' },
+  { label: 'Umbrellas & Rainwear', href: '/products/vinyl-banners' },
 ];
 
 export interface CategoryDropdownColumn {
@@ -552,7 +552,7 @@ export interface CategoryDropdown {
 
 export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
   'Visiting Cards': {
-    seeAllHref: '/products/business-cards',
+    seeAllHref: '/products/standard-business-cards',
     seeAllLabel: 'All Visiting Cards',
     columns: [
       {
@@ -595,86 +595,86 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
     ],
   },
   'Stationery, Letterheads & Notebooks': {
-    seeAllHref: '/products/letterheads',
+    seeAllHref: '/products/a4-letterheads',
     seeAllLabel: 'All Stationery',
     columns: [
       {
         title: 'Custom Stationery',
         items: [
           { name: 'Letterheads', href: '/products/a4-letterheads' },
-          { name: 'Envelopes', href: '/products/envelopes' },
-          { name: 'Bill Books', href: '/products/letterheads' },
-          { name: 'Custom Mouse Pads', href: '/products/letterheads' },
-          { name: 'Custom Pen Drive', href: '/products/letterheads' },
+          { name: 'Envelopes', href: '/products/a4-letterheads' },
+          { name: 'Bill Books', href: '/products/a4-letterheads' },
+          { name: 'Custom Mouse Pads', href: '/products/a4-letterheads' },
+          { name: 'Custom Pen Drive', href: '/products/a4-letterheads' },
         ],
       },
       {
         title: 'Office Supplies',
         items: [
-          { name: 'Lanyards', href: '/products/letterheads' },
-          { name: 'ID Cards', href: '/products/letterheads' },
-          { name: 'Invoice Books', href: '/products/letterheads' },
-          { name: 'Note Cards', href: '/products/letterheads' },
-          { name: 'Custom Certificates', href: '/products/letterheads' },
-          { name: 'Coasters', href: '/products/letterheads' },
+          { name: 'Lanyards', href: '/products/a4-letterheads' },
+          { name: 'ID Cards', href: '/products/a4-letterheads' },
+          { name: 'Invoice Books', href: '/products/a4-letterheads' },
+          { name: 'Note Cards', href: '/products/a4-letterheads' },
+          { name: 'Custom Certificates', href: '/products/a4-letterheads' },
+          { name: 'Coasters', href: '/products/a4-letterheads' },
         ],
       },
       {
         title: 'Custom Notebooks & Diaries',
         items: [
-          { name: 'Personalised Notebooks', href: '/products/letterheads' },
-          { name: 'Diary with Pen Holder', href: '/products/letterheads' },
-          { name: 'Personalised A5 Diary', href: '/products/letterheads' },
-          { name: 'Notebook A4 Size', href: '/products/letterheads' },
+          { name: 'Personalised Notebooks', href: '/products/a4-letterheads' },
+          { name: 'Diary with Pen Holder', href: '/products/a4-letterheads' },
+          { name: 'Personalised A5 Diary', href: '/products/a4-letterheads' },
+          { name: 'Notebook A4 Size', href: '/products/a4-letterheads' },
         ],
       },
       {
         title: 'Files and Folders',
         items: [
-          { name: 'Presentation Folders', href: '/products/letterheads' },
-          { name: 'Ring Binder File', href: '/products/letterheads' },
-          { name: 'Presentation File with Pocket', href: '/products/letterheads' },
+          { name: 'Presentation Folders', href: '/products/a4-letterheads' },
+          { name: 'Ring Binder File', href: '/products/a4-letterheads' },
+          { name: 'Presentation File with Pocket', href: '/products/a4-letterheads' },
         ],
       },
     ],
   },
   'Stamps and Ink': {
-    seeAllHref: '/products/stamps',
+    seeAllHref: '/products/a4-letterheads',
     seeAllLabel: 'All Stamps and Ink',
     columns: [
       {
         title: 'Stamps',
         items: [
-          { name: 'Self Inking Stamps', href: '/products/stamps' },
-          { name: 'Basic Rubber Stamps', href: '/products/stamps' },
-          { name: 'Pocket Stamps', href: '/products/stamps' },
-          { name: 'Name Stamps', href: '/products/stamps' },
-          { name: 'Paper Embosser', href: '/products/stamps' },
+          { name: 'Self Inking Stamps', href: '/products/a4-letterheads' },
+          { name: 'Basic Rubber Stamps', href: '/products/a4-letterheads' },
+          { name: 'Pocket Stamps', href: '/products/a4-letterheads' },
+          { name: 'Name Stamps', href: '/products/a4-letterheads' },
+          { name: 'Paper Embosser', href: '/products/a4-letterheads' },
         ],
       },
       {
         title: 'Ink & Accessories',
         items: [
-          { name: 'Stamp Ink Pads', href: '/products/stamps' },
-          { name: 'Refill Ink', href: '/products/stamps' },
-          { name: 'Stamp Pads', href: '/products/stamps' },
+          { name: 'Stamp Ink Pads', href: '/products/a4-letterheads' },
+          { name: 'Refill Ink', href: '/products/a4-letterheads' },
+          { name: 'Stamp Pads', href: '/products/a4-letterheads' },
         ],
       },
     ],
   },
   'Signs, Posters & Marketing Materials': {
-    seeAllHref: '/products/banners',
+    seeAllHref: '/products/vinyl-banners',
     seeAllLabel: 'All Signs & Marketing',
     columns: [
       {
         title: 'Signs and Posters',
         items: [
-          { name: 'Standees', href: '/products/banners' },
-          { name: 'Posters', href: '/products/banners' },
-          { name: 'Bulk Posters', href: '/products/banners' },
+          { name: 'Standees', href: '/products/vinyl-banners' },
+          { name: 'Posters', href: '/products/vinyl-banners' },
+          { name: 'Bulk Posters', href: '/products/vinyl-banners' },
           { name: 'Banners', href: '/products/vinyl-banners' },
-          { name: 'Foam Boards', href: '/products/banners' },
-          { name: 'Tent Cards', href: '/products/banners' },
+          { name: 'Foam Boards', href: '/products/vinyl-banners' },
+          { name: 'Tent Cards', href: '/products/vinyl-banners' },
         ],
       },
       {
@@ -691,28 +691,28 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
       {
         title: 'More in Signs',
         items: [
-          { name: 'Acrylic Signs', href: '/products/banners' },
-          { name: 'Outdoor Signs', href: '/products/banners' },
-          { name: 'Plastic Signboards', href: '/products/banners' },
-          { name: 'Board Signs', href: '/products/banners' },
-          { name: 'Canvas Signs', href: '/products/banners' },
-          { name: 'Magnetic Signs', href: '/products/banners' },
+          { name: 'Acrylic Signs', href: '/products/vinyl-banners' },
+          { name: 'Outdoor Signs', href: '/products/vinyl-banners' },
+          { name: 'Plastic Signboards', href: '/products/vinyl-banners' },
+          { name: 'Board Signs', href: '/products/vinyl-banners' },
+          { name: 'Canvas Signs', href: '/products/vinyl-banners' },
+          { name: 'Magnetic Signs', href: '/products/vinyl-banners' },
         ],
       },
       {
         title: 'More in Marketing',
         items: [
-          { name: 'Custom Car Door Decals', href: '/products/banners' },
+          { name: 'Custom Car Door Decals', href: '/products/vinyl-banners' },
           { name: 'Menu Cards', href: '/products/a5-flyers' },
           { name: 'Loyalty Cards', href: '/products/standard-business-cards' },
-          { name: 'Button Badges', href: '/products/banners' },
-          { name: 'Custom Keychains', href: '/products/banners' },
+          { name: 'Button Badges', href: '/products/vinyl-banners' },
+          { name: 'Custom Keychains', href: '/products/vinyl-banners' },
         ],
       },
     ],
   },
   'Labels, Stickers & Packaging': {
-    seeAllHref: '/products/labels-stickers',
+    seeAllHref: '/products/die-cut-stickers',
     seeAllLabel: 'All Labels & Packaging',
     columns: [
       {
@@ -760,14 +760,14 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
     ],
   },
   'Clothing, Caps & Bags': {
-    seeAllHref: '/products/tshirts',
+    seeAllHref: '/products/cotton-tshirts',
     seeAllLabel: 'All Clothing',
     columns: [
       {
         title: 'T-Shirts',
         items: [
           { name: 'Cotton T-Shirts', href: '/products/cotton-tshirts' },
-          { name: 'Polo Shirts', href: '/products/polo-shirts' },
+          { name: 'Polo Shirts', href: '/products/cotton-tshirts' },
           { name: 'V-Neck T-Shirts', href: '/products/cotton-tshirts' },
           { name: 'Long Sleeve T-Shirts', href: '/products/cotton-tshirts' },
           { name: 'Tank Tops', href: '/products/cotton-tshirts' },
@@ -776,31 +776,31 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
       {
         title: 'Headwear',
         items: [
-          { name: 'Caps', href: '/products/caps' },
-          { name: 'Beanies', href: '/products/caps' },
-          { name: 'Visors', href: '/products/caps' },
+          { name: 'Caps', href: '/products/cotton-tshirts' },
+          { name: 'Beanies', href: '/products/cotton-tshirts' },
+          { name: 'Visors', href: '/products/cotton-tshirts' },
         ],
       },
       {
         title: 'Outerwear',
         items: [
-          { name: 'Hoodies', href: '/products/hoodies' },
-          { name: 'Jackets', href: '/products/hoodies' },
-          { name: 'Sweatshirts', href: '/products/hoodies' },
+          { name: 'Hoodies', href: '/products/cotton-tshirts' },
+          { name: 'Jackets', href: '/products/cotton-tshirts' },
+          { name: 'Sweatshirts', href: '/products/cotton-tshirts' },
         ],
       },
       {
         title: 'Bags',
         items: [
-          { name: 'Tote Bags', href: '/products/tote-bags' },
-          { name: 'Backpacks', href: '/products/tote-bags' },
-          { name: 'Drawstring Bags', href: '/products/tote-bags' },
+          { name: 'Tote Bags', href: '/products/mailer-boxes' },
+          { name: 'Backpacks', href: '/products/mailer-boxes' },
+          { name: 'Drawstring Bags', href: '/products/mailer-boxes' },
         ],
       },
     ],
   },
   'Mugs, Albums & Gifts': {
-    seeAllHref: '/products/mugs-drinkware',
+    seeAllHref: '/products/ceramic-mugs',
     seeAllLabel: 'All Gifts & Mugs',
     columns: [
       {
@@ -815,51 +815,51 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
       {
         title: 'Photo Gifts',
         items: [
-          { name: 'Photo Books', href: '/products/mugs-drinkware' },
-          { name: 'Canvas Prints', href: '/products/mugs-drinkware' },
-          { name: 'Photo Cushions', href: '/products/mugs-drinkware' },
-          { name: 'Photo Calendars', href: '/products/mugs-drinkware' },
-          { name: 'Custom Puzzles', href: '/products/mugs-drinkware' },
+          { name: 'Photo Books', href: '/products/ceramic-mugs' },
+          { name: 'Canvas Prints', href: '/products/ceramic-mugs' },
+          { name: 'Photo Cushions', href: '/products/ceramic-mugs' },
+          { name: 'Photo Calendars', href: '/products/ceramic-mugs' },
+          { name: 'Custom Puzzles', href: '/products/ceramic-mugs' },
         ],
       },
       {
         title: 'Corporate Gifts',
         items: [
-          { name: 'USB Drives', href: '/products/mugs-drinkware' },
-          { name: 'Power Banks', href: '/products/mugs-drinkware' },
-          { name: 'Keychains', href: '/products/mugs-drinkware' },
-          { name: 'Lanyards', href: '/products/mugs-drinkware' },
+          { name: 'USB Drives', href: '/products/ceramic-mugs' },
+          { name: 'Power Banks', href: '/products/ceramic-mugs' },
+          { name: 'Keychains', href: '/products/ceramic-mugs' },
+          { name: 'Lanyards', href: '/products/ceramic-mugs' },
         ],
       },
       {
         title: 'Custom Calendars',
         items: [
-          { name: 'Desk Calendars', href: '/products/mugs-drinkware' },
-          { name: 'Wall Calendars', href: '/products/mugs-drinkware' },
-          { name: 'Magnet Calendars', href: '/products/mugs-drinkware' },
+          { name: 'Desk Calendars', href: '/products/ceramic-mugs' },
+          { name: 'Wall Calendars', href: '/products/ceramic-mugs' },
+          { name: 'Magnet Calendars', href: '/products/ceramic-mugs' },
         ],
       },
     ],
   },
   'Pens': {
-    seeAllHref: '/products/pens',
+    seeAllHref: '/products/a4-letterheads',
     seeAllLabel: 'All Pens',
     columns: [
       {
         title: 'Custom Pens',
         items: [
-          { name: 'Customized Pens', href: '/products/pens' },
-          { name: 'Personalised Pens', href: '/products/pens' },
-          { name: 'Premium Metal Roller Pens', href: '/products/pens' },
-          { name: 'Wooden Finish Ball Pens', href: '/products/pens' },
-          { name: 'Premium Matte Pens', href: '/products/pens' },
-          { name: 'Brass Metal Golden Ball Pens', href: '/products/pens' },
+          { name: 'Customized Pens', href: '/products/a4-letterheads' },
+          { name: 'Personalised Pens', href: '/products/a4-letterheads' },
+          { name: 'Premium Metal Roller Pens', href: '/products/a4-letterheads' },
+          { name: 'Wooden Finish Ball Pens', href: '/products/a4-letterheads' },
+          { name: 'Premium Matte Pens', href: '/products/a4-letterheads' },
+          { name: 'Brass Metal Golden Ball Pens', href: '/products/a4-letterheads' },
         ],
       },
     ],
   },
   'Drinkware': {
-    seeAllHref: '/products/mugs-drinkware',
+    seeAllHref: '/products/ceramic-mugs',
     seeAllLabel: 'All Drinkware',
     columns: [
       {
@@ -867,39 +867,39 @@ export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
         items: [
           { name: 'Ceramic Mugs', href: '/products/ceramic-mugs' },
           { name: 'Travel Mugs', href: '/products/ceramic-mugs' },
-          { name: 'Water Bottles', href: '/products/mugs-drinkware' },
+          { name: 'Water Bottles', href: '/products/ceramic-mugs' },
           { name: 'Tumblers', href: '/products/ceramic-mugs' },
-          { name: 'Flasks', href: '/products/mugs-drinkware' },
-          { name: 'Wine Glasses', href: '/products/mugs-drinkware' },
+          { name: 'Flasks', href: '/products/ceramic-mugs' },
+          { name: 'Wine Glasses', href: '/products/ceramic-mugs' },
         ],
       },
     ],
   },
   'Custom Polo T-shirts': {
-    seeAllHref: '/products/polo-shirts',
+    seeAllHref: '/products/cotton-tshirts',
     seeAllLabel: 'All Polo T-shirts',
     columns: [
       {
         title: 'Polo T-shirts',
         items: [
-          { name: 'Custom Polo Shirts', href: '/products/polo-shirts' },
-          { name: 'Premium Polo Shirts', href: '/products/polo-shirts' },
-          { name: 'Embroidered Polos', href: '/products/polo-shirts' },
-          { name: 'Bulk Polo Orders', href: '/products/polo-shirts' },
+          { name: 'Custom Polo Shirts', href: '/products/cotton-tshirts' },
+          { name: 'Premium Polo Shirts', href: '/products/cotton-tshirts' },
+          { name: 'Embroidered Polos', href: '/products/cotton-tshirts' },
+          { name: 'Bulk Polo Orders', href: '/products/cotton-tshirts' },
         ],
       },
     ],
   },
   'Umbrellas & Rainwear': {
-    seeAllHref: '/products/umbrellas',
+    seeAllHref: '/products/vinyl-banners',
     seeAllLabel: 'All Umbrellas',
     columns: [
       {
         title: 'Umbrellas',
         items: [
-          { name: 'Custom Umbrellas', href: '/products/umbrellas' },
-          { name: 'Compact Umbrellas', href: '/products/umbrellas' },
-          { name: 'Golf Umbrellas', href: '/products/umbrellas' },
+          { name: 'Custom Umbrellas', href: '/products/vinyl-banners' },
+          { name: 'Compact Umbrellas', href: '/products/vinyl-banners' },
+          { name: 'Golf Umbrellas', href: '/products/vinyl-banners' },
         ],
       },
     ],
