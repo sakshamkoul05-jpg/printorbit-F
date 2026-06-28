@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'motion/react';
 import {
   Type, Image, Square, Circle, Minus, Undo2, Redo2, Download, Save,
@@ -41,10 +42,32 @@ const TEMPLATES = [
   { name: 'Poster A3', width: 3508, height: 4961, category: 'Posters' },
 ];
 
+const PRODUCT_CANVAS_MAP: Record<string, { width: number; height: number; label: string }> = {
+  'standard-business-cards': { width: 1050, height: 600, label: 'Business Card' },
+  'premium-matte-business-cards': { width: 1050, height: 600, label: 'Business Card' },
+  'metallic-foil-business-cards': { width: 1050, height: 600, label: 'Business Card' },
+  'luxury-business-cards': { width: 1050, height: 600, label: 'Business Card' },
+  'magnet-business-cards': { width: 1050, height: 600, label: 'Business Card' },
+  'a5-flyers': { width: 1754, height: 2480, label: 'A5 Flyer' },
+  'a4-flyers': { width: 2480, height: 3508, label: 'A4 Flyer' },
+  'tri-fold-brochures': { width: 2480, height: 3508, label: 'Tri-Fold Brochure' },
+  'bi-fold-brochures': { width: 2480, height: 3508, label: 'Bi-Fold Brochure' },
+  'vinyl-banners': { width: 3600, height: 7200, label: 'Vinyl Banner' },
+  'die-cut-stickers': { width: 600, height: 600, label: 'Die-Cut Sticker' },
+  'mailer-boxes': { width: 2400, height: 1200, label: 'Mailer Box' },
+  'cotton-tshirts': { width: 1200, height: 1600, label: 'T-Shirt' },
+  'ceramic-mugs': { width: 1200, height: 800, label: 'Ceramic Mug' },
+  'a4-letterheads': { width: 2480, height: 3508, label: 'A4 Letterhead' },
+};
+
 const FONTS = ['Inter', 'Space Grotesk', 'Playfair Display', 'Montserrat', 'Poppins', 'Roboto', 'Lato', 'Oswald'];
 const COLORS = ['#0B57D0', '#FF6B00', '#16A34A', '#DC2626', '#7C3AED', '#0F172A', '#FFFFFF', '#F8FAFC', '#1F2937', '#64748B'];
 
 export default function DesignStudioPage() {
+  const searchParams = useSearchParams();
+  const productParam = searchParams.get('product');
+  const templateParam = searchParams.get('template');
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [selectedTool, setSelectedTool] = useState<string>('select');
   const [elements, setElements] = useState<CanvasElement[]>([]);
@@ -63,6 +86,17 @@ export default function DesignStudioPage() {
   const [textInput, setTextInput] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [activeProduct, setActiveProduct] = useState<string | null>(productParam);
+
+  // Set canvas size based on product param
+  useEffect(() => {
+    if (productParam && PRODUCT_CANVAS_MAP[productParam]) {
+      const product = PRODUCT_CANVAS_MAP[productParam];
+      setCanvasWidth(product.width);
+      setCanvasHeight(product.height);
+      setActiveProduct(productParam);
+    }
+  }, [productParam]);
 
   const selectedElement = elements.find((el) => el.id === selectedId);
 
@@ -381,6 +415,33 @@ export default function DesignStudioPage() {
           </button>
         </div>
       </div>
+
+      {/* Product Context Banner */}
+      {activeProduct && PRODUCT_CANVAS_MAP[activeProduct] && (
+        <div className="h-9 bg-primary/10 border-b border-primary/20 flex items-center justify-center px-4 shrink-0">
+          <div className="flex items-center gap-2 text-xs">
+            <Sparkles className="w-3.5 h-3.5 text-primary" />
+            <span className="text-primary font-medium">
+              Designing for: {PRODUCT_CANVAS_MAP[activeProduct].label}
+            </span>
+            <span className="text-slate-400">
+              ({canvasWidth} × {canvasHeight} px)
+            </span>
+            <Link
+              href={`/products/${activeProduct}`}
+              className="ml-2 text-primary underline hover:text-primary/80 transition-colors"
+            >
+              View Product
+            </Link>
+            <button
+              onClick={() => { setActiveProduct(null); setCanvasWidth(1050); setCanvasHeight(600); }}
+              className="ml-2 text-slate-400 hover:text-slate-600 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Template Picker Modal */}
       {showTemplates && (

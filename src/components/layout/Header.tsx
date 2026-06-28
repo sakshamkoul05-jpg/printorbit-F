@@ -337,11 +337,11 @@ export default function Header() {
             >
               <Container>
                 <div className="py-6">
-                  <div className="grid grid-cols-6 gap-6">
+                  <div className="grid grid-cols-5 gap-6">
                     {currentDropdown.columns.map((col) => (
                       <div key={col.title}>
                         <h3 className="text-xs font-bold text-dark mb-3">{col.title}</h3>
-                        <ul className="space-y-1.5">
+                        <ul className="space-y-2.5">
                           {col.items.map((item) => (
                             <li key={item.name}>
                               <Link
@@ -356,6 +356,9 @@ export default function Header() {
                                   </span>
                                 )}
                               </Link>
+                              {item.description && (
+                                <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">{item.description}</p>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -422,6 +425,7 @@ export default function Header() {
                                     <Link key={item.name} href={item.href} className="block px-3 py-1.5 text-sm text-slate-500 hover:text-primary" onClick={() => setMobileOpen(false)}>
                                       {item.name}
                                       {item.isNew && <span className="ml-1.5 px-1 py-0.5 bg-primary text-white text-[8px] font-bold rounded">NEW</span>}
+                                      {item.description && <span className="ml-1 text-[10px] text-slate-400">- {item.description}</span>}
                                     </Link>
                                   ))}
                                 </div>
