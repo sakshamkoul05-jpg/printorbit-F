@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Phone, Mail, MapPin, ArrowUpRight } from 'lucide-react';
 import { OFFICES, MEGA_MENU_DATA } from '@/lib/constants';
 import Container from '@/components/ui/Container';
+import Logo from '@/components/ui/Logo';
 
 const FOOTER_PRODUCTS = MEGA_MENU_DATA.slice(0, 4).map((tab) => ({
   category: tab.label,
@@ -19,11 +20,8 @@ export default function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
             {/* Brand */}
             <div className="col-span-2">
-              <Link href="/" className="flex items-center gap-2.5 mb-4">
-                <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-base font-heading">P</span>
-                </div>
-                <span className="text-lg font-bold text-white font-heading">PrintOrbit</span>
+              <Link href="/" className="mb-4">
+                <Logo dark={false} />
               </Link>
               <p className="text-sm text-white/40 mb-4 leading-relaxed max-w-xs">
                 India&apos;s premium online printing platform. Design, customize, and order print products for your business.

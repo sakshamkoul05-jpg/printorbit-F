@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import { formatPrice } from '@/lib/utils';
+import Logo from '@/components/ui/Logo';
 
 const STATS = [
   { label: 'Total Revenue', value: '₹12,45,680', change: '+12.5%', trend: 'up', icon: DollarSign },
@@ -90,9 +91,7 @@ export default function AdminPage() {
         <div className="flex items-center justify-between h-16 px-4 border-b border-white/10">
           {sidebarOpen && (
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs font-heading">P</span>
-              </div>
+              <Logo size="sm" dark={false} showText={false} />
               <span className="font-bold text-sm font-heading">Admin Panel</span>
             </div>
           )}

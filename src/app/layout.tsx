@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "PrintOrbit | India's Premium Printing Platform",
   description: "Premium printing services for businesses, startups, and organizations. Business cards, packaging, banners, labels & more. Quality guaranteed.",
   keywords: ["printing services", "business cards", "packaging", "banners", "labels", "custom printing", "premium printing", "India"],
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

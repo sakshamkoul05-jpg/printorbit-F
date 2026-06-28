@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Link from 'next/link';
+import Logo from '@/components/ui/Logo';
 
 interface CanvasElement {
   id: string;
@@ -362,9 +363,7 @@ export default function DesignStudioPage() {
       <div className="h-12 bg-dark border-b border-white/10 flex items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-7 h-7 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xs font-heading">P</span>
-            </div>
+            <Logo size="sm" dark={false} showText={false} />
             <span className="text-white font-semibold text-sm font-heading hidden sm:inline">Design Studio</span>
           </Link>
 

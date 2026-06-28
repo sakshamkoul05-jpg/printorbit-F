@@ -8,6 +8,7 @@ import {
   ChevronRight, LogIn, ArrowRight, Tag, Percent, Truck,
 } from 'lucide-react';
 import { NAV_LINKS, CATEGORY_BAR, CATEGORY_MEGA_DATA } from '@/lib/constants';
+import Logo from '@/components/ui/Logo';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
 import Button from '@/components/ui/Button';
@@ -128,14 +129,8 @@ export default function Header() {
         <Container>
           <div className="flex items-center gap-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 shrink-0">
-              <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center shadow-md shadow-primary/20">
-                <span className="text-white font-bold text-base font-heading">P</span>
-              </div>
-              <div className="flex flex-col leading-none">
-                <span className="text-lg font-bold text-dark font-heading tracking-tight">PrintOrbit</span>
-                <span className="text-[8px] uppercase tracking-[0.15em] text-muted -mt-0.5">India&apos;s Printing Platform</span>
-              </div>
+            <Link href="/" className="shrink-0">
+              <Logo />
             </Link>
 
             {/* Desktop Nav Links */}
