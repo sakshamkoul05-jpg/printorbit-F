@@ -21,6 +21,7 @@ const PRODUCT_DATA: Record<string, {
   sizes: { name: string; width: number; height: number; price_modifier: number }[];
   finishes: { name: string; price_modifier: number }[];
   specs: Record<string, string>; delivery: string; rating: number; reviews: number;
+  image?: string;
 }> = {
   'standard-business-cards': {
     name: 'Standard Business Cards', category: 'Business Cards',
@@ -32,6 +33,7 @@ const PRODUCT_DATA: Record<string, {
     finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }],
     specs: { 'Paper': '300gsm Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte or Glossy', 'Size': '85 × 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 384,
+    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
   },
   'premium-matte-business-cards': {
     name: 'Premium Matte Business Cards', category: 'Business Cards',
@@ -43,6 +45,7 @@ const PRODUCT_DATA: Record<string, {
     finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 25 }, { name: 'Soft Touch', price_modifier: 75 }],
     specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Size': '85 × 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 247,
+    image: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=800&h=800&fit=crop',
   },
   'metallic-foil-business-cards': {
     name: 'Metallic Foil Business Cards', category: 'Business Cards',
@@ -54,6 +57,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }],
     specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Foil Stamping + Digital', 'Finish': 'Spot UV + Foil', 'Size': '85 × 55 mm', 'Foil Colors': 'Gold, Silver, Rose Gold', 'File Format': 'PDF, AI' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 183,
+    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
   },
   'luxury-business-cards': {
     name: 'Luxury Velvet Business Cards', category: 'Business Cards',
@@ -65,6 +69,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }],
     specs: { 'Paper': '500gsm Premium', 'Finish': 'Velvet Lamination', 'Print': 'Full Color + Foil', 'Size': '85 × 55 mm', 'File Format': 'PDF, AI' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 127,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'magnet-business-cards': {
     name: 'Magnet Business Cards', category: 'Business Cards',
@@ -76,6 +81,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }],
     specs: { 'Material': 'Flexible Magnetic Sheet', 'Print': 'Full Color', 'Thickness': '0.4mm', 'Size': '85 × 55 mm', 'File Format': 'PDF, AI, PNG' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 94,
+    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
   },
   'a5-flyers': {
     name: 'A5 Double-Sided Flyers', category: 'Flyers',
@@ -87,6 +93,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }, { name: 'A4', width: 210, height: 297, price_modifier: 80 }, { name: 'DL', width: 99, height: 210, price_modifier: -20 }],
     specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Sizes': 'A5, A4, DL', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.7, reviews: 412,
+    image: 'https://images.unsplash.com/photo-1586281380183-ea4a351cc8b6?w=800&h=800&fit=crop',
   },
   'a4-flyers': {
     name: 'A4 Double-Sided Flyers', category: 'Flyers',
@@ -98,6 +105,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }],
     specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides', 'Finish': 'Matte or Glossy', 'Size': 'A4 (210 × 297 mm)', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 289,
+    image: 'https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=800&h=800&fit=crop',
   },
   'tri-fold-brochures': {
     name: 'Tri-Fold Brochures', category: 'Brochures',
@@ -109,6 +117,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A4 (folded to DL)', width: 210, height: 297, price_modifier: 0 }],
     specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Tri-Fold (6 panels)', 'Print': 'Full Color Both Sides', 'Folded Size': '99 × 210 mm', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 201,
+    image: 'https://images.unsplash.com/photo-1553729784-e91953dec042?w=800&h=800&fit=crop',
   },
   'bi-fold-brochures': {
     name: 'Bi-Fold Brochures', category: 'Brochures',
@@ -120,6 +129,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }],
     specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Bi-Fold (4 panels)', 'Print': 'Full Color Both Sides', 'Folded Size': '148 × 210 mm', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=800&h=800&fit=crop',
   },
   'vinyl-banners': {
     name: 'Vinyl Banner 3×6ft', category: 'Banners',
@@ -131,6 +141,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '3×6 ft', width: 914, height: 1829, price_modifier: 0 }, { name: '4×8 ft', width: 1219, height: 2438, price_modifier: 300 }, { name: '6×10 ft', width: 1829, height: 3048, price_modifier: 800 }],
     specs: { 'Material': '13oz Premium Vinyl', 'Print': 'Eco-Solvent Full Color', 'Finish': 'Weather Resistant', 'Edge': 'Hemmed with Grommets', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
   },
   'die-cut-stickers': {
     name: 'Die-Cut Vinyl Stickers', category: 'Labels & Stickers',
@@ -142,6 +153,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '2 inch', width: 50, height: 50, price_modifier: 0 }, { name: '3 inch', width: 75, height: 75, price_modifier: 20 }, { name: '4 inch', width: 100, height: 100, price_modifier: 40 }],
     specs: { 'Material': 'Premium Vinyl', 'Print': 'Eco-Solvent', 'Finish': 'Waterproof', 'Adhesive': 'Permanent', 'File Format': 'PDF, AI, PNG' },
     delivery: '2-4 Business Days', rating: 4.8, reviews: 523,
+    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=800&fit=crop',
   },
   'mailer-boxes': {
     name: 'Custom Mailer Boxes', category: 'Custom Boxes',
@@ -153,6 +165,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Small', width: 150, height: 100, price_modifier: 0 }, { name: 'Medium', width: 250, height: 150, price_modifier: 60 }, { name: 'Large', width: 350, height: 250, price_modifier: 150 }],
     specs: { 'Material': 'E-Flute Corrugated', 'Print': 'Full Color Offset', 'Finish': 'Matte Lamination', 'Assembly': 'Easy Fold', 'File Format': 'PDF, AI' },
     delivery: '7-10 Business Days', rating: 4.7, reviews: 89,
+    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=800&fit=crop',
   },
   'cotton-tshirts': {
     name: 'Custom Cotton T-Shirts', category: 'Clothing',
@@ -164,6 +177,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }, { name: 'XXL', width: 0, height: 0, price_modifier: 20 }],
     specs: { 'Material': '100% Cotton', 'Weight': '180 GSM', 'Print': 'Screen / DTG / Sublimation', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red', 'File Format': 'PNG, AI, PSD (300 DPI)' },
     delivery: '5-7 Business Days', rating: 4.5, reviews: 312,
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop',
   },
   'ceramic-mugs': {
     name: 'Custom Ceramic Mugs', category: 'Gifts & Mugs',
@@ -175,6 +189,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '11oz', width: 0, height: 0, price_modifier: 0 }, { name: '15oz', width: 0, height: 0, price_modifier: 40 }],
     specs: { 'Material': 'Ceramic', 'Capacity': '11oz / 15oz', 'Print': 'Full Color Sublimation', 'Dishwasher Safe': 'Yes', 'Microwave Safe': 'Yes', 'File Format': 'PNG, JPG, AI' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 278,
+    image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
   },
   'a4-letterheads': {
     name: 'A4 Corporate Letterheads', category: 'Stationery',
@@ -186,6 +201,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }],
     specs: { 'Paper': '120gsm Premium', 'Print': 'Full Color', 'Size': 'A4 (210 × 297 mm)', 'Finish': 'Uncoated / Wove', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 178,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'card-holders': {
     name: 'Visiting Card Holders', category: 'Card Accessories',
@@ -197,6 +213,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard (85×55)', width: 85, height: 55, price_modifier: 0 }],
     specs: { 'Material': 'Premium Metal / Leatherite', 'Capacity': '15-20 Cards', 'Finish': 'Engraved / Matte', 'Size': 'Standard Business Card', 'Feature': 'Engraved Logo Available' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 89,
+    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
   },
   'transparent-business-cards': {
     name: 'Transparent Business Cards', category: 'Business Cards',
@@ -208,6 +225,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard (85×55)', width: 85, height: 55, price_modifier: 0 }],
     specs: { 'Material': '0.3mm Clear PVC', 'Print': 'Full Color UV', 'Finish': 'Matte / Glossy', 'Size': '85 × 55 mm', 'Feature': 'Waterproof & Durable' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
   },
   'polo-tshirts': {
     name: 'Custom Polo T-Shirts', category: 'Clothing',
@@ -219,6 +237,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }, { name: 'XXL', width: 0, height: 0, price_modifier: 20 }],
     specs: { 'Material': 'Cotton Pique', 'Weight': '220 GSM', 'Print': 'Screen / Embroidery / DTG', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
+    image: 'https://images.unsplash.com/photo-1625910513413-5fc42fba866a?w=800&h=800&fit=crop',
   },
   'custom-caps': {
     name: 'Custom Caps & Headwear', category: 'Clothing',
@@ -230,6 +249,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'S/M', width: 0, height: 0, price_modifier: 0 }, { name: 'L/XL', width: 0, height: 0, price_modifier: 0 }, { name: 'One Size', width: 0, height: 0, price_modifier: 0 }],
     specs: { 'Material': 'Cotton / Polyester', 'Print': 'Embroidery / Screen Print', 'Style': 'Baseball, Snapback, Beanie, Visor', 'Closure': 'Snapback / Velcro / Strap' },
     delivery: '5-7 Business Days', rating: 4.5, reviews: 178,
+    image: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=800&h=800&fit=crop',
   },
   'custom-hoodies': {
     name: 'Custom Hoodies & Sweatshirts', category: 'Clothing',
@@ -241,6 +261,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }, { name: 'XXL', width: 0, height: 0, price_modifier: 30 }],
     specs: { 'Material': 'Cotton Fleece', 'Weight': '320 GSM', 'Print': 'Screen / DTG / Embroidery', 'Style': 'Pullover / Zip-Up', 'Sizes': 'S, M, L, XL, XXL' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 145,
+    image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop',
   },
   'custom-notebooks': {
     name: 'Custom Notebooks & Diaries', category: 'Stationery',
@@ -252,6 +273,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }, { name: 'A4', width: 210, height: 297, price_modifier: 40 }, { name: 'Pocket', width: 105, height: 148, price_modifier: -20 }],
     specs: { 'Paper': '80gsm Cream/White', 'Cover': 'Softcover / Hardcover / Leather', 'Binding': 'Perfect / Spiral / Sewn', 'Pages': '80-200 pages', 'Feature': 'Logo Foil Stamping Available' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 203,
+    image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=800&h=800&fit=crop',
   },
   'wedding-invitations': {
     name: 'Wedding Invitations & Stationery', category: 'Stationery',
@@ -263,6 +285,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A6', width: 105, height: 148, price_modifier: 0 }, { name: 'A5', width: 148, height: 210, price_modifier: 30 }, { name: '5x7 inch', width: 127, height: 178, price_modifier: 20 }],
     specs: { 'Paper': '300gsm Premium Cardstock', 'Print': 'Full Color + Foil', 'Finish': 'Matte / Foil / Embossed', 'Sizes': 'A6, A5, 5x7 inch', 'Includes': 'Envelope' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 312,
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=800&fit=crop',
   },
   'presentation-folders': {
     name: 'Presentation Folders', category: 'Stationery',
@@ -274,6 +297,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A4 (holds A4)', width: 240, height: 320, price_modifier: 0 }, { name: 'Letter (holds 8.5x11)', width: 240, height: 310, price_modifier: 0 }],
     specs: { 'Paper': '300gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Pockets': 'Single / Double', 'Feature': 'Business Card Slits', 'Finish': 'Matte / Glossy Lamination' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 134,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'custom-stamps': {
     name: 'Custom Stamps & Ink', category: 'Office Supplies',
@@ -285,6 +309,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Small (38×14mm)', width: 38, height: 14, price_modifier: 0 }, { name: 'Medium (47×18mm)', width: 47, height: 18, price_modifier: 20 }, { name: 'Large (58×22mm)', width: 58, height: 22, price_modifier: 40 }],
     specs: { 'Material': 'Premium Rubber', 'Type': 'Self-Inking / Wood / Pocket', 'Ink': 'Black / Blue / Red', 'Die Size': '38×14 to 58×22 mm', 'Refill': 'Available' },
     delivery: '2-3 Business Days', rating: 4.6, reviews: 267,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'standees': {
     name: 'Standees & Display Boards', category: 'Signs & Displays',
@@ -296,6 +321,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Counter (6×12 inch)', width: 152, height: 305, price_modifier: 0 }, { name: 'Medium (24×63 inch)', width: 610, height: 1600, price_modifier: 400 }, { name: 'Large (33×80 inch)', width: 838, height: 2032, price_modifier: 800 }],
     specs: { 'Material': 'Premium Vinyl / Fabric', 'Print': 'Full Color Eco-Solvent', 'Stand': 'Roll-Up / X-Frame / L-Frame', 'Carry Case': 'Included', 'Setup': 'Tool-free' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 189,
+    image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
   },
   'foam-boards': {
     name: 'Foam Board Printing', category: 'Signs & Displays',
@@ -307,6 +333,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A3', width: 297, height: 420, price_modifier: 0 }, { name: 'A2', width: 420, height: 594, price_modifier: 200 }, { name: 'A1', width: 594, height: 841, price_modifier: 400 }],
     specs: { 'Material': '5mm / 10mm Foam Board', 'Print': 'Full Color UV', 'Finish': 'Matte / Glossy', 'Use': 'Indoor Displays' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 145,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'tent-cards': {
     name: 'Tent Cards & Table Signs', category: 'Signs & Displays',
@@ -318,6 +345,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A6 Tent', width: 105, height: 148, price_modifier: 0 }, { name: 'A5 Tent', width: 148, height: 210, price_modifier: 30 }],
     specs: { 'Paper': '300gsm Cardstock', 'Print': 'Full Color Both Sides', 'Fold': 'Tri-Fold Tent', 'Use': 'Table/Counter Display' },
     delivery: '2-4 Business Days', rating: 4.5, reviews: 98,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'loyalty-cards': {
     name: 'Loyalty Cards', category: 'Business Cards',
@@ -329,6 +357,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard (85×55)', width: 85, height: 55, price_modifier: 0 }, { name: 'Mini (70×28)', width: 70, height: 28, price_modifier: -20 }],
     specs: { 'Paper': '350gsm / PVC', 'Print': 'Full Color Both Sides', 'Feature': 'Barcode / QR Code / Stamp Grid', 'Size': 'Standard or Mini' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 167,
+    image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
   },
   'gift-certificates': {
     name: 'Gift Certificates & Vouchers', category: 'Marketing',
@@ -340,6 +369,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A6', width: 105, height: 148, price_modifier: 0 }, { name: 'DL', width: 99, height: 210, price_modifier: 10 }],
     specs: { 'Paper': '300gsm Premium Card', 'Print': 'Full Color + Foil', 'Feature': 'Serial Number / Barcode' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 89,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'button-badges': {
     name: 'Button Badges & Pins', category: 'Promotional',
@@ -351,6 +381,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '1 inch', width: 25, height: 25, price_modifier: 0 }, { name: '1.5 inch', width: 38, height: 38, price_modifier: 10 }, { name: '2 inch', width: 50, height: 50, price_modifier: 20 }, { name: '3 inch', width: 75, height: 75, price_modifier: 40 }],
     specs: { 'Material': 'Metal + Paper', 'Print': 'Full Color', 'Back': 'Pin-Back', 'Sizes': '1" to 3"' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 312,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'custom-keychains': {
     name: 'Custom Keychains', category: 'Promotional',
@@ -362,6 +393,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard (50mm)', width: 50, height: 50, price_modifier: 0 }, { name: 'Large (75mm)', width: 75, height: 75, price_modifier: 20 }],
     specs: { 'Material': 'Acrylic / Metal / Leather', 'Print': 'Full Color / Engraved', 'Ring': 'Included', 'Packaging': 'Individual' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'table-covers': {
     name: 'Custom Table Covers', category: 'Events & Displays',
@@ -373,6 +405,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '6ft Table', width: 183, height: 122, price_modifier: 0 }, { name: '8ft Table', width: 244, height: 122, price_modifier: 200 }],
     specs: { 'Material': 'Polyester / Cotton', 'Print': 'Full Color Dye Sublimation', 'Style': 'Throw / Fitted', 'Washable': 'Yes' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 123,
+    image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
   },
   'custom-flags': {
     name: 'Custom Flags & Banners', category: 'Events & Displays',
@@ -384,6 +417,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Table Flag', width: 150, height: 200, price_modifier: 0 }, { name: 'Teardrop', width: 600, height: 1200, price_modifier: 300 }, { name: 'Rectangle', width: 900, height: 1500, price_modifier: 500 }],
     specs: { 'Material': 'Polyester Fabric', 'Print': 'Full Color Dye Sublimation', 'Pole': 'Fiberglass / Metal', 'Base': 'Cross / Water Bag' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
   },
   'custom-tote-bags': {
     name: 'Custom Tote Bags', category: 'Bags & Packaging',
@@ -395,6 +429,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard (35×40cm)', width: 350, height: 400, price_modifier: 0 }, { name: 'Large (45×50cm)', width: 450, height: 500, price_modifier: 30 }],
     specs: { 'Material': 'Cotton / Canvas / Jute', 'Print': 'Screen Print / Sublimation', 'Handle': 'Self-Fabric', 'GSM': '10-12 oz' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 289,
+    image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=800&fit=crop',
   },
   'custom-umbrellas': {
     name: 'Custom Umbrellas', category: 'Promotional',
@@ -406,6 +441,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Compact (42")', width: 0, height: 0, price_modifier: 0 }, { name: 'Golf (60")', width: 0, height: 0, price_modifier: 200 }],
     specs: { 'Material': 'Polyester / Nylon', 'Print': 'Full Color', 'Style': 'Compact / Golf / Straight', 'Auto': 'Manual / Auto Open' },
     delivery: '7-10 Business Days', rating: 4.5, reviews: 89,
+    image: 'https://images.unsplash.com/photo-1521656693884-cee73588d390?w=800&h=800&fit=crop',
   },
   'photo-albums': {
     name: 'Custom Photo Albums', category: 'Gifts & Photo',
@@ -417,6 +453,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'A5 (20×15cm)', width: 200, height: 150, price_modifier: 0 }, { name: 'A4 (30×20cm)', width: 300, height: 200, price_modifier: 150 }, { name: 'Square (20×20cm)', width: 200, height: 200, price_modifier: 50 }],
     specs: { 'Pages': '20-100 pages', 'Cover': 'Softcover / Hardcover', 'Paper': '250gsm Matte', 'Binding': 'Perfect / Layflat' },
     delivery: '5-7 Business Days', rating: 4.8, reviews: 234,
+    image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&h=800&fit=crop',
   },
   'photo-frames': {
     name: 'Custom Photo Frames', category: 'Gifts & Photo',
@@ -428,6 +465,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '4×6 inch', width: 102, height: 152, price_modifier: 0 }, { name: '5×7 inch', width: 127, height: 178, price_modifier: 30 }, { name: '8×10 inch', width: 203, height: 254, price_modifier: 80 }],
     specs: { 'Material': 'Acrylic / Wood / LED', 'Print': 'Photo Print', 'Size': '4×6 to 8×10 inch', 'Stand': 'Included' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 189,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'custom-coasters': {
     name: 'Custom Coasters', category: 'Gifts & Promotional',
@@ -439,6 +477,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Round (3.5")', width: 89, height: 89, price_modifier: 0 }, { name: 'Square (3.5")', width: 89, height: 89, price_modifier: 0 }, { name: 'Large (4")', width: 102, height: 102, price_modifier: 15 }],
     specs: { 'Material': 'Cork / Acrylic / Ceramic', 'Print': 'Full Color', 'Shape': 'Round / Square', 'Thickness': '3mm / 5mm' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'custom-pens': {
     name: 'Custom Pens', category: 'Promotional',
@@ -450,6 +489,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Standard', width: 0, height: 0, price_modifier: 0 }],
     specs: { 'Material': 'Plastic / Metal / Wood', 'Print': 'Logo Print / Engraved', 'Ink': 'Black / Blue', 'Type': 'Ballpoint / Rollerball' },
     delivery: '3-5 Business Days', rating: 4.5, reviews: 345,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'custom-calendars': {
     name: 'Custom Calendars', category: 'Stationery',
@@ -461,6 +501,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: 'Desk (A5)', width: 148, height: 210, price_modifier: 0 }, { name: 'Wall (A4)', width: 210, height: 297, price_modifier: 40 }, { name: 'Wall (A3)', width: 297, height: 420, price_modifier: 80 }],
     specs: { 'Paper': '250gsm Art Paper', 'Print': 'Full Color', 'Type': 'Desk / Wall / Magnet', 'Pages': '12-13 sheets' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 178,
+    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
   },
   'water-bottles': {
     name: 'Custom Water Bottles', category: 'Drinkware',
@@ -472,6 +513,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '500ml', width: 0, height: 0, price_modifier: 0 }, { name: '750ml', width: 0, height: 0, price_modifier: 30 }, { name: '1L', width: 0, height: 0, price_modifier: 60 }],
     specs: { 'Material': 'Stainless Steel / Aluminum / Plastic', 'Print': 'Screen Print / Laser Engraved', 'Capacity': '500ml / 750ml / 1L', 'Lid': 'Screw / Flip / Sport' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
+    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&h=800&fit=crop',
   },
   'custom-tumblers': {
     name: 'Custom Tumblers', category: 'Drinkware',
@@ -483,6 +525,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '12oz', width: 0, height: 0, price_modifier: 0 }, { name: '16oz', width: 0, height: 0, price_modifier: 30 }, { name: '20oz', width: 0, height: 0, price_modifier: 50 }],
     specs: { 'Material': 'Stainless Steel', 'Print': 'Sublimation / Screen Print', 'Capacity': '12oz / 16oz / 20oz', 'Insulated': 'Yes' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 189,
+    image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
   },
   'travel-mugs': {
     name: 'Custom Travel Mugs', category: 'Drinkware',
@@ -494,6 +537,7 @@ const PRODUCT_DATA: Record<string, {
     sizes: [{ name: '12oz', width: 0, height: 0, price_modifier: 0 }, { name: '16oz', width: 0, height: 0, price_modifier: 40 }],
     specs: { 'Material': 'Stainless Steel', 'Print': 'Screen Print / Engraved', 'Capacity': '12oz / 16oz', 'Insulated': 'Double Wall' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 156,
+    image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
   },
 };
 
@@ -547,7 +591,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
     addItem({
       product_id: slug,
       product_name: product.name,
-      product_image: '/placeholder.jpg',
+      product_image: product.image || '/placeholder.jpg',
       quantity,
       material: product.materials[0]?.name || 'Standard',
       size: product.sizes[0]?.name || 'Standard',
@@ -574,20 +618,32 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           {/* Left: Image Gallery */}
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <div className="aspect-square bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl overflow-hidden mb-4">
-              <div className="w-full h-full flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-3">
-                    <Package className="w-12 h-12 text-primary" />
+              {product.image ? (
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-3">
+                      <Package className="w-12 h-12 text-primary" />
+                    </div>
+                    <p className="text-sm text-muted">{product.name}</p>
                   </div>
-                  <p className="text-sm text-muted">{product.name}</p>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Thumbnails */}
             <div className="grid grid-cols-4 gap-3">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-slate-100 rounded-xl border-2 border-primary/20 cursor-pointer hover:border-primary transition-colors" />
+                <div key={i} className="aspect-square bg-slate-100 rounded-xl border-2 border-primary/20 cursor-pointer hover:border-primary transition-colors overflow-hidden">
+                  {product.image && (
+                    <img src={product.image} alt="" className="w-full h-full object-cover opacity-80" />
+                  )}
+                </div>
               ))}
             </div>
           </motion.div>
