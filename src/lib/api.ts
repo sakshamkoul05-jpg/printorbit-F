@@ -19,7 +19,6 @@ async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   return data;
 }
 
-// Auth
 export const authAPI = {
   login: (email: string, password: string) =>
     fetchAPI('/auth/login', { method: 'POST', body: JSON.stringify({ email, password }) }),
@@ -30,7 +29,6 @@ export const authAPI = {
     fetchAPI('/auth/me', { headers: { Authorization: `Bearer ${token}` } }),
 };
 
-// Products
 export const productsAPI = {
   list: (params?: Record<string, string>) => {
     const query = params ? '?' + new URLSearchParams(params).toString() : '';
@@ -38,15 +36,14 @@ export const productsAPI = {
   },
   get: (slug: string) => fetchAPI(`/products/${slug}`),
   templates: (slug: string) => fetchAPI(`/products/${slug}/templates`),
+  search: (q: string) => fetchAPI(`/products/search?q=${encodeURIComponent(q)}`),
 };
 
-// Categories
 export const categoriesAPI = {
   list: () => fetchAPI('/categories'),
   get: (slug: string) => fetchAPI(`/categories/${slug}`),
 };
 
-// Quotes
 export const quotesAPI = {
   create: (data: { items: unknown[]; design_files?: string[]; notes?: string }) =>
     fetchAPI('/quotes', { method: 'POST', body: JSON.stringify(data) }),
@@ -56,15 +53,14 @@ export const quotesAPI = {
     fetchAPI(`/quotes/${id}`, { headers: { Authorization: `Bearer ${token}` } }),
 };
 
-// Orders
 export const ordersAPI = {
   list: (token: string) =>
     fetchAPI('/orders', { headers: { Authorization: `Bearer ${token}` } }),
   get: (token: string, id: string) =>
     fetchAPI(`/orders/${id}`, { headers: { Authorization: `Bearer ${token}` } }),
+  track: (id: string) => fetchAPI(`/orders/${id}/track`),
 };
 
-// Projects (saved designs)
 export const projectsAPI = {
   list: (token: string) =>
     fetchAPI('/projects', { headers: { Authorization: `Bearer ${token}` } }),
@@ -76,8 +72,32 @@ export const projectsAPI = {
     fetchAPI(`/projects/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } }),
 };
 
-// Contact
 export const contactAPI = {
   submit: (data: { name: string; email: string; phone?: string; subject?: string; message: string }) =>
     fetchAPI('/contact', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+export const reviewsAPI = {
+  list: (productId: string) => fetchAPI(`/products/${productId}/reviews`),
+  create: (token: string, productId: string, data: { rating: number; title: string; content: string }) =>
+    fetchAPI(`/products/${productId}/reviews`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify(data),
+    }),
+};
+
+export const uploadAPI = {
+  image: async (token: string, file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API_URL}/upload/image`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'Upload failed');
+    return data;
+  },
 };
