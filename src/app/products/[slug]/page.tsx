@@ -96,13 +96,24 @@ const SAMPLE_REVIEWS = [
   { name: 'Anjali P.', rating: 4, date: '3 weeks ago', title: 'Good but minor issue', content: 'Overall great cards. One minor alignment issue on a few cards but customer service resolved it quickly.', helpful: 12 },
 ];
 
+const PRODUCT_TEMPLATES = [
+  { id: 't1', name: 'Modern Minimalist', category: 'Business', colors: ['#0B57D0', '#FFFFFF', '#1F2937'], isPremium: false },
+  { id: 't2', name: 'Bold & Creative', category: 'Creative', colors: ['#FF6B00', '#FFFFFF', '#0F172A'], isPremium: false },
+  { id: 't3', name: 'Elegant Gold', category: 'Luxury', colors: ['#0F172A', '#C9A84C', '#FFFFFF'], isPremium: true },
+  { id: 't4', name: 'Corporate Blue', category: 'Corporate', colors: ['#0B57D0', '#DBEAFE', '#1F2937'], isPremium: false },
+  { id: 't5', name: 'Fresh & Clean', category: 'Startup', colors: ['#16A34A', '#FFFFFF', '#0F172A'], isPremium: false },
+  { id: 't6', name: 'Warm & Friendly', category: 'Restaurant', colors: ['#EA580C', '#FFFFFF', '#1F2937'], isPremium: false },
+  { id: 't7', name: 'Tech & Modern', category: 'Technology', colors: ['#7C3AED', '#FFFFFF', '#0F172A'], isPremium: true },
+  { id: 't8', name: 'Natural Organic', category: 'Eco', colors: ['#16A34A', '#FEF3C7', '#1F2937'], isPremium: false },
+];
+
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params);
   const product = PRODUCT_DATA[slug];
 
   const [totalPrice, setTotalPrice] = useState(product?.basePrice || 499);
   const [quantity, setQuantity] = useState(product?.minQty || 100);
-  const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'faq'>('specs');
+  const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'faq' | 'templates'>('specs');
   const [showUpload, setShowUpload] = useState(false);
   const addItem = useCartStore((s) => s.addItem);
   const { addItem: addWish, removeItem: removeWish, productIds } = useWishlistStore();
@@ -288,6 +299,43 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               )}
             </div>
 
+            {/* Start with a Template - Vistaprint Style */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-sm font-semibold text-dark">Start with a template</h3>
+                <Link href={`/design-studio?product=${slug}`} className="text-xs font-semibold text-primary hover:text-primary-dark">
+                  View All Templates →
+                </Link>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                {PRODUCT_TEMPLATES.slice(0, 4).map((template) => (
+                  <Link
+                    key={template.id}
+                    href={`/design-studio?template=${template.id}&product=${slug}`}
+                    className="group relative aspect-[3/2] rounded-lg overflow-hidden border border-slate-200 hover:border-primary transition-colors"
+                  >
+                    <div
+                      className="w-full h-full flex items-center justify-center"
+                      style={{ background: template.colors[0] }}
+                    >
+                      <div className="text-center">
+                        <div className="w-8 h-4 rounded-sm mx-auto mb-1" style={{ background: template.colors[1] }} />
+                        <div className="w-6 h-1 rounded-sm mx-auto" style={{ background: template.colors[2] + '40' }} />
+                      </div>
+                    </div>
+                    {template.isPremium && (
+                      <span className="absolute top-1 right-1 px-1.5 py-0.5 bg-accent text-white text-[8px] font-bold rounded uppercase">
+                        PRO
+                      </span>
+                    )}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="text-[10px] font-medium text-white truncate">{template.name}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
             {/* Actions */}
             <div className="flex gap-3">
               <button
@@ -315,7 +363,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         {/* Tabs: Specs, Reviews, FAQ */}
         <div className="border-t border-slate-100 py-10">
           <div className="flex gap-6 border-b border-slate-100 mb-8">
-            {(['specs', 'reviews', 'faq'] as const).map((tab) => (
+            {(['specs', 'templates', 'reviews', 'faq'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -325,10 +373,58 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     : 'text-muted border-transparent hover:text-dark'
                 }`}
               >
-                {tab === 'specs' ? 'Specifications' : tab === 'reviews' ? `Reviews (${product.reviews})` : 'FAQ'}
+                {tab === 'specs' ? 'Specifications' : tab === 'templates' ? `Templates (${PRODUCT_TEMPLATES.length})` : tab === 'reviews' ? `Reviews (${product.reviews})` : 'FAQ'}
               </button>
             ))}
           </div>
+
+          {activeTab === 'templates' && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-lg font-bold text-dark font-heading">Design Templates</h3>
+                  <p className="text-sm text-muted">Start with a professionally designed template and customize it in our design studio.</p>
+                </div>
+                <Link href={`/design-studio?product=${slug}`} className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
+                  Open Design Studio
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {PRODUCT_TEMPLATES.map((template) => (
+                  <Link
+                    key={template.id}
+                    href={`/design-studio?template=${template.id}&product=${slug}`}
+                    className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-primary transition-all"
+                  >
+                    <div
+                      className="aspect-[3/2] flex items-center justify-center"
+                      style={{ background: template.colors[0] }}
+                    >
+                      <div className="text-center">
+                        <div className="w-12 h-6 rounded mx-auto mb-1.5" style={{ background: template.colors[1] }} />
+                        <div className="w-8 h-1.5 rounded mx-auto" style={{ background: template.colors[2] + '40' }} />
+                        <div className="w-10 h-1 rounded mx-auto mt-1" style={{ background: template.colors[2] + '20' }} />
+                      </div>
+                    </div>
+                    {template.isPremium && (
+                      <span className="absolute top-2 right-2 px-2 py-0.5 bg-accent text-white text-[9px] font-bold rounded uppercase">
+                        PRO
+                      </span>
+                    )}
+                    <div className="p-3">
+                      <p className="text-xs font-semibold text-dark truncate">{template.name}</p>
+                      <p className="text-[10px] text-muted">{template.category}</p>
+                    </div>
+                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg shadow-lg">
+                        Customize This Template
+                      </span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
 
           {activeTab === 'specs' && (
             <div className="grid grid-cols-2 gap-4 max-w-2xl">

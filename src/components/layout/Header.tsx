@@ -6,51 +6,53 @@ import { motion, AnimatePresence } from 'motion/react';
 import {
   Menu, X, Phone, Mail, Search, ShoppingCart, User, ChevronDown,
   ArrowRight, Star, TrendingUp, Sparkles, Package, Megaphone, Flag,
-  PenLine, Shirt, Camera, ChevronRight, Heart, MapPin, LogIn,
+  PenLine, Shirt, Camera, ChevronRight, Heart, LogIn, Eye, Flame,
+  Tag, Percent, Truck,
 } from 'lucide-react';
-import { NAV_LINKS, MEGA_MENU_DATA, POPULAR_SEARCHES } from '@/lib/constants';
+import { NAV_LINKS, MEGA_MENU_DATA } from '@/lib/constants';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
-import { useUIStore } from '@/store/ui';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  Megaphone, Flag, Package, PenLine, Shirt, Camera,
-  CreditCard: () => <Star className="w-4 h-4" />,
-  FileText: () => <Sparkles className="w-4 h-4" />,
-  Image: () => <Sparkles className="w-4 h-4" />,
-  RectangleHorizontal: () => <Sparkles className="w-4 h-4" />,
-  Square: () => <Sparkles className="w-4 h-4" />,
-  Layout: () => <Sparkles className="w-4 h-4" />,
-  Box: () => <Package className="w-4 h-4" />,
-  Tag: () => <Sparkles className="w-4 h-4" />,
-  ShoppingBag: () => <Sparkles className="w-4 h-4" />,
-  Mail: () => <Sparkles className="w-4 h-4" />,
-  StickyNote: () => <Sparkles className="w-4 h-4" />,
-  Coffee: () => <Sparkles className="w-4 h-4" />,
-  Gift: () => <Sparkles className="w-4 h-4" />,
-  Heart: () => <Heart className="w-4 h-4" />,
+  Megaphone, Flag, Package, PenLine, Shirt, Camera, Gift: Sparkles,
 };
+
+const PROMOS = [
+  'Free delivery on orders above ₹5,000',
+  'Get 20% off on first order — Use code WELCOME20',
+  'Business cards starting at ₹99',
+  'Design Studio — Create your design for free',
+];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState('marketing');
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
+  const [promoIndex, setPromoIndex] = useState(0);
   const megaRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval>>(null);
 
   const itemCount = useCartStore((s) => s.getItemCount());
   const { user } = useAuthStore();
-  const { setSearchOpen } = useUIStore();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setPromoIndex((prev) => (prev + 1) % PROMOS.length);
+    }, 3000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, []);
 
   useEffect(() => {
@@ -74,25 +76,41 @@ export default function Header() {
     }
   };
 
+  const currentTab = MEGA_MENU_DATA.find((t) => t.id === activeTab) || MEGA_MENU_DATA[0];
+
   return (
     <>
-      {/* Top Bar */}
-      <div className="bg-dark text-white/70 text-xs hidden md:block">
+      {/* Promo Banner - Rotating */}
+      <div className="bg-primary text-white text-xs hidden md:block">
         <Container>
-          <div className="flex items-center justify-between h-9">
-            <div className="flex items-center gap-5">
-              <a href="tel:+919876543210" className="flex items-center gap-1.5 hover:text-white transition-colors">
+          <div className="flex items-center justify-between h-8">
+            <div className="flex items-center gap-4">
+              <a href="tel:+919876543210" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
                 <Phone className="w-3 h-3" />
                 <span>+91 98765 43210</span>
               </a>
-              <a href="mailto:info@printorbit.in" className="flex items-center gap-1.5 hover:text-white transition-colors">
+              <a href="mailto:info@printorbit.in" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
                 <Mail className="w-3 h-3" />
                 <span>info@printorbit.in</span>
               </a>
             </div>
-            <div className="flex items-center gap-4">
-              <span className="text-white/40">Dharamshala | Faridabad</span>
-              <span className="text-primary font-medium">Free delivery on orders above ₹5,000</span>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={promoIndex}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="font-medium"
+              >
+                {PROMOS[promoIndex]}
+              </motion.span>
+            </AnimatePresence>
+            <div className="flex items-center gap-3">
+              <Link href="/sample-kit" className="hover:text-white/80 transition-colors">Sample Kit</Link>
+              <span className="text-white/30">|</span>
+              <Link href="/corporate" className="hover:text-white/80 transition-colors">Corporate</Link>
+              <span className="text-white/30">|</span>
+              <Link href="/design-studio" className="hover:text-white/80 transition-colors">Design Studio</Link>
             </div>
           </div>
         </Container>
@@ -100,241 +118,342 @@ export default function Header() {
 
       {/* Main Header */}
       <header
-        className={`sticky top-0 z-50 transition-all duration-500 ${
+        className={`sticky top-0 z-50 transition-all duration-300 border-b ${
           scrolled
-            ? 'bg-white/98 shadow-lg py-2.5 backdrop-blur-xl border-b border-slate-100/50'
-            : 'bg-white py-3.5'
+            ? 'bg-white shadow-md py-2 backdrop-blur-xl border-slate-100'
+            : 'bg-white py-3 border-slate-100'
         }`}
       >
         <Container>
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-6">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 shrink-0">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-lg shadow-primary/25">
-                <span className="text-white font-bold text-lg font-heading">P</span>
+            <Link href="/" className="flex items-center gap-2.5 shrink-0">
+              <div className="w-9 h-9 bg-gradient-to-br from-primary to-primary-light rounded-lg flex items-center justify-center shadow-md shadow-primary/20">
+                <span className="text-white font-bold text-base font-heading">P</span>
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-dark font-heading tracking-tight">PrintOrbit</span>
-                <span className="text-[9px] uppercase tracking-[0.2em] text-muted -mt-0.5">Premium Printing</span>
+              <div className="flex flex-col leading-none">
+                <span className="text-lg font-bold text-dark font-heading tracking-tight">PrintOrbit</span>
+                <span className="text-[8px] uppercase tracking-[0.15em] text-muted -mt-0.5">India&apos;s Printing Platform</span>
               </div>
             </Link>
 
-            {/* Desktop Nav */}
-            <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-center">
-              {/* Products Mega Menu Trigger */}
-              <div ref={megaRef} className="relative">
-                <button
-                  className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors flex items-center gap-1.5 rounded-xl hover:bg-primary/5"
-                  onMouseEnter={() => setProductsOpen(true)}
-                  onClick={() => setProductsOpen(!productsOpen)}
-                >
-                  <Package className="w-4 h-4" />
-                  Products
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${productsOpen ? 'rotate-180' : ''}`} />
-                </button>
+            {/* Products Mega Menu Trigger */}
+            <div ref={megaRef} className="relative hidden lg:block">
+              <button
+                className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-dark hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+                onMouseEnter={() => setProductsOpen(true)}
+                onClick={() => setProductsOpen(!productsOpen)}
+              >
+                <Package className="w-4 h-4" />
+                Products
+                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${productsOpen ? 'rotate-180' : ''}`} />
+              </button>
 
-                <AnimatePresence>
-                  {productsOpen && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 w-[900px] bg-white rounded-2xl shadow-2xl border border-slate-200 p-0 mt-2 overflow-hidden"
-                      onMouseLeave={() => setProductsOpen(false)}
-                    >
-                      {/* Mega Menu Header */}
-                      <div className="bg-gradient-to-r from-primary/5 to-accent/5 px-6 py-3 border-b border-slate-100">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold text-dark">All Product Categories</span>
+              <AnimatePresence>
+                {productsOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 w-[1100px] bg-white rounded-b-2xl shadow-2xl border border-slate-200 mt-0 overflow-hidden z-50"
+                    onMouseLeave={() => setProductsOpen(false)}
+                  >
+                    {/* Tabs */}
+                    <div className="flex border-b border-slate-100">
+                      {MEGA_MENU_DATA.map((tab) => {
+                        const TabIcon = ICONS[tab.icon] || Package;
+                        return (
+                          <button
+                            key={tab.id}
+                            onMouseEnter={() => setActiveTab(tab.id)}
+                            onClick={() => setActiveTab(tab.id)}
+                            className={`flex items-center gap-2 px-4 py-3 text-xs font-semibold transition-colors border-b-2 ${
+                              activeTab === tab.id
+                                ? 'text-primary border-primary bg-primary/5'
+                                : 'text-slate-500 border-transparent hover:text-dark hover:bg-slate-50'
+                            }`}
+                          >
+                            <TabIcon className="w-3.5 h-3.5" />
+                            {tab.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex">
+                      {/* Left: Categories */}
+                      <div className="flex-1 p-5">
+                        <div className="grid grid-cols-4 gap-5">
+                          {currentTab.categories.map((cat) => (
+                            <div key={cat.slug}>
+                              <Link
+                                href={`/products/${cat.slug}`}
+                                className="text-xs font-bold text-dark uppercase tracking-wider hover:text-primary transition-colors block mb-2"
+                                onClick={() => setProductsOpen(false)}
+                              >
+                                {cat.name}
+                              </Link>
+                              <ul className="space-y-1">
+                                {cat.items.map((item) => (
+                                  <li key={item.slug}>
+                                    <Link
+                                      href={`/products/${item.slug}`}
+                                      className="text-xs text-slate-500 hover:text-primary transition-colors block py-0.5"
+                                      onClick={() => setProductsOpen(false)}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Right: Featured + Bestsellers + Trending */}
+                      <div className="w-[280px] border-l border-slate-100 p-4 space-y-4">
+                        {/* Bestsellers */}
+                        <div>
+                          <div className="flex items-center gap-1.5 mb-2">
+                            <Flame className="w-3.5 h-3.5 text-accent" />
+                            <span className="text-[10px] font-bold text-dark uppercase tracking-wider">Bestsellers</span>
+                          </div>
+                          {currentTab.bestsellers.map((item) => (
+                            <Link
+                              key={item.slug}
+                              href={`/products/${item.slug}`}
+                              className="flex items-center gap-2.5 py-1.5 text-xs text-slate-600 hover:text-primary transition-colors"
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              <div className="w-8 h-8 bg-slate-100 rounded-md shrink-0" />
+                              <div>
+                                <p className="font-medium">{item.name}</p>
+                                <p className="text-[10px] text-muted">{item.description}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <hr className="border-slate-100" />
+
+                        {/* New Arrivals */}
+                        <div>
+                          <div className="flex items-center gap-1.5 mb-2">
+                            <Sparkles className="w-3.5 h-3.5 text-primary" />
+                            <span className="text-[10px] font-bold text-dark uppercase tracking-wider">New Arrivals</span>
+                          </div>
+                          {currentTab.newArrivals.map((item) => (
+                            <Link
+                              key={item.slug}
+                              href={`/products/${item.slug}`}
+                              className="flex items-center gap-2.5 py-1.5 text-xs text-slate-600 hover:text-primary transition-colors"
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              <div className="w-8 h-8 bg-primary/10 rounded-md shrink-0" />
+                              <div>
+                                <p className="font-medium">{item.name}</p>
+                                <p className="text-[10px] text-muted">{item.description}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+
+                        <hr className="border-slate-100" />
+
+                        {/* Trending */}
+                        <div>
+                          <div className="flex items-center gap-1.5 mb-2">
+                            <TrendingUp className="w-3.5 h-3.5 text-success" />
+                            <span className="text-[10px] font-bold text-dark uppercase tracking-wider">Trending</span>
+                          </div>
+                          {currentTab.trending.map((item) => (
+                            <Link
+                              key={item.slug}
+                              href={`/products/${item.slug}`}
+                              className="flex items-center gap-2.5 py-1.5 text-xs text-slate-600 hover:text-primary transition-colors"
+                              onClick={() => setProductsOpen(false)}
+                            >
+                              <div className="w-8 h-8 bg-success/10 rounded-md shrink-0" />
+                              <div>
+                                <p className="font-medium">{item.name}</p>
+                                <p className="text-[10px] text-muted">{item.description}</p>
+                              </div>
+                            </Link>
+                          ))}
+                        </div>
+
+                        {/* Promo Card */}
+                        <div className={`bg-gradient-to-r ${currentTab.promo.bg} rounded-xl p-3 text-white`}>
+                          <p className="text-xs font-bold mb-0.5">{currentTab.promo.title}</p>
+                          <p className="text-[10px] text-white/70 mb-2">{currentTab.promo.description}</p>
                           <Link
-                            href="/products"
-                            className="text-xs font-semibold text-primary hover:text-primary-dark flex items-center gap-1"
+                            href={currentTab.promo.href}
+                            className="text-[10px] font-semibold flex items-center gap-1 hover:underline"
                             onClick={() => setProductsOpen(false)}
                           >
-                            View All <ArrowRight className="w-3 h-3" />
+                            Learn more <ArrowRight className="w-3 h-3" />
                           </Link>
                         </div>
                       </div>
+                    </div>
 
-                      {/* 6-Column Grid */}
-                      <div className="grid grid-cols-6 gap-0 p-4">
-                        {MEGA_MENU_DATA.map((column) => {
-                          const ColumnIcon = ICONS[column.icon] || Package;
-                          return (
-                            <div key={column.title} className="px-3">
-                              <div className="flex items-center gap-2 mb-3">
-                                <div className="w-6 h-6 bg-primary/10 rounded-md flex items-center justify-center text-primary">
-                                  <ColumnIcon className="w-3.5 h-3.5" />
-                                </div>
-                                <span className="text-xs font-bold text-dark uppercase tracking-wider">{column.title}</span>
-                              </div>
-                              <div className="space-y-0.5">
-                                {column.categories.map((cat) => (
-                                  <div key={cat.slug} className="group">
-                                    <Link
-                                      href={`/products/${cat.slug}`}
-                                      className="flex items-center justify-between px-2 py-1.5 rounded-lg text-sm text-slate-600 hover:bg-primary/5 hover:text-primary transition-colors font-medium"
-                                      onClick={() => setProductsOpen(false)}
-                                    >
-                                      <span>{cat.name}</span>
-                                      <ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                    </Link>
-                                    {/* Subcategories dropdown */}
-                                    <div className="hidden group-hover:block ml-4">
-                                      {cat.subcategories.map((sub) => (
-                                        <Link
-                                          key={sub.slug}
-                                          href={`/products/${sub.slug}`}
-                                          className="block px-2 py-1 text-xs text-slate-500 hover:text-primary transition-colors"
-                                          onClick={() => setProductsOpen(false)}
-                                        >
-                                          {sub.name}
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          );
-                        })}
+                    {/* Bottom Bar */}
+                    <div className="bg-slate-50 px-5 py-2.5 flex items-center justify-between border-t border-slate-100">
+                      <div className="flex items-center gap-4 text-xs text-muted">
+                        <span className="flex items-center gap-1"><Truck className="w-3 h-3" /> Free shipping ₹5,000+</span>
+                        <span className="flex items-center gap-1"><Percent className="w-3 h-3" /> Bulk discounts up to 35%</span>
+                        <span className="flex items-center gap-1"><Tag className="w-3 h-3" /> Use code WELCOME20</span>
                       </div>
+                      <Link
+                        href="/products"
+                        className="text-xs font-semibold text-primary hover:text-primary-dark flex items-center gap-1"
+                        onClick={() => setProductsOpen(false)}
+                      >
+                        View All Products <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-                      {/* Bottom Promo */}
-                      <div className="bg-gradient-to-r from-accent/5 to-primary/5 px-6 py-3 border-t border-slate-100 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Sparkles className="w-4 h-4 text-accent" />
-                          <span className="text-sm text-slate-600">
-                            <strong className="text-dark">AI Design Studio</strong> — Create stunning designs in minutes
-                          </span>
-                        </div>
-                        <Link
-                          href="/design-studio"
-                          className="text-xs font-semibold text-primary hover:text-primary-dark flex items-center gap-1"
-                          onClick={() => setProductsOpen(false)}
-                        >
-                          Try Now <ArrowRight className="w-3 h-3" />
-                        </Link>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              {/* Other Nav Links */}
+            {/* Desktop Nav Links */}
+            <nav className="hidden lg:flex items-center gap-0.5 flex-1">
               {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-xl hover:bg-primary/5"
+                  className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
                 >
                   {link.label}
                 </Link>
               ))}
             </nav>
 
-            {/* Desktop Search + Actions */}
-            <div className="hidden lg:flex items-center gap-2 shrink-0">
-              {/* Search */}
-              <div ref={searchRef} className="relative">
-                <form onSubmit={handleSearch}>
-                  <div className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all duration-200 ${
-                    searchFocused
-                      ? 'border-primary bg-white shadow-md shadow-primary/10 w-64'
-                      : 'border-slate-200 bg-slate-50 hover:bg-slate-100 w-48'
-                  }`}>
-                    <Search className="w-4 h-4 text-slate-400 shrink-0" />
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      onFocus={() => setSearchFocused(true)}
-                      className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full"
-                    />
-                  </div>
-                </form>
+            {/* Search Bar - Prominent */}
+            <div ref={searchRef} className="relative hidden lg:block">
+              <form onSubmit={handleSearch}>
+                <div className={`flex items-center gap-2 border rounded-full transition-all duration-200 ${
+                  searchFocused
+                    ? 'border-primary bg-white shadow-lg shadow-primary/10 w-72 ring-2 ring-primary/10'
+                    : 'border-slate-200 bg-slate-50 hover:bg-slate-100 w-56'
+                }`}>
+                  <Search className="w-4 h-4 text-slate-400 ml-3.5 shrink-0" />
+                  <input
+                    type="text"
+                    placeholder="Search for products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setSearchFocused(true)}
+                    className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full py-2 pr-3"
+                  />
+                </div>
+              </form>
 
-                {/* Search Dropdown */}
-                <AnimatePresence>
-                  {searchFocused && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 5 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 5 }}
-                      className="absolute top-full right-0 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 mt-2 p-4 z-50"
-                    >
-                      {!searchQuery ? (
-                        <div>
-                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Popular Searches</p>
-                          <div className="flex flex-wrap gap-2">
-                            {POPULAR_SEARCHES.map((term) => (
-                              <button
-                                key={term}
-                                onClick={() => {
-                                  setSearchQuery(term);
-                                  window.location.href = `/products?q=${encodeURIComponent(term)}`;
-                                }}
-                                className="px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
-                              >
-                                {term}
-                              </button>
-                            ))}
-                          </div>
+              <AnimatePresence>
+                {searchFocused && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 5 }}
+                    className="absolute top-full right-0 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 mt-2 z-50"
+                  >
+                    {!searchQuery ? (
+                      <div className="p-4">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">Popular Searches</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {['Business Cards', 'Flyers', 'Brochures', 'Banners', 'Stickers', 'T-Shirts', 'Mugs', 'Labels'].map((term) => (
+                            <button
+                              key={term}
+                              onClick={() => { window.location.href = `/products?q=${encodeURIComponent(term)}`; }}
+                              className="px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
+                            >
+                              {term}
+                            </button>
+                          ))}
                         </div>
-                      ) : (
-                        <div>
-                          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">
-                            Results for &ldquo;{searchQuery}&rdquo;
-                          </p>
-                          <button
-                            onClick={handleSearch}
-                            className="w-full text-left px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors flex items-center gap-2"
-                          >
-                            <Search className="w-4 h-4" />
-                            Search for &ldquo;{searchQuery}&rdquo;
-                          </button>
+                        <div className="mt-3 pt-3 border-t border-slate-100">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Categories</p>
+                          {['Business Cards', 'Flyers', 'Banners', 'Packaging'].map((cat) => (
+                            <Link
+                              key={cat}
+                              href={`/products?category=${cat.toLowerCase().replace(/ /g, '-')}`}
+                              className="flex items-center gap-2 py-1.5 text-xs text-slate-500 hover:text-primary transition-colors"
+                              onClick={() => setSearchFocused(false)}
+                            >
+                              <Package className="w-3 h-3" />
+                              {cat}
+                            </Link>
+                          ))}
                         </div>
-                      )}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                      </div>
+                    ) : (
+                      <div className="p-4">
+                        <button
+                          onClick={handleSearch}
+                          className="w-full text-left px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors flex items-center gap-2"
+                        >
+                          <Search className="w-4 h-4" />
+                          Search for &ldquo;{searchQuery}&rdquo;
+                        </button>
+                        <div className="mt-2 pt-2 border-t border-slate-100">
+                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Suggested</p>
+                          {['Premium Business Cards', 'A5 Flyers', 'Vinyl Banners'].filter(s => s.toLowerCase().includes(searchQuery.toLowerCase())).map((s) => (
+                            <Link
+                              key={s}
+                              href={`/products?q=${encodeURIComponent(s)}`}
+                              className="block px-3 py-1.5 text-xs text-slate-500 hover:text-primary transition-colors"
+                              onClick={() => setSearchFocused(false)}
+                            >
+                              {s}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-              {/* Wishlist */}
-              <Link href="/account" className="p-2.5 text-slate-400 hover:text-red hover:bg-red/5 transition-all rounded-xl">
-                <Heart className="w-5 h-5" />
+            {/* Right Actions */}
+            <div className="flex items-center gap-1 shrink-0">
+              {/* Mobile Search */}
+              <Link href="/products" className="lg:hidden p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg">
+                <Search className="w-5 h-5" />
               </Link>
 
               {/* Cart */}
-              <Link href="/cart" className="p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-xl relative">
+              <Link href="/cart" className="p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg relative">
                 <ShoppingCart className="w-5 h-5" />
                 {itemCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
               </Link>
 
-              {/* Auth */}
+              {/* Account */}
               {user ? (
-                <Link href="/account" className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors">
+                <Link href="/account" className="hidden sm:flex items-center gap-2 px-2.5 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors">
                   <div className="w-7 h-7 bg-primary/10 rounded-full flex items-center justify-center">
                     <span className="text-xs font-bold text-primary">{user.full_name?.[0] || 'U'}</span>
                   </div>
-                  <span className="hidden xl:inline">{user.full_name?.split(' ')[0] || 'Account'}</span>
                 </Link>
               ) : (
-                <Link href="/auth/login" className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors">
+                <Link href="/auth/login" className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors">
                   <LogIn className="w-4 h-4" />
                   Sign In
                 </Link>
               )}
 
-              <Link href="/quote/request">
+              {/* CTA */}
+              <Link href="/quote/request" className="hidden sm:block">
                 <Button variant="primary" size="sm">
-                  Get Quote
+                  Get a Quote
                 </Button>
               </Link>
             </div>
@@ -357,96 +476,60 @@ export default function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white border-b border-slate-100 overflow-hidden fixed inset-x-0 top-[73px] z-40 max-h-[calc(100vh-73px)] overflow-y-auto"
+            transition={{ duration: 0.25 }}
+            className="lg:hidden bg-white border-b border-slate-100 overflow-hidden fixed inset-x-0 top-0 z-40 max-h-screen overflow-y-auto pt-16"
           >
             <Container>
               <div className="py-4 space-y-1">
-                {/* Mobile Search */}
                 <form onSubmit={handleSearch} className="mb-4">
                   <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 rounded-xl border border-slate-200">
                     <Search className="w-4 h-4 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full"
-                    />
+                    <input type="text" placeholder="Search products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full" />
                   </div>
                 </form>
 
-                {/* Products Accordion */}
-                <div>
-                  <button
-                    className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
-                    onClick={() => setMobileAccordion(mobileAccordion === 'products' ? null : 'products')}
-                  >
-                    <span className="flex items-center gap-2">
-                      <Package className="w-4 h-4" />
-                      Products
-                    </span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${mobileAccordion === 'products' ? 'rotate-180' : ''}`} />
-                  </button>
-                  <AnimatePresence>
-                    {mobileAccordion === 'products' && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="pl-8 pb-2 space-y-1">
-                          {MEGA_MENU_DATA.map((col) => (
-                            <div key={col.title}>
-                              <p className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase">{col.title}</p>
-                              {col.categories.map((cat) => (
-                                <Link
-                                  key={cat.slug}
-                                  href={`/products/${cat.slug}`}
-                                  className="block px-3 py-2 text-sm text-slate-600 hover:text-primary rounded-lg"
-                                  onClick={() => setMobileOpen(false)}
-                                >
-                                  {cat.name}
-                                </Link>
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Other Nav Links */}
-                {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="block px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
+                {MEGA_MENU_DATA.map((tab) => (
+                  <div key={tab.id}>
+                    <button
+                      className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                      onClick={() => setMobileAccordion(mobileAccordion === tab.id ? null : tab.id)}
+                    >
+                      <span>{tab.label}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${mobileAccordion === tab.id ? 'rotate-180' : ''}`} />
+                    </button>
+                    <AnimatePresence>
+                      {mobileAccordion === tab.id && (
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                          <div className="pl-6 pb-2 space-y-0.5">
+                            {tab.categories.map((cat) => (
+                              <div key={cat.slug}>
+                                <Link href={`/products/${cat.slug}`} className="block px-3 py-2 text-xs font-bold text-dark uppercase" onClick={() => setMobileOpen(false)}>{cat.name}</Link>
+                                {cat.items.slice(0, 4).map((item) => (
+                                  <Link key={item.slug} href={`/products/${item.slug}`} className="block px-3 py-1.5 text-sm text-slate-500 hover:text-primary" onClick={() => setMobileOpen(false)}>{item.name}</Link>
+                                ))}
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 ))}
 
                 <hr className="border-slate-100 my-3" />
 
-                <a href="tel:+919876543210" className="flex items-center gap-2 px-4 py-3 text-sm text-slate-500">
-                  <Phone className="w-4 h-4 text-primary" />
-                  +91 98765 43210
-                </a>
+                {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
+                  <Link key={link.href} href={link.href} className="block px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors" onClick={() => setMobileOpen(false)}>
+                    {link.label}
+                  </Link>
+                ))}
 
-                <div className="flex gap-3 pt-3 pb-4">
+                <div className="flex gap-3 pt-4 pb-6">
                   <Link href="/auth/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="outline" className="w-full" size="md">
-                      Sign In
-                    </Button>
+                    <Button variant="outline" className="w-full" size="md">Sign In</Button>
                   </Link>
                   <Link href="/quote/request" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="primary" className="w-full" size="md">
-                      Get Quote
-                    </Button>
+                    <Button variant="primary" className="w-full" size="md">Get a Quote</Button>
                   </Link>
                 </div>
               </div>
