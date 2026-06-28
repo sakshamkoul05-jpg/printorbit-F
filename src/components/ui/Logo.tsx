@@ -1,3 +1,5 @@
+import { useId } from 'react';
+
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
   showText?: boolean;
@@ -5,6 +7,8 @@ interface LogoProps {
 }
 
 export default function Logo({ size = 'md', showText = true, dark = true }: LogoProps) {
+  const id = useId();
+
   const sizes = {
     sm: { container: 'w-7 h-7', svg: 22 },
     md: { container: 'w-9 h-9', svg: 28 },
@@ -15,26 +19,41 @@ export default function Logo({ size = 'md', showText = true, dark = true }: Logo
 
   return (
     <div className="flex items-center gap-2.5">
-      <div className={`${s.container} rounded-lg flex items-center justify-center`}>
-        <svg viewBox="0 0 40 40" width={s.svg} height={s.svg} fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M20 4C11.163 4 4 11.163 4 20s7.163 16 16 16c2.43 0 4.75-.546 6.84-1.525C21.16 35.16 17 30.12 17 24.5c0-6.904 5.596-12.5 12.5-12.5.584 0 1.156.04 1.714.115C29.595 7.73 25.097 4 20 4z"
-            fill="url(#orange-grad)"
-          />
-          <path
-            d="M18 11h7.5c4.142 0 7.5 3.358 7.5 7.5s-3.358 7.5-7.5 7.5H18V11z"
-            fill="url(#blue-grad)"
-          />
+      <div className={`${s.container} flex items-center justify-center`}>
+        <svg viewBox="0 0 200 200" width={s.svg} height={s.svg} xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <linearGradient id="orange-grad" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#FF7A00" />
-              <stop offset="1" stopColor="#FF5500" />
+            <linearGradient id={`${id}-og`} x1="20" y1="0" x2="180" y2="200" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#FF8C00" />
+              <stop offset="1" stopColor="#E85D00" />
             </linearGradient>
-            <linearGradient id="blue-grad" x1="18" y1="11" x2="33" y2="26" gradientUnits="userSpaceOnUse">
-              <stop stopColor="#00C2FF" />
-              <stop offset="1" stopColor="#0090FF" />
+            <linearGradient id={`${id}-bg`} x1="0" y1="30" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#003580" />
+              <stop offset="0.5" stopColor="#0078D4" />
+              <stop offset="1" stopColor="#00B4E6" />
             </linearGradient>
           </defs>
+
+          {/* Orange outer C-ring */}
+          <circle cx="100" cy="100" r="98" fill={`url(#${id}-og)`} />
+          {/* White inner area (creates ring thickness) */}
+          <circle cx="100" cy="100" r="68" fill="white" />
+          {/* White left opening (creates C gap) */}
+          <rect x="0" y="22" width="46" height="156" fill="white" />
+
+          {/* Blue P shape with counter cutout */}
+          <path
+            fillRule="evenodd"
+            d="
+              M 16 148 L 16 164 L 56 164 L 56 116
+              C 118 116 144 98 144 78
+              C 144 56 118 34 56 34
+              L 26 34 L 26 148 Z
+              M 62 54 L 118 54
+              A 20 22 0 0 1 118 98
+              L 62 98 Z
+            "
+            fill={`url(#${id}-bg)`}
+          />
         </svg>
       </div>
       {showText && (

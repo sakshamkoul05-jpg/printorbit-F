@@ -1,20 +1,27 @@
-<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path
-    d="M20 4C11.163 4 4 11.163 4 20s7.163 16 16 16c2.43 0 4.75-.546 6.84-1.525C21.16 35.16 17 30.12 17 24.5c0-6.904 5.596-12.5 12.5-12.5.584 0 1.156.04 1.714.115C29.595 7.73 25.097 4 20 4z"
-    fill="url(#orange-grad)"
-  />
-  <path
-    d="M18 11h7.5c4.142 0 7.5 3.358 7.5 7.5s-3.358 7.5-7.5 7.5H18V11z"
-    fill="url(#blue-grad)"
-  />
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="orange-grad" x1="4" y1="4" x2="36" y2="36" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FF7A00" />
-      <stop offset="1" stop-color="#FF5500" />
+    <linearGradient id="og" x1="20" y1="0" x2="180" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF8C00"/>
+      <stop offset="1" stop-color="#E85D00"/>
     </linearGradient>
-    <linearGradient id="blue-grad" x1="18" y1="11" x2="33" y2="26" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#00C2FF" />
-      <stop offset="1" stop-color="#0090FF" />
+    <linearGradient id="bg" x1="0" y1="30" x2="160" y2="180" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#003580"/>
+      <stop offset="0.5" stop-color="#0078D4"/>
+      <stop offset="1" stop-color="#00B4E6"/>
     </linearGradient>
   </defs>
+
+  <circle cx="100" cy="100" r="98" fill="url(#og)"/>
+  <circle cx="100" cy="100" r="68" fill="white"/>
+  <rect x="0" y="22" width="46" height="156" fill="white"/>
+
+  <path fill-rule="evenodd" d="
+    M 16 148 L 16 164 L 56 164 L 56 116
+    C 118 116 144 98 144 78
+    C 144 56 118 34 56 34
+    L 26 34 L 26 148 Z
+    M 62 54 L 118 54
+    A 20 22 0 0 1 118 98
+    L 62 98 Z
+  " fill="url(#bg)"/>
 </svg>
