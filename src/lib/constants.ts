@@ -518,11 +518,25 @@ export const PRODUCT_CATEGORIES = [
 export const NAV_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'Products', href: '/products' },
-  { label: 'Design Studio', href: '/design-studio' },
   { label: 'Templates', href: '/templates' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
+];
+
+export const CATEGORY_BAR = [
+  { label: 'View All', href: '/products' },
+  { label: 'Visiting Cards', href: '/products/business-cards' },
+  { label: 'Stationery, Letterheads & Notebooks', href: '/products/letterheads' },
+  { label: 'Stamps and Ink', href: '/products/stamps' },
+  { label: 'Signs, Posters & Marketing Materials', href: '/products/banners' },
+  { label: 'Labels, Stickers & Packaging', href: '/products/labels-stickers' },
+  { label: 'Clothing, Caps & Bags', href: '/products/tshirts' },
+  { label: 'Mugs, Albums & Gifts', href: '/products/mugs-drinkware' },
+  { label: 'Pens', href: '/products/pens' },
+  { label: 'Drinkware', href: '/products/mugs-drinkware' },
+  { label: 'Custom Polo T-shirts', href: '/products/polo-shirts' },
+  { label: 'Umbrellas & Rainwear', href: '/products/umbrellas' },
 ];
 
 export const HOW_IT_WORKS = [

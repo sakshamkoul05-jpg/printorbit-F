@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import {
   Star, ShoppingCart, Heart, Share2, Truck, Shield, Clock, RotateCcw,
   ChevronRight, ChevronDown, Minus, Plus, Check, FileText, Download,
-  MessageSquare, ThumbsUp, Package, Zap,
+  MessageSquare, ThumbsUp, Package, Zap, Layout, Upload, Wand2, Brain,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import ProductConfigurator from '@/components/products/ProductConfigurator';
@@ -265,75 +265,88 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               onPriceChange={(price, qty) => { setTotalPrice(price); setQuantity(qty); }}
             />
 
-            {/* Upload Design */}
-            <div className="border border-dashed border-slate-300 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-accent/10 rounded-xl flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-accent" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-dark">Have your own design?</p>
-                    <p className="text-xs text-muted">Upload print-ready PDF, AI, PSD, or PNG</p>
-                  </div>
+            {/* Design Options - Vistaprint Style */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-dark uppercase tracking-wide">How would you like to design?</h3>
+
+              {/* Browse Design */}
+              <Link
+                href={`/templates?product=${slug}`}
+                className="flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                  <Layout className="w-6 h-6 text-primary" />
                 </div>
-                <button
-                  onClick={() => setShowUpload(!showUpload)}
-                  className="px-4 py-2 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dark transition-colors"
-                >
-                  Upload File
-                </button>
-              </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-dark">Browse Design</p>
+                  <p className="text-xs text-muted">Choose from hundreds of professionally designed templates</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-colors" />
+              </Link>
+
+              {/* Edit Template */}
+              <Link
+                href={`/design-studio?product=${slug}`}
+                className="flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer"
+              >
+                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors">
+                  <Wand2 className="w-6 h-6 text-accent" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-dark">Edit Template</p>
+                  <p className="text-xs text-muted">Start with a template and customize it to your needs</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-colors" />
+              </Link>
+
+              {/* Upload Design */}
+              <button
+                onClick={() => setShowUpload(!showUpload)}
+                className="w-full flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group text-left"
+              >
+                <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-success/20 transition-colors">
+                  <Upload className="w-6 h-6 text-success" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-dark">Upload Design</p>
+                  <p className="text-xs text-muted">Upload print-ready PDF, AI, PSD, or PNG files</p>
+                </div>
+                <ChevronRight className={`w-5 h-5 text-slate-300 group-hover:text-primary transition-colors transition-transform ${showUpload ? 'rotate-90' : ''}`} />
+              </button>
+
               {showUpload && (
                 <motion.div
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
-                  className="mt-4 p-6 border-t border-dashed border-slate-200 text-center"
+                  className="mx-4 p-6 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50"
                 >
-                  <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <Download className="w-8 h-8 text-slate-400" />
+                  <div className="w-14 h-14 bg-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                    <Download className="w-7 h-7 text-slate-400" />
                   </div>
-                  <p className="text-sm text-muted mb-2">Drag & drop your file here, or click to browse</p>
-                  <p className="text-xs text-slate-300">PDF, AI, PSD, PNG, JPG — Max 50MB</p>
+                  <p className="text-sm font-medium text-dark mb-1">Drag & drop your file here</p>
+                  <p className="text-xs text-muted mb-3">or click to browse</p>
+                  <p className="text-[10px] text-slate-300">PDF, AI, PSD, PNG, JPG — Max 50MB</p>
                 </motion.div>
               )}
-            </div>
 
-            {/* Start with a Template - Vistaprint Style */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-dark">Start with a template</h3>
-                <Link href={`/design-studio?product=${slug}`} className="text-xs font-semibold text-primary hover:text-primary-dark">
-                  View All Templates →
-                </Link>
-              </div>
-              <div className="grid grid-cols-4 gap-2">
-                {PRODUCT_TEMPLATES.slice(0, 4).map((template) => (
-                  <Link
-                    key={template.id}
-                    href={`/design-studio?template=${template.id}&product=${slug}`}
-                    className="group relative aspect-[3/2] rounded-lg overflow-hidden border border-slate-200 hover:border-primary transition-colors"
-                  >
-                    <div
-                      className="w-full h-full flex items-center justify-center"
-                      style={{ background: template.colors[0] }}
-                    >
-                      <div className="text-center">
-                        <div className="w-8 h-4 rounded-sm mx-auto mb-1" style={{ background: template.colors[1] }} />
-                        <div className="w-6 h-1 rounded-sm mx-auto" style={{ background: template.colors[2] + '40' }} />
-                      </div>
-                    </div>
-                    {template.isPremium && (
-                      <span className="absolute top-1 right-1 px-1.5 py-0.5 bg-accent text-white text-[8px] font-bold rounded uppercase">
-                        PRO
-                      </span>
-                    )}
-                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <p className="text-[10px] font-medium text-white truncate">{template.name}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+              {/* Build with Orbit AI */}
+              <Link
+                href={`/design-studio?product=${slug}&mode=ai`}
+                className="flex items-center gap-4 p-4 border-2 border-dashed border-purple-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all group cursor-pointer relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
+                  <Brain className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1 relative z-10">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold text-dark">Build with Orbit AI</p>
+                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[9px] font-bold rounded uppercase">AI</span>
+                  </div>
+                  <p className="text-xs text-muted">Describe your design and let AI create it for you</p>
+                </div>
+                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-purple-400 transition-colors" />
+              </Link>
             </div>
 
             {/* Actions */}
@@ -385,8 +398,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <h3 className="text-lg font-bold text-dark font-heading">Design Templates</h3>
                   <p className="text-sm text-muted">Start with a professionally designed template and customize it in our design studio.</p>
                 </div>
-                <Link href={`/design-studio?product=${slug}`} className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
-                  Open Design Studio
+                <Link href={`/templates?product=${slug}`} className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
+                  Browse All Templates
                 </Link>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

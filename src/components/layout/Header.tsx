@@ -9,7 +9,7 @@ import {
   PenLine, Shirt, Camera, ChevronRight, Heart, LogIn, Eye, Flame,
   Tag, Percent, Truck,
 } from 'lucide-react';
-import { NAV_LINKS, MEGA_MENU_DATA } from '@/lib/constants';
+import { NAV_LINKS, MEGA_MENU_DATA, CATEGORY_BAR } from '@/lib/constants';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
 import Button from '@/components/ui/Button';
@@ -109,8 +109,6 @@ export default function Header() {
               <Link href="/sample-kit" className="hover:text-white/80 transition-colors">Sample Kit</Link>
               <span className="text-white/30">|</span>
               <Link href="/corporate" className="hover:text-white/80 transition-colors">Corporate</Link>
-              <span className="text-white/30">|</span>
-              <Link href="/design-studio" className="hover:text-white/80 transition-colors">Design Studio</Link>
             </div>
           </div>
         </Container>
@@ -468,6 +466,23 @@ export default function Header() {
           </div>
         </Container>
       </header>
+
+      {/* Category Bar - Vistaprint Style */}
+      <div className="hidden lg:block bg-white border-b border-slate-100 sticky top-[60px] z-40">
+        <Container>
+          <div className="flex items-center gap-0 overflow-x-auto scrollbar-hide py-0">
+            {CATEGORY_BAR.map((cat) => (
+              <Link
+                key={cat.href}
+                href={cat.href}
+                className="px-4 py-3 text-xs font-semibold text-slate-600 hover:text-primary whitespace-nowrap transition-colors border-b-2 border-transparent hover:border-primary"
+              >
+                {cat.label}
+              </Link>
+            ))}
+          </div>
+        </Container>
+      </div>
 
       {/* Mobile Menu */}
       <AnimatePresence>

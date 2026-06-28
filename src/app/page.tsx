@@ -8,7 +8,6 @@ import IndustrySolutions from '@/components/sections/IndustrySolutions';
 import PrintingProcess from '@/components/sections/PrintingProcess';
 import PremiumFinishes from '@/components/sections/PremiumFinishes';
 import WhyChooseUs from '@/components/sections/WhyChooseUs';
-import DesignStudioPreview from '@/components/sections/DesignStudioPreview';
 import BulkPrinting from '@/components/sections/BulkPrinting';
 import BusinessSolutions from '@/components/sections/BusinessSolutions';
 import Templates from '@/components/sections/Templates';
@@ -30,7 +29,6 @@ export default function Home() {
       <PrintingProcess />
       <PremiumFinishes />
       <WhyChooseUs />
-      <DesignStudioPreview />
       <BulkPrinting />
       <BusinessSolutions />
       <Templates />
