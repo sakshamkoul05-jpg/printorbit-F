@@ -19,7 +19,7 @@ export default function Logo({ size = 'md', showText = true, dark = true }: Logo
     <div className="flex items-center gap-2.5">
       <div className={`${s.container} flex items-center justify-center`}>
         <Image
-          src="/logo-printorbit.jpeg"
+          src="/logo-printorbit.png"
           alt="PrintOrbit"
           width={s.img}
           height={s.img}
