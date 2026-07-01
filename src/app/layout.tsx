@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ScrollProgress from "@/components/ui/ScrollProgress";
+import OrbitMagicWidget from "@/components/ai/OrbitMagicWidget";
 
 export const metadata: Metadata = {
   title: "PrintOrbit | India's Premium Printing Platform",
@@ -25,6 +26,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <OrbitMagicWidget />
       </body>
     </html>
   );

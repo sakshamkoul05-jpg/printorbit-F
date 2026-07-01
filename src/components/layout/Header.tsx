@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Menu, X, Phone, Mail, Search, ShoppingCart, ChevronDown,
-  ChevronRight, LogIn, ArrowRight, Tag, Percent, Truck,
+  ChevronRight, LogIn, ArrowRight, Tag, Percent, Truck, Sparkles,
 } from 'lucide-react';
 import { NAV_LINKS, CATEGORY_BAR, CATEGORY_MEGA_DATA } from '@/lib/constants';
 import Logo from '@/components/ui/Logo';
@@ -135,15 +135,28 @@ export default function Header() {
 
             {/* Desktop Nav Links */}
             <nav className="hidden lg:flex items-center gap-0.5 flex-1">
-              {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAV_LINKS.filter(l => l.label !== 'Products').map((link) =>
+                'isOrbitMagic' in link && link.isOrbitMagic ? (
+                  <button
+                    key="orbit-magic"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('toggle-orbit-magic'));
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary hover:text-primary-dark transition-colors rounded-lg bg-primary/5 hover:bg-primary/10 border border-primary/10"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    {link.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
             </nav>
 
             {/* Search Bar */}
@@ -435,11 +448,25 @@ export default function Header() {
 
                 <hr className="border-slate-100 my-3" />
 
-                {NAV_LINKS.filter(l => l.label !== 'Products').map((link) => (
-                  <Link key={link.href} href={link.href} className="block px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors" onClick={() => setMobileOpen(false)}>
-                    {link.label}
-                  </Link>
-                ))}
+                {NAV_LINKS.filter(l => l.label !== 'Products').map((link) =>
+                  'isOrbitMagic' in link && link.isOrbitMagic ? (
+                    <button
+                      key="orbit-magic-mobile"
+                      onClick={() => {
+                        setMobileOpen(false);
+                        window.dispatchEvent(new CustomEvent('toggle-orbit-magic'));
+                      }}
+                      className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-primary hover:bg-primary/5 rounded-xl transition-colors"
+                    >
+                      <Sparkles className="w-4 h-4" />
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link key={link.href} href={link.href} className="block px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors" onClick={() => setMobileOpen(false)}>
+                      {link.label}
+                    </Link>
+                  )
+                )}
 
                 <div className="flex gap-3 pt-4 pb-6">
                   <Link href="/auth/login" className="flex-1" onClick={() => setMobileOpen(false)}>

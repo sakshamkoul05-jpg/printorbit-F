@@ -522,6 +522,7 @@ export const NAV_LINKS = [
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Orbit Magic', href: '#orbit-magic', isOrbitMagic: true },
 ];
 
 export const CATEGORY_BAR = [

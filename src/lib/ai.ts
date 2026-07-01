@@ -44,7 +44,15 @@ async function fetchAI(endpoint: string, body: unknown) {
   return data;
 }
 
+interface AIChatResponse {
+  success: boolean;
+  reply: string;
+}
+
 export const aiAPI = {
+  chat: (message: string, context?: string): Promise<AIChatResponse> =>
+    fetchAI('chat', { message, context }),
+
   generateDesign: (
     prompt: string,
     canvasWidth: number,
