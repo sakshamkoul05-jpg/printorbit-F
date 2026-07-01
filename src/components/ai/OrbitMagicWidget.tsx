@@ -10,7 +10,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { aiAPI } from '@/lib/ai';
-import { generateLayout, getLayoutIds, getStyleIds, LAYOUTS, STYLE_MAP } from '@/lib/designEngine';
+import { generateLayout, getLayoutIds, getStyleIds, TEMPLATE_REGISTRY, STYLE_TO_PALETTE } from '@/lib/designEngine';
 import type { CanvasElement } from '@/app/design-studio/page';
 
 type WidgetView = 'home' | 'generate' | 'preview' | 'chat';
@@ -205,19 +205,20 @@ export default function OrbitMagicWidget() {
       // AI generates content + layout/style choices
       const result = await aiAPI.generateContent(prompt, selectedProduct.width, selectedProduct.height, selectedProduct.id);
 
-      // Design engine calculates ALL positions mathematically
+      // Design engine calculates ALL positions using template system
       const design = generateLayout(
         result.layout || 'centered',
         result.style || selectedStyle.id,
         result.content,
         selectedProduct.width,
         selectedProduct.height,
+        selectedProduct.id,
       );
 
       setGeneratedDesign(design);
 
       // Update selected style to match AI choice
-      const aiStyle = STYLE_MAP[result.style || selectedStyle.id];
+      const aiStyle = STYLE_TO_PALETTE[result.style || selectedStyle.id];
       if (aiStyle) {
         const preset = STYLE_PRESETS.find(s => s.id === result.style);
         if (preset) setSelectedStyle(preset);
@@ -232,7 +233,7 @@ export default function OrbitMagicWidget() {
         contact: 'www.printorbit.in',
         cta: 'Order Now',
       };
-      const design = generateLayout('centered', selectedStyle.id, fallbackContent, selectedProduct.width, selectedProduct.height);
+      const design = generateLayout('centered', selectedStyle.id, fallbackContent, selectedProduct.width, selectedProduct.height, selectedProduct.id);
       setGeneratedDesign(design);
     }
     setIsGenerating(false);
@@ -566,11 +567,12 @@ export default function OrbitMagicWidget() {
                                   // Regenerate with new style
                                   if (generatedDesign && selectedProduct) {
                                     const newDesign = generateLayout(
-                                      LAYOUTS[generatedDesign.elements.length > 10 ? 'centered' : 'split'] ? 'centered' : 'centered',
+                                      'centered',
                                       sp.id,
                                       { title: 'YOUR DESIGN', subtitle: prompt.slice(0, 60), tagline: selectedProduct.name.toUpperCase(), contact: 'www.printorbit.in', cta: 'Order Now' },
                                       selectedProduct.width,
                                       selectedProduct.height,
+                                      selectedProduct.id,
                                     );
                                     setGeneratedDesign(newDesign);
                                   }

@@ -54,13 +54,14 @@ export default function AIDesignGenerator({
       // AI generates content + layout/style choices
       const result = await aiAPI.generateContent(finalPrompt, canvasWidth, canvasHeight, productType);
 
-      // Design engine calculates all positions mathematically
+      // Design engine calculates all positions using template system
       const design = generateLayout(
         result.layout || 'centered',
         result.style || 'modern',
         result.content,
         canvasWidth,
         canvasHeight,
+        productType,
       );
 
       onDesignGenerated(design);

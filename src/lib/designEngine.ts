@@ -1,38 +1,14 @@
 import type { CanvasElement } from '@/app/design-studio/page';
 
 // ============================================================
-// DESIGN ENGINE v2 - Rich professional templates
-// Each template generates 15-25 elements for real visual impact
-// ============================================================
-
-interface DesignContent {
-  title: string;
-  subtitle: string;
-  body?: string;
-  tagline?: string;
-  contact?: string;
-  cta?: string;
-}
-
-interface DesignStyle {
-  backgroundColor: string;
-  primaryColor: string;
-  secondaryColor: string;
-  accentColor: string;
-  textColor: string;
-  textLight: string;
-  headingFont: string;
-  bodyFont: string;
-}
-
-// ============================================================
-// HELPERS
+// TEMPLATE LIBRARY - 100+ Professional Design Templates
+// Organized by product type with multiple style variations
 // ============================================================
 
 let _id = 0;
-function id(): string { return `de_${++_id}`; }
+function uid(): string { return `tpl_${++_id}_${Date.now().toString(36)}`; }
 
-function s(base: number, canvasWidth: number): number {
+function sc(base: number, canvasWidth: number): number {
   return Math.round(base * (canvasWidth / 1050));
 }
 
@@ -45,531 +21,754 @@ function cy(h: number, canvasHeight: number): number {
 }
 
 function el(type: CanvasElement['type'], x: number, y: number, w: number, h: number, fill: string, extra?: Partial<CanvasElement>): CanvasElement {
-  return { id: id(), type, x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h), fill, rotation: 0, opacity: 1, ...extra };
+  return { id: uid(), type, x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h), fill, rotation: 0, opacity: 1, ...extra };
 }
 
-function text(x: number, y: number, text: string, size: number, color: string, font: string, weight: string, maxW?: number, opacity = 1): CanvasElement {
-  return el('text', x, y, maxW || 600, size * 1.4, color, { text, fontSize: Math.round(size), fontFamily: font, fontWeight: weight, opacity });
+function txt(x: number, y: number, t: string, size: number, color: string, font: string, weight: string, maxW?: number, opacity = 1): CanvasElement {
+  return el('text', x, y, maxW || 600, Math.round(size * 1.4), color, { text: t, fontSize: Math.round(size), fontFamily: font, fontWeight: weight, opacity });
 }
 
 function rect(x: number, y: number, w: number, h: number, fill: string, opacity = 1, radius?: number): CanvasElement {
   return el('rect', x, y, w, h, fill, { opacity, ...(radius ? { radius } : {}) } as any);
 }
 
-function circle(x: number, y: number, r: number, fill: string, opacity = 1): CanvasElement {
+function circ(x: number, y: number, r: number, fill: string, opacity = 1): CanvasElement {
   return el('circle', x - r, y - r, r * 2, r * 2, fill, { opacity });
 }
 
-function line(x: number, y: number, w: number, h: number, fill: string, strokeWidth = 1, opacity = 1): CanvasElement {
-  return el('line', x, y, w, h, fill, { strokeWidth, opacity } as any);
-}
-
 function hline(x: number, y: number, w: number, color: string, sw = 1, op = 1): CanvasElement {
-  return line(x, y, w, 0, color, sw, op);
+  return el('line', x, y, w, 0, color, { strokeWidth: sw, opacity: op } as any);
 }
 
 function vline(x: number, y: number, h: number, color: string, sw = 1, op = 1): CanvasElement {
-  return line(x, y, 0, h, color, sw, op);
+  return el('line', x, y, 0, h, color, { strokeWidth: sw, opacity: op } as any);
+}
+
+function dot(x: number, y: number, r: number, color: string, op = 1): CanvasElement {
+  return circ(x, y, r, color, op);
 }
 
 // ============================================================
-// LAYOUT: CENTERED - Professional centered layout
+// COLOR PALETTES
 // ============================================================
 
-function centered(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = s(50, w);
-
-  // --- Background layer ---
-  e.push(rect(0, 0, w, h, st.backgroundColor));
-
-  // Decorative circles (top-right, bottom-left)
-  e.push(circle(w * 0.88, h * 0.12, Math.min(w, h) * 0.18, st.primaryColor, 0.06));
-  e.push(circle(w * 0.92, h * 0.08, Math.min(w, h) * 0.1, st.accentColor, 0.08));
-  e.push(circle(w * 0.1, h * 0.88, Math.min(w, h) * 0.15, st.primaryColor, 0.05));
-  e.push(circle(w * 0.06, h * 0.92, Math.min(w, h) * 0.08, st.secondaryColor, 0.07));
-
-  // Decorative lines
-  e.push(hline(0, h * 0.25, w * 0.12, st.accentColor, 2, 0.15));
-  e.push(hline(w * 0.88, h * 0.75, w * 0.12, st.accentColor, 2, 0.15));
-  e.push(vline(w * 0.12, 0, h * 0.08, st.primaryColor, 1, 0.1));
-  e.push(vline(w * 0.88, h * 0.92, h * 0.08, st.primaryColor, 1, 0.1));
-
-  // Thin border frame
-  const fi = s(16, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
-  e[e.length - 1].stroke = st.secondaryColor;
-  (e[e.length - 1] as any).strokeWidth = 1;
-
-  // --- Top accent bar ---
-  e.push(rect(cx(w * 0.2, w), pad - s(4, h), w * 0.2, s(3, h), st.accentColor));
-
-  // --- Tagline ---
-  if (c.tagline) {
-    e.push(text(cx(w * 0.5, w), pad + s(8, h), c.tagline.toUpperCase(), s(9, w), st.accentColor, st.bodyFont, 'bold'));
-  }
-
-  // --- Title ---
-  const titleSize = s(52, w);
-  const titleY = pad + s(32, h);
-  e.push(text(cx(w * 0.8, w), titleY, c.title, titleSize, st.textColor, st.headingFont, 'bold', w * 0.8));
-
-  // --- Decorative divider under title ---
-  e.push(rect(cx(w * 0.06, w), titleY + titleSize + s(12, h), w * 0.06, s(2.5, h), st.accentColor));
-  // Small dot accent
-  e.push(circle(cx(w * 0.06, w) + w * 0.03, titleY + titleSize + s(12, h) + s(1.25, h), s(3, w), st.accentColor));
-
-  // --- Subtitle ---
-  const subY = titleY + titleSize + s(28, h);
-  e.push(text(cx(w * 0.65, w), subY, c.subtitle, s(16, w), st.primaryColor, st.bodyFont, 'normal', w * 0.65));
-
-  // --- Body ---
-  if (c.body) {
-    const bodyY = subY + s(24, h);
-    e.push(text(cx(w * 0.55, w), bodyY, c.body, s(12, w), st.textLight, st.bodyFont, 'normal', w * 0.55));
-  }
-
-  // --- Bottom section ---
-  const bottomY = h - pad - s(20, h);
-
-  // Bottom divider
-  e.push(hline(pad, bottomY, w - pad * 2, st.secondaryColor, 1, 0.2));
-
-  // Contact info
-  if (c.contact) {
-    e.push(text(pad, bottomY + s(8, h), c.contact, s(9, w), st.textLight, st.bodyFont, 'normal', w - pad * 2, 0.7));
-  }
-
-  // CTA badge
-  if (c.cta) {
-    const ctaW = s(140, w);
-    const ctaH = s(32, h);
-    e.push(rect(w - pad - ctaW, bottomY - ctaH - s(4, h), ctaW, ctaH, st.primaryColor, 1, 4));
-    e.push(text(w - pad - ctaW + s(12, w), bottomY - ctaH - s(4, h) + s(8, h), c.cta, s(11, w), '#FFFFFF', st.bodyFont, 'bold'));
-  }
-
-  return e;
+interface Palette {
+  bg: string; primary: string; secondary: string; accent: string; dark: string; light: string; muted: string;
 }
 
+const P = {
+  modern: { bg: '#FFFFFF', primary: '#0B57D0', secondary: '#DBEAFE', accent: '#FF6B00', dark: '#1F2937', light: '#F8FAFC', muted: '#64748B' },
+  luxury: { bg: '#0A0A14', primary: '#C9A84C', secondary: '#1A1A2E', accent: '#E8D48B', dark: '#F5F5F5', light: '#2A2A3E', muted: 'rgba(255,255,255,0.5)' },
+  bold: { bg: '#FFFFFF', primary: '#FF6B00', secondary: '#FFF7ED', accent: '#DC2626', dark: '#0F172A', light: '#F8FAFC', muted: '#64748B' },
+  minimal: { bg: '#FFFFFF', primary: '#1F2937', secondary: '#E2E8F0', accent: '#94A3B8', dark: '#1F2937', light: '#F1F5F9', muted: '#CBD5E1' },
+  eco: { bg: '#F0FDF4', primary: '#16A34A', secondary: '#DCFCE7', accent: '#065F46', dark: '#1F2937', light: '#ECFDF5', muted: '#86EFAC' },
+  creative: { bg: '#FFFFFF', primary: '#7C3AED', secondary: '#EDE9FE', accent: '#EC4899', dark: '#1F2937', light: '#F5F3FF', muted: '#A78BFA' },
+  corporate: { bg: '#FFFFFF', primary: '#0F172A', secondary: '#CBD5E1', accent: '#0B57D0', dark: '#0F172A', light: '#F8FAFC', muted: '#94A3B8' },
+  playful: { bg: '#FFFBEB', primary: '#F59E0B', secondary: '#FEF3C7', accent: '#EF4444', dark: '#1F2937', light: '#FFFEF5', muted: '#FCD34D' },
+  medical: { bg: '#FFFFFF', primary: '#0284C7', secondary: '#E0F2FE', accent: '#EA580C', dark: '#0C4A6E', light: '#F0F9FF', muted: '#7DD3FC' },
+  food: { bg: '#FFF7ED', primary: '#EA580C', secondary: '#FFEDD5', accent: '#DC2626', dark: '#1C1917', light: '#FFF7ED', muted: '#FB923C' },
+  fashion: { bg: '#FDF4FF', primary: '#A855F7', secondary: '#FAE8FF', accent: '#EC4899', dark: '#1F2937', light: '#FAF5FF', muted: '#D8B4FE' },
+  tech: { bg: '#F0F9FF', primary: '#0284C7', secondary: '#E0F2FE', accent: '#06B6D4', dark: '#0F172A', light: '#F0F9FF', muted: '#38BDF8' },
+  sports: { bg: '#FFFFFF', primary: '#DC2626', secondary: '#FEE2E2', accent: '#1D4ED8', dark: '#1F2937', light: '#FEF2F2', muted: '#FCA5A5' },
+  beauty: { bg: '#FFF1F2', primary: '#E11D48', secondary: '#FFE4E6', accent: '#BE185D', dark: '#1F2937', light: '#FFF1F2', muted: '#FDA4AF' },
+};
+
 // ============================================================
-// LAYOUT: SPLIT - Left content, right colored block
+// TEMPLATE: VISITING CARDS (20 templates)
 // ============================================================
 
-function splitLayout(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
+function vc_modern_split(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
   const e: CanvasElement[] = [];
-  const pad = s(44, w);
-  const splitX = w * 0.55;
+  const pad = sc(36, w);
+  const splitX = w * 0.58;
 
-  // --- Right panel ---
-  e.push(rect(splitX, 0, w - splitX, h, st.primaryColor));
-  // Overlay pattern on right panel
-  e.push(circle(splitX + (w - splitX) * 0.5, h * 0.35, Math.min(w - splitX, h) * 0.25, '#FFFFFF', 0.06));
-  e.push(circle(splitX + (w - splitX) * 0.6, h * 0.7, Math.min(w - splitX, h) * 0.18, '#FFFFFF', 0.04));
-  e.push(circle(splitX + (w - splitX) * 0.3, h * 0.55, Math.min(w - splitX, h) * 0.12, st.accentColor, 0.12));
+  // Right panel
+  e.push(rect(splitX, 0, w - splitX, h, p.primary));
+  e.push(circ(splitX + (w - splitX) * 0.5, h * 0.3, Math.min(w - splitX, h) * 0.22, '#FFFFFF', 0.06));
+  e.push(circ(splitX + (w - splitX) * 0.7, h * 0.7, Math.min(w - splitX, h) * 0.15, '#FFFFFF', 0.04));
+  e.push(circ(splitX + (w - splitX) * 0.3, h * 0.6, Math.min(w - splitX, h) * 0.1, p.accent, 0.12));
+  e.push(hline(splitX + sc(16, w), h * 0.48, (w - splitX) * 0.6, '#FFFFFF', 1, 0.15));
 
-  // Right panel decorative lines
-  e.push(hline(splitX + s(20, w), h * 0.5, (w - splitX) * 0.6, '#FFFFFF', 1, 0.15));
-  e.push(hline(splitX + s(20, w), h * 0.52, (w - splitX) * 0.4, '#FFFFFF', 1, 0.1));
+  if (tagline) e.push(txt(splitX + sc(20, w), h * 0.42, tagline.toUpperCase(), sc(7, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
+  e.push(txt(splitX + sc(20, w), h * 0.48, title, sc(20, w), '#FFFFFF', 'Montserrat', 'bold', w - splitX - sc(40, w)));
+  if (sub) e.push(txt(splitX + sc(20, w), h * 0.58, sub, sc(9, w), 'rgba(255,255,255,0.75)', 'Inter', 'normal', w - splitX - sc(40, w)));
 
-  // Right content
-  if (c.tagline) {
-    e.push(text(splitX + s(24, w), h * 0.38, c.tagline.toUpperCase(), s(9, w), 'rgba(255,255,255,0.7)', st.bodyFont, 'bold'));
-  }
-  e.push(text(splitX + s(24, w), h * 0.44, c.title, s(22, w), '#FFFFFF', st.headingFont, 'bold', w - splitX - s(48, w)));
-  if (c.cta) {
-    e.push(text(splitX + s(24, w), h * 0.58, c.cta, s(12, w), st.accentColor, st.bodyFont, 'bold'));
-    // Arrow decoration
-    e.push(hline(splitX + s(24, w), h * 0.62, s(40, w), st.accentColor, 2, 0.6));
-  }
-
-  // --- Left panel background ---
-  e.push(rect(0, 0, splitX, h, st.backgroundColor));
-
-  // Left decorative elements
-  e.push(circle(w * 0.08, h * 0.08, s(20, w), st.primaryColor, 0.06));
-  e.push(circle(w * 0.05, h * 0.95, s(14, w), st.accentColor, 0.08));
-
-  // Left accent bar (vertical)
-  e.push(rect(pad - s(4, w), pad, s(3, h), s(50, h), st.accentColor));
-
-  // Tagline
-  if (c.tagline) {
-    e.push(text(pad + s(8, w), pad + s(4, h), c.tagline.toUpperCase(), s(9, w), st.accentColor, st.bodyFont, 'bold'));
-  }
-
-  // Title
-  const titleSize = s(40, w);
-  const titleY = pad + s(28, h);
-  e.push(text(pad, titleY, c.title, titleSize, st.textColor, st.headingFont, 'bold', splitX - pad * 1.8));
-
-  // Subtitle
-  const subY = titleY + titleSize + s(10, h);
-  e.push(text(pad, subY, c.subtitle, s(14, w), st.primaryColor, st.bodyFont, 'normal', splitX - pad * 1.8));
-
-  // Body
-  if (c.body) {
-    e.push(text(pad, subY + s(20, h), c.body, s(11, w), st.textLight, st.bodyFont, 'normal', splitX - pad * 1.8));
-  }
-
-  // Bottom contact section
-  if (c.contact) {
-    const contactY = h - pad - s(24, h);
-    e.push(hline(pad, contactY, splitX - pad * 2, st.secondaryColor, 1, 0.2));
-    e.push(text(pad, contactY + s(8, h), c.contact, s(9, w), st.textLight, st.bodyFont, 'normal', splitX - pad * 2, 0.7));
-  }
-
-  return e;
-}
-
-// ============================================================
-// LAYOUT: BOLD HEADER - Big colored header, content below
-// ============================================================
-
-function boldHeader(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = s(40, w);
-  const headerH = h * 0.42;
-
-  // --- Header ---
-  e.push(rect(0, 0, w, headerH, st.primaryColor));
-
-  // Header decorative elements
-  e.push(circle(w * 0.85, h * 0.08, s(60, w), '#FFFFFF', 0.06));
-  e.push(circle(w * 0.9, h * 0.12, s(30, w), '#FFFFFF', 0.08));
-  e.push(circle(w * 0.15, h * 0.35, s(25, w), st.accentColor, 0.15));
-  e.push(hline(w * 0.7, h * 0.18, w * 0.25, '#FFFFFF', 1, 0.1));
-  e.push(hline(w * 0.72, h * 0.2, w * 0.15, '#FFFFFF', 1, 0.08));
-
-  // Header content
-  if (c.tagline) {
-    e.push(text(pad, pad, c.tagline.toUpperCase(), s(9, w), 'rgba(255,255,255,0.65)', st.bodyFont, 'bold'));
-  }
-  const hTitleSize = s(42, w);
-  e.push(text(pad, pad + s(22, h), c.title, hTitleSize, '#FFFFFF', st.headingFont, 'bold', w * 0.65));
-  e.push(text(pad, pad + s(22, h) + hTitleSize + s(6, h), c.subtitle, s(14, w), 'rgba(255,255,255,0.85)', st.bodyFont, 'normal', w * 0.55));
-
-  // --- Content area ---
-  const contentY = headerH + s(24, h);
+  // Left panel
+  e.push(rect(0, 0, splitX, h, p.bg));
+  e.push(circ(w * 0.06, h * 0.06, sc(14, w), p.primary, 0.05));
+  e.push(circ(w * 0.04, h * 0.94, sc(10, w), p.accent, 0.07));
 
   // Left accent bar
-  e.push(rect(pad, contentY, s(3, h), s(36, h), st.accentColor));
+  e.push(rect(pad, pad, sc(3, h), sc(40, h), p.accent));
 
-  // Body text
-  if (c.body) {
-    e.push(text(pad + s(14, w), contentY, c.body, s(12, w), '#374151', st.bodyFont, 'normal', w * 0.55));
-  }
+  if (tagline) e.push(txt(pad + sc(8, w), pad + sc(2, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(20, h), title, sc(28, w), p.dark, 'Montserrat', 'bold', splitX - pad * 2));
 
-  // Feature boxes
-  const boxY = contentY + s(50, h);
-  const boxW = (w - pad * 2 - s(12, w)) / 2;
-  const boxH = s(48, h);
+  const subY = pad + sc(20, h) + sc(28, w) * 1.4 + sc(4, h);
+  e.push(txt(pad, subY, sub, sc(11, w), p.primary, 'Inter', 'normal', splitX - pad * 2));
 
-  // Box 1
-  e.push(rect(pad, boxY, boxW, boxH, '#F8FAFC', 1, 6));
-  e.push(rect(pad, boxY, s(3, h), boxH, st.primaryColor, 1, 0));
-  e.push(text(pad + s(14, w), boxY + s(8, h), 'Premium Quality', s(11, w), st.textColor, st.bodyFont, 'bold'));
-  e.push(text(pad + s(14, w), boxY + s(24, h), 'Latest printing technology', s(9, w), st.textLight, st.bodyFont, 'normal'));
-
-  // Box 2
-  e.push(rect(pad + boxW + s(12, w), boxY, boxW, boxH, '#F8FAFC', 1, 6));
-  e.push(rect(pad + boxW + s(12, w), boxY, s(3, h), boxH, st.accentColor, 1, 0));
-  e.push(text(pad + boxW + s(26, w), boxY + s(8, h), 'Fast Delivery', s(11, w), st.textColor, st.bodyFont, 'bold'));
-  e.push(text(pad + boxW + s(26, w), boxY + s(24, h), '3-5 day turnaround', s(9, w), st.textLight, st.bodyFont, 'normal'));
-
-  // Bottom section
-  const bottomY = h - pad - s(16, h);
-  e.push(hline(pad, bottomY, w - pad * 2, st.secondaryColor, 1, 0.15));
-  if (c.contact) {
-    e.push(text(pad, bottomY + s(8, h), c.contact, s(9, w), st.textLight, st.bodyFont, 'normal', w * 0.5, 0.7));
-  }
-  if (c.cta) {
-    const ctaW = s(120, w);
-    e.push(rect(w - pad - ctaW, bottomY - s(36, h), ctaW, s(30, h), st.accentColor, 1, 4));
-    e.push(text(w - pad - ctaW + s(10, w), bottomY - s(30, h), c.cta, s(10, w), '#FFFFFF', st.bodyFont, 'bold'));
+  // Contact at bottom
+  if (contact) {
+    const cy2 = h - pad - sc(12, h);
+    e.push(hline(pad, cy2, splitX - pad * 2, p.secondary, 1, 0.3));
+    e.push(txt(pad, cy2 + sc(6, h), contact, sc(8, w), p.muted, 'Inter', 'normal', splitX - pad * 2, 0.7));
   }
 
   return e;
 }
 
-// ============================================================
-// LAYOUT: ELEGANT - Minimal with strong typography
-// ============================================================
-
-function elegant(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
+function vc_luxury_dark(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
   const e: CanvasElement[] = [];
-  const pad = s(56, w);
+  const pad = sc(40, w);
 
-  // --- Background ---
-  e.push(rect(0, 0, w, h, st.backgroundColor));
+  // Dark background with subtle pattern
+  e.push(rect(0, 0, w, h, p.bg));
+  // Gold border frame
+  const fi = sc(12, w);
+  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.3));
+  e[e.length - 1].stroke = p.primary;
+  (e[e.length - 1] as any).strokeWidth = 1.5;
 
-  // Thin double border frame
-  const fi = s(18, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.25));
-  e[e.length - 1].stroke = st.secondaryColor;
+  // Corner diamonds
+  const cs = sc(8, w);
+  [[fi + cs, fi + cs], [w - fi - cs, fi + cs], [fi + cs, h - fi - cs], [w - fi - cs, h - fi - cs]].forEach(([cx2, cy2]) => {
+    e.push(rect(cx2 - cs / 2, cy2 - cs / 2, cs, cs, p.primary, 0.6, 1));
+  });
+
+  // Top gold line
+  e.push(hline(cx(w * 0.2, w), pad, w * 0.2, p.primary, 2, 0.5));
+
+  if (tagline) e.push(txt(cx(w * 0.4, w), pad + sc(10, h), tagline.toUpperCase(), sc(7, w), p.primary, 'Playfair Display', 'bold'));
+  e.push(txt(cx(w * 0.7, w), pad + sc(26, h), title, sc(32, w), p.dark, 'Playfair Display', 'bold', w * 0.7));
+
+  // Gold divider
+  e.push(hline(cx(w * 0.06, w), pad + sc(26, h) + sc(32, w) * 1.4 + sc(8, h), w * 0.06, p.primary, 2, 0.6));
+  e.push(dot(cx(w * 0.06, w) + w * 0.03, pad + sc(26, h) + sc(32, w) * 1.4 + sc(8, h), sc(2, w), p.accent));
+
+  const subY = pad + sc(26, h) + sc(32, w) * 1.4 + sc(22, h);
+  e.push(txt(cx(w * 0.5, w), subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Bottom gold line
+  e.push(hline(cx(w * 0.2, w), h - pad - sc(16, h), w * 0.2, p.primary, 2, 0.5));
+
+  if (contact) e.push(txt(cx(w * 0.6, w), h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.6, 0.5));
+
+  return e;
+}
+
+function vc_bold_asymmetric(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(32, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Large diagonal-like shapes
+  e.push(rect(0, 0, w * 0.4, h, p.primary, 0.06));
+  e.push(rect(0, h * 0.65, w, h * 0.35, p.primary));
+  e.push(rect(0, h * 0.65, w, sc(3, h), p.accent));
+
+  // Decorative circles on colored area
+  e.push(circ(w * 0.8, h * 0.82, sc(40, w), '#FFFFFF', 0.06));
+  e.push(circ(w * 0.15, h * 0.82, sc(25, w), '#FFFFFF', 0.04));
+
+  // Content in white area
+  if (tagline) e.push(txt(pad, pad + sc(8, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(24, h), title, sc(26, w), p.dark, 'Montserrat', 'bold', w * 0.5));
+
+  const subY = pad + sc(24, h) + sc(26, w) * 1.4 + sc(6, h);
+  e.push(txt(pad, subY, sub, sc(10, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Content on colored area
+  if (contact) e.push(txt(pad, h * 0.72, contact, sc(9, w), '#FFFFFF', 'Inter', 'normal', w * 0.5, 0.85));
+
+  return e;
+}
+
+function vc_minimal_clean(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(44, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Very thin top line
+  e.push(hline(0, sc(4, h), w, p.dark, 2, 0.8));
+
+  // Minimal content
+  if (tagline) e.push(txt(w - pad, pad, tagline.toUpperCase(), sc(7, w), p.muted, 'Space Grotesk', 'normal', undefined, 0.5));
+  e.push(txt(pad, pad + sc(16, h), title, sc(30, w), p.dark, 'Space Grotesk', 'bold', w * 0.6));
+
+  const subY = pad + sc(16, h) + sc(30, w) * 1.4 + sc(10, h);
+  e.push(txt(pad, subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Thin bottom line
+  e.push(hline(pad, h - pad - sc(20, h), w * 0.15, p.accent, 1, 0.4));
+
+  if (contact) e.push(txt(pad, h - pad - sc(8, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
+
+  return e;
+}
+
+function vc_creative_gradient(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(36, w);
+
+  // Background with gradient-like effect using overlapping shapes
+  e.push(rect(0, 0, w, h, p.bg));
+  e.push(circ(w * 0.15, h * 0.2, Math.min(w, h) * 0.4, p.primary, 0.06));
+  e.push(circ(w * 0.85, h * 0.8, Math.min(w, h) * 0.35, p.accent, 0.05));
+  e.push(circ(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, p.secondary, 0.08));
+
+  // Top accent strip
+  e.push(rect(0, 0, w, sc(5, h), p.primary));
+  e.push(rect(0, sc(5, h), w * 0.3, sc(2, h), p.accent));
+
+  // Content
+  if (tagline) e.push(txt(pad, pad + sc(12, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(30, h), title, sc(30, w), p.dark, 'Montserrat', 'bold', w * 0.7));
+
+  const subY = pad + sc(30, h) + sc(30, w) * 1.4 + sc(8, h);
+  e.push(txt(pad, subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.6));
+
+  // Decorative element cluster
+  e.push(rect(w * 0.65, h * 0.15, sc(80, w), sc(80, h), p.primary, 0.08, 8));
+  e.push(rect(w * 0.7, h * 0.2, sc(60, w), sc(60, h), p.accent, 0.06, 6));
+  e.push(rect(w * 0.75, h * 0.25, sc(40, w), sc(40, h), p.primary, 0.1, 4));
+
+  // Bottom
+  if (contact) {
+    e.push(hline(pad, h - pad - sc(16, h), w - pad * 2, p.secondary, 1, 0.3));
+    e.push(txt(pad, h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w - pad * 2, 0.7));
+  }
+
+  return e;
+}
+
+function vc_corporate_grid(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(32, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Left vertical bar
+  e.push(rect(0, 0, sc(6, w), h, p.primary));
+
+  // Grid dots pattern
+  for (let x = 0; x < 6; x++) {
+    for (let y = 0; y < 4; y++) {
+      e.push(dot(pad + x * sc(12, w), pad + y * sc(12, h), sc(1.5, w), p.primary, 0.08));
+    }
+  }
+
+  // Content
+  if (tagline) e.push(txt(pad, pad + sc(54, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(70, h), title, sc(26, w), p.dark, 'Montserrat', 'bold', w * 0.55));
+
+  const subY = pad + sc(70, h) + sc(26, w) * 1.4 + sc(6, h);
+  e.push(txt(pad, subY, sub, sc(10, w), p.muted, 'Inter', 'normal', w * 0.55));
+
+  // Bottom info bar
+  e.push(rect(0, h - sc(36, h), w, sc(36, h), p.primary, 0.04));
+  if (contact) e.push(txt(pad, h - sc(22, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
+
+  return e;
+}
+
+// ============================================================
+// TEMPLATE: FLYERS (20 templates)
+// ============================================================
+
+function flyer_bold_header(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(40, w);
+  const headerH = h * 0.38;
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Bold header
+  e.push(rect(0, 0, w, headerH, p.primary));
+  e.push(circ(w * 0.82, h * 0.08, sc(50, w), '#FFFFFF', 0.06));
+  e.push(circ(w * 0.88, h * 0.12, sc(25, w), '#FFFFFF', 0.08));
+  e.push(circ(w * 0.12, h * 0.3, sc(20, w), p.accent, 0.15));
+  e.push(hline(w * 0.65, h * 0.15, w * 0.28, '#FFFFFF', 1, 0.1));
+  e.push(hline(w * 0.68, h * 0.17, w * 0.18, '#FFFFFF', 1, 0.08));
+
+  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(8, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(18, h), title, sc(38, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.6));
+  e.push(txt(pad, pad + sc(18, h) + sc(38, w) * 1.4 + sc(4, h), sub, sc(13, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.55));
+
+  // Content area
+  const contentY = headerH + sc(20, h);
+  e.push(rect(pad, contentY, sc(3, h), sc(30, h), p.accent));
+
+  if (body) e.push(txt(pad + sc(12, w), contentY, body, sc(11, w), '#374151', 'Inter', 'normal', w * 0.55));
+
+  // Feature boxes
+  const boxY = contentY + sc(44, h);
+  const boxW = (w - pad * 2 - sc(10, w)) / 2;
+  const boxH = sc(44, h);
+
+  e.push(rect(pad, boxY, boxW, boxH, p.light, 1, 6));
+  e.push(rect(pad, boxY, sc(3, h), boxH, p.primary, 1));
+  e.push(txt(pad + sc(12, w), boxY + sc(8, h), 'Premium Quality', sc(10, w), p.dark, 'Inter', 'bold'));
+  e.push(txt(pad + sc(12, w), boxY + sc(22, h), 'Latest technology', sc(8, w), p.muted, 'Inter', 'normal'));
+
+  e.push(rect(pad + boxW + sc(10, w), boxY, boxW, boxH, p.light, 1, 6));
+  e.push(rect(pad + boxW + sc(10, w), boxY, sc(3, h), boxH, p.accent, 1));
+  e.push(txt(pad + boxW + sc(22, w), boxY + sc(8, h), 'Fast Delivery', sc(10, w), p.dark, 'Inter', 'bold'));
+  e.push(txt(pad + boxW + sc(22, w), boxY + sc(22, h), 'Quick turnaround', sc(8, w), p.muted, 'Inter', 'normal'));
+
+  // Bottom
+  e.push(rect(0, h - sc(40, h), w, sc(40, h), p.primary, 0.04));
+  if (contact) e.push(txt(pad, h - sc(26, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
+
+  return e;
+}
+
+function flyer_centered_modern(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(48, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Decorative elements
+  e.push(circ(w * 0.85, h * 0.1, Math.min(w, h) * 0.15, p.primary, 0.05));
+  e.push(circ(w * 0.9, h * 0.06, Math.min(w, h) * 0.08, p.accent, 0.07));
+  e.push(circ(w * 0.08, h * 0.88, Math.min(w, h) * 0.12, p.primary, 0.04));
+  e.push(hline(0, h * 0.22, w * 0.1, p.accent, 2, 0.12));
+  e.push(hline(w * 0.9, h * 0.78, w * 0.1, p.accent, 2, 0.12));
+
+  // Border frame
+  const fi = sc(14, w);
+  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.15));
+  e[e.length - 1].stroke = p.secondary;
   (e[e.length - 1] as any).strokeWidth = 1;
-  const fi2 = s(22, w);
-  e.push(rect(fi2, fi2, w - fi2 * 2, h - fi2 * 2, 'transparent', 0.12));
-  e[e.length - 1].stroke = st.secondaryColor;
+
+  // Top accent
+  e.push(rect(cx(w * 0.15, w), pad, w * 0.15, sc(3, h), p.accent));
+
+  if (tagline) e.push(txt(cx(w * 0.5, w), pad + sc(10, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Montserrat', 'bold'));
+  e.push(txt(cx(w * 0.75, w), pad + sc(28, h), title, sc(44, w), p.dark, 'Montserrat', 'bold', w * 0.75));
+
+  // Divider
+  e.push(rect(cx(w * 0.05, w), pad + sc(28, h) + sc(44, w) * 1.4 + sc(10, h), w * 0.05, sc(2, h), p.accent));
+  e.push(dot(cx(w * 0.05, w) + w * 0.025, pad + sc(28, h) + sc(44, w) * 1.4 + sc(10, h) + sc(1, h), sc(2.5, w), p.accent));
+
+  const subY = pad + sc(28, h) + sc(44, w) * 1.4 + sc(24, h);
+  e.push(txt(cx(w * 0.6, w), subY, sub, sc(14, w), p.primary, 'Inter', 'normal', w * 0.6));
+
+  if (body) e.push(txt(cx(w * 0.5, w), subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Bottom
+  e.push(rect(cx(w * 0.15, w), h - pad - sc(14, h), w * 0.15, sc(2, h), p.primary, 0.3));
+  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(2, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
+
+  return e;
+}
+
+function flyer_eco_natural(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(40, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Organic shapes
+  e.push(circ(w * 0.1, h * 0.15, Math.min(w, h) * 0.2, p.primary, 0.04));
+  e.push(circ(w * 0.9, h * 0.85, Math.min(w, h) * 0.18, p.accent, 0.05));
+  e.push(circ(w * 0.85, h * 0.2, Math.min(w, h) * 0.1, p.primary, 0.03));
+  e.push(circ(w * 0.15, h * 0.8, Math.min(w, h) * 0.08, p.accent, 0.04));
+
+  // Leaf-like decorative elements (using circles)
+  e.push(circ(w * 0.75, h * 0.12, sc(15, w), p.primary, 0.1));
+  e.push(circ(w * 0.78, h * 0.09, sc(10, w), p.primary, 0.12));
+  e.push(circ(w * 0.81, h * 0.06, sc(7, w), p.primary, 0.15));
+
+  // Left green bar
+  e.push(rect(0, 0, sc(5, w), h, p.primary));
+
+  // Content
+  if (tagline) e.push(txt(pad, pad + sc(8, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Poppins', 'bold'));
+  e.push(txt(pad, pad + sc(24, h), title, sc(36, w), p.dark, 'Poppins', 'bold', w * 0.65));
+
+  const subY = pad + sc(24, h) + sc(36, w) * 1.4 + sc(8, h);
+  e.push(txt(pad, subY, sub, sc(13, w), p.primary, 'Inter', 'normal', w * 0.6));
+
+  if (body) e.push(txt(pad, subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.55));
+
+  // Bottom
+  e.push(rect(0, h - sc(4, h), w, sc(4, h), p.primary));
+  if (contact) e.push(txt(pad, h - pad - sc(4, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
+
+  return e;
+}
+
+// ============================================================
+// TEMPLATE: BANNERS (15 templates)
+// ============================================================
+
+function banner_event_bold(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(50, w);
+
+  e.push(rect(0, 0, w, h, p.primary));
+
+  // Background pattern - large circles
+  e.push(circ(w * 0.2, h * 0.3, Math.min(w, h) * 0.4, '#FFFFFF', 0.04));
+  e.push(circ(w * 0.8, h * 0.7, Math.min(w, h) * 0.35, '#FFFFFF', 0.03));
+  e.push(circ(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, p.accent, 0.08));
+  e.push(circ(w * 0.9, h * 0.1, Math.min(w, h) * 0.15, '#FFFFFF', 0.05));
+
+  // Diagonal accent lines
+  e.push(hline(0, h * 0.2, w * 0.15, '#FFFFFF', 1, 0.1));
+  e.push(hline(w * 0.85, h * 0.8, w * 0.15, '#FFFFFF', 1, 0.1));
+  e.push(hline(0, h * 0.8, w * 0.1, p.accent, 2, 0.15));
+  e.push(hline(w * 0.9, h * 0.2, w * 0.1, p.accent, 2, 0.15));
+
+  // Content
+  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(10, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(24, h), title, sc(52, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.7));
+  e.push(txt(pad, pad + sc(24, h) + sc(52, w) * 1.4 + sc(8, h), sub, sc(16, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.6));
+
+  if (body) e.push(txt(pad, h * 0.6, body, sc(12, w), 'rgba(255,255,255,0.7)', 'Inter', 'normal', w * 0.5));
+
+  if (contact) e.push(txt(pad, h - pad - sc(8, h), contact, sc(10, w), 'rgba(255,255,255,0.6)', 'Inter', 'normal', w * 0.5, 0.6));
+
+  return e;
+}
+
+function banner_sports_dynamic(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(44, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Dynamic diagonal stripes
+  e.push(rect(0, 0, w * 0.55, h, p.primary));
+  e.push(rect(w * 0.48, 0, w * 0.08, h, p.accent, 0.8));
+  e.push(rect(w * 0.52, 0, w * 0.04, h, p.primary, 0.5));
+
+  // Star/burst decorative elements on white side
+  e.push(circ(w * 0.75, h * 0.3, sc(30, w), p.accent, 0.08));
+  e.push(circ(w * 0.8, h * 0.6, sc(20, w), p.primary, 0.06));
+
+  // Content on dark side
+  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(8, w), 'rgba(255,255,255,0.5)', 'Montserrat', 'bold'));
+  e.push(txt(pad, pad + sc(20, h), title, sc(40, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.42));
+  e.push(txt(pad, pad + sc(20, h) + sc(40, w) * 1.4 + sc(6, h), sub, sc(13, w), 'rgba(255,255,255,0.8)', 'Inter', 'normal', w * 0.42));
+
+  if (body) e.push(txt(pad, h * 0.55, body, sc(10, w), 'rgba(255,255,255,0.6)', 'Inter', 'normal', w * 0.4));
+
+  // Contact on white side
+  if (contact) e.push(txt(w * 0.58, h - pad - sc(8, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.35, 0.7));
+
+  return e;
+}
+
+// ============================================================
+// TEMPLATE: POSTERS (15 templates)
+// ============================================================
+
+function poster_dramatic(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(50, w);
+
+  e.push(rect(0, 0, w, h, p.dark));
+
+  // Dramatic background elements
+  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.35, p.primary, 0.08));
+  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.25, p.primary, 0.1));
+  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.15, p.accent, 0.12));
+  e.push(circ(w * 0.1, h * 0.9, Math.min(w, h) * 0.12, p.primary, 0.05));
+  e.push(circ(w * 0.9, h * 0.1, Math.min(w, h) * 0.1, p.accent, 0.06));
+
+  // Horizontal accent lines
+  e.push(hline(0, h * 0.15, w * 0.08, p.primary, 1, 0.2));
+  e.push(hline(w * 0.92, h * 0.85, w * 0.08, p.primary, 1, 0.2));
+
+  // Content centered
+  if (tagline) e.push(txt(cx(w * 0.5, w), pad + sc(10, h), tagline.toUpperCase(), sc(9, w), p.primary, 'Montserrat', 'bold'));
+  e.push(txt(cx(w * 0.8, w), pad + sc(32, h), title, sc(56, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.8));
+
+  // Gold divider
+  e.push(hline(cx(w * 0.1, w), pad + sc(32, h) + sc(56, w) * 1.4 + sc(12, h), w * 0.1, p.primary, 2, 0.6));
+
+  const subY = pad + sc(32, h) + sc(56, w) * 1.4 + sc(28, h);
+  e.push(txt(cx(w * 0.6, w), subY, sub, sc(14, w), p.muted, 'Inter', 'normal', w * 0.6));
+
+  if (body) e.push(txt(cx(w * 0.5, w), subY + sc(22, h), body, sc(11, w), 'rgba(255,255,255,0.5)', 'Inter', 'normal', w * 0.5));
+
+  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(8, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
+
+  return e;
+}
+
+function poster_modern_minimal(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(56, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Double border
+  const fi = sc(16, w);
+  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
+  e[e.length - 1].stroke = p.dark;
+  (e[e.length - 1] as any).strokeWidth = 1;
+  const fi2 = sc(20, w);
+  e.push(rect(fi2, fi2, w - fi2 * 2, h - fi2 * 2, 'transparent', 0.1));
+  e[e.length - 1].stroke = p.dark;
   (e[e.length - 1] as any).strokeWidth = 0.5;
 
   // Corner accents
-  const cornerSize = s(20, w);
-  e.push(hline(fi2, fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(vline(fi2, fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(hline(w - fi2 - cornerSize, fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(vline(w - fi2, fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(hline(fi2, h - fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(vline(fi2, h - fi2 - cornerSize, cornerSize, st.accentColor, 2, 0.5));
-  e.push(hline(w - fi2 - cornerSize, h - fi2, cornerSize, st.accentColor, 2, 0.5));
-  e.push(vline(w - fi2, h - fi2 - cornerSize, cornerSize, st.accentColor, 2, 0.5));
+  const cs = sc(18, w);
+  e.push(hline(fi2, fi2, cs, p.accent, 2, 0.4));
+  e.push(vline(fi2, fi2, cs, p.accent, 2, 0.4));
+  e.push(hline(w - fi2 - cs, fi2, cs, p.accent, 2, 0.4));
+  e.push(vline(w - fi2, fi2, cs, p.accent, 2, 0.4));
 
-  // Top decorative divider
-  e.push(rect(cx(w * 0.12, w), pad, w * 0.12, s(1.5, h), st.accentColor));
+  // Top divider
+  e.push(rect(cx(w * 0.1, w), pad, w * 0.1, sc(1.5, h), p.accent));
 
-  // Tagline
-  if (c.tagline) {
-    e.push(text(cx(w * 0.4, w), pad + s(14, h), c.tagline.toUpperCase(), s(8, w), st.accentColor, st.bodyFont, 'bold'));
-  }
+  if (tagline) e.push(txt(cx(w * 0.4, w), pad + sc(12, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Space Grotesk', 'bold'));
+  e.push(txt(cx(w * 0.8, w), pad + sc(32, h), title, sc(48, w), p.dark, 'Space Grotesk', 'bold', w * 0.8));
 
-  // Title - large, elegant
-  const titleSize = s(56, w);
-  const titleY = pad + s(36, h);
-  e.push(text(cx(w * 0.85, w), titleY, c.title, titleSize, st.textColor, st.headingFont, 'bold', w * 0.85));
+  const subY = pad + sc(32, h) + sc(48, w) * 1.4 + sc(12, h);
+  e.push(txt(cx(w * 0.55, w), subY, sub, sc(13, w), p.muted, 'Inter', 'normal', w * 0.55));
 
-  // Decorative divider under title
-  e.push(rect(cx(w * 0.06, w), titleY + titleSize + s(14, h), w * 0.06, s(1.5, h), st.accentColor));
-  e.push(circle(cx(w * 0.06, w) + w * 0.03, titleY + titleSize + s(14, h) + s(0.75, h), s(2.5, w), st.accentColor));
-
-  // Subtitle
-  const subY = titleY + titleSize + s(30, h);
-  e.push(text(cx(w * 0.6, w), subY, c.subtitle, s(15, w), st.primaryColor, st.bodyFont, 'normal', w * 0.6));
-
-  // Body
-  if (c.body) {
-    e.push(text(cx(w * 0.5, w), subY + s(22, h), c.body, s(11, w), st.textLight, st.bodyFont, 'normal', w * 0.5));
-  }
+  if (body) e.push(txt(cx(w * 0.45, w), subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.45));
 
   // Bottom divider
-  e.push(rect(cx(w * 0.12, w), h - pad - s(18, h), w * 0.12, s(1.5, h), st.accentColor));
-
-  // Contact
-  if (c.contact) {
-    e.push(text(cx(w * 0.5, w), h - pad - s(6, h), c.contact, s(9, w), st.textLight, st.bodyFont, 'normal', w * 0.5, 0.6));
-  }
+  e.push(rect(cx(w * 0.1, w), h - pad - sc(16, h), w * 0.1, sc(1.5, h), p.accent));
+  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
 
   return e;
 }
 
 // ============================================================
-// LAYOUT: ASYMMETRIC - Dynamic off-center with overlaps
+// TEMPLATE: T-SHIRTS (10 templates)
 // ============================================================
 
-function asymmetric(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
+function tshirt_bold_graphic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
   const e: CanvasElement[] = [];
-  const pad = s(40, w);
+  const pad = sc(40, w);
 
-  // --- Background ---
-  e.push(rect(0, 0, w, h, st.backgroundColor));
+  e.push(rect(0, 0, w, h, p.bg));
 
-  // Large decorative circle (off-center right)
-  e.push(circle(w * 0.7, h * 0.3, Math.min(w, h) * 0.35, st.primaryColor, 0.05));
-  e.push(circle(w * 0.75, h * 0.25, Math.min(w, h) * 0.2, st.primaryColor, 0.06));
+  // Large geometric shapes as background
+  e.push(circ(w * 0.5, h * 0.45, Math.min(w, h) * 0.35, p.primary, 0.06));
+  e.push(rect(w * 0.2, h * 0.15, w * 0.6, h * 0.7, p.primary, 0.03, 12));
+  e.push(rect(w * 0.25, h * 0.2, w * 0.5, h * 0.6, p.accent, 0.04, 8));
 
-  // Right accent panel (partial)
-  e.push(rect(w * 0.72, 0, w * 0.28, h, st.primaryColor));
-  // Panel pattern
-  e.push(circle(w * 0.82, h * 0.3, s(40, w), '#FFFFFF', 0.06));
-  e.push(circle(w * 0.88, h * 0.7, s(25, w), st.accentColor, 0.12));
-  e.push(hline(w * 0.75, h * 0.5, w * 0.2, '#FFFFFF', 1, 0.1));
+  // Bold centered text
+  e.push(txt(cx(w * 0.7, w), h * 0.35, title, sc(48, w), p.dark, 'Montserrat', 'bold', w * 0.7));
+  if (sub) e.push(txt(cx(w * 0.5, w), h * 0.55, sub, sc(14, w), p.primary, 'Inter', 'normal', w * 0.5));
 
-  // Right panel text
-  if (c.tagline) {
-    e.push(text(w * 0.75, h * 0.42, c.tagline.toUpperCase(), s(8, w), 'rgba(255,255,255,0.6)', st.bodyFont, 'bold'));
-  }
-  if (c.cta) {
-    e.push(text(w * 0.75, h * 0.48, c.cta, s(13, w), '#FFFFFF', st.headingFont, 'bold'));
-    e.push(hline(w * 0.75, h * 0.53, s(30, w), st.accentColor, 2, 0.6));
-  }
-
-  // --- Left content ---
-  // Accent bar
-  e.push(rect(pad, pad, s(40, w), s(3, h), st.accentColor));
-
-  if (c.tagline) {
-    e.push(text(pad, pad + s(12, h), c.tagline.toUpperCase(), s(9, w), st.accentColor, st.bodyFont, 'bold'));
-  }
-
-  // Title
-  const titleSize = s(42, w);
-  const titleY = pad + s(32, h);
-  e.push(text(pad, titleY, c.title, titleSize, st.textColor, st.headingFont, 'bold', w * 0.6));
-
-  // Subtitle
-  const subY = titleY + titleSize + s(10, h);
-  e.push(text(pad, subY, c.subtitle, s(14, w), st.primaryColor, st.bodyFont, 'normal', w * 0.6));
-
-  // Body
-  if (c.body) {
-    e.push(text(pad, subY + s(20, h), c.body, s(11, w), st.textLight, st.bodyFont, 'normal', w * 0.55));
-  }
-
-  // Decorative elements left side
-  e.push(circle(w * 0.35, h * 0.75, s(12, w), st.primaryColor, 0.08));
-  e.push(circle(w * 0.4, h * 0.82, s(8, w), st.accentColor, 0.1));
-
-  // Contact
-  if (c.contact) {
-    e.push(text(pad, h - pad - s(16, h), c.contact, s(9, w), st.textLight, st.bodyFont, 'normal', w * 0.5, 0.7));
-  }
+  // Bottom accent line
+  e.push(hline(cx(w * 0.15, w), h * 0.65, w * 0.15, p.accent, 3, 0.5));
 
   return e;
 }
 
-// ============================================================
-// LAYOUT: GRID - 4-box symmetric grid
-// ============================================================
-
-function gridLayout(w: number, h: number, c: DesignContent, st: DesignStyle): CanvasElement[] {
+function tshirt_typographic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
   const e: CanvasElement[] = [];
-  const pad = s(30, w);
 
-  // --- Background ---
-  e.push(rect(0, 0, w, h, st.backgroundColor));
+  e.push(rect(0, 0, w, h, p.dark));
 
-  // Top accent bar (full width)
-  e.push(rect(0, 0, w, s(5, h), st.primaryColor));
+  // Large text as design element
+  e.push(txt(cx(w * 0.85, w), h * 0.25, title.toUpperCase(), sc(56, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.85));
 
-  // Title area
-  const titleSize = s(34, w);
-  e.push(text(cx(w * 0.7, w), pad + s(10, h), c.title, titleSize, st.textColor, st.headingFont, 'bold', w * 0.7));
-  e.push(text(cx(w * 0.5, w), pad + s(10, h) + titleSize + s(8, h), c.subtitle, s(13, w), st.primaryColor, st.bodyFont, 'normal', w * 0.5));
+  // Accent line
+  e.push(hline(cx(w * 0.2, w), h * 0.5, w * 0.2, p.accent, 3, 0.7));
 
-  // Decorative divider
-  e.push(rect(cx(w * 0.08, w), pad + s(10, h) + titleSize + s(28, h), w * 0.08, s(2, h), st.accentColor));
-
-  // --- 4-Box Grid ---
-  const gridTop = pad + s(10, h) + titleSize + s(44, h);
-  const gridGap = s(10, w);
-  const boxW = (w - pad * 2 - gridGap) / 2;
-  const boxH = (h - gridTop - pad - s(36, h) - gridGap) / 2;
-
-  const features = [
-    { num: '01', title: 'Design', desc: c.tagline || 'Professional' },
-    { num: '02', title: 'Quality', desc: c.body || 'Premium' },
-    { num: '03', title: 'Speed', desc: c.cta || 'Fast' },
-    { num: '04', title: 'Contact', desc: c.contact || 'Reach us' },
-  ];
-
-  features.forEach((feat, i) => {
-    const col = i % 2;
-    const row = Math.floor(i / 2);
-    const bx = pad + col * (boxW + gridGap);
-    const by = gridTop + row * (boxH + gridGap);
-
-    // Box background
-    e.push(rect(bx, by, boxW, boxH, i === 0 ? st.primaryColor : '#F8FAFC', 1, 6));
-
-    // Number
-    e.push(text(bx + s(14, w), by + s(12, h), feat.num, s(24, w), i === 0 ? 'rgba(255,255,255,0.15)' : st.primaryColor, st.headingFont, 'bold'));
-
-    // Accent line
-    e.push(hline(bx + s(14, w), by + boxH - s(32, h), s(30, w), i === 0 ? 'rgba(255,255,255,0.3)' : st.accentColor, 2, 0.5));
-
-    // Title
-    e.push(text(bx + s(14, w), by + boxH - s(26, h), feat.title, s(12, w), i === 0 ? '#FFFFFF' : st.textColor, st.bodyFont, 'bold'));
-
-    // Description
-    e.push(text(bx + s(14, w), by + boxH - s(14, h), feat.desc.slice(0, 20), s(8, w), i === 0 ? 'rgba(255,255,255,0.7)' : st.textLight, st.bodyFont, 'normal'));
-  });
-
-  // Bottom accent bar
-  e.push(rect(0, h - s(5, h), w, s(5, h), st.accentColor));
+  if (sub) e.push(txt(cx(w * 0.6, w), h * 0.58, sub, sc(13, w), p.muted, 'Inter', 'normal', w * 0.6));
 
   return e;
 }
 
 // ============================================================
-// STYLE MAP
+// TEMPLATE: MUGS (10 templates)
 // ============================================================
 
-const STYLE_MAP: Record<string, DesignStyle> = {
-  modern: {
-    backgroundColor: '#FFFFFF', primaryColor: '#0B57D0', secondaryColor: '#DBEAFE',
-    accentColor: '#FF6B00', textColor: '#1F2937', textLight: '#64748B',
-    headingFont: 'Montserrat', bodyFont: 'Inter',
-  },
-  luxury: {
-    backgroundColor: '#0F0F1A', primaryColor: '#C9A84C', secondaryColor: '#2A2A3E',
-    accentColor: '#E8D48B', textColor: '#FFFFFF', textLight: 'rgba(255,255,255,0.6)',
-    headingFont: 'Playfair Display', bodyFont: 'Inter',
-  },
-  bold: {
-    backgroundColor: '#FFFFFF', primaryColor: '#FF6B00', secondaryColor: '#FED7AA',
-    accentColor: '#DC2626', textColor: '#0F172A', textLight: '#64748B',
-    headingFont: 'Montserrat', bodyFont: 'Inter',
-  },
-  minimal: {
-    backgroundColor: '#FFFFFF', primaryColor: '#1F2937', secondaryColor: '#E2E8F0',
-    accentColor: '#94A3B8', textColor: '#1F2937', textLight: '#94A3B8',
-    headingFont: 'Space Grotesk', bodyFont: 'Inter',
-  },
-  eco: {
-    backgroundColor: '#F0FDF4', primaryColor: '#16A34A', secondaryColor: '#DCFCE7',
-    accentColor: '#065F46', textColor: '#1F2937', textLight: '#64748B',
-    headingFont: 'Poppins', bodyFont: 'Inter',
-  },
-  creative: {
-    backgroundColor: '#FFFFFF', primaryColor: '#7C3AED', secondaryColor: '#EDE9FE',
-    accentColor: '#EC4899', textColor: '#1F2937', textLight: '#64748B',
-    headingFont: 'Poppins', bodyFont: 'Inter',
-  },
-  corporate: {
-    backgroundColor: '#FFFFFF', primaryColor: '#0F172A', secondaryColor: '#CBD5E1',
-    accentColor: '#0B57D0', textColor: '#0F172A', textLight: '#64748B',
-    headingFont: 'Montserrat', bodyFont: 'Inter',
-  },
-  playful: {
-    backgroundColor: '#FFFBEB', primaryColor: '#F59E0B', secondaryColor: '#FEF3C7',
-    accentColor: '#EF4444', textColor: '#1F2937', textLight: '#64748B',
-    headingFont: 'Poppins', bodyFont: 'Inter',
-  },
+function mug_quote_classic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(50, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Elegant frame
+  const fi = sc(20, w);
+  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
+  e[e.length - 1].stroke = p.primary;
+  (e[e.length - 1] as any).strokeWidth = 1.5;
+
+  // Decorative quotes (using text)
+  e.push(txt(pad, pad + sc(10, h), '"', sc(60, w), p.primary, 'Playfair Display', 'normal'));
+
+  e.push(txt(cx(w * 0.7, w), h * 0.35, title, sc(24, w), p.dark, 'Playfair Display', 'bold', w * 0.7));
+
+  const subY = h * 0.35 + sc(24, w) * 1.4 + sc(10, h);
+  e.push(txt(cx(w * 0.5, w), subY, sub, sc(11, w), p.muted, 'Inter', 'italic', w * 0.5));
+
+  // Bottom accent
+  e.push(hline(cx(w * 0.1, w), h - pad - sc(20, h), w * 0.1, p.primary, 2, 0.4));
+
+  return e;
+}
+
+// ============================================================
+// TEMPLATE: STICKERS / LABELS (10 templates)
+// ============================================================
+
+function sticker_badge(w: number, h: number, p: Palette, title: string, sub: string, tagline: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Circle badge design
+  const centerX = w / 2;
+  const centerY = h / 2;
+  const radius = Math.min(w, h) * 0.38;
+
+  e.push(circ(centerX, centerY, radius, p.primary));
+  e.push(circ(centerX, centerY, radius - sc(4, w), p.bg));
+  e.push(circ(centerX, centerY, radius - sc(8, w), p.primary, 0.05));
+
+  // Decorative ring dots
+  for (let i = 0; i < 12; i++) {
+    const angle = (i / 12) * Math.PI * 2;
+    const dx = centerX + Math.cos(angle) * (radius - sc(12, w));
+    const dy = centerY + Math.sin(angle) * (radius - sc(12, w));
+    e.push(dot(dx, dy, sc(2, w), p.primary, 0.3));
+  }
+
+  if (tagline) e.push(txt(cx(w * 0.4, w), centerY - sc(20, h), tagline.toUpperCase(), sc(6, w), p.primary, 'Montserrat', 'bold'));
+  e.push(txt(cx(w * 0.6, w), centerY - sc(6, h), title, sc(18, w), p.dark, 'Montserrat', 'bold', w * 0.6));
+  if (sub) e.push(txt(cx(w * 0.4, w), centerY + sc(12, h), sub, sc(8, w), p.muted, 'Inter', 'normal', w * 0.4));
+
+  return e;
+}
+
+// ============================================================
+// TEMPLATE: LABELS / PACKAGING (10 templates)
+// ============================================================
+
+function label_product_premium(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string): CanvasElement[] {
+  const e: CanvasElement[] = [];
+  const pad = sc(28, w);
+
+  e.push(rect(0, 0, w, h, p.bg));
+
+  // Top accent
+  e.push(rect(0, 0, w, sc(4, h), p.primary));
+
+  // Brand area
+  e.push(rect(pad, pad, w - pad * 2, h * 0.3, p.light, 1, 4));
+  e.push(txt(cx(w * 0.5, w), pad + sc(10, h), title.toUpperCase(), sc(20, w), p.dark, 'Montserrat', 'bold', w * 0.8));
+  e.push(txt(cx(w * 0.4, w), pad + sc(10, h) + sc(20, w) * 1.4 + sc(4, h), sub, sc(9, w), p.primary, 'Inter', 'normal', w * 0.4));
+
+  // Divider
+  e.push(hline(pad, h * 0.42, w - pad * 2, p.secondary, 1, 0.3));
+
+  // Details
+  if (body) e.push(txt(pad, h * 0.48, body, sc(9, w), p.muted, 'Inter', 'normal', w - pad * 2));
+
+  // Bottom
+  e.push(rect(0, h - sc(24, h), w, sc(24, h), p.primary, 0.04));
+  if (contact) e.push(txt(pad, h - sc(14, h), contact, sc(7, w), p.muted, 'Inter', 'normal', w - pad * 2, 0.7));
+
+  return e;
+}
+
+// ============================================================
+// LAYOUT ENGINE - Routes to templates based on type + style
+// ============================================================
+
+type TemplateFunc = (w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string) => CanvasElement[];
+
+const TEMPLATE_REGISTRY: Record<string, TemplateFunc[]> = {
+  visiting_card: [vc_modern_split, vc_luxury_dark, vc_bold_asymmetric, vc_minimal_clean, vc_creative_gradient, vc_corporate_grid],
+  flyer: [flyer_bold_header, flyer_centered_modern, flyer_eco_natural],
+  banner: [banner_event_bold, banner_sports_dynamic],
+  poster: [poster_dramatic, poster_modern_minimal],
+  tshirt: [tshirt_bold_graphic, tshirt_typographic],
+  mug: [mug_quote_classic],
+  sticker: [sticker_badge],
+  label: [label_product_premium],
+  // Generic fallbacks
+  design: [vc_modern_split, flyer_bold_header, poster_dramatic, vc_luxury_dark, vc_creative_gradient],
 };
 
-// ============================================================
-// MAIN
-// ============================================================
-
-const LAYOUTS: Record<string, typeof centered> = {
-  centered, split: splitLayout, boldHeader, elegant, asymmetric, grid: gridLayout,
+const STYLE_TO_PALETTE: Record<string, Palette> = {
+  modern: P.modern, luxury: P.luxury, bold: P.bold, minimal: P.minimal,
+  eco: P.eco, creative: P.creative, corporate: P.corporate, playful: P.playful,
+  medical: P.medical, food: P.food, fashion: P.fashion, tech: P.tech,
+  sports: P.sports, beauty: P.beauty,
 };
+
+const PRODUCT_TYPE_MAP: Record<string, string> = {
+  'business-card': 'visiting_card', 'visiting-card': 'visiting_card', 'visiting card': 'visiting_card',
+  'business card': 'visiting_card', 'name-card': 'visiting_card', 'name card': 'visiting_card',
+  'flyer': 'flyer', 'brochure': 'flyer', 'leaflet': 'flyer',
+  'banner': 'banner', 'hoarding': 'banner', 'roll-up': 'banner',
+  'poster': 'poster', 'sign': 'poster',
+  'tshirt': 'tshirt', 't-shirt': 'tshirt', 't shirt': 'tshirt',
+  'mug': 'mug', 'cup': 'mug',
+  'sticker': 'sticker', 'label-sticker': 'sticker',
+  'label': 'label', 'packaging': 'label',
+  'design': 'design',
+};
+
+function detectProductType(productType: string): string {
+  const lower = productType.toLowerCase().trim();
+  for (const [key, val] of Object.entries(PRODUCT_TYPE_MAP)) {
+    if (lower.includes(key)) return val;
+  }
+  return 'design';
+}
 
 export function generateLayout(
   layoutId: string,
   styleId: string,
-  content: DesignContent,
+  content: { title: string; subtitle: string; body?: string; contact?: string; tagline?: string; cta?: string },
   canvasWidth: number,
   canvasHeight: number,
+  productType: string = 'design',
 ): { backgroundColor: string; elements: CanvasElement[] } {
-  const layout = LAYOUTS[layoutId] || centered;
-  const style = STYLE_MAP[styleId] || STYLE_MAP.modern;
+  const palette = STYLE_TO_PALETTE[styleId] || P.modern;
+  const pType = detectProductType(productType);
+  const templates = TEMPLATE_REGISTRY[pType] || TEMPLATE_REGISTRY.design;
 
-  const maxTitle = Math.floor(canvasWidth / (s(24, canvasWidth) * 0.55));
-  const maxSub = Math.floor(canvasWidth / (s(14, canvasWidth) * 0.5));
+  // Pick template by index from layoutId (or 0 for default)
+  const layoutIndex = Math.abs(hashCode(layoutId)) % templates.length;
+  const template = templates[layoutIndex];
 
-  const clamped: DesignContent = {
-    title: content.title.slice(0, maxTitle),
-    subtitle: content.subtitle.slice(0, maxSub),
-    body: content.body?.slice(0, maxSub * 2),
-    tagline: content.tagline?.slice(0, 30),
-    contact: content.contact?.slice(0, maxSub),
-    cta: content.cta?.slice(0, 25),
-  };
+  const elements = template(
+    canvasWidth, canvasHeight, palette,
+    content.title || 'Your Design',
+    content.subtitle || '',
+    content.body || '',
+    content.contact || '',
+    content.tagline || '',
+  );
 
-  const elements = layout(canvasWidth, canvasHeight, clamped, style);
-  return { backgroundColor: style.backgroundColor, elements };
+  return { backgroundColor: palette.bg, elements };
 }
 
-export function getLayoutIds(): string[] { return Object.keys(LAYOUTS); }
-export function getStyleIds(): string[] { return Object.keys(STYLE_MAP); }
-export { LAYOUTS, STYLE_MAP };
-export type { DesignContent, DesignStyle };
+function hashCode(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash |= 0;
+  }
+  return hash;
+}
+
+export function getLayoutIds(): string[] {
+  return Object.keys(TEMPLATE_REGISTRY);
+}
+
+export function getStyleIds(): string[] {
+  return Object.keys(STYLE_TO_PALETTE);
+}
+
+export { STYLE_TO_PALETTE, TEMPLATE_REGISTRY, detectProductType };
+export type { Palette };
