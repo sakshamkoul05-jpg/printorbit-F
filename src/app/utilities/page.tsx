@@ -5,15 +5,23 @@ import {
   Ruler, Calculator, Grid3x3, BookOpenCheck, Droplets, Paintbrush, PenTool, Sparkles,
   ImageIcon, Wand2, FileDown, Grid2x2, Hash, Type, CreditCard, DollarSign, Layers,
   BookOpen, Download, Upload, CheckCircle, AlertTriangle, ArrowRight, Copy,
-  RefreshCw, Sliders, Eye, Minimize2, Bold,
+  RefreshCw, Sliders, Eye, Minimize2, Bold, Shield, CircleDot, Scissors,
+  ScanSearch, Palette, Moon, ArrowLeftRight, Monitor, Search, FileSearch,
+  Package, Truck, Clock, FileText, Weight, Target, Settings, Grid, ZoomIn,
 } from 'lucide-react';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
+import PreflightChecker, { CMYKSimulator, TrapWidthCalculator, SpotUVGenerator, DieCutTemplateGenerator } from './_components/PrintProductionNew';
+import { ColorBlindSimulator, ContrastChecker, ICCProfileComparison, SafeFontList, ColorMixCalculator } from './_components/ColorToolsNew';
+import { ImageDPIScaler, StencilGenerator, BleedPreviewOverlay } from './_components/ImageToolsNew';
+import { FileProofingTool, PrintQuantityCalculator, PaperStockComparison, ShippingCalculator, OrderTimelineEstimator, DesignBriefGenerator } from './_components/ClientToolsNew';
+import { EnvelopeSizeReference, PrintResolutionReference, SubstrateWeightCalculator, FileNamingGenerator, MultiPageLayoutArranger } from './_components/ReferenceToolsNew';
+import { ImpressionCalculator, GCRCalculator, ImpositionCalculator } from './_components/AdvancedTools';
 
 // ============================================================
 // TOOL DEFINITIONS
 // ============================================================
-type ToolCategory = 'PRINT PRODUCTION' | 'COLOR TOOLS' | 'IMAGE TOOLS' | 'CLIENT TOOLS' | 'REFERENCE';
+type ToolCategory = 'PRINT PRODUCTION' | 'COLOR TOOLS' | 'IMAGE TOOLS' | 'CLIENT TOOLS' | 'REFERENCE' | 'ADVANCED';
 
 interface ToolDef {
   id: string;
@@ -28,20 +36,47 @@ const tools: ToolDef[] = [
   { id: 'bleed', name: 'Bleed Calculator', icon: Grid3x3, description: 'Calculate bleed & safe zones', category: 'PRINT PRODUCTION' },
   { id: 'units', name: 'Unit Converter', icon: Calculator, description: 'Convert mm, cm, inches, px, pt, pc', category: 'PRINT PRODUCTION' },
   { id: 'papersize', name: 'Paper Size Reference', icon: BookOpenCheck, description: 'Standard paper sizes worldwide', category: 'PRINT PRODUCTION' },
+  { id: 'preflight', name: 'Print Preflight Checker', icon: Shield, description: 'Check designs for print readiness', category: 'PRINT PRODUCTION' },
+  { id: 'cmyksim', name: 'CMYK Simulator', icon: CircleDot, description: 'Preview RGB→CMYK color shift', category: 'PRINT PRODUCTION' },
+  { id: 'trap', name: 'Trap Width Calculator', icon: ArrowLeftRight, description: 'Calculate trap for offset printing', category: 'PRINT PRODUCTION' },
+  { id: 'spotuv', name: 'Spot UV Template', icon: Sparkles, description: 'Generate spot UV mask layers', category: 'PRINT PRODUCTION' },
+  { id: 'diecut', name: 'Die-Cut Template', icon: Scissors, description: 'Generate cut/fold templates', category: 'PRINT PRODUCTION' },
   { id: 'colorconvert', name: 'Color Converter', icon: Droplets, description: 'Convert HEX, RGB, CMYK, HSL', category: 'COLOR TOOLS' },
   { id: 'richblack', name: 'Rich Black Calculator', icon: Bold, description: 'Proper rich black values for print', category: 'COLOR TOOLS' },
   { id: 'palette', name: 'Color Palette Generator', icon: Paintbrush, description: 'Generate color palettes', category: 'COLOR TOOLS' },
+  { id: 'colorblind', name: 'Color Blind Simulator', icon: Eye, description: 'Simulate color vision deficiencies', category: 'COLOR TOOLS' },
+  { id: 'contrast', name: 'Contrast Checker', icon: ScanSearch, description: 'WCAG contrast ratio checker', category: 'COLOR TOOLS' },
+  { id: 'icc', name: 'ICC Profile Comparison', icon: Monitor, description: 'Compare color gamuts across profiles', category: 'COLOR TOOLS' },
+  { id: 'safefont', name: 'Safe Font List', icon: Type, description: 'Cross-platform font compatibility', category: 'COLOR TOOLS' },
+  { id: 'colormix', name: 'Color Mixing Calculator', icon: Palette, description: 'Spot color mixing percentages', category: 'COLOR TOOLS' },
   { id: 'compress', name: 'Image Compression', icon: Minimize2, description: 'Compress images with quality control', category: 'IMAGE TOOLS' },
   { id: 'watermark', name: 'Watermark Tool', icon: ImageIcon, description: 'Add text watermarks to images', category: 'IMAGE TOOLS' },
   { id: 'bgremove', name: 'Background Remover', icon: Wand2, description: 'Remove white/light backgrounds', category: 'IMAGE TOOLS' },
   { id: 'formatconvert', name: 'Image Format Converter', icon: FileDown, description: 'Convert PNG, JPG, WebP formats', category: 'IMAGE TOOLS' },
   { id: 'svgtopng', name: 'SVG to PNG', icon: Grid2x2, description: 'Convert SVG to PNG at custom DPI', category: 'IMAGE TOOLS' },
+  { id: 'upscaler', name: 'Image DPI Scaler', icon: ZoomIn, description: 'Smart upscale images for print', category: 'IMAGE TOOLS' },
+  { id: 'stencil', name: 'Stencil Generator', icon: Scissors, description: 'Create cuttable stencil templates', category: 'IMAGE TOOLS' },
+  { id: 'bleedpreview', name: 'Bleed Preview Overlay', icon: Grid, description: 'Visualize bleed/safe zones on designs', category: 'IMAGE TOOLS' },
   { id: 'barcode', name: 'Barcode Generator', icon: Hash, description: 'Generate Code 128, EAN-13, UPC-A', category: 'CLIENT TOOLS' },
   { id: 'lorem', name: 'Placeholder Text Generator', icon: Type, description: 'Lorem ipsum for print mockups', category: 'CLIENT TOOLS' },
   { id: 'bizcard', name: 'Business Card Sizes', icon: CreditCard, description: 'Standard sizes worldwide', category: 'CLIENT TOOLS' },
+  { id: 'proofing', name: 'File Proofing Tool', icon: FileSearch, description: 'Client design proofing & annotation', category: 'CLIENT TOOLS' },
+  { id: 'quantity', name: 'Print Quantity Calculator', icon: DollarSign, description: 'Cost estimation by quantity', category: 'CLIENT TOOLS' },
+  { id: 'paperstock', name: 'Paper Stock Comparison', icon: Layers, description: 'Compare paper types & finishes', category: 'CLIENT TOOLS' },
+  { id: 'shipping', name: 'Shipping Calculator', icon: Truck, description: 'Estimate shipping costs', category: 'CLIENT TOOLS' },
+  { id: 'timeline', name: 'Order Timeline Estimator', icon: Clock, description: 'Production timeline calculator', category: 'CLIENT TOOLS' },
+  { id: 'brief', name: 'Design Brief Generator', icon: FileText, description: 'Client questionnaire & brief', category: 'CLIENT TOOLS' },
   { id: 'priceest', name: 'Print Price Estimator', icon: DollarSign, description: 'Estimate print job costs', category: 'REFERENCE' },
   { id: 'gangsheet', name: 'Gang Sheet Calculator', icon: Layers, description: 'Items per sheet calculator', category: 'REFERENCE' },
   { id: 'fontpair', name: 'Font Pairing Guide', icon: BookOpen, description: 'Recommended font combinations', category: 'REFERENCE' },
+  { id: 'envelope', name: 'Envelope Size Reference', icon: Package, description: 'Standard envelope sizes worldwide', category: 'REFERENCE' },
+  { id: 'presref', name: 'Print Resolution Guide', icon: Monitor, description: 'DPI requirements per product', category: 'REFERENCE' },
+  { id: 'substrate', name: 'Substrate Weight Calc', icon: Weight, description: 'Paper weight conversions', category: 'REFERENCE' },
+  { id: 'filenaming', name: 'File Naming Generator', icon: FileText, description: 'Standardized print file names', category: 'REFERENCE' },
+  { id: 'impose', name: 'Multi-Page Layout', icon: Grid2x2, description: 'Page imposition for booklets', category: 'REFERENCE' },
+  { id: 'impression', name: 'Impression Calculator', icon: Target, description: 'Ink coverage & cost estimation', category: 'ADVANCED' },
+  { id: 'gcr', name: 'GCR/UCR Calculator', icon: Settings, description: 'Gray Component Replacement settings', category: 'ADVANCED' },
+  { id: 'imposecalc', name: 'Imposition Calculator', icon: Grid3x3, description: 'Multi-up imposition layouts', category: 'ADVANCED' },
 ];
 
 // ============================================================
@@ -1580,20 +1615,47 @@ export default function UtilitiesPage() {
     bleed: <BleedCalculator />,
     units: <UnitConverter />,
     papersize: <PaperSizeReference />,
+    preflight: <PreflightChecker />,
+    cmyksim: <CMYKSimulator />,
+    trap: <TrapWidthCalculator />,
+    spotuv: <SpotUVGenerator />,
+    diecut: <DieCutTemplateGenerator />,
     colorconvert: <ColorConverter />,
     richblack: <RichBlackCalculator />,
     palette: <PaletteGenerator />,
+    colorblind: <ColorBlindSimulator />,
+    contrast: <ContrastChecker />,
+    icc: <ICCProfileComparison />,
+    safefont: <SafeFontList />,
+    colormix: <ColorMixCalculator />,
     compress: <ImageCompression />,
     watermark: <WatermarkTool />,
     bgremove: <BackgroundRemover />,
     formatconvert: <FormatConverter />,
     svgtopng: <SVGtoPNG />,
+    upscaler: <ImageDPIScaler />,
+    stencil: <StencilGenerator />,
+    bleedpreview: <BleedPreviewOverlay />,
     barcode: <BarcodeGenerator />,
     lorem: <PlaceholderTextGenerator />,
     bizcard: <BusinessCardSizes />,
+    proofing: <FileProofingTool />,
+    quantity: <PrintQuantityCalculator />,
+    paperstock: <PaperStockComparison />,
+    shipping: <ShippingCalculator />,
+    timeline: <OrderTimelineEstimator />,
+    brief: <DesignBriefGenerator />,
     priceest: <PrintPriceEstimator />,
     gangsheet: <GangSheetCalculator />,
     fontpair: <FontPairingGuide />,
+    envelope: <EnvelopeSizeReference />,
+    presref: <PrintResolutionReference />,
+    substrate: <SubstrateWeightCalculator />,
+    filenaming: <FileNamingGenerator />,
+    impose: <MultiPageLayoutArranger />,
+    impression: <ImpressionCalculator />,
+    gcr: <GCRCalculator />,
+    imposecalc: <ImpositionCalculator />,
   };
 
   const categories = [...new Set(tools.map((t) => t.category))];
@@ -1605,7 +1667,7 @@ export default function UtilitiesPage() {
           <div className="py-6">
             <Link href="/" className="text-xs text-primary hover:underline mb-3 inline-block">← Back to Home</Link>
             <h1 className="text-2xl md:text-3xl font-bold text-dark font-heading">Print Utilities & Tools</h1>
-            <p className="text-sm text-muted mt-1">20 essential tools for designers & print professionals</p>
+            <p className="text-sm text-muted mt-1">45+ essential tools for designers & print professionals · <Link href="/utilities/mockups" className="text-primary hover:underline font-medium">Mockup Scene Generator →</Link></p>
           </div>
         </Container>
       </div>
