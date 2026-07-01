@@ -1,709 +1,554 @@
 import type { CanvasElement } from '@/app/design-studio/page';
 
 // ============================================================
-// TEMPLATE LIBRARY - 100+ Professional Design Templates
-// Organized by product type with multiple style variations
+// DESIGN ENGINE v3 - Fixed templates, no content duplication
+// Every text element appears EXACTLY ONCE
 // ============================================================
 
 let _id = 0;
-function uid(): string { return `tpl_${++_id}_${Date.now().toString(36)}`; }
+function uid(): string { return `de${++_id}`; }
 
-function sc(base: number, canvasWidth: number): number {
-  return Math.round(base * (canvasWidth / 1050));
+function s(base: number, cw: number): number { return Math.round(base * (cw / 1050)); }
+function cx(w: number, cw: number): number { return Math.round((cw - w) / 2); }
+
+function R(x: number, y: number, w: number, h: number, fill: string, opacity = 1, radius?: number): CanvasElement {
+  return { id: uid(), type: 'rect', x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h), fill, rotation: 0, opacity, ...(radius ? { radius } : {}) } as any;
 }
 
-function cx(w: number, canvasWidth: number): number {
-  return Math.round((canvasWidth - w) / 2);
+function C(x: number, y: number, r: number, fill: string, opacity = 1): CanvasElement {
+  return { id: uid(), type: 'circle', x: Math.round(x - r), y: Math.round(y - r), width: Math.round(r * 2), height: Math.round(r * 2), fill, rotation: 0, opacity };
 }
 
-function cy(h: number, canvasHeight: number): number {
-  return Math.round((canvasHeight - h) / 2);
+function T(x: number, y: number, text: string, size: number, color: string, font: string, weight: string, maxW?: number, opacity = 1): CanvasElement {
+  return { id: uid(), type: 'text', x: Math.round(x), y: Math.round(y), width: Math.round(maxW || 600), height: Math.round(size * 1.4), fill: color, rotation: 0, opacity, text, fontSize: Math.round(size), fontFamily: font, fontWeight: weight } as any;
 }
 
-function el(type: CanvasElement['type'], x: number, y: number, w: number, h: number, fill: string, extra?: Partial<CanvasElement>): CanvasElement {
-  return { id: uid(), type, x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h), fill, rotation: 0, opacity: 1, ...extra };
+function HL(x: number, y: number, w: number, color: string, sw = 1, op = 1): CanvasElement {
+  return { id: uid(), type: 'line', x: Math.round(x), y: Math.round(y), width: Math.round(w), height: 0, fill: color, rotation: 0, opacity: op, strokeWidth: sw } as any;
 }
 
-function txt(x: number, y: number, t: string, size: number, color: string, font: string, weight: string, maxW?: number, opacity = 1): CanvasElement {
-  return el('text', x, y, maxW || 600, Math.round(size * 1.4), color, { text: t, fontSize: Math.round(size), fontFamily: font, fontWeight: weight, opacity });
-}
-
-function rect(x: number, y: number, w: number, h: number, fill: string, opacity = 1, radius?: number): CanvasElement {
-  return el('rect', x, y, w, h, fill, { opacity, ...(radius ? { radius } : {}) } as any);
-}
-
-function circ(x: number, y: number, r: number, fill: string, opacity = 1): CanvasElement {
-  return el('circle', x - r, y - r, r * 2, r * 2, fill, { opacity });
-}
-
-function hline(x: number, y: number, w: number, color: string, sw = 1, op = 1): CanvasElement {
-  return el('line', x, y, w, 0, color, { strokeWidth: sw, opacity: op } as any);
-}
-
-function vline(x: number, y: number, h: number, color: string, sw = 1, op = 1): CanvasElement {
-  return el('line', x, y, 0, h, color, { strokeWidth: sw, opacity: op } as any);
-}
-
-function dot(x: number, y: number, r: number, color: string, op = 1): CanvasElement {
-  return circ(x, y, r, color, op);
+function VL(x: number, y: number, h: number, color: string, sw = 1, op = 1): CanvasElement {
+  return { id: uid(), type: 'line', x: Math.round(x), y: Math.round(y), width: 0, height: Math.round(h), fill: color, rotation: 0, opacity: op, strokeWidth: sw } as any;
 }
 
 // ============================================================
-// COLOR PALETTES
+// PALETTES
 // ============================================================
 
-interface Palette {
-  bg: string; primary: string; secondary: string; accent: string; dark: string; light: string; muted: string;
-}
+interface P { bg: string; pri: string; sec: string; acc: string; dark: string; light: string; muted: string; white: string; }
 
-const P = {
-  modern: { bg: '#FFFFFF', primary: '#0B57D0', secondary: '#DBEAFE', accent: '#FF6B00', dark: '#1F2937', light: '#F8FAFC', muted: '#64748B' },
-  luxury: { bg: '#0A0A14', primary: '#C9A84C', secondary: '#1A1A2E', accent: '#E8D48B', dark: '#F5F5F5', light: '#2A2A3E', muted: 'rgba(255,255,255,0.5)' },
-  bold: { bg: '#FFFFFF', primary: '#FF6B00', secondary: '#FFF7ED', accent: '#DC2626', dark: '#0F172A', light: '#F8FAFC', muted: '#64748B' },
-  minimal: { bg: '#FFFFFF', primary: '#1F2937', secondary: '#E2E8F0', accent: '#94A3B8', dark: '#1F2937', light: '#F1F5F9', muted: '#CBD5E1' },
-  eco: { bg: '#F0FDF4', primary: '#16A34A', secondary: '#DCFCE7', accent: '#065F46', dark: '#1F2937', light: '#ECFDF5', muted: '#86EFAC' },
-  creative: { bg: '#FFFFFF', primary: '#7C3AED', secondary: '#EDE9FE', accent: '#EC4899', dark: '#1F2937', light: '#F5F3FF', muted: '#A78BFA' },
-  corporate: { bg: '#FFFFFF', primary: '#0F172A', secondary: '#CBD5E1', accent: '#0B57D0', dark: '#0F172A', light: '#F8FAFC', muted: '#94A3B8' },
-  playful: { bg: '#FFFBEB', primary: '#F59E0B', secondary: '#FEF3C7', accent: '#EF4444', dark: '#1F2937', light: '#FFFEF5', muted: '#FCD34D' },
-  medical: { bg: '#FFFFFF', primary: '#0284C7', secondary: '#E0F2FE', accent: '#EA580C', dark: '#0C4A6E', light: '#F0F9FF', muted: '#7DD3FC' },
-  food: { bg: '#FFF7ED', primary: '#EA580C', secondary: '#FFEDD5', accent: '#DC2626', dark: '#1C1917', light: '#FFF7ED', muted: '#FB923C' },
-  fashion: { bg: '#FDF4FF', primary: '#A855F7', secondary: '#FAE8FF', accent: '#EC4899', dark: '#1F2937', light: '#FAF5FF', muted: '#D8B4FE' },
-  tech: { bg: '#F0F9FF', primary: '#0284C7', secondary: '#E0F2FE', accent: '#06B6D4', dark: '#0F172A', light: '#F0F9FF', muted: '#38BDF8' },
-  sports: { bg: '#FFFFFF', primary: '#DC2626', secondary: '#FEE2E2', accent: '#1D4ED8', dark: '#1F2937', light: '#FEF2F2', muted: '#FCA5A5' },
-  beauty: { bg: '#FFF1F2', primary: '#E11D48', secondary: '#FFE4E6', accent: '#BE185D', dark: '#1F2937', light: '#FFF1F2', muted: '#FDA4AF' },
+const PAL: Record<string, P> = {
+  modern:   { bg: '#FFFFFF', pri: '#0B57D0', sec: '#DBEAFE', acc: '#FF6B00', dark: '#1F2937', light: '#F8FAFC', muted: '#64748B', white: '#FFFFFF' },
+  luxury:   { bg: '#0A0A14', pri: '#C9A84C', sec: '#1A1A2E', acc: '#E8D48B', dark: '#F5F5F5', light: '#2A2A3E', muted: 'rgba(255,255,255,0.5)', white: '#FFFFFF' },
+  bold:     { bg: '#FFFFFF', pri: '#FF6B00', sec: '#FFF7ED', acc: '#DC2626', dark: '#0F172A', light: '#F8FAFC', muted: '#64748B', white: '#FFFFFF' },
+  minimal:  { bg: '#FFFFFF', pri: '#1F2937', sec: '#E2E8F0', acc: '#94A3B8', dark: '#1F2937', light: '#F1F5F9', muted: '#CBD5E1', white: '#FFFFFF' },
+  eco:      { bg: '#F0FDF4', pri: '#16A34A', sec: '#DCFCE7', acc: '#065F46', dark: '#1F2937', light: '#ECFDF5', muted: '#86EFAC', white: '#FFFFFF' },
+  creative: { bg: '#FFFFFF', pri: '#7C3AED', sec: '#EDE9FE', acc: '#EC4899', dark: '#1F2937', light: '#F5F3FF', muted: '#A78BFA', white: '#FFFFFF' },
+  corporate:{ bg: '#FFFFFF', pri: '#0F172A', sec: '#CBD5E1', acc: '#0B57D0', dark: '#0F172A', light: '#F8FAFC', muted: '#94A3B8', white: '#FFFFFF' },
+  playful:  { bg: '#FFFBEB', pri: '#F59E0B', sec: '#FEF3C7', acc: '#EF4444', dark: '#1F2937', light: '#FFFEF5', muted: '#FCD34D', white: '#FFFFFF' },
+  medical:  { bg: '#FFFFFF', pri: '#0284C7', sec: '#E0F2FE', acc: '#EA580C', dark: '#0C4A6E', light: '#F0F9FF', muted: '#7DD3FC', white: '#FFFFFF' },
+  food:     { bg: '#FFF7ED', pri: '#EA580C', sec: '#FFEDD5', acc: '#DC2626', dark: '#1C1917', light: '#FFF7ED', muted: '#FB923C', white: '#FFFFFF' },
+  fashion:  { bg: '#FDF4FF', pri: '#A855F7', sec: '#FAE8FF', acc: '#EC4899', dark: '#1F2937', light: '#FAF5FF', muted: '#D8B4FE', white: '#FFFFFF' },
+  tech:     { bg: '#F0F9FF', pri: '#0284C7', sec: '#E0F2FE', acc: '#06B6D4', dark: '#0F172A', light: '#F0F9FF', muted: '#38BDF8', white: '#FFFFFF' },
+  sports:   { bg: '#FFFFFF', pri: '#DC2626', sec: '#FEE2E2', acc: '#1D4ED8', dark: '#1F2937', light: '#FEF2F2', muted: '#FCA5A5', white: '#FFFFFF' },
+  beauty:   { bg: '#FFF1F2', pri: '#E11D48', sec: '#FFE4E6', acc: '#BE185D', dark: '#1F2937', light: '#FFF1F2', muted: '#FDA4AF', white: '#FFFFFF' },
 };
 
 // ============================================================
-// TEMPLATE: VISITING CARDS (20 templates)
+// VISITING CARD TEMPLATES
 // ============================================================
 
-function vc_modern_split(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(36, w);
-  const splitX = w * 0.58;
+// SPLIT: Left = text, Right = colored panel with decorative shapes ONLY
+function tpl_vc_split(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(36, w);
+  const sx = Math.round(w * 0.56); // split line
 
-  // Right panel
-  e.push(rect(splitX, 0, w - splitX, h, p.primary));
-  e.push(circ(splitX + (w - splitX) * 0.5, h * 0.3, Math.min(w - splitX, h) * 0.22, '#FFFFFF', 0.06));
-  e.push(circ(splitX + (w - splitX) * 0.7, h * 0.7, Math.min(w - splitX, h) * 0.15, '#FFFFFF', 0.04));
-  e.push(circ(splitX + (w - splitX) * 0.3, h * 0.6, Math.min(w - splitX, h) * 0.1, p.accent, 0.12));
-  e.push(hline(splitX + sc(16, w), h * 0.48, (w - splitX) * 0.6, '#FFFFFF', 1, 0.15));
+  // RIGHT PANEL - colored with decorative shapes, NO text
+  e.push(R(sx, 0, w - sx, h, p.pri));
+  // Decorative overlapping circles
+  e.push(C(sx + (w - sx) * 0.5, h * 0.3, Math.min(w - sx, h) * 0.24, '#FFFFFF', 0.07));
+  e.push(C(sx + (w - sx) * 0.65, h * 0.65, Math.min(w - sx, h) * 0.16, '#FFFFFF', 0.05));
+  e.push(C(sx + (w - sx) * 0.35, h * 0.7, Math.min(w - sx, h) * 0.11, p.acc, 0.14));
+  // Accent lines on panel
+  e.push(HL(sx + s(18, w), h * 0.5, (w - sx) * 0.55, '#FFFFFF', 1, 0.12));
+  e.push(HL(sx + s(18, w), h * 0.52, (w - sx) * 0.35, '#FFFFFF', 1, 0.08));
+  // Small dots cluster
+  e.push(C(sx + (w - sx) * 0.8, h * 0.15, s(4, w), p.acc, 0.2));
+  e.push(C(sx + (w - sx) * 0.85, h * 0.18, s(3, w), '#FFFFFF', 0.15));
 
-  if (tagline) e.push(txt(splitX + sc(20, w), h * 0.42, tagline.toUpperCase(), sc(7, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
-  e.push(txt(splitX + sc(20, w), h * 0.48, title, sc(20, w), '#FFFFFF', 'Montserrat', 'bold', w - splitX - sc(40, w)));
-  if (sub) e.push(txt(splitX + sc(20, w), h * 0.58, sub, sc(9, w), 'rgba(255,255,255,0.75)', 'Inter', 'normal', w - splitX - sc(40, w)));
+  // LEFT PANEL - white with all text content
+  e.push(R(0, 0, sx, h, p.bg));
+  // Subtle corner accents
+  e.push(C(w * 0.05, h * 0.05, s(12, w), p.pri, 0.04));
+  e.push(C(w * 0.03, h * 0.95, s(8, w), p.acc, 0.06));
 
-  // Left panel
-  e.push(rect(0, 0, splitX, h, p.bg));
-  e.push(circ(w * 0.06, h * 0.06, sc(14, w), p.primary, 0.05));
-  e.push(circ(w * 0.04, h * 0.94, sc(10, w), p.accent, 0.07));
+  // Vertical accent bar
+  e.push(R(pad, pad, s(3, h), s(44, h), p.acc));
 
-  // Left accent bar
-  e.push(rect(pad, pad, sc(3, h), sc(40, h), p.accent));
+  // Tagline
+  if (c.tagline) e.push(T(pad + s(10, w), pad + s(2, h), c.tagline.toUpperCase(), s(7, w), p.acc, 'Montserrat', 'bold'));
 
-  if (tagline) e.push(txt(pad + sc(8, w), pad + sc(2, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(20, h), title, sc(28, w), p.dark, 'Montserrat', 'bold', splitX - pad * 2));
+  // Title - BIG and bold
+  const ts = s(30, w);
+  e.push(T(pad, pad + s(22, h), c.title, ts, p.dark, 'Montserrat', 'bold', sx - pad * 2));
 
-  const subY = pad + sc(20, h) + sc(28, w) * 1.4 + sc(4, h);
-  e.push(txt(pad, subY, sub, sc(11, w), p.primary, 'Inter', 'normal', splitX - pad * 2));
+  // Subtitle
+  const sy = pad + s(22, h) + Math.round(ts * 1.4) + s(6, h);
+  e.push(T(pad, sy, c.subtitle, s(12, w), p.pri, 'Inter', 'normal', sx - pad * 2));
 
-  // Contact at bottom
-  if (contact) {
-    const cy2 = h - pad - sc(12, h);
-    e.push(hline(pad, cy2, splitX - pad * 2, p.secondary, 1, 0.3));
-    e.push(txt(pad, cy2 + sc(6, h), contact, sc(8, w), p.muted, 'Inter', 'normal', splitX - pad * 2, 0.7));
+  // Body
+  if (c.body) e.push(T(pad, sy + s(18, h), c.body, s(9, w), p.muted, 'Inter', 'normal', sx - pad * 2));
+
+  // Contact section at bottom
+  if (c.contact) {
+    const cy = h - pad - s(10, h);
+    e.push(HL(pad, cy, sx - pad * 2, p.sec, 1, 0.3));
+    e.push(T(pad, cy + s(6, h), c.contact, s(8, w), p.muted, 'Inter', 'normal', sx - pad * 2, 0.7));
   }
 
   return e;
 }
 
-function vc_luxury_dark(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(40, w);
+// ELEGANT: Double border, centered, luxury feel
+function tpl_vc_elegant(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(44, w);
 
-  // Dark background with subtle pattern
-  e.push(rect(0, 0, w, h, p.bg));
-  // Gold border frame
-  const fi = sc(12, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.3));
-  e[e.length - 1].stroke = p.primary;
-  (e[e.length - 1] as any).strokeWidth = 1.5;
+  e.push(R(0, 0, w, h, p.bg));
 
-  // Corner diamonds
-  const cs = sc(8, w);
-  [[fi + cs, fi + cs], [w - fi - cs, fi + cs], [fi + cs, h - fi - cs], [w - fi - cs, h - fi - cs]].forEach(([cx2, cy2]) => {
-    e.push(rect(cx2 - cs / 2, cy2 - cs / 2, cs, cs, p.primary, 0.6, 1));
+  // Double border frame
+  const f1 = s(14, w);
+  e.push(R(f1, f1, w - f1 * 2, h - f1 * 2, 'transparent', 0.25));
+  e[e.length - 1].stroke = p.pri; (e[e.length - 1] as any).strokeWidth = 1.5;
+  const f2 = s(18, w);
+  e.push(R(f2, f2, w - f2 * 2, h - f2 * 2, 'transparent', 0.12));
+  e[e.length - 1].stroke = p.pri; (e[e.length - 1] as any).strokeWidth = 0.5;
+
+  // Corner accent marks
+  const cs = s(16, w);
+  [[f2, f2], [w - f2 - cs, f2], [f2, h - f2 - cs], [w - f2 - cs, h - f2 - cs]].forEach(([x, y]) => {
+    e.push(HL(x, y, cs, p.acc, 2, 0.4));
+    e.push(VL(x, y, cs, p.acc, 2, 0.4));
   });
 
-  // Top gold line
-  e.push(hline(cx(w * 0.2, w), pad, w * 0.2, p.primary, 2, 0.5));
-
-  if (tagline) e.push(txt(cx(w * 0.4, w), pad + sc(10, h), tagline.toUpperCase(), sc(7, w), p.primary, 'Playfair Display', 'bold'));
-  e.push(txt(cx(w * 0.7, w), pad + sc(26, h), title, sc(32, w), p.dark, 'Playfair Display', 'bold', w * 0.7));
-
-  // Gold divider
-  e.push(hline(cx(w * 0.06, w), pad + sc(26, h) + sc(32, w) * 1.4 + sc(8, h), w * 0.06, p.primary, 2, 0.6));
-  e.push(dot(cx(w * 0.06, w) + w * 0.03, pad + sc(26, h) + sc(32, w) * 1.4 + sc(8, h), sc(2, w), p.accent));
-
-  const subY = pad + sc(26, h) + sc(32, w) * 1.4 + sc(22, h);
-  e.push(txt(cx(w * 0.5, w), subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.5));
-
-  // Bottom gold line
-  e.push(hline(cx(w * 0.2, w), h - pad - sc(16, h), w * 0.2, p.primary, 2, 0.5));
-
-  if (contact) e.push(txt(cx(w * 0.6, w), h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.6, 0.5));
-
-  return e;
-}
-
-function vc_bold_asymmetric(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(32, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Large diagonal-like shapes
-  e.push(rect(0, 0, w * 0.4, h, p.primary, 0.06));
-  e.push(rect(0, h * 0.65, w, h * 0.35, p.primary));
-  e.push(rect(0, h * 0.65, w, sc(3, h), p.accent));
-
-  // Decorative circles on colored area
-  e.push(circ(w * 0.8, h * 0.82, sc(40, w), '#FFFFFF', 0.06));
-  e.push(circ(w * 0.15, h * 0.82, sc(25, w), '#FFFFFF', 0.04));
-
-  // Content in white area
-  if (tagline) e.push(txt(pad, pad + sc(8, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(24, h), title, sc(26, w), p.dark, 'Montserrat', 'bold', w * 0.5));
-
-  const subY = pad + sc(24, h) + sc(26, w) * 1.4 + sc(6, h);
-  e.push(txt(pad, subY, sub, sc(10, w), p.muted, 'Inter', 'normal', w * 0.5));
-
-  // Content on colored area
-  if (contact) e.push(txt(pad, h * 0.72, contact, sc(9, w), '#FFFFFF', 'Inter', 'normal', w * 0.5, 0.85));
-
-  return e;
-}
-
-function vc_minimal_clean(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(44, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Very thin top line
-  e.push(hline(0, sc(4, h), w, p.dark, 2, 0.8));
-
-  // Minimal content
-  if (tagline) e.push(txt(w - pad, pad, tagline.toUpperCase(), sc(7, w), p.muted, 'Space Grotesk', 'normal', undefined, 0.5));
-  e.push(txt(pad, pad + sc(16, h), title, sc(30, w), p.dark, 'Space Grotesk', 'bold', w * 0.6));
-
-  const subY = pad + sc(16, h) + sc(30, w) * 1.4 + sc(10, h);
-  e.push(txt(pad, subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.5));
-
-  // Thin bottom line
-  e.push(hline(pad, h - pad - sc(20, h), w * 0.15, p.accent, 1, 0.4));
-
-  if (contact) e.push(txt(pad, h - pad - sc(8, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
-
-  return e;
-}
-
-function vc_creative_gradient(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(36, w);
-
-  // Background with gradient-like effect using overlapping shapes
-  e.push(rect(0, 0, w, h, p.bg));
-  e.push(circ(w * 0.15, h * 0.2, Math.min(w, h) * 0.4, p.primary, 0.06));
-  e.push(circ(w * 0.85, h * 0.8, Math.min(w, h) * 0.35, p.accent, 0.05));
-  e.push(circ(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, p.secondary, 0.08));
-
-  // Top accent strip
-  e.push(rect(0, 0, w, sc(5, h), p.primary));
-  e.push(rect(0, sc(5, h), w * 0.3, sc(2, h), p.accent));
-
-  // Content
-  if (tagline) e.push(txt(pad, pad + sc(12, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(30, h), title, sc(30, w), p.dark, 'Montserrat', 'bold', w * 0.7));
-
-  const subY = pad + sc(30, h) + sc(30, w) * 1.4 + sc(8, h);
-  e.push(txt(pad, subY, sub, sc(11, w), p.muted, 'Inter', 'normal', w * 0.6));
-
-  // Decorative element cluster
-  e.push(rect(w * 0.65, h * 0.15, sc(80, w), sc(80, h), p.primary, 0.08, 8));
-  e.push(rect(w * 0.7, h * 0.2, sc(60, w), sc(60, h), p.accent, 0.06, 6));
-  e.push(rect(w * 0.75, h * 0.25, sc(40, w), sc(40, h), p.primary, 0.1, 4));
-
-  // Bottom
-  if (contact) {
-    e.push(hline(pad, h - pad - sc(16, h), w - pad * 2, p.secondary, 1, 0.3));
-    e.push(txt(pad, h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w - pad * 2, 0.7));
-  }
-
-  return e;
-}
-
-function vc_corporate_grid(w: number, h: number, p: Palette, title: string, sub: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(32, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Left vertical bar
-  e.push(rect(0, 0, sc(6, w), h, p.primary));
-
-  // Grid dots pattern
-  for (let x = 0; x < 6; x++) {
-    for (let y = 0; y < 4; y++) {
-      e.push(dot(pad + x * sc(12, w), pad + y * sc(12, h), sc(1.5, w), p.primary, 0.08));
-    }
-  }
-
-  // Content
-  if (tagline) e.push(txt(pad, pad + sc(54, h), tagline.toUpperCase(), sc(7, w), p.accent, 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(70, h), title, sc(26, w), p.dark, 'Montserrat', 'bold', w * 0.55));
-
-  const subY = pad + sc(70, h) + sc(26, w) * 1.4 + sc(6, h);
-  e.push(txt(pad, subY, sub, sc(10, w), p.muted, 'Inter', 'normal', w * 0.55));
-
-  // Bottom info bar
-  e.push(rect(0, h - sc(36, h), w, sc(36, h), p.primary, 0.04));
-  if (contact) e.push(txt(pad, h - sc(22, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
-
-  return e;
-}
-
-// ============================================================
-// TEMPLATE: FLYERS (20 templates)
-// ============================================================
-
-function flyer_bold_header(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(40, w);
-  const headerH = h * 0.38;
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Bold header
-  e.push(rect(0, 0, w, headerH, p.primary));
-  e.push(circ(w * 0.82, h * 0.08, sc(50, w), '#FFFFFF', 0.06));
-  e.push(circ(w * 0.88, h * 0.12, sc(25, w), '#FFFFFF', 0.08));
-  e.push(circ(w * 0.12, h * 0.3, sc(20, w), p.accent, 0.15));
-  e.push(hline(w * 0.65, h * 0.15, w * 0.28, '#FFFFFF', 1, 0.1));
-  e.push(hline(w * 0.68, h * 0.17, w * 0.18, '#FFFFFF', 1, 0.08));
-
-  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(8, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(18, h), title, sc(38, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.6));
-  e.push(txt(pad, pad + sc(18, h) + sc(38, w) * 1.4 + sc(4, h), sub, sc(13, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.55));
-
-  // Content area
-  const contentY = headerH + sc(20, h);
-  e.push(rect(pad, contentY, sc(3, h), sc(30, h), p.accent));
-
-  if (body) e.push(txt(pad + sc(12, w), contentY, body, sc(11, w), '#374151', 'Inter', 'normal', w * 0.55));
-
-  // Feature boxes
-  const boxY = contentY + sc(44, h);
-  const boxW = (w - pad * 2 - sc(10, w)) / 2;
-  const boxH = sc(44, h);
-
-  e.push(rect(pad, boxY, boxW, boxH, p.light, 1, 6));
-  e.push(rect(pad, boxY, sc(3, h), boxH, p.primary, 1));
-  e.push(txt(pad + sc(12, w), boxY + sc(8, h), 'Premium Quality', sc(10, w), p.dark, 'Inter', 'bold'));
-  e.push(txt(pad + sc(12, w), boxY + sc(22, h), 'Latest technology', sc(8, w), p.muted, 'Inter', 'normal'));
-
-  e.push(rect(pad + boxW + sc(10, w), boxY, boxW, boxH, p.light, 1, 6));
-  e.push(rect(pad + boxW + sc(10, w), boxY, sc(3, h), boxH, p.accent, 1));
-  e.push(txt(pad + boxW + sc(22, w), boxY + sc(8, h), 'Fast Delivery', sc(10, w), p.dark, 'Inter', 'bold'));
-  e.push(txt(pad + boxW + sc(22, w), boxY + sc(22, h), 'Quick turnaround', sc(8, w), p.muted, 'Inter', 'normal'));
-
-  // Bottom
-  e.push(rect(0, h - sc(40, h), w, sc(40, h), p.primary, 0.04));
-  if (contact) e.push(txt(pad, h - sc(26, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
-
-  return e;
-}
-
-function flyer_centered_modern(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(48, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Decorative elements
-  e.push(circ(w * 0.85, h * 0.1, Math.min(w, h) * 0.15, p.primary, 0.05));
-  e.push(circ(w * 0.9, h * 0.06, Math.min(w, h) * 0.08, p.accent, 0.07));
-  e.push(circ(w * 0.08, h * 0.88, Math.min(w, h) * 0.12, p.primary, 0.04));
-  e.push(hline(0, h * 0.22, w * 0.1, p.accent, 2, 0.12));
-  e.push(hline(w * 0.9, h * 0.78, w * 0.1, p.accent, 2, 0.12));
-
-  // Border frame
-  const fi = sc(14, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.15));
-  e[e.length - 1].stroke = p.secondary;
-  (e[e.length - 1] as any).strokeWidth = 1;
-
-  // Top accent
-  e.push(rect(cx(w * 0.15, w), pad, w * 0.15, sc(3, h), p.accent));
-
-  if (tagline) e.push(txt(cx(w * 0.5, w), pad + sc(10, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Montserrat', 'bold'));
-  e.push(txt(cx(w * 0.75, w), pad + sc(28, h), title, sc(44, w), p.dark, 'Montserrat', 'bold', w * 0.75));
-
-  // Divider
-  e.push(rect(cx(w * 0.05, w), pad + sc(28, h) + sc(44, w) * 1.4 + sc(10, h), w * 0.05, sc(2, h), p.accent));
-  e.push(dot(cx(w * 0.05, w) + w * 0.025, pad + sc(28, h) + sc(44, w) * 1.4 + sc(10, h) + sc(1, h), sc(2.5, w), p.accent));
-
-  const subY = pad + sc(28, h) + sc(44, w) * 1.4 + sc(24, h);
-  e.push(txt(cx(w * 0.6, w), subY, sub, sc(14, w), p.primary, 'Inter', 'normal', w * 0.6));
-
-  if (body) e.push(txt(cx(w * 0.5, w), subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.5));
-
-  // Bottom
-  e.push(rect(cx(w * 0.15, w), h - pad - sc(14, h), w * 0.15, sc(2, h), p.primary, 0.3));
-  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(2, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
-
-  return e;
-}
-
-function flyer_eco_natural(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(40, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Organic shapes
-  e.push(circ(w * 0.1, h * 0.15, Math.min(w, h) * 0.2, p.primary, 0.04));
-  e.push(circ(w * 0.9, h * 0.85, Math.min(w, h) * 0.18, p.accent, 0.05));
-  e.push(circ(w * 0.85, h * 0.2, Math.min(w, h) * 0.1, p.primary, 0.03));
-  e.push(circ(w * 0.15, h * 0.8, Math.min(w, h) * 0.08, p.accent, 0.04));
-
-  // Leaf-like decorative elements (using circles)
-  e.push(circ(w * 0.75, h * 0.12, sc(15, w), p.primary, 0.1));
-  e.push(circ(w * 0.78, h * 0.09, sc(10, w), p.primary, 0.12));
-  e.push(circ(w * 0.81, h * 0.06, sc(7, w), p.primary, 0.15));
-
-  // Left green bar
-  e.push(rect(0, 0, sc(5, w), h, p.primary));
-
-  // Content
-  if (tagline) e.push(txt(pad, pad + sc(8, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Poppins', 'bold'));
-  e.push(txt(pad, pad + sc(24, h), title, sc(36, w), p.dark, 'Poppins', 'bold', w * 0.65));
-
-  const subY = pad + sc(24, h) + sc(36, w) * 1.4 + sc(8, h);
-  e.push(txt(pad, subY, sub, sc(13, w), p.primary, 'Inter', 'normal', w * 0.6));
-
-  if (body) e.push(txt(pad, subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.55));
-
-  // Bottom
-  e.push(rect(0, h - sc(4, h), w, sc(4, h), p.primary));
-  if (contact) e.push(txt(pad, h - pad - sc(4, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
-
-  return e;
-}
-
-// ============================================================
-// TEMPLATE: BANNERS (15 templates)
-// ============================================================
-
-function banner_event_bold(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(50, w);
-
-  e.push(rect(0, 0, w, h, p.primary));
-
-  // Background pattern - large circles
-  e.push(circ(w * 0.2, h * 0.3, Math.min(w, h) * 0.4, '#FFFFFF', 0.04));
-  e.push(circ(w * 0.8, h * 0.7, Math.min(w, h) * 0.35, '#FFFFFF', 0.03));
-  e.push(circ(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, p.accent, 0.08));
-  e.push(circ(w * 0.9, h * 0.1, Math.min(w, h) * 0.15, '#FFFFFF', 0.05));
-
-  // Diagonal accent lines
-  e.push(hline(0, h * 0.2, w * 0.15, '#FFFFFF', 1, 0.1));
-  e.push(hline(w * 0.85, h * 0.8, w * 0.15, '#FFFFFF', 1, 0.1));
-  e.push(hline(0, h * 0.8, w * 0.1, p.accent, 2, 0.15));
-  e.push(hline(w * 0.9, h * 0.2, w * 0.1, p.accent, 2, 0.15));
-
-  // Content
-  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(10, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(24, h), title, sc(52, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.7));
-  e.push(txt(pad, pad + sc(24, h) + sc(52, w) * 1.4 + sc(8, h), sub, sc(16, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.6));
-
-  if (body) e.push(txt(pad, h * 0.6, body, sc(12, w), 'rgba(255,255,255,0.7)', 'Inter', 'normal', w * 0.5));
-
-  if (contact) e.push(txt(pad, h - pad - sc(8, h), contact, sc(10, w), 'rgba(255,255,255,0.6)', 'Inter', 'normal', w * 0.5, 0.6));
-
-  return e;
-}
-
-function banner_sports_dynamic(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(44, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Dynamic diagonal stripes
-  e.push(rect(0, 0, w * 0.55, h, p.primary));
-  e.push(rect(w * 0.48, 0, w * 0.08, h, p.accent, 0.8));
-  e.push(rect(w * 0.52, 0, w * 0.04, h, p.primary, 0.5));
-
-  // Star/burst decorative elements on white side
-  e.push(circ(w * 0.75, h * 0.3, sc(30, w), p.accent, 0.08));
-  e.push(circ(w * 0.8, h * 0.6, sc(20, w), p.primary, 0.06));
-
-  // Content on dark side
-  if (tagline) e.push(txt(pad, pad, tagline.toUpperCase(), sc(8, w), 'rgba(255,255,255,0.5)', 'Montserrat', 'bold'));
-  e.push(txt(pad, pad + sc(20, h), title, sc(40, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.42));
-  e.push(txt(pad, pad + sc(20, h) + sc(40, w) * 1.4 + sc(6, h), sub, sc(13, w), 'rgba(255,255,255,0.8)', 'Inter', 'normal', w * 0.42));
-
-  if (body) e.push(txt(pad, h * 0.55, body, sc(10, w), 'rgba(255,255,255,0.6)', 'Inter', 'normal', w * 0.4));
-
-  // Contact on white side
-  if (contact) e.push(txt(w * 0.58, h - pad - sc(8, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.35, 0.7));
-
-  return e;
-}
-
-// ============================================================
-// TEMPLATE: POSTERS (15 templates)
-// ============================================================
-
-function poster_dramatic(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(50, w);
-
-  e.push(rect(0, 0, w, h, p.dark));
-
-  // Dramatic background elements
-  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.35, p.primary, 0.08));
-  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.25, p.primary, 0.1));
-  e.push(circ(w * 0.5, h * 0.35, Math.min(w, h) * 0.15, p.accent, 0.12));
-  e.push(circ(w * 0.1, h * 0.9, Math.min(w, h) * 0.12, p.primary, 0.05));
-  e.push(circ(w * 0.9, h * 0.1, Math.min(w, h) * 0.1, p.accent, 0.06));
-
-  // Horizontal accent lines
-  e.push(hline(0, h * 0.15, w * 0.08, p.primary, 1, 0.2));
-  e.push(hline(w * 0.92, h * 0.85, w * 0.08, p.primary, 1, 0.2));
-
-  // Content centered
-  if (tagline) e.push(txt(cx(w * 0.5, w), pad + sc(10, h), tagline.toUpperCase(), sc(9, w), p.primary, 'Montserrat', 'bold'));
-  e.push(txt(cx(w * 0.8, w), pad + sc(32, h), title, sc(56, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.8));
-
-  // Gold divider
-  e.push(hline(cx(w * 0.1, w), pad + sc(32, h) + sc(56, w) * 1.4 + sc(12, h), w * 0.1, p.primary, 2, 0.6));
-
-  const subY = pad + sc(32, h) + sc(56, w) * 1.4 + sc(28, h);
-  e.push(txt(cx(w * 0.6, w), subY, sub, sc(14, w), p.muted, 'Inter', 'normal', w * 0.6));
-
-  if (body) e.push(txt(cx(w * 0.5, w), subY + sc(22, h), body, sc(11, w), 'rgba(255,255,255,0.5)', 'Inter', 'normal', w * 0.5));
-
-  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(8, h), contact, sc(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
-
-  return e;
-}
-
-function poster_modern_minimal(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(56, w);
-
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Double border
-  const fi = sc(16, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
-  e[e.length - 1].stroke = p.dark;
-  (e[e.length - 1] as any).strokeWidth = 1;
-  const fi2 = sc(20, w);
-  e.push(rect(fi2, fi2, w - fi2 * 2, h - fi2 * 2, 'transparent', 0.1));
-  e[e.length - 1].stroke = p.dark;
-  (e[e.length - 1] as any).strokeWidth = 0.5;
-
-  // Corner accents
-  const cs = sc(18, w);
-  e.push(hline(fi2, fi2, cs, p.accent, 2, 0.4));
-  e.push(vline(fi2, fi2, cs, p.accent, 2, 0.4));
-  e.push(hline(w - fi2 - cs, fi2, cs, p.accent, 2, 0.4));
-  e.push(vline(w - fi2, fi2, cs, p.accent, 2, 0.4));
-
   // Top divider
-  e.push(rect(cx(w * 0.1, w), pad, w * 0.1, sc(1.5, h), p.accent));
+  e.push(R(cx(w * 0.1, w), pad, w * 0.1, s(1.5, h), p.acc));
 
-  if (tagline) e.push(txt(cx(w * 0.4, w), pad + sc(12, h), tagline.toUpperCase(), sc(8, w), p.accent, 'Space Grotesk', 'bold'));
-  e.push(txt(cx(w * 0.8, w), pad + sc(32, h), title, sc(48, w), p.dark, 'Space Grotesk', 'bold', w * 0.8));
+  // Tagline
+  if (c.tagline) e.push(T(cx(w * 0.4, w), pad + s(10, h), c.tagline.toUpperCase(), s(7, w), p.acc, 'Playfair Display', 'bold'));
 
-  const subY = pad + sc(32, h) + sc(48, w) * 1.4 + sc(12, h);
-  e.push(txt(cx(w * 0.55, w), subY, sub, sc(13, w), p.muted, 'Inter', 'normal', w * 0.55));
+  // Title - large elegant
+  const ts = s(34, w);
+  const ty = pad + s(26, h);
+  e.push(T(cx(w * 0.75, w), ty, c.title, ts, p.dark, 'Playfair Display', 'bold', w * 0.75));
 
-  if (body) e.push(txt(cx(w * 0.45, w), subY + sc(20, h), body, sc(10, w), p.muted, 'Inter', 'normal', w * 0.45));
+  // Gold divider under title
+  e.push(R(cx(w * 0.05, w), ty + Math.round(ts * 1.4) + s(10, h), w * 0.05, s(1.5, h), p.acc));
+  e.push(C(cx(w * 0.05, w) + w * 0.025, ty + Math.round(ts * 1.4) + s(10, h) + s(0.75, h), s(2, w), p.acc));
+
+  // Subtitle
+  const sy = ty + Math.round(ts * 1.4) + s(24, h);
+  e.push(T(cx(w * 0.55, w), sy, c.subtitle, s(12, w), p.muted, 'Inter', 'normal', w * 0.55));
+
+  // Body
+  if (c.body) e.push(T(cx(w * 0.45, w), sy + s(18, h), c.body, s(9, w), p.muted, 'Inter', 'normal', w * 0.45));
 
   // Bottom divider
-  e.push(rect(cx(w * 0.1, w), h - pad - sc(16, h), w * 0.1, sc(1.5, h), p.accent));
-  if (contact) e.push(txt(cx(w * 0.5, w), h - pad - sc(4, h), contact, sc(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
+  e.push(R(cx(w * 0.1, w), h - pad - s(14, h), w * 0.1, s(1.5, h), p.acc));
+
+  // Contact
+  if (c.contact) e.push(T(cx(w * 0.5, w), h - pad - s(2, h), c.contact, s(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
+
+  return e;
+}
+
+// ASYMMETRIC: Dynamic off-center, creative
+function tpl_vc_asymmetric(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(32, w);
+
+  e.push(R(0, 0, w, h, p.bg));
+
+  // Right partial panel
+  e.push(R(Math.round(w * 0.68), 0, Math.round(w * 0.32), h, p.pri));
+  // Panel decorations
+  e.push(C(Math.round(w * 0.78), h * 0.25, s(30, w), '#FFFFFF', 0.06));
+  e.push(C(Math.round(w * 0.85), h * 0.7, s(20, w), p.acc, 0.12));
+  e.push(HL(Math.round(w * 0.71), h * 0.5, w * 0.22, '#FFFFFF', 1, 0.1));
+
+  // Accent bar top
+  e.push(R(pad, pad, s(40, w), s(3, h), p.acc));
+
+  // Tagline
+  if (c.tagline) e.push(T(pad, pad + s(12, h), c.tagline.toUpperCase(), s(7, w), p.acc, 'Montserrat', 'bold'));
+
+  // Title
+  const ts = s(28, w);
+  e.push(T(pad, pad + s(28, h), c.title, ts, p.dark, 'Montserrat', 'bold', w * 0.58));
+
+  // Subtitle
+  e.push(T(pad, pad + s(28, h) + Math.round(ts * 1.4) + s(6, h), c.subtitle, s(11, w), p.pri, 'Inter', 'normal', w * 0.55));
+
+  // Body
+  if (c.body) e.push(T(pad, pad + s(28, h) + Math.round(ts * 1.4) + s(26, h), c.body, s(9, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Decorative cluster
+  e.push(C(w * 0.4, h * 0.78, s(10, w), p.pri, 0.06));
+  e.push(C(w * 0.45, h * 0.85, s(7, w), p.acc, 0.08));
+
+  // Contact
+  if (c.contact) e.push(T(pad, h - pad - s(10, h), c.contact, s(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
+
+  return e;
+}
+
+// BOLD HEADER: Big colored header, content below
+function tpl_flyer_bold(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(40, w);
+  const headerH = Math.round(h * 0.36);
+
+  e.push(R(0, 0, w, h, p.bg));
+
+  // Header
+  e.push(R(0, 0, w, headerH, p.pri));
+  e.push(C(w * 0.82, h * 0.06, s(45, w), '#FFFFFF', 0.06));
+  e.push(C(w * 0.88, h * 0.1, s(22, w), '#FFFFFF', 0.08));
+  e.push(C(w * 0.12, h * 0.28, s(18, w), p.acc, 0.15));
+  e.push(HL(w * 0.65, h * 0.13, w * 0.28, '#FFFFFF', 1, 0.1));
+
+  if (c.tagline) e.push(T(pad, pad, c.tagline.toUpperCase(), s(8, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
+  e.push(T(pad, pad + s(16, h), c.title, s(38, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.58));
+  e.push(T(pad, pad + s(16, h) + s(38, w) * 1.4 + s(4, h), c.subtitle, s(13, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.52));
+
+  // Content below header
+  const cy = headerH + s(20, h);
+  e.push(R(pad, cy, s(3, h), s(28, h), p.acc));
+  if (c.body) e.push(T(pad + s(12, w), cy, c.body, s(10, w), '#374151', 'Inter', 'normal', w * 0.55));
+
+  // Feature boxes
+  const bx = cy + s(40, h);
+  const bw = (w - pad * 2 - s(10, w)) / 2;
+  const bh = s(42, h);
+
+  e.push(R(pad, bx, bw, bh, p.light, 1, 6));
+  e.push(R(pad, bx, s(3, h), bh, p.pri, 1));
+  e.push(T(pad + s(12, w), bx + s(8, h), 'Premium Quality', s(10, w), p.dark, 'Inter', 'bold'));
+  e.push(T(pad + s(12, w), bx + s(22, h), 'Latest technology', s(8, w), p.muted, 'Inter', 'normal'));
+
+  e.push(R(pad + bw + s(10, w), bx, bw, bh, p.light, 1, 6));
+  e.push(R(pad + bw + s(10, w), bx, s(3, h), bh, p.acc, 1));
+  e.push(T(pad + bw + s(22, w), bx + s(8, h), 'Fast Delivery', s(10, w), p.dark, 'Inter', 'bold'));
+  e.push(T(pad + bw + s(22, w), bx + s(22, h), 'Quick turnaround', s(8, w), p.muted, 'Inter', 'normal'));
+
+  // Bottom
+  e.push(R(0, h - s(36, h), w, s(36, h), p.pri, 0.04));
+  if (c.contact) e.push(T(pad, h - s(22, h), c.contact, s(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.7));
+
+  return e;
+}
+
+// CENTERED: Symmetrical, clean
+function tpl_centered(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(48, w);
+
+  e.push(R(0, 0, w, h, p.bg));
+
+  // Decorative circles
+  e.push(C(w * 0.88, h * 0.1, Math.min(w, h) * 0.14, p.pri, 0.05));
+  e.push(C(w * 0.92, h * 0.06, Math.min(w, h) * 0.08, p.acc, 0.07));
+  e.push(C(w * 0.08, h * 0.88, Math.min(w, h) * 0.12, p.pri, 0.04));
+  // Accent lines
+  e.push(HL(0, h * 0.22, w * 0.08, p.acc, 2, 0.12));
+  e.push(HL(w * 0.92, h * 0.78, w * 0.08, p.acc, 2, 0.12));
+
+  // Border frame
+  const fi = s(14, w);
+  e.push(R(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.15));
+  e[e.length - 1].stroke = p.sec; (e[e.length - 1] as any).strokeWidth = 1;
+
+  // Top accent
+  e.push(R(cx(w * 0.12, w), pad, w * 0.12, s(3, h), p.acc));
+
+  if (c.tagline) e.push(T(cx(w * 0.5, w), pad + s(10, h), c.tagline.toUpperCase(), s(8, w), p.acc, 'Montserrat', 'bold'));
+
+  const ts = s(44, w);
+  const ty = pad + s(26, h);
+  e.push(T(cx(w * 0.8, w), ty, c.title, ts, p.dark, 'Montserrat', 'bold', w * 0.8));
+
+  // Divider
+  e.push(R(cx(w * 0.05, w), ty + Math.round(ts * 1.4) + s(10, h), w * 0.05, s(2, h), p.acc));
+  e.push(C(cx(w * 0.05, w) + w * 0.025, ty + Math.round(ts * 1.4) + s(10, h) + s(1, h), s(2.5, w), p.acc));
+
+  const sy = ty + Math.round(ts * 1.4) + s(24, h);
+  e.push(T(cx(w * 0.6, w), sy, c.subtitle, s(14, w), p.pri, 'Inter', 'normal', w * 0.6));
+  if (c.body) e.push(T(cx(w * 0.5, w), sy + s(18, h), c.body, s(10, w), p.muted, 'Inter', 'normal', w * 0.5));
+
+  // Bottom
+  e.push(R(cx(w * 0.12, w), h - pad - s(14, h), w * 0.12, s(2, h), p.pri, 0.3));
+  if (c.contact) e.push(T(cx(w * 0.5, w), h - pad - s(2, h), c.contact, s(8, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
+
+  return e;
+}
+
+// GRID: 4 boxes
+function tpl_grid(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(28, w);
+
+  e.push(R(0, 0, w, h, p.bg));
+  e.push(R(0, 0, w, s(5, h), p.pri));
+
+  const ts = s(30, w);
+  e.push(T(cx(w * 0.7, w), pad + s(8, h), c.title, ts, p.dark, 'Montserrat', 'bold', w * 0.7));
+  e.push(T(cx(w * 0.5, w), pad + s(8, h) + Math.round(ts * 1.4) + s(6, h), c.subtitle, s(12, w), p.pri, 'Inter', 'normal', w * 0.5));
+  e.push(R(cx(w * 0.06, w), pad + s(8, h) + Math.round(ts * 1.4) + s(24, h), w * 0.06, s(2, h), p.acc));
+
+  const gt = pad + s(8, h) + Math.round(ts * 1.4) + s(38, h);
+  const gg = s(8, w);
+  const bw = (w - pad * 2 - gg) / 2;
+  const bh = (h - gt - pad - s(32, h) - gg) / 2;
+
+  const items = [
+    { n: '01', t: 'Design', d: c.tagline || 'Professional' },
+    { n: '02', t: 'Quality', d: 'Premium materials' },
+    { n: '03', t: 'Speed', d: 'Fast turnaround' },
+    { n: '04', t: 'Contact', d: c.contact || 'Reach us' },
+  ];
+
+  items.forEach((it, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const bx = pad + col * (bw + gg);
+    const by = gt + row * (bh + gg);
+    const isPrimary = i === 0;
+
+    e.push(R(bx, by, bw, bh, isPrimary ? p.pri : p.light, 1, 6));
+    e.push(T(bx + s(12, w), by + s(10, h), it.n, s(22, w), isPrimary ? 'rgba(255,255,255,0.15)' : p.pri, 'Montserrat', 'bold'));
+    e.push(HL(bx + s(12, w), by + bh - s(28, h), s(28, w), isPrimary ? 'rgba(255,255,255,0.3)' : p.acc, 2, 0.5));
+    e.push(T(bx + s(12, w), by + bh - s(22, h), it.t, s(11, w), isPrimary ? '#FFFFFF' : p.dark, 'Inter', 'bold'));
+    e.push(T(bx + s(12, w), by + bh - s(10, h), it.d.slice(0, 18), s(8, w), isPrimary ? 'rgba(255,255,255,0.7)' : p.muted, 'Inter', 'normal'));
+  });
+
+  e.push(R(0, h - s(5, h), w, s(5, h), p.acc));
+  return e;
+}
+
+// ============================================================
+// FLYER TEMPLATES
+// ============================================================
+
+function tpl_flyer_centered(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(50, w);
+
+  e.push(R(0, 0, w, h, p.bg));
+
+  // Background decorations
+  e.push(C(w * 0.85, h * 0.08, Math.min(w, h) * 0.12, p.pri, 0.04));
+  e.push(C(w * 0.9, h * 0.05, Math.min(w, h) * 0.06, p.acc, 0.06));
+  e.push(C(w * 0.06, h * 0.92, Math.min(w, h) * 0.1, p.pri, 0.03));
+  e.push(HL(0, h * 0.2, w * 0.06, p.acc, 2, 0.1));
+  e.push(HL(w * 0.94, h * 0.8, w * 0.06, p.acc, 2, 0.1));
+
+  // Border
+  const fi = s(12, w);
+  e.push(R(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.12));
+  e[e.length - 1].stroke = p.sec; (e[e.length - 1] as any).strokeWidth = 0.5;
+
+  // Top accent
+  e.push(R(cx(w * 0.1, w), pad, w * 0.1, s(3, h), p.acc));
+
+  if (c.tagline) e.push(T(cx(w * 0.5, w), pad + s(10, h), c.tagline.toUpperCase(), s(8, w), p.acc, 'Montserrat', 'bold'));
+
+  const ts = s(48, w);
+  const ty = pad + s(28, h);
+  e.push(T(cx(w * 0.85, w), ty, c.title, ts, p.dark, 'Montserrat', 'bold', w * 0.85));
+
+  // Divider
+  e.push(R(cx(w * 0.05, w), ty + Math.round(ts * 1.4) + s(12, h), w * 0.05, s(2, h), p.acc));
+  e.push(C(cx(w * 0.05, w) + w * 0.025, ty + Math.round(ts * 1.4) + s(12, h) + s(1, h), s(2.5, w), p.acc));
+
+  const sy = ty + Math.round(ts * 1.4) + s(28, h);
+  e.push(T(cx(w * 0.65, w), sy, c.subtitle, s(15, w), p.pri, 'Inter', 'normal', w * 0.65));
+  if (c.body) e.push(T(cx(w * 0.55, w), sy + s(20, h), c.body, s(11, w), p.muted, 'Inter', 'normal', w * 0.55));
+
+  // Bottom
+  e.push(R(cx(w * 0.1, w), h - pad - s(16, h), w * 0.1, s(2, h), p.pri, 0.3));
+  if (c.contact) e.push(T(cx(w * 0.5, w), h - pad - s(4, h), c.contact, s(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.6));
 
   return e;
 }
 
 // ============================================================
-// TEMPLATE: T-SHIRTS (10 templates)
+// BANNER TEMPLATES
 // ============================================================
 
-function tshirt_bold_graphic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(40, w);
+function tpl_banner_bold(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(50, w);
 
-  e.push(rect(0, 0, w, h, p.bg));
+  e.push(R(0, 0, w, h, p.pri));
 
-  // Large geometric shapes as background
-  e.push(circ(w * 0.5, h * 0.45, Math.min(w, h) * 0.35, p.primary, 0.06));
-  e.push(rect(w * 0.2, h * 0.15, w * 0.6, h * 0.7, p.primary, 0.03, 12));
-  e.push(rect(w * 0.25, h * 0.2, w * 0.5, h * 0.6, p.accent, 0.04, 8));
+  // Background decorations
+  e.push(C(w * 0.2, h * 0.3, Math.min(w, h) * 0.4, '#FFFFFF', 0.04));
+  e.push(C(w * 0.8, h * 0.7, Math.min(w, h) * 0.35, '#FFFFFF', 0.03));
+  e.push(C(w * 0.5, h * 0.5, Math.min(w, h) * 0.25, p.acc, 0.08));
+  e.push(HL(0, h * 0.2, w * 0.1, '#FFFFFF', 1, 0.1));
+  e.push(HL(w * 0.9, h * 0.8, w * 0.1, '#FFFFFF', 1, 0.1));
 
-  // Bold centered text
-  e.push(txt(cx(w * 0.7, w), h * 0.35, title, sc(48, w), p.dark, 'Montserrat', 'bold', w * 0.7));
-  if (sub) e.push(txt(cx(w * 0.5, w), h * 0.55, sub, sc(14, w), p.primary, 'Inter', 'normal', w * 0.5));
-
-  // Bottom accent line
-  e.push(hline(cx(w * 0.15, w), h * 0.65, w * 0.15, p.accent, 3, 0.5));
-
-  return e;
-}
-
-function tshirt_typographic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-
-  e.push(rect(0, 0, w, h, p.dark));
-
-  // Large text as design element
-  e.push(txt(cx(w * 0.85, w), h * 0.25, title.toUpperCase(), sc(56, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.85));
-
-  // Accent line
-  e.push(hline(cx(w * 0.2, w), h * 0.5, w * 0.2, p.accent, 3, 0.7));
-
-  if (sub) e.push(txt(cx(w * 0.6, w), h * 0.58, sub, sc(13, w), p.muted, 'Inter', 'normal', w * 0.6));
+  if (c.tagline) e.push(T(pad, pad, c.tagline.toUpperCase(), s(10, w), 'rgba(255,255,255,0.6)', 'Montserrat', 'bold'));
+  e.push(T(pad, pad + s(22, h), c.title, s(52, w), '#FFFFFF', 'Montserrat', 'bold', w * 0.7));
+  e.push(T(pad, pad + s(22, h) + s(52, w) * 1.4 + s(8, h), c.subtitle, s(16, w), 'rgba(255,255,255,0.85)', 'Inter', 'normal', w * 0.6));
+  if (c.body) e.push(T(pad, h * 0.6, c.body, s(12, w), 'rgba(255,255,255,0.7)', 'Inter', 'normal', w * 0.5));
+  if (c.contact) e.push(T(pad, h - pad - s(8, h), c.contact, s(10, w), 'rgba(255,255,255,0.6)', 'Inter', 'normal', w * 0.5, 0.6));
 
   return e;
 }
 
 // ============================================================
-// TEMPLATE: MUGS (10 templates)
+// POSTER TEMPLATES
 // ============================================================
 
-function mug_quote_classic(w: number, h: number, p: Palette, title: string, sub: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(50, w);
+function tpl_poster_dramatic(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(50, w);
 
-  e.push(rect(0, 0, w, h, p.bg));
+  e.push(R(0, 0, w, h, p.dark));
+
+  // Dramatic circles
+  e.push(C(w * 0.5, h * 0.35, Math.min(w, h) * 0.35, p.pri, 0.08));
+  e.push(C(w * 0.5, h * 0.35, Math.min(w, h) * 0.25, p.pri, 0.1));
+  e.push(C(w * 0.5, h * 0.35, Math.min(w, h) * 0.15, p.acc, 0.12));
+  e.push(HL(0, h * 0.15, w * 0.06, p.pri, 1, 0.2));
+  e.push(HL(w * 0.94, h * 0.85, w * 0.06, p.pri, 1, 0.2));
+
+  if (c.tagline) e.push(T(cx(w * 0.5, w), pad + s(10, h), c.tagline.toUpperCase(), s(9, w), p.pri, 'Montserrat', 'bold'));
+  const ts = s(56, w);
+  const ty = pad + s(32, h);
+  e.push(T(cx(w * 0.85, w), ty, c.title, ts, '#FFFFFF', 'Montserrat', 'bold', w * 0.85));
+
+  e.push(HL(cx(w * 0.08, w), ty + Math.round(ts * 1.4) + s(12, h), w * 0.08, p.pri, 2, 0.6));
+
+  const sy = ty + Math.round(ts * 1.4) + s(28, h);
+  e.push(T(cx(w * 0.6, w), sy, c.subtitle, s(14, w), p.muted, 'Inter', 'normal', w * 0.6));
+  if (c.body) e.push(T(cx(w * 0.5, w), sy + s(20, h), c.body, s(11, w), 'rgba(255,255,255,0.5)', 'Inter', 'normal', w * 0.5));
+  if (c.contact) e.push(T(cx(w * 0.5, w), h - pad - s(8, h), c.contact, s(9, w), p.muted, 'Inter', 'normal', w * 0.5, 0.5));
+
+  return e;
+}
+
+// ============================================================
+// T-SHIRT TEMPLATES
+// ============================================================
+
+function tpl_tshirt_bold(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+
+  e.push(R(0, 0, w, h, p.bg));
+
+  // Geometric background
+  e.push(C(w * 0.5, h * 0.45, Math.min(w, h) * 0.35, p.pri, 0.06));
+  e.push(R(w * 0.2, h * 0.15, w * 0.6, h * 0.7, p.pri, 0.03, 12));
+  e.push(R(w * 0.25, h * 0.2, w * 0.5, h * 0.6, p.acc, 0.04, 8));
+
+  e.push(T(cx(w * 0.7, w), h * 0.35, c.title, s(48, w), p.dark, 'Montserrat', 'bold', w * 0.7));
+  if (c.subtitle) e.push(T(cx(w * 0.5, w), h * 0.55, c.subtitle, s(14, w), p.pri, 'Inter', 'normal', w * 0.5));
+  e.push(HL(cx(w * 0.12, w), h * 0.65, w * 0.12, p.acc, 3, 0.5));
+
+  return e;
+}
+
+// ============================================================
+// MUG TEMPLATE
+// ============================================================
+
+function tpl_mug_quote(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
+  const pad = s(50, w);
+
+  e.push(R(0, 0, w, h, p.bg));
 
   // Elegant frame
-  const fi = sc(20, w);
-  e.push(rect(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
-  e[e.length - 1].stroke = p.primary;
-  (e[e.length - 1] as any).strokeWidth = 1.5;
+  const fi = s(18, w);
+  e.push(R(fi, fi, w - fi * 2, h - fi * 2, 'transparent', 0.2));
+  e[e.length - 1].stroke = p.pri; (e[e.length - 1] as any).strokeWidth = 1.5;
 
-  // Decorative quotes (using text)
-  e.push(txt(pad, pad + sc(10, h), '"', sc(60, w), p.primary, 'Playfair Display', 'normal'));
+  // Quote mark
+  e.push(T(pad, pad + s(8, h), '\u201C', s(56, w), p.pri, 'Playfair Display', 'normal'));
 
-  e.push(txt(cx(w * 0.7, w), h * 0.35, title, sc(24, w), p.dark, 'Playfair Display', 'bold', w * 0.7));
+  e.push(T(cx(w * 0.7, w), h * 0.35, c.title, s(24, w), p.dark, 'Playfair Display', 'bold', w * 0.7));
+  if (c.subtitle) e.push(T(cx(w * 0.5, w), h * 0.35 + s(24, w) * 1.4 + s(8, h), c.subtitle, s(11, w), p.muted, 'Inter', 'italic', w * 0.5));
 
-  const subY = h * 0.35 + sc(24, w) * 1.4 + sc(10, h);
-  e.push(txt(cx(w * 0.5, w), subY, sub, sc(11, w), p.muted, 'Inter', 'italic', w * 0.5));
-
-  // Bottom accent
-  e.push(hline(cx(w * 0.1, w), h - pad - sc(20, h), w * 0.1, p.primary, 2, 0.4));
+  e.push(HL(cx(w * 0.08, w), h - pad - s(18, h), w * 0.08, p.pri, 2, 0.4));
 
   return e;
 }
 
 // ============================================================
-// TEMPLATE: STICKERS / LABELS (10 templates)
+// STICKER TEMPLATE
 // ============================================================
 
-function sticker_badge(w: number, h: number, p: Palette, title: string, sub: string, tagline: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
+function tpl_sticker_badge(w: number, h: number, p: P, c: Content): E[] {
+  const e: E[] = [];
 
-  e.push(rect(0, 0, w, h, p.bg));
+  e.push(R(0, 0, w, h, p.bg));
 
-  // Circle badge design
   const centerX = w / 2;
   const centerY = h / 2;
   const radius = Math.min(w, h) * 0.38;
 
-  e.push(circ(centerX, centerY, radius, p.primary));
-  e.push(circ(centerX, centerY, radius - sc(4, w), p.bg));
-  e.push(circ(centerX, centerY, radius - sc(8, w), p.primary, 0.05));
+  e.push(C(centerX, centerY, radius, p.pri));
+  e.push(C(centerX, centerY, radius - s(4, w), p.bg));
+  e.push(C(centerX, centerY, radius - s(8, w), p.pri, 0.05));
 
-  // Decorative ring dots
+  // Ring dots
   for (let i = 0; i < 12; i++) {
     const angle = (i / 12) * Math.PI * 2;
-    const dx = centerX + Math.cos(angle) * (radius - sc(12, w));
-    const dy = centerY + Math.sin(angle) * (radius - sc(12, w));
-    e.push(dot(dx, dy, sc(2, w), p.primary, 0.3));
+    const dx = centerX + Math.cos(angle) * (radius - s(10, w));
+    const dy = centerY + Math.sin(angle) * (radius - s(10, w));
+    e.push(C(dx, dy, s(1.5, w), p.pri, 0.3));
   }
 
-  if (tagline) e.push(txt(cx(w * 0.4, w), centerY - sc(20, h), tagline.toUpperCase(), sc(6, w), p.primary, 'Montserrat', 'bold'));
-  e.push(txt(cx(w * 0.6, w), centerY - sc(6, h), title, sc(18, w), p.dark, 'Montserrat', 'bold', w * 0.6));
-  if (sub) e.push(txt(cx(w * 0.4, w), centerY + sc(12, h), sub, sc(8, w), p.muted, 'Inter', 'normal', w * 0.4));
+  if (c.tagline) e.push(T(cx(w * 0.4, w), centerY - s(18, h), c.tagline.toUpperCase(), s(6, w), p.pri, 'Montserrat', 'bold'));
+  e.push(T(cx(w * 0.55, w), centerY - s(4, h), c.title, s(18, w), p.dark, 'Montserrat', 'bold', w * 0.55));
+  if (c.subtitle) e.push(T(cx(w * 0.4, w), centerY + s(12, h), c.subtitle, s(8, w), p.muted, 'Inter', 'normal', w * 0.4));
 
   return e;
 }
 
 // ============================================================
-// TEMPLATE: LABELS / PACKAGING (10 templates)
+// TYPES & ROUTER
 // ============================================================
 
-function label_product_premium(w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string): CanvasElement[] {
-  const e: CanvasElement[] = [];
-  const pad = sc(28, w);
+type E = CanvasElement;
 
-  e.push(rect(0, 0, w, h, p.bg));
-
-  // Top accent
-  e.push(rect(0, 0, w, sc(4, h), p.primary));
-
-  // Brand area
-  e.push(rect(pad, pad, w - pad * 2, h * 0.3, p.light, 1, 4));
-  e.push(txt(cx(w * 0.5, w), pad + sc(10, h), title.toUpperCase(), sc(20, w), p.dark, 'Montserrat', 'bold', w * 0.8));
-  e.push(txt(cx(w * 0.4, w), pad + sc(10, h) + sc(20, w) * 1.4 + sc(4, h), sub, sc(9, w), p.primary, 'Inter', 'normal', w * 0.4));
-
-  // Divider
-  e.push(hline(pad, h * 0.42, w - pad * 2, p.secondary, 1, 0.3));
-
-  // Details
-  if (body) e.push(txt(pad, h * 0.48, body, sc(9, w), p.muted, 'Inter', 'normal', w - pad * 2));
-
-  // Bottom
-  e.push(rect(0, h - sc(24, h), w, sc(24, h), p.primary, 0.04));
-  if (contact) e.push(txt(pad, h - sc(14, h), contact, sc(7, w), p.muted, 'Inter', 'normal', w - pad * 2, 0.7));
-
-  return e;
+interface Content {
+  title: string;
+  subtitle: string;
+  body?: string;
+  contact?: string;
+  tagline?: string;
+  cta?: string;
 }
 
-// ============================================================
-// LAYOUT ENGINE - Routes to templates based on type + style
-// ============================================================
+type TplFn = (w: number, h: number, p: P, c: Content) => E[];
 
-type TemplateFunc = (w: number, h: number, p: Palette, title: string, sub: string, body: string, contact: string, tagline: string) => CanvasElement[];
-
-const TEMPLATE_REGISTRY: Record<string, TemplateFunc[]> = {
-  visiting_card: [vc_modern_split, vc_luxury_dark, vc_bold_asymmetric, vc_minimal_clean, vc_creative_gradient, vc_corporate_grid],
-  flyer: [flyer_bold_header, flyer_centered_modern, flyer_eco_natural],
-  banner: [banner_event_bold, banner_sports_dynamic],
-  poster: [poster_dramatic, poster_modern_minimal],
-  tshirt: [tshirt_bold_graphic, tshirt_typographic],
-  mug: [mug_quote_classic],
-  sticker: [sticker_badge],
-  label: [label_product_premium],
-  // Generic fallbacks
-  design: [vc_modern_split, flyer_bold_header, poster_dramatic, vc_luxury_dark, vc_creative_gradient],
+const TEMPLATES: Record<string, TplFn[]> = {
+  visiting_card: [tpl_vc_split, tpl_vc_elegant, tpl_vc_asymmetric],
+  flyer: [tpl_flyer_bold, tpl_flyer_centered],
+  banner: [tpl_banner_bold],
+  poster: [tpl_poster_dramatic],
+  tshirt: [tpl_tshirt_bold],
+  mug: [tpl_mug_quote],
+  sticker: [tpl_sticker_badge],
+  label: [tpl_vc_split],
+  design: [tpl_vc_split, tpl_flyer_bold, tpl_poster_dramatic, tpl_vc_elegant],
 };
 
-const STYLE_TO_PALETTE: Record<string, Palette> = {
-  modern: P.modern, luxury: P.luxury, bold: P.bold, minimal: P.minimal,
-  eco: P.eco, creative: P.creative, corporate: P.corporate, playful: P.playful,
-  medical: P.medical, food: P.food, fashion: P.fashion, tech: P.tech,
-  sports: P.sports, beauty: P.beauty,
-};
-
-const PRODUCT_TYPE_MAP: Record<string, string> = {
+const PRODUCT_MAP: Record<string, string> = {
   'business-card': 'visiting_card', 'visiting-card': 'visiting_card', 'visiting card': 'visiting_card',
   'business card': 'visiting_card', 'name-card': 'visiting_card', 'name card': 'visiting_card',
   'flyer': 'flyer', 'brochure': 'flyer', 'leaflet': 'flyer',
@@ -716,59 +561,51 @@ const PRODUCT_TYPE_MAP: Record<string, string> = {
   'design': 'design',
 };
 
-function detectProductType(productType: string): string {
-  const lower = productType.toLowerCase().trim();
-  for (const [key, val] of Object.entries(PRODUCT_TYPE_MAP)) {
-    if (lower.includes(key)) return val;
+function detectProduct(pt: string): string {
+  const l = pt.toLowerCase().trim();
+  for (const [k, v] of Object.entries(PRODUCT_MAP)) {
+    if (l.includes(k)) return v;
   }
   return 'design';
-}
-
-export function generateLayout(
-  layoutId: string,
-  styleId: string,
-  content: { title: string; subtitle: string; body?: string; contact?: string; tagline?: string; cta?: string },
-  canvasWidth: number,
-  canvasHeight: number,
-  productType: string = 'design',
-): { backgroundColor: string; elements: CanvasElement[] } {
-  const palette = STYLE_TO_PALETTE[styleId] || P.modern;
-  const pType = detectProductType(productType);
-  const templates = TEMPLATE_REGISTRY[pType] || TEMPLATE_REGISTRY.design;
-
-  // Pick template by index from layoutId (or 0 for default)
-  const layoutIndex = Math.abs(hashCode(layoutId)) % templates.length;
-  const template = templates[layoutIndex];
-
-  const elements = template(
-    canvasWidth, canvasHeight, palette,
-    content.title || 'Your Design',
-    content.subtitle || '',
-    content.body || '',
-    content.contact || '',
-    content.tagline || '',
-  );
-
-  return { backgroundColor: palette.bg, elements };
 }
 
 function hashCode(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
     hash |= 0;
   }
   return hash;
 }
 
-export function getLayoutIds(): string[] {
-  return Object.keys(TEMPLATE_REGISTRY);
+export function generateLayout(
+  layoutId: string,
+  styleId: string,
+  content: Content,
+  canvasWidth: number,
+  canvasHeight: number,
+  productType: string = 'design',
+): { backgroundColor: string; elements: CanvasElement[] } {
+  const palette = PAL[styleId] || PAL.modern;
+  const pType = detectProduct(productType);
+  const templates = TEMPLATES[pType] || TEMPLATES.design;
+
+  const idx = Math.abs(hashCode(layoutId)) % templates.length;
+  const template = templates[idx];
+
+  const elements = template(canvasWidth, canvasHeight, palette, {
+    title: content.title || 'YOUR DESIGN',
+    subtitle: content.subtitle || '',
+    body: content.body || '',
+    contact: content.contact || '',
+    tagline: content.tagline || '',
+    cta: content.cta || '',
+  });
+
+  return { backgroundColor: palette.bg, elements };
 }
 
-export function getStyleIds(): string[] {
-  return Object.keys(STYLE_TO_PALETTE);
-}
-
-export { STYLE_TO_PALETTE, TEMPLATE_REGISTRY, detectProductType };
-export type { Palette };
+export function getLayoutIds(): string[] { return Object.keys(TEMPLATES); }
+export function getStyleIds(): string[] { return Object.keys(PAL); }
+export { PAL as STYLE_TO_PALETTE, TEMPLATES as TEMPLATE_REGISTRY, detectProduct as detectProductType };
+export type { P as Palette };
