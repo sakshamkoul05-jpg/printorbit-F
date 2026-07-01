@@ -10,6 +10,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { aiAPI } from '@/lib/ai';
+import { generateLayout, getLayoutIds, getStyleIds, LAYOUTS, STYLE_MAP } from '@/lib/designEngine';
 import type { CanvasElement } from '@/app/design-studio/page';
 
 type WidgetView = 'home' | 'generate' | 'preview' | 'chat';
@@ -130,8 +131,22 @@ export default function OrbitMagicWidget() {
       }
 
       if (el.type === 'rect') {
-        ctx.fillStyle = el.fill;
-        ctx.fillRect(el.x, el.y, el.width, el.height);
+        if (el.fill && el.fill !== 'transparent') {
+          ctx.fillStyle = el.fill;
+          const r = (el as any).radius || 0;
+          if (r > 0) {
+            ctx.beginPath();
+            ctx.roundRect(el.x, el.y, el.width, el.height, r);
+            ctx.fill();
+          } else {
+            ctx.fillRect(el.x, el.y, el.width, el.height);
+          }
+        }
+        if (el.stroke) {
+          ctx.strokeStyle = el.stroke;
+          ctx.lineWidth = el.strokeWidth || 2;
+          ctx.strokeRect(el.x, el.y, el.width, el.height);
+        }
       } else if (el.type === 'circle') {
         ctx.fillStyle = el.fill;
         ctx.beginPath();
@@ -139,12 +154,30 @@ export default function OrbitMagicWidget() {
         ctx.fill();
       } else if (el.type === 'text' && el.text) {
         ctx.fillStyle = el.fill;
-        ctx.font = `${el.fontWeight || 'normal'} ${el.fontSize || 16}px ${el.fontFamily || 'Inter'}`;
+        const fs = el.fontSize || 16;
+        const fw = el.fontWeight === 'bold' ? 'bold' : 'normal';
+        ctx.font = `${fw} ${fs}px ${el.fontFamily || 'Inter'}, sans-serif`;
         ctx.textBaseline = 'top';
-        ctx.fillText(el.text, el.x, el.y);
+        // Word wrap for longer text
+        const maxWidth = el.width || 600;
+        const words = el.text.split(' ');
+        let line = '';
+        let lineY = el.y;
+        for (let i = 0; i < words.length; i++) {
+          const testLine = line + words[i] + ' ';
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxWidth && i > 0) {
+            ctx.fillText(line.trim(), el.x, lineY);
+            line = words[i] + ' ';
+            lineY += fs * 1.3;
+          } else {
+            line = testLine;
+          }
+        }
+        ctx.fillText(line.trim(), el.x, lineY);
       } else if (el.type === 'line') {
         ctx.strokeStyle = el.fill;
-        ctx.lineWidth = el.strokeWidth || 2;
+        ctx.lineWidth = el.strokeWidth || 1;
         ctx.beginPath();
         ctx.moveTo(el.x, el.y);
         ctx.lineTo(el.x + el.width, el.y + el.height);
@@ -164,19 +197,38 @@ export default function OrbitMagicWidget() {
     setView('preview');
 
     try {
-      const enhancedPrompt = `${prompt} | Style: ${selectedStyle.name} | Colors: ${selectedStyle.colors.join(', ')} | Product: ${selectedProduct.name} | Make it print-ready, professional, and visually stunning`;
-      const result = await aiAPI.generateDesign(enhancedPrompt, selectedProduct.width, selectedProduct.height, selectedProduct.id);
-      setGeneratedDesign(result.design);
+      // AI generates content + layout/style choices
+      const result = await aiAPI.generateContent(prompt, selectedProduct.width, selectedProduct.height, selectedProduct.id);
+
+      // Design engine calculates ALL positions mathematically
+      const design = generateLayout(
+        result.layout || 'centered',
+        result.style || selectedStyle.id,
+        result.content,
+        selectedProduct.width,
+        selectedProduct.height,
+      );
+
+      setGeneratedDesign(design);
+
+      // Update selected style to match AI choice
+      const aiStyle = STYLE_MAP[result.style || selectedStyle.id];
+      if (aiStyle) {
+        const preset = STYLE_PRESETS.find(s => s.id === result.style);
+        if (preset) setSelectedStyle(preset);
+      }
     } catch {
-      setGeneratedDesign({
-        backgroundColor: selectedStyle.colors[0],
-        elements: [
-          { id: 'bg', type: 'rect', x: 0, y: 0, width: selectedProduct.width, height: selectedProduct.height, fill: selectedStyle.colors[0], rotation: 0, opacity: 1 },
-          { id: 'accent', type: 'rect', x: 40, y: 40, width: selectedProduct.width - 80, height: selectedProduct.height - 80, fill: 'transparent', stroke: selectedStyle.colors[1], strokeWidth: 3, rotation: 0, opacity: 0.3 },
-          { id: 'title', type: 'text', x: 60, y: selectedProduct.height * 0.3, width: selectedProduct.width - 120, height: 60, fill: selectedStyle.colors[2] || '#FFFFFF', text: 'YOUR DESIGN', fontSize: Math.min(72, selectedProduct.width * 0.08), fontFamily: 'Montserrat', fontWeight: 'bold', rotation: 0, opacity: 1 },
-          { id: 'subtitle', type: 'text', x: 60, y: selectedProduct.height * 0.3 + 80, width: selectedProduct.width - 120, height: 40, fill: selectedStyle.colors[1], text: prompt.slice(0, 60), fontSize: Math.min(24, selectedProduct.width * 0.025), fontFamily: 'Inter', fontWeight: 'normal', rotation: 0, opacity: 0.8 },
-        ],
-      });
+      // Fallback: generate with current selections
+      const fallbackContent = {
+        title: 'YOUR DESIGN',
+        subtitle: prompt.slice(0, 60),
+        body: '',
+        tagline: selectedProduct.name.toUpperCase(),
+        contact: 'www.printorbit.in',
+        cta: 'Order Now',
+      };
+      const design = generateLayout('centered', selectedStyle.id, fallbackContent, selectedProduct.width, selectedProduct.height);
+      setGeneratedDesign(design);
     }
     setIsGenerating(false);
   };
@@ -488,7 +540,7 @@ export default function OrbitMagicWidget() {
                             <Layers className="w-4 h-4" />
                             Open in Studio
                           </Link>
-                          <button
+                        <button
                             onClick={handleGenerate}
                             className="flex items-center justify-center gap-2 py-3 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-all"
                           >
@@ -504,7 +556,20 @@ export default function OrbitMagicWidget() {
                             {STYLE_PRESETS.filter((sp) => sp.id !== selectedStyle.id).slice(0, 4).map((sp) => (
                               <button
                                 key={sp.id}
-                                onClick={() => { setSelectedStyle(sp); }}
+                                onClick={() => {
+                                  setSelectedStyle(sp);
+                                  // Regenerate with new style
+                                  if (generatedDesign && selectedProduct) {
+                                    const newDesign = generateLayout(
+                                      LAYOUTS[generatedDesign.elements.length > 10 ? 'centered' : 'split'] ? 'centered' : 'centered',
+                                      sp.id,
+                                      { title: 'YOUR DESIGN', subtitle: prompt.slice(0, 60), tagline: selectedProduct.name.toUpperCase(), contact: 'www.printorbit.in', cta: 'Order Now' },
+                                      selectedProduct.width,
+                                      selectedProduct.height,
+                                    );
+                                    setGeneratedDesign(newDesign);
+                                  }
+                                }}
                                 className="flex flex-col items-center gap-1 p-2 rounded-xl bg-slate-50 text-[10px] font-medium text-slate-500 hover:bg-slate-100 transition-all"
                               >
                                 <div className="flex gap-0.5">

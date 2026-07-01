@@ -49,9 +49,32 @@ interface AIChatResponse {
   reply: string;
 }
 
+interface AIContentResponse {
+  success: boolean;
+  content: {
+    title: string;
+    subtitle: string;
+    body: string;
+    tagline: string;
+    contact: string;
+    cta: string;
+  };
+  layout: string;
+  style: string;
+  generationTime: number;
+}
+
 export const aiAPI = {
   chat: (message: string, context?: string): Promise<AIChatResponse> =>
     fetchAI('chat', { message, context }),
+
+  generateContent: (
+    prompt: string,
+    canvasWidth: number,
+    canvasHeight: number,
+    productType?: string
+  ): Promise<AIContentResponse> =>
+    fetchAI('generate-design', { prompt, productType, canvasWidth, canvasHeight }),
 
   generateDesign: (
     prompt: string,
