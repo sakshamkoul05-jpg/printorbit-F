@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion } from 'motion/react';
 import { Sparkles, Loader2, Image, FileText, Flag, Package, Shirt, Gift } from 'lucide-react';
 import { aiAPI } from '@/lib/ai';
+import { generateLayout } from '@/lib/designEngine';
 import type { CanvasElement } from '@/app/design-studio/page';
 
 interface AIDesignGeneratorProps {
@@ -50,8 +51,19 @@ export default function AIDesignGenerator({
     setLoading(true);
     setError('');
     try {
-      const result = await aiAPI.generateDesign(finalPrompt, canvasWidth, canvasHeight, productType);
-      onDesignGenerated(result.design);
+      // AI generates content + layout/style choices
+      const result = await aiAPI.generateContent(finalPrompt, canvasWidth, canvasHeight, productType);
+
+      // Design engine calculates all positions mathematically
+      const design = generateLayout(
+        result.layout || 'centered',
+        result.style || 'modern',
+        result.content,
+        canvasWidth,
+        canvasHeight,
+      );
+
+      onDesignGenerated(design);
     } catch (err: any) {
       setError(err.message || 'Generation failed. Please try again.');
     }
