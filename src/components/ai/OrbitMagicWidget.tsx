@@ -152,6 +152,11 @@ export default function OrbitMagicWidget() {
         ctx.beginPath();
         ctx.ellipse(el.x + el.width / 2, el.y + el.height / 2, el.width / 2, el.height / 2, 0, 0, Math.PI * 2);
         ctx.fill();
+        if (el.stroke) {
+          ctx.strokeStyle = el.stroke;
+          ctx.lineWidth = el.strokeWidth || 2;
+          ctx.stroke();
+        }
       } else if (el.type === 'text' && el.text) {
         ctx.fillStyle = el.fill;
         const fs = el.fontSize || 16;

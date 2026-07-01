@@ -283,34 +283,70 @@ export default function DesignStudioPage() {
       }
 
       switch (el.type) {
-        case 'rect':
-          ctx.fillStyle = el.fill;
-          ctx.fillRect(el.x, el.y, el.width, el.height);
-          if (el.strokeWidth) {
-            ctx.strokeStyle = el.stroke || el.fill;
-            ctx.lineWidth = el.strokeWidth;
-            ctx.strokeRect(el.x, el.y, el.width, el.height);
+        case 'rect': {
+          const r = (el as any).radius || 0;
+          if (el.fill && el.fill !== 'transparent') {
+            ctx.fillStyle = el.fill;
+            if (r > 0) {
+              ctx.beginPath();
+              ctx.roundRect(el.x, el.y, el.width, el.height, r);
+              ctx.fill();
+            } else {
+              ctx.fillRect(el.x, el.y, el.width, el.height);
+            }
+          }
+          if (el.stroke) {
+            ctx.strokeStyle = el.stroke;
+            ctx.lineWidth = el.strokeWidth || 2;
+            if (r > 0) {
+              ctx.beginPath();
+              ctx.roundRect(el.x, el.y, el.width, el.height, r);
+              ctx.stroke();
+            } else {
+              ctx.strokeRect(el.x, el.y, el.width, el.height);
+            }
           }
           break;
+        }
         case 'circle':
           ctx.fillStyle = el.fill;
           ctx.beginPath();
-          ctx.arc(el.x + el.width / 2, el.y + el.height / 2, el.width / 2, 0, Math.PI * 2);
+          ctx.ellipse(el.x + el.width / 2, el.y + el.height / 2, el.width / 2, el.height / 2, 0, 0, Math.PI * 2);
           ctx.fill();
-          if (el.strokeWidth) {
-            ctx.strokeStyle = el.stroke || el.fill;
-            ctx.lineWidth = el.strokeWidth;
+          if (el.stroke) {
+            ctx.strokeStyle = el.stroke;
+            ctx.lineWidth = el.strokeWidth || 2;
             ctx.stroke();
           }
           break;
-        case 'text':
+        case 'text': {
           ctx.fillStyle = el.fill;
-          ctx.font = `${el.fontStyle || 'normal'} ${el.fontWeight || 'normal'} ${el.fontSize || 24}px ${el.fontFamily || 'Inter'}`;
-          ctx.fillText(el.text || '', el.x, el.y + (el.fontSize || 24));
+          const fs = el.fontSize || 24;
+          const fw = el.fontWeight === 'bold' ? 'bold' : 'normal';
+          ctx.font = `${fw} ${fs}px ${el.fontFamily || 'Inter'}, sans-serif`;
+          ctx.textBaseline = 'top';
+          const maxWidth = el.width || 600;
+          const words = (el.text || '').split(' ');
+          let line = '';
+          let lineY = el.y;
+          for (let i = 0; i < words.length; i++) {
+            const testLine = line + words[i] + ' ';
+            const metrics = ctx.measureText(testLine);
+            if (metrics.width > maxWidth && i > 0) {
+              ctx.fillText(line.trim(), el.x, lineY);
+              line = words[i] + ' ';
+              lineY += fs * 1.3;
+            } else {
+              line = testLine;
+            }
+          }
+          ctx.fillText(line.trim(), el.x, lineY);
           break;
+        }
         case 'line':
           ctx.strokeStyle = el.fill;
           ctx.lineWidth = el.strokeWidth || 2;
+          ctx.lineCap = 'round';
           ctx.beginPath();
           ctx.moveTo(el.x, el.y);
           ctx.lineTo(el.x + el.width, el.y + el.height);
