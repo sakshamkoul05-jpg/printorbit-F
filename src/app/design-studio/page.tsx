@@ -7,13 +7,14 @@ import {
   Type, Image, Square, Circle, Minus, Undo2, Redo2, Download, Save,
   ZoomIn, ZoomOut, Trash2, Copy, Layers, Palette, ChevronDown, Sparkles,
   Upload, Grid3X3, Move, RotateCw, AlignLeft, AlignCenter, AlignRight,
-  Bold, Italic, Underline, Sliders, FileText, Shapes, Eraser,
+  Bold, Italic, Underline, Sliders, FileText, Shapes, Eraser, Bot,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Link from 'next/link';
 import Logo from '@/components/ui/Logo';
+import AIAgentPanel from '@/components/ai/AIAgentPanel';
 
-interface CanvasElement {
+export interface CanvasElement {
   id: string;
   type: 'text' | 'image' | 'rect' | 'circle' | 'line';
   x: number;
@@ -88,6 +89,7 @@ export default function DesignStudioPage() {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [activeProduct, setActiveProduct] = useState<string | null>(productParam);
+  const [showAIAgent, setShowAIAgent] = useState(false);
 
   // Set canvas size based on product param
   useEffect(() => {
@@ -400,6 +402,17 @@ export default function DesignStudioPage() {
           >
             <FileText className="w-3.5 h-3.5" />
             Templates
+          </button>
+          <button
+            onClick={() => setShowAIAgent(!showAIAgent)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
+              showAIAgent
+                ? 'bg-primary text-white shadow-lg shadow-primary/30'
+                : 'bg-white/10 text-white hover:bg-white/15'
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5" />
+            AI Agent
           </button>
           <button
             onClick={handleDownload}
@@ -771,6 +784,26 @@ export default function DesignStudioPage() {
             </div>
           )}
         </div>
+
+        {/* AI Agent Panel */}
+        <AIAgentPanel
+          isOpen={showAIAgent}
+          onClose={() => setShowAIAgent(false)}
+          canvasWidth={canvasWidth}
+          canvasHeight={canvasHeight}
+          elements={elements}
+          backgroundColor={bgColor}
+          onDesignGenerated={(design) => {
+            setElements(design.elements);
+            setBgColor(design.backgroundColor);
+            saveToHistory();
+          }}
+          onElementsUpdate={(newElements) => {
+            setElements(newElements);
+            saveToHistory();
+          }}
+          onBackgroundChange={(color) => setBgColor(color)}
+        />
       </div>
     </div>
   );
