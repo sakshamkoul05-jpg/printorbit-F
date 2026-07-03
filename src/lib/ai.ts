@@ -104,4 +104,11 @@ export const aiAPI = {
     fetchAI('enhance-prompt', { prompt, productType }),
 };
 
+export async function proxyImage(url: string): Promise<string> {
+  const res = await fetch(`${API_URL}/mockups/proxy-image?url=${encodeURIComponent(url)}`);
+  const data = await res.json();
+  if (!res.ok || !data.dataUrl) throw new Error(data.error || 'Failed to proxy image');
+  return data.dataUrl;
+}
+
 export type { AISuggestionItem };
