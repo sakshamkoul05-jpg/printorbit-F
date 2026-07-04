@@ -1,208 +1,102 @@
 'use client';
 
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
-import { proxyImage } from '@/lib/ai';
-import { SCENES } from '@/lib/mockupScenes';
-import { renderPerspectiveWarp, renderVignette, renderGrain, renderShadow } from '@/lib/mockupEngine';
+import { SCENES, renderPerspectiveWarp, renderExportShadow, renderVignette } from '@/lib/mockupEngine';
 import type { SceneDef } from '@/lib/mockupEngine';
 
-const CANVAS_W = 1200;
-const CANVAS_H = 800;
-const PREVIEW_W = 800;
-const PREVIEW_H = 533;
-
 export default function MockupGenerator() {
-  const [designImage, setDesignImage] = useState<HTMLImageElement | null>(null);
-  const [designDataUrl, setDesignDataUrl] = useState<string | null>(null);
+  const [designImage, setDesignImage] = useState<string | null>(null);
   const [designFileName, setDesignFileName] = useState('');
-  const [selectedScene, setSelectedScene] = useState<SceneDef>(SCENES[0]);
+  const [scene, setScene] = useState<SceneDef>(SCENES[0]);
   const [activeCategory, setActiveCategory] = useState('Business Cards');
-  const [bgDataUrl, setBgDataUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [exporting, setExporting] = useState(false);
-  const [needsRender, setNeedsRender] = useState(0);
-
-  // Design adjustments
   const [brightness, setBrightness] = useState(0);
   const [contrast, setContrast] = useState(0);
   const [saturation, setSaturation] = useState(0);
-  const [designOpacity, setDesignOpacity] = useState(100);
-  const [designScale, setDesignScale] = useState(100);
-  const [sizeLock, setSizeLock] = useState(false);
+  const [opacity, setOpacity] = useState(100);
+  const [exporting, setExporting] = useState(false);
 
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const categories = [...new Set(SCENES.map(s => s.product))];
   const filteredScenes = SCENES.filter(s => s.product === activeCategory);
 
-  // ── Load background image via proxy ──
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    proxyImage(selectedScene.photoUrl)
-      .then(dataUrl => { if (!cancelled) { setBgDataUrl(dataUrl); setLoading(false); } })
-      .catch(() => { if (!cancelled) { setBgDataUrl(null); setLoading(false); } });
-    return () => { cancelled = true; };
-  }, [selectedScene.photoUrl]);
+  const filterStr = `brightness(${1 + brightness / 100}) contrast(${1 + contrast / 100}) saturate(${1 + saturation / 100})`;
 
-  // ── Re-render whenever inputs change ──
-  useEffect(() => { setNeedsRender(n => n + 1); }, [bgDataUrl, designDataUrl, selectedScene, brightness, contrast, saturation, designOpacity, designScale, sizeLock]);
-
-  // ── Render the mockup preview ──
-  useEffect(() => {
-    const canvas = previewCanvasRef.current;
-    if (!canvas || (!bgDataUrl && !designDataUrl)) return;
-
-    const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
-    const W = PREVIEW_W;
-    const H = PREVIEW_H;
-    canvas.width = W;
-    canvas.height = H;
-    ctx.clearRect(0, 0, W, H);
-
-    const renderFrame = async () => {
-      // 1) Background
-      if (bgDataUrl) {
-        const bg = new Image(); bg.crossOrigin = 'anonymous';
-        await new Promise(res => { bg.onload = res; bg.onerror = res; bg.src = bgDataUrl; });
-        ctx.drawImage(bg, 0, 0, W, H);
-      } else {
-        const g = ctx.createLinearGradient(0, 0, W, H);
-        g.addColorStop(0, '#e8e0d0'); g.addColorStop(1, '#c8b8a0');
-        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      }
-
-      // 2) Design with perspective warp
-      if (designDataUrl && designImage) {
-        const img = new Image();
-        await new Promise(res => { img.onload = res; img.onerror = res; img.src = designDataUrl; });
-
-        const scale = sizeLock ? (designScale / 100) : 1;
-        const scaleCompensation = sizeLock ? 1 : (designScale / 100);
-        const scaledCorners = {
-          tl: selectedScene.corners.tl,
-          tr: selectedScene.corners.tr,
-          bl: selectedScene.corners.bl,
-          br: selectedScene.corners.br,
-        };
-
-        renderPerspectiveWarp(ctx, img, selectedScene.corners, W, H, {
-          brightness: brightness * scaleCompensation,
-          contrast: contrast * scaleCompensation,
-          saturation: saturation * scaleCompensation,
-          opacity: designOpacity,
-          blendMode: selectedScene.blendMode,
-        });
-
-        // Apply blend texture overlay
-        if (selectedScene.textureOverlay) {
-          ctx.globalCompositeOperation = 'multiply';
-          ctx.globalAlpha = 0.08;
-          const g2 = ctx.createRadialGradient(W / 2, H / 2, W * 0.1, W / 2, H / 2, W * 0.6);
-          g2.addColorStop(0, '#000'); g2.addColorStop(1, 'transparent');
-          ctx.fillStyle = g2; ctx.fillRect(0, 0, W, H);
-          ctx.globalAlpha = 1;
-          ctx.globalCompositeOperation = 'source-over';
-        }
-      }
-
-      // 3) Shadow
-      if (selectedScene.shadow && designDataUrl) {
-        renderShadow(ctx, selectedScene.corners, selectedScene.shadow, W, H);
-      }
-
-      // 4) Vignette
-      renderVignette(ctx, W, H, 0.25);
-
-      // 5) Grain overlay
-      renderGrain(ctx, W, H, 0.03);
-    };
-
-    renderFrame();
-  }, [needsRender, bgDataUrl, designDataUrl, designImage, selectedScene, brightness, contrast, saturation, designOpacity, designScale, sizeLock]);
-
-  // ── Handle file upload ──
-  const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleFile = useCallback((file: File) => {
+    if (!file.type.startsWith('image/')) return;
     setDesignFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const url = ev.target?.result as string;
-      setDesignDataUrl(url);
-      const img = new Image();
-      img.onload = () => setDesignImage(img);
-      img.src = url;
-    };
-    reader.readAsDataURL(file);
+    const r = new FileReader();
+    r.onload = e => setDesignImage(e.target?.result as string);
+    r.readAsDataURL(file);
   }, []);
+
+  const handleUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files?.[0]) handleFile(e.target.files[0]);
+  }, [handleFile]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
-    const file = e.dataTransfer.files[0];
-    if (!file || !file.type.startsWith('image/')) return;
-    setDesignFileName(file.name);
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const url = ev.target?.result as string;
-      setDesignDataUrl(url);
-      const img = new Image();
-      img.onload = () => setDesignImage(img);
-      img.src = url;
-    };
-    reader.readAsDataURL(file);
-  }, []);
+    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
+  }, [handleFile]);
 
-  // ── Export ──
   const handleExport = useCallback(async (scale: number) => {
     setExporting(true);
     try {
-      const W = CANVAS_W * scale;
-      const H = CANVAS_H * scale;
+      const W = 1200 * scale;
+      const H = 800 * scale;
       const canvas = document.createElement('canvas');
       canvas.width = W;
       canvas.height = H;
       const ctx = canvas.getContext('2d')!;
 
       // Background
-      if (bgDataUrl) {
-        const bg = new Image();
-        await new Promise(res => { bg.onload = res; bg.onerror = res; bg.crossOrigin = 'anonymous'; bg.src = bgDataUrl; });
-        ctx.drawImage(bg, 0, 0, W, H);
+      const bgMatch = scene.background.match(/#[0-9a-f]{6}/gi);
+      if (bgMatch && bgMatch.length >= 2) {
+        const g = ctx.createLinearGradient(0, 0, W, H);
+        g.addColorStop(0, bgMatch[0]);
+        g.addColorStop(1, bgMatch[bgMatch.length - 1]);
+        ctx.fillStyle = g;
+      } else if (bgMatch) {
+        ctx.fillStyle = bgMatch[0];
+      } else {
+        ctx.fillStyle = '#888';
       }
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle shading
+      const l = ctx.createRadialGradient(W * 0.7, H * 0.2, 0, W * 0.7, H * 0.2, W * 0.9);
+      l.addColorStop(0, 'rgba(255,240,200,0.12)');
+      l.addColorStop(1, 'transparent');
+      ctx.fillStyle = l;
+      ctx.fillRect(0, 0, W, H);
 
       // Design
-      if (designDataUrl) {
+      if (designImage && scene.corners) {
         const img = new Image();
-        await new Promise(res => { img.onload = res; img.onerror = res; img.crossOrigin = 'anonymous'; img.src = designDataUrl; });
-        renderPerspectiveWarp(ctx, img, selectedScene.corners, W, H, {
-          brightness, contrast, saturation, opacity: designOpacity, blendMode: selectedScene.blendMode,
-        });
+        await new Promise<void>(res => { img.onload = () => res(); img.onerror = () => res(); img.src = designImage; });
+        renderPerspectiveWarp(ctx, img, scene.corners, W, H, { brightness, contrast, saturation, opacity });
       }
 
       // Shadow
-      if (selectedScene.shadow && designDataUrl) {
-        renderShadow(ctx, selectedScene.corners, selectedScene.shadow, W, H);
+      if (designImage && scene.corners && scene.shadowExport) {
+        renderExportShadow(ctx, scene.corners, scene.shadowExport, W, H);
       }
 
-      // Vignette + grain
+      // Vignette
       renderVignette(ctx, W, H, 0.25);
-      renderGrain(ctx, W, H, 0.03);
 
       const link = document.createElement('a');
-      link.download = `mockup-${selectedScene.id}-${scale}x.png`;
+      link.download = `mockup-${scene.id}-${scale}x.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
     } catch (err) {
-      console.error('Export failed:', err);
+      console.error('Export error:', err);
     } finally {
       setExporting(false);
     }
-  }, [bgDataUrl, designDataUrl, selectedScene, brightness, contrast, saturation, designOpacity]);
-
-  const scene = selectedScene;
+  }, [designImage, scene, brightness, contrast, saturation, opacity]);
 
   return (
     <div className="min-h-screen bg-slate-900">
@@ -213,14 +107,14 @@ export default function MockupGenerator() {
             <div>
               <Link href="/utilities" className="text-xs text-blue-400 hover:underline mb-1 inline-block">← Back to Utilities</Link>
               <h1 className="text-xl md:text-2xl font-bold text-white font-heading">Mockup Scene Generator</h1>
-              <p className="text-xs text-slate-400 mt-0.5">Place your design on realistic product photos</p>
+              <p className="text-xs text-slate-400 mt-0.5">Place your design on professional product scenes</p>
             </div>
-            {designDataUrl && (
+            {designImage && (
               <div className="flex gap-2">
                 {[1, 2, 3].map(s => (
                   <button key={s} onClick={() => handleExport(s)} disabled={exporting}
                     className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
-                    {exporting ? 'Exporting...' : `Export ${s}×`}
+                    {exporting ? '...' : `Export ${s}×`}
                   </button>
                 ))}
               </div>
@@ -231,44 +125,42 @@ export default function MockupGenerator() {
 
       <Container>
         <div className="py-6 flex flex-col xl:flex-row gap-6">
-          {/* ── LEFT: Categories + Scenes ── */}
+          {/* ── LEFT SIDEBAR ── */}
           <div className="w-full xl:w-64 shrink-0 space-y-4">
             {/* Upload */}
             <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
               <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Your Design</p>
-              {designDataUrl ? (
+              {designImage ? (
                 <div className="space-y-3">
-                  <div className="relative w-full aspect-[4/3] bg-slate-700 rounded-lg overflow-hidden">
-                    <img src={designDataUrl} alt="Design" className="w-full h-full object-contain" />
+                  <div className="relative w-full aspect-[3/2] bg-slate-700 rounded-lg overflow-hidden">
+                    <img src={designImage} alt="design" className="w-full h-full object-contain" />
                   </div>
                   <p className="text-[10px] text-slate-400 truncate">{designFileName}</p>
                   <div className="flex gap-2">
-                    <button onClick={() => fileInputRef.current?.click()}
-                      className="flex-1 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg transition-colors">Replace</button>
-                    <button onClick={() => { setDesignImage(null); setDesignDataUrl(null); setDesignFileName(''); }}
-                      className="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/50 text-red-300 text-xs rounded-lg transition-colors">Remove</button>
+                    <button onClick={() => fileInputRef.current?.click()} className="flex-1 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg">Replace</button>
+                    <button onClick={() => { setDesignImage(null); setDesignFileName(''); }} className="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/50 text-red-300 text-xs rounded-lg">Remove</button>
                   </div>
                 </div>
               ) : (
                 <div onDragOver={e => e.preventDefault()} onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full aspect-[4/3] border-2 border-dashed border-slate-600 hover:border-blue-500 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors">
+                  className="w-full aspect-[3/2] border-2 border-dashed border-slate-600 hover:border-blue-500 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors">
                   <svg className="w-8 h-8 text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12m6-6H6" />
                   </svg>
-                  <p className="text-xs text-slate-400">Drop image or click</p>
-                  <p className="text-[10px] text-slate-500 mt-1">PNG, JPG, SVG</p>
+                  <p className="text-xs text-slate-400">Drop your design</p>
+                  <p className="text-[10px] text-slate-500 mt-1">PNG, JPG</p>
                 </div>
               )}
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
             </div>
 
             {/* Categories */}
             <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Product</p>
+              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Product Type</p>
               <div className="space-y-1 max-h-60 overflow-y-auto">
                 {categories.map(cat => (
-                  <button key={cat} onClick={() => { setActiveCategory(cat); setSelectedScene(SCENES.find(s => s.product === cat) || SCENES[0]); }}
+                  <button key={cat} onClick={() => { setActiveCategory(cat); setScene(SCENES.find(s => s.product === cat) || SCENES[0]); }}
                     className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeCategory === cat ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}>
                     {cat}
                   </button>
@@ -276,25 +168,52 @@ export default function MockupGenerator() {
               </div>
             </div>
 
-            {/* Scene Thumbnails */}
+            {/* Scenes */}
             <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">{activeCategory} Scenes</p>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Scenes</p>
+              <div className="space-y-2 max-h-80 overflow-y-auto">
                 {filteredScenes.map(s => (
-                  <button key={s.id} onClick={() => setSelectedScene(s)}
-                    className={`w-full text-left p-2 rounded-lg border transition-all ${selectedScene.id === s.id ? 'border-blue-500 bg-blue-500/10' : 'border-slate-700 hover:border-slate-500 bg-slate-700/50'}`}>
-                    <div className="w-full h-12 rounded-md mb-1 overflow-hidden bg-slate-700">
-                      <img src={s.photoUrl} alt={s.name} className="w-full h-full object-cover"
-                        onError={e => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                  <button key={s.id} onClick={() => setScene(s)}
+                    className={`w-full text-left p-2.5 rounded-lg border transition-all ${scene.id === s.id ? 'border-blue-500 bg-blue-500/10' : 'border-slate-700 hover:border-slate-500 bg-slate-700/50'}`}>
+                    <div className="w-full h-14 rounded-md overflow-hidden mb-1" style={{ background: s.background }}>
+                      {designImage && scene.id === s.id && (
+                        <img src={designImage} alt="" className="w-full h-full object-cover opacity-50" />
+                      )}
                     </div>
-                    <p className="text-[10px] text-slate-300 font-medium">{s.name}</p>
+                    <p className="text-[11px] text-slate-200 font-medium">{s.name}</p>
+                    <p className="text-[9px] text-slate-500">{s.description}</p>
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* Adjustments */}
+            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
+              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Adjustments</p>
+              <div className="space-y-3">
+                {[
+                  { label: 'Brightness', v: brightness, s: setBrightness },
+                  { label: 'Contrast', v: contrast, s: setContrast },
+                  { label: 'Saturation', v: saturation, s: setSaturation },
+                  { label: 'Opacity', v: opacity, s: setOpacity },
+                ].map(({ label, v, s }) => (
+                  <div key={label}>
+                    <div className="flex justify-between mb-1">
+                      <span className="text-[10px] text-slate-400">{label}</span>
+                      <span className="text-[10px] text-slate-500">{v}{label === 'Opacity' ? '%' : ''}</span>
+                    </div>
+                    <input type="range" min={label === 'Opacity' ? 10 : -50} max={label === 'Opacity' ? 100 : 50} value={v}
+                      onChange={e => s(Number(e.target.value))}
+                      className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                  </div>
+                ))}
+                <button onClick={() => { setBrightness(0); setContrast(0); setSaturation(0); setOpacity(100); }}
+                  className="w-full px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs rounded-lg">Reset</button>
+              </div>
+            </div>
           </div>
 
-          {/* ── CENTER: Canvas Preview ── */}
+          {/* ── MAIN PREVIEW ── */}
           <div className="flex-1 min-w-0">
             <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
               <div className="px-4 py-2.5 bg-slate-750 border-b border-slate-700 flex items-center justify-between">
@@ -302,67 +221,68 @@ export default function MockupGenerator() {
                   <span className="text-xs font-bold text-white">{scene.name}</span>
                   <span className="text-[10px] text-slate-400">{scene.product}</span>
                 </div>
-                <div className="flex items-center gap-3">
-                  {loading && <span className="text-[10px] text-yellow-400">Loading image...</span>}
-                  <span className="text-[10px] text-slate-500">{PREVIEW_W} × {PREVIEW_H}</span>
-                </div>
+                <span className="text-[10px] text-slate-500">1200 × 800</span>
               </div>
-              <div className="relative bg-slate-900" style={{ aspectRatio: `${PREVIEW_W}/${PREVIEW_H}` }}>
-                <canvas ref={previewCanvasRef}
-                  width={PREVIEW_W} height={PREVIEW_H}
-                  className="absolute inset-0 w-full h-full" />
-                {!designDataUrl && (
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <p className="text-slate-500 text-sm">Upload a design to see it on this mockup</p>
+
+              {/* ── THE MOCKUP ── */}
+              <div ref={previewRef} className="relative overflow-hidden" style={{ aspectRatio: '3/2', background: scene.background }}>
+                {/* Ambient lighting */}
+                <div className="absolute inset-0" style={{
+                  background: 'radial-gradient(ellipse at 70% 20%, rgba(255,240,200,0.12) 0%, transparent 60%)',
+                  pointerEvents: 'none', zIndex: 2,
+                }} />
+
+                {/* Design on product with CSS 3D transform */}
+                {designImage && (
+                  <div className="absolute" style={{
+                    left: scene.designLeft,
+                    top: scene.designTop,
+                    width: scene.designWidth,
+                    height: scene.designHeight,
+                    transform: scene.designTransform,
+                    borderRadius: scene.borderRadius || '0',
+                    boxShadow: scene.boxShadow || 'none',
+                    clipPath: scene.clipPath || 'none',
+                    opacity: opacity / 100,
+                    zIndex: 1,
+                  }}>
+                    <img
+                      src={designImage}
+                      alt="Design on product"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: scene.borderRadius || '0',
+                        filter: filterStr,
+                        mixBlendMode: (scene.blendMode as any) || 'normal',
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* Vignette */}
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.3) 100%)',
+                  zIndex: 3,
+                }} />
+
+                {/* No-design placeholder */}
+                {!designImage && (
+                  <div className="absolute inset-0 flex items-center justify-center z-10">
+                    <p className="text-white/40 text-sm">Upload your design to preview</p>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Adjustments */}
+            {/* Tips */}
             <div className="mt-4 bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-xs font-bold text-slate-300">Image Adjustments</p>
-                <button onClick={() => { setBrightness(0); setContrast(0); setSaturation(0); setDesignOpacity(100); setDesignScale(100); setSizeLock(false); }}
-                  className="text-[10px] text-slate-500 hover:text-white transition-colors">Reset All</button>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {[
-                  { label: 'Brightness', value: brightness, set: setBrightness, min: -50, max: 50, unit: '' },
-                  { label: 'Contrast', value: contrast, set: setContrast, min: -50, max: 50, unit: '' },
-                  { label: 'Saturation', value: saturation, set: setSaturation, min: -50, max: 50, unit: '' },
-                  { label: 'Opacity', value: designOpacity, set: setDesignOpacity, min: 10, max: 100, unit: '%' },
-                  { label: 'Scale', value: designScale, set: setDesignScale, min: 25, max: 150, unit: '%' },
-                ].map(s => (
-                  <div key={s.label}>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-[10px] text-slate-400">{s.label}</span>
-                      <span className="text-[10px] text-slate-500">{s.value}{s.unit}</span>
-                    </div>
-                    <input type="range" min={s.min} max={s.max} value={s.value}
-                      onChange={e => s.set(Number(e.target.value))}
-                      className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" />
-                  </div>
-                ))}
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-[10px] text-slate-400">Size Lock</span>
-                  </div>
-                  <button onClick={() => setSizeLock(!sizeLock)}
-                    className={`w-full px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${sizeLock ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}`}>
-                    {sizeLock ? 'ON' : 'OFF'}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Info */}
-            <div className="mt-4 bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 mb-2">Tips for Best Results</p>
+              <p className="text-xs font-bold text-slate-300 mb-2">Tips</p>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
-                  'Use PNG with transparent background for apparel mockups',
-                  'High-res images (1200px+) produce sharper results',
+                  'Use high resolution images (1200px+ wide) for sharp results',
+                  'PNG with transparent background works best for clean compositing',
                   'Adjust brightness/contrast to match the scene lighting',
                 ].map((t, i) => (
                   <div key={i} className="flex items-start gap-2">
