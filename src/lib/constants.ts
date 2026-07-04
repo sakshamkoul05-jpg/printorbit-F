@@ -521,6 +521,7 @@ export const NAV_LINKS = [
   { label: 'Templates', href: '/templates' },
   { label: 'Portfolio', href: '/portfolio' },
   { label: 'Blog', href: '/blog' },
+  { label: 'Mockups', href: '/mockup-generator' },
   { label: 'Contact', href: '/contact' },
   { label: 'Orbit Magic', href: '#orbit-magic', isOrbitMagic: true },
 ];
