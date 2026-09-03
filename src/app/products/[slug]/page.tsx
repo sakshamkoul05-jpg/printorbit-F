@@ -1,15 +1,12 @@
 'use client';
 
-import { useState, use } from 'react';
+import { useState, use, useMemo } from 'react';
 import Link from 'next/link';
-import { motion } from 'motion/react';
 import {
-  Star, ShoppingCart, Heart, Share2, Truck, Shield, Clock, RotateCcw,
-  ChevronRight, ChevronDown, Minus, Plus, Check, FileText, Download,
-  MessageSquare, ThumbsUp, Package, Zap, Layout, Upload, Wand2, Brain,
+  Star, ShoppingCart, Truck, Clock, ChevronRight, ChevronDown, Minus, Plus,
+  FileText, Download, ThumbsUp, Package, Upload, Check, Info, Tag,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
-import ProductConfigurator from '@/components/products/ProductConfigurator';
 import { useCartStore } from '@/store/cart';
 import { useWishlistStore } from '@/store/wishlist';
 import { formatPrice } from '@/lib/utils';
@@ -22,6 +19,7 @@ const PRODUCT_DATA: Record<string, {
   finishes: { name: string; price_modifier: number }[];
   specs: Record<string, string>; delivery: string; rating: number; reviews: number;
   image?: string;
+  features?: string[];
 }> = {
   'standard-business-cards': {
     name: 'Standard Business Cards', category: 'Business Cards',
@@ -34,6 +32,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '300gsm Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte or Glossy', 'Size': '85 × 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 384,
     image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
+    features: ['Printed on premium 300gsm cardstock', 'Full color both sides', 'Matte or glossy finish options', 'Fast 2-4 day turnaround', 'Free design proof before printing'],
   },
   'premium-matte-business-cards': {
     name: 'Premium Matte Business Cards', category: 'Business Cards',
@@ -46,6 +45,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Size': '85 × 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 247,
     image: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=800&h=800&fit=crop',
+    features: ['Premium 400gsm thick cardstock', 'Soft-touch matte lamination', 'Luxurious tactile feel', 'Perfect for professionals', 'Available in Standard and Slim sizes'],
   },
   'metallic-foil-business-cards': {
     name: 'Metallic Foil Business Cards', category: 'Business Cards',
@@ -58,6 +58,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Foil Stamping + Digital', 'Finish': 'Spot UV + Foil', 'Size': '85 × 55 mm', 'Foil Colors': 'Gold, Silver, Rose Gold', 'File Format': 'PDF, AI' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 183,
     image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
+    features: ['Metallic foil stamping in Gold, Silver, Rose Gold', 'Premium 400gsm cardstock', 'Spot UV + Foil finish', 'Eye-catching reflective foil', 'Perfect for luxury branding'],
   },
   'luxury-business-cards': {
     name: 'Luxury Velvet Business Cards', category: 'Business Cards',
@@ -70,6 +71,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '500gsm Premium', 'Finish': 'Velvet Lamination', 'Print': 'Full Color + Foil', 'Size': '85 × 55 mm', 'File Format': 'PDF, AI' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 127,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Soft-touch velvet lamination', 'Available in Black, Navy, Burgundy', 'Optional foil accents', '500gsm premium cardstock', 'Truly premium tactile experience'],
   },
   'magnet-business-cards': {
     name: 'Magnet Business Cards', category: 'Business Cards',
@@ -82,6 +84,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Flexible Magnetic Sheet', 'Print': 'Full Color', 'Thickness': '0.4mm', 'Size': '85 × 55 mm', 'File Format': 'PDF, AI, PNG' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 94,
     image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
+    features: ['Sticks to fridges and metal surfaces', 'Flexible magnetic sheet', 'Full-color printing', 'Never gets thrown away', 'Great for service businesses'],
   },
   'a5-flyers': {
     name: 'A5 Double-Sided Flyers', category: 'Flyers',
@@ -94,6 +97,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Sizes': 'A5, A4, DL', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.7, reviews: 412,
     image: 'https://images.unsplash.com/photo-1586281380183-ea4a351cc8b6?w=800&h=800&fit=crop',
+    features: ['Premium 170gsm art paper', 'Full color both sides', 'Available in A5, A4, DL sizes', 'Matte or glossy finish', 'Perfect for promotions and events'],
   },
   'a4-flyers': {
     name: 'A4 Double-Sided Flyers', category: 'Flyers',
@@ -106,6 +110,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides', 'Finish': 'Matte or Glossy', 'Size': 'A4 (210 × 297 mm)', 'File Format': 'PDF, AI, PSD, PNG' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 289,
     image: 'https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=800&h=800&fit=crop',
+    features: ['Large A4 format for maximum impact', 'Premium 170gsm art paper', 'Full color both sides', 'Ideal for menus and product sheets', 'Fast 2-4 day turnaround'],
   },
   'tri-fold-brochures': {
     name: 'Tri-Fold Brochures', category: 'Brochures',
@@ -118,6 +123,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Tri-Fold (6 panels)', 'Print': 'Full Color Both Sides', 'Folded Size': '99 × 210 mm', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 201,
     image: 'https://images.unsplash.com/photo-1553729784-e91953dec042?w=800&h=800&fit=crop',
+    features: ['6-panel tri-fold design', 'Premium 170gsm art paper', 'Full color both sides', 'Most popular brochure format', 'Perfect for marketing collateral'],
   },
   'bi-fold-brochures': {
     name: 'Bi-Fold Brochures', category: 'Brochures',
@@ -130,6 +136,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Bi-Fold (4 panels)', 'Print': 'Full Color Both Sides', 'Folded Size': '148 × 210 mm', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 156,
     image: 'https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=800&h=800&fit=crop',
+    features: ['4-panel bi-fold design', 'Larger panels for more content', 'Premium paper stock', 'Professional corporate look', 'Perfect for presentations'],
   },
   'vinyl-banners': {
     name: 'Vinyl Banner 3×6ft', category: 'Banners',
@@ -142,6 +149,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': '13oz Premium Vinyl', 'Print': 'Eco-Solvent Full Color', 'Finish': 'Weather Resistant', 'Edge': 'Hemmed with Grommets', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 156,
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
+    features: ['Weather-resistant and UV-protected', 'Eco-solvent inks', 'Hemmed edges with grommets', 'Indoor and outdoor use', 'Available in multiple sizes'],
   },
   'die-cut-stickers': {
     name: 'Die-Cut Vinyl Stickers', category: 'Labels & Stickers',
@@ -154,6 +162,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Premium Vinyl', 'Print': 'Eco-Solvent', 'Finish': 'Waterproof', 'Adhesive': 'Permanent', 'File Format': 'PDF, AI, PNG' },
     delivery: '2-4 Business Days', rating: 4.8, reviews: 523,
     image: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=800&fit=crop',
+    features: ['Custom die-cut in any shape', 'Waterproof vinyl material', 'Strong permanent adhesive', 'White, Clear, or Holographic options', 'Perfect for product labels'],
   },
   'mailer-boxes': {
     name: 'Custom Mailer Boxes', category: 'Custom Boxes',
@@ -166,6 +175,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'E-Flute Corrugated', 'Print': 'Full Color Offset', 'Finish': 'Matte Lamination', 'Assembly': 'Easy Fold', 'File Format': 'PDF, AI' },
     delivery: '7-10 Business Days', rating: 4.7, reviews: 89,
     image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&h=800&fit=crop',
+    features: ['Full-color offset printing', 'Easy fold assembly', 'Kraft, White, or Laminated finish', 'E-Flute and B-Flute options', 'Elevate your unboxing experience'],
   },
   'cotton-tshirts': {
     name: 'Custom Cotton T-Shirts', category: 'Clothing',
@@ -178,6 +188,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': '100% Cotton', 'Weight': '180 GSM', 'Print': 'Screen / DTG / Sublimation', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red', 'File Format': 'PNG, AI, PSD (300 DPI)' },
     delivery: '5-7 Business Days', rating: 4.5, reviews: 312,
     image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=800&fit=crop',
+    features: ['Premium 100% cotton fabric', 'Screen print, DTG, or sublimation', 'Available in S to XXL', '180 GSM weight', 'Perfect for events and teams'],
   },
   'ceramic-mugs': {
     name: 'Custom Ceramic Mugs', category: 'Gifts & Mugs',
@@ -190,6 +201,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Ceramic', 'Capacity': '11oz / 15oz', 'Print': 'Full Color Sublimation', 'Dishwasher Safe': 'Yes', 'Microwave Safe': 'Yes', 'File Format': 'PNG, JPG, AI' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 278,
     image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
+    features: ['Vibrant, long-lasting colors', '11oz and 15oz sizes', 'Dishwasher and microwave safe', 'Magic heat-reveal option available', 'Great for gifts and promotions'],
   },
   'a4-letterheads': {
     name: 'A4 Corporate Letterheads', category: 'Stationery',
@@ -202,6 +214,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '120gsm Premium', 'Print': 'Full Color', 'Size': 'A4 (210 × 297 mm)', 'Finish': 'Uncoated / Wove', 'File Format': 'PDF, AI, PSD' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 178,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Premium 120gsm uncoated paper', 'Full-color logo printing', 'Perfect for official correspondence', 'Uncoated or Wove finish', 'Professional corporate look'],
   },
   'card-holders': {
     name: 'Visiting Card Holders', category: 'Card Accessories',
@@ -214,6 +227,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Premium Metal / Leatherite', 'Capacity': '15-20 Cards', 'Finish': 'Engraved / Matte', 'Size': 'Standard Business Card', 'Feature': 'Engraved Logo Available' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 89,
     image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
+    features: ['Premium metal and leather finishes', 'Holds 15-20 cards', 'Engraved logo available', 'Brushed Steel, Matte Black, Gold', 'Perfect for corporate gifting'],
   },
   'transparent-business-cards': {
     name: 'Transparent Business Cards', category: 'Business Cards',
@@ -226,6 +240,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': '0.3mm Clear PVC', 'Print': 'Full Color UV', 'Finish': 'Matte / Glossy', 'Size': '85 × 55 mm', 'Feature': 'Waterproof & Durable' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 156,
     image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&h=800&fit=crop',
+    features: ['Clear PVC material', 'Full color UV printing', 'Waterproof and durable', 'Matte or Glossy finish', 'Modern see-through design'],
   },
   'polo-tshirts': {
     name: 'Custom Polo T-Shirts', category: 'Clothing',
@@ -238,6 +253,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Cotton Pique', 'Weight': '220 GSM', 'Print': 'Screen / Embroidery / DTG', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
     image: 'https://images.unsplash.com/photo-1625910513413-5fc42fba866a?w=800&h=800&fit=crop',
+    features: ['Cotton Pique, Dry-Fit, or Premium Pique', 'Screen print, DTG, or embroidery', 'Available in S to XXL', '220 GSM weight', 'Perfect for teams and brands'],
   },
   'custom-caps': {
     name: 'Custom Caps & Headwear', category: 'Clothing',
@@ -250,6 +266,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Cotton / Polyester', 'Print': 'Embroidery / Screen Print', 'Style': 'Baseball, Snapback, Beanie, Visor', 'Closure': 'Snapback / Velcro / Strap' },
     delivery: '5-7 Business Days', rating: 4.5, reviews: 178,
     image: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=800&h=800&fit=crop',
+    features: ['Baseball caps, snapbacks, beanies, visors', 'Premium embroidery options', 'Cotton, Polyester, or Wool Blend', 'Multiple closure styles', 'Great for team branding'],
   },
   'custom-hoodies': {
     name: 'Custom Hoodies & Sweatshirts', category: 'Clothing',
@@ -262,6 +279,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Cotton Fleece', 'Weight': '320 GSM', 'Print': 'Screen / DTG / Embroidery', 'Style': 'Pullover / Zip-Up', 'Sizes': 'S, M, L, XL, XXL' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 145,
     image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=800&h=800&fit=crop',
+    features: ['Pullover, zip-up, and oversized styles', '320 GSM cotton fleece', 'Screen print, DTG, or embroidery', 'Available in S to XXL', 'Perfect for teams and brands'],
   },
   'custom-notebooks': {
     name: 'Custom Notebooks & Diaries', category: 'Stationery',
@@ -274,6 +292,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '80gsm Cream/White', 'Cover': 'Softcover / Hardcover / Leather', 'Binding': 'Perfect / Spiral / Sewn', 'Pages': '80-200 pages', 'Feature': 'Logo Foil Stamping Available' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 203,
     image: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=800&h=800&fit=crop',
+    features: ['Hardcover, softcover, or spiral-bound', '80-200 page options', 'Logo foil stamping available', 'A5, A4, or Pocket sizes', 'Perfect for corporate gifts'],
   },
   'wedding-invitations': {
     name: 'Wedding Invitations & Stationery', category: 'Stationery',
@@ -286,6 +305,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '300gsm Premium Cardstock', 'Print': 'Full Color + Foil', 'Finish': 'Matte / Foil / Embossed', 'Sizes': 'A6, A5, 5x7 inch', 'Includes': 'Envelope' },
     delivery: '5-7 Business Days', rating: 4.9, reviews: 312,
     image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&h=800&fit=crop',
+    features: ['Elegant foil-stamped invitations', 'Gold, Silver, or Embossed finish', 'Includes RSVP cards and menus', 'A6, A5, or 5x7 inch sizes', 'Premium 300gsm cardstock'],
   },
   'presentation-folders': {
     name: 'Presentation Folders', category: 'Stationery',
@@ -298,6 +318,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '300gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Pockets': 'Single / Double', 'Feature': 'Business Card Slits', 'Finish': 'Matte / Glossy Lamination' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 134,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Single or double pockets', 'Business card slits included', 'Matte, Glossy, or Spot UV finish', 'Full color both sides', 'Perfect for sales kits'],
   },
   'custom-stamps': {
     name: 'Custom Stamps & Ink', category: 'Office Supplies',
@@ -310,6 +331,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Premium Rubber', 'Type': 'Self-Inking / Wood / Pocket', 'Ink': 'Black / Blue / Red', 'Die Size': '38×14 to 58×22 mm', 'Refill': 'Available' },
     delivery: '2-3 Business Days', rating: 4.6, reviews: 267,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Self-inking, wood handle, or pocket stamps', 'Premium rubber material', 'Black, Blue, or Red ink', 'Multiple die sizes available', 'Ink refills available'],
   },
   'standees': {
     name: 'Standees & Display Boards', category: 'Signs & Displays',
@@ -322,6 +344,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Premium Vinyl / Fabric', 'Print': 'Full Color Eco-Solvent', 'Stand': 'Roll-Up / X-Frame / L-Frame', 'Carry Case': 'Included', 'Setup': 'Tool-free' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 189,
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
+    features: ['Roll-up, X-banner, L-banner formats', 'Lightweight and portable', 'Tool-free setup', 'Carry case included', 'Counter to large formats'],
   },
   'foam-boards': {
     name: 'Foam Board Printing', category: 'Signs & Displays',
@@ -334,6 +357,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': '5mm / 10mm Foam Board', 'Print': 'Full Color UV', 'Finish': 'Matte / Glossy', 'Use': 'Indoor Displays' },
     delivery: '2-4 Business Days', rating: 4.6, reviews: 145,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Lightweight yet rigid', '5mm or 10mm thickness', 'Full color UV printing', 'Matte or Glossy finish', 'Perfect for presentations'],
   },
   'tent-cards': {
     name: 'Tent Cards & Table Signs', category: 'Signs & Displays',
@@ -346,6 +370,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '300gsm Cardstock', 'Print': 'Full Color Both Sides', 'Fold': 'Tri-Fold Tent', 'Use': 'Table/Counter Display' },
     delivery: '2-4 Business Days', rating: 4.5, reviews: 98,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Tri-fold tent design', 'Stands on tables and counters', 'Full color both sides', 'A6 or A5 sizes', 'Great for restaurants and events'],
   },
   'loyalty-cards': {
     name: 'Loyalty Cards', category: 'Business Cards',
@@ -358,6 +383,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '350gsm / PVC', 'Print': 'Full Color Both Sides', 'Feature': 'Barcode / QR Code / Stamp Grid', 'Size': 'Standard or Mini' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 167,
     image: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=800&h=800&fit=crop',
+    features: ['Standard and mini sizes', 'Barcode, QR code, or stamp grid', '350gsm card or PVC', 'Full color both sides', 'Keep customers coming back'],
   },
   'gift-certificates': {
     name: 'Gift Certificates & Vouchers', category: 'Marketing',
@@ -370,6 +396,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '300gsm Premium Card', 'Print': 'Full Color + Foil', 'Feature': 'Serial Number / Barcode' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 89,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Professional gift certificates', 'Full-color premium printing', 'Optional gold foil accents', 'Serial number and barcode', 'A6 or DL sizes'],
   },
   'button-badges': {
     name: 'Button Badges & Pins', category: 'Promotional',
@@ -382,6 +409,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Metal + Paper', 'Print': 'Full Color', 'Back': 'Pin-Back', 'Sizes': '1" to 3"' },
     delivery: '3-5 Business Days', rating: 4.8, reviews: 312,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Pin-back design', 'Full-color printing', '1 inch to 3 inch sizes', 'Standard or Mirror finish', 'Great for events and promotions'],
   },
   'custom-keychains': {
     name: 'Custom Keychains', category: 'Promotional',
@@ -394,6 +422,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Acrylic / Metal / Leather', 'Print': 'Full Color / Engraved', 'Ring': 'Included', 'Packaging': 'Individual' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Acrylic, Metal, or Leather', 'Print or Engraved options', 'Standard 50mm or Large 75mm', 'Ring included', 'Individual packaging'],
   },
   'table-covers': {
     name: 'Custom Table Covers', category: 'Events & Displays',
@@ -406,6 +435,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Polyester / Cotton', 'Print': 'Full Color Dye Sublimation', 'Style': 'Throw / Fitted', 'Washable': 'Yes' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 123,
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
+    features: ['Full-color dye sublimation', 'Polyester or Cotton material', 'Throw or Fitted styles', 'Washable', '6ft or 8ft table sizes'],
   },
   'custom-flags': {
     name: 'Custom Flags & Banners', category: 'Events & Displays',
@@ -418,6 +448,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Polyester Fabric', 'Print': 'Full Color Dye Sublimation', 'Pole': 'Fiberglass / Metal', 'Base': 'Cross / Water Bag' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 156,
     image: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=800&h=800&fit=crop',
+    features: ['Teardrop, rectangular, table flags', 'Full-color dye sublimation', 'Fiberglass or Metal pole', 'Cross or Water Bag base', 'Perfect for events and offices'],
   },
   'custom-tote-bags': {
     name: 'Custom Tote Bags', category: 'Bags & Packaging',
@@ -430,6 +461,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Cotton / Canvas / Jute', 'Print': 'Screen Print / Sublimation', 'Handle': 'Self-Fabric', 'GSM': '10-12 oz' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 289,
     image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&h=800&fit=crop',
+    features: ['Cotton, Canvas, or Jute material', 'Screen print or Sublimation', 'Standard or Large sizes', 'Self-Fabric handle', '10-12 oz GSM'],
   },
   'custom-umbrellas': {
     name: 'Custom Umbrellas', category: 'Promotional',
@@ -442,6 +474,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Polyester / Nylon', 'Print': 'Full Color', 'Style': 'Compact / Golf / Straight', 'Auto': 'Manual / Auto Open' },
     delivery: '7-10 Business Days', rating: 4.5, reviews: 89,
     image: 'https://images.unsplash.com/photo-1521656693884-cee73588d390?w=800&h=800&fit=crop',
+    features: ['Compact or Golf styles', 'Single or double side print', 'Polyester or Nylon material', 'Manual or Auto Open', 'Full-color canopy printing'],
   },
   'photo-albums': {
     name: 'Custom Photo Albums', category: 'Gifts & Photo',
@@ -454,6 +487,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Pages': '20-100 pages', 'Cover': 'Softcover / Hardcover', 'Paper': '250gsm Matte', 'Binding': 'Perfect / Layflat' },
     delivery: '5-7 Business Days', rating: 4.8, reviews: 234,
     image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=800&h=800&fit=crop',
+    features: ['Hardcover, layflat, or softcover', '20-100 page options', '250gsm matte paper', 'Perfect or Layflat binding', 'Great for weddings and gifts'],
   },
   'photo-frames': {
     name: 'Custom Photo Frames', category: 'Gifts & Photo',
@@ -466,6 +500,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Acrylic / Wood / LED', 'Print': 'Photo Print', 'Size': '4×6 to 8×10 inch', 'Stand': 'Included' },
     delivery: '3-5 Business Days', rating: 4.7, reviews: 189,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Acrylic, Wood, or LED options', 'Photo print included', '4×6 to 8×10 inch sizes', 'Stand included', 'LED lighting option available'],
   },
   'custom-coasters': {
     name: 'Custom Coasters', category: 'Gifts & Promotional',
@@ -478,6 +513,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Cork / Acrylic / Ceramic', 'Print': 'Full Color', 'Shape': 'Round / Square', 'Thickness': '3mm / 5mm' },
     delivery: '3-5 Business Days', rating: 4.6, reviews: 156,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Cork, Acrylic, or Ceramic', 'Round or Square shapes', 'Full-color printing', '3mm or 5mm thickness', 'Great for weddings and events'],
   },
   'custom-pens': {
     name: 'Custom Pens', category: 'Promotional',
@@ -490,6 +526,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Plastic / Metal / Wood', 'Print': 'Logo Print / Engraved', 'Ink': 'Black / Blue', 'Type': 'Ballpoint / Rollerball' },
     delivery: '3-5 Business Days', rating: 4.5, reviews: 345,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Plastic, Metal, or Wood', 'Logo print or Engraved', 'Ballpoint or Rollerball', 'Black or Blue ink', 'Great for corporate gifting'],
   },
   'custom-calendars': {
     name: 'Custom Calendars', category: 'Stationery',
@@ -502,6 +539,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Paper': '250gsm Art Paper', 'Print': 'Full Color', 'Type': 'Desk / Wall / Magnet', 'Pages': '12-13 sheets' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 178,
     image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&h=800&fit=crop',
+    features: ['Desk, wall, and magnet types', 'Full-color printing', '250gsm art paper', '12-13 sheets', 'Saddle Stitch, Wire Bound, or Magnet'],
   },
   'water-bottles': {
     name: 'Custom Water Bottles', category: 'Drinkware',
@@ -514,6 +552,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Stainless Steel / Aluminum / Plastic', 'Print': 'Screen Print / Laser Engraved', 'Capacity': '500ml / 750ml / 1L', 'Lid': 'Screw / Flip / Sport' },
     delivery: '5-7 Business Days', rating: 4.6, reviews: 234,
     image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&h=800&fit=crop',
+    features: ['Stainless Steel, Aluminum, or BPA-free Plastic', 'Screen Print or Laser Engraved', '500ml, 750ml, or 1L capacity', 'Screw, Flip, or Sport lid', 'Great for sports and events'],
   },
   'custom-tumblers': {
     name: 'Custom Tumblers', category: 'Drinkware',
@@ -526,6 +565,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Stainless Steel', 'Print': 'Sublimation / Screen Print', 'Capacity': '12oz / 16oz / 20oz', 'Insulated': 'Yes' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 189,
     image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
+    features: ['Insulated stainless steel', 'Sublimation or Screen Print', '12oz, 16oz, or 20oz capacity', 'Full-color print', 'Great for events and branding'],
   },
   'travel-mugs': {
     name: 'Custom Travel Mugs', category: 'Drinkware',
@@ -538,6 +578,7 @@ const PRODUCT_DATA: Record<string, {
     specs: { 'Material': 'Stainless Steel', 'Print': 'Screen Print / Engraved', 'Capacity': '12oz / 16oz', 'Insulated': 'Double Wall' },
     delivery: '5-7 Business Days', rating: 4.7, reviews: 156,
     image: 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=800&h=800&fit=crop',
+    features: ['Double-wall insulated stainless steel', 'Screen Print or Engraved', '12oz or 16oz capacity', 'Ceramic inner option', 'Perfect for commuting'],
   },
 };
 
@@ -547,15 +588,19 @@ const SAMPLE_REVIEWS = [
   { name: 'Anjali P.', rating: 4, date: '3 weeks ago', title: 'Good but minor issue', content: 'Overall great cards. One minor alignment issue on a few cards but customer service resolved it quickly.', helpful: 12 },
 ];
 
-const PRODUCT_TEMPLATES = [
-  { id: 't1', name: 'Modern Minimalist', category: 'Business', colors: ['#0B57D0', '#FFFFFF', '#1F2937'], isPremium: false },
-  { id: 't2', name: 'Bold & Creative', category: 'Creative', colors: ['#FF6B00', '#FFFFFF', '#0F172A'], isPremium: false },
-  { id: 't3', name: 'Elegant Gold', category: 'Luxury', colors: ['#0F172A', '#C9A84C', '#FFFFFF'], isPremium: true },
-  { id: 't4', name: 'Corporate Blue', category: 'Corporate', colors: ['#0B57D0', '#DBEAFE', '#1F2937'], isPremium: false },
-  { id: 't5', name: 'Fresh & Clean', category: 'Startup', colors: ['#16A34A', '#FFFFFF', '#0F172A'], isPremium: false },
-  { id: 't6', name: 'Warm & Friendly', category: 'Restaurant', colors: ['#EA580C', '#FFFFFF', '#1F2937'], isPremium: false },
-  { id: 't7', name: 'Tech & Modern', category: 'Technology', colors: ['#7C3AED', '#FFFFFF', '#0F172A'], isPremium: true },
-  { id: 't8', name: 'Natural Organic', category: 'Eco', colors: ['#16A34A', '#FEF3C7', '#1F2937'], isPremium: false },
+const FAQ_DATA = [
+  { q: 'What file formats do you accept?', a: 'We accept PDF, AI, PSD, PNG, and JPG files. For best results, we recommend PDF with vector artwork and 300 DPI resolution.' },
+  { q: 'How long does delivery take?', a: 'Standard delivery is 2-7 business days depending on the product. Express delivery (1-2 days) is available at checkout for an additional fee.' },
+  { q: 'Can I request a proof before printing?', a: 'Yes! We provide a digital proof for all orders above 500 pcs. You can approve or request changes before we go to print.' },
+  { q: 'What is the minimum order quantity?', a: 'Minimum order quantity varies by product. Most products start at 50-100 pcs. Contact us for custom smaller orders.' },
+  { q: 'Do you offer bulk discounts?', a: 'Yes! We offer volume discounts starting at 500 pieces. The more you order, the more you save — up to 44% off on large orders.' },
+];
+
+const RELATED_PRODUCTS = [
+  { name: 'Premium Matte Business Cards', slug: 'premium-matte-business-cards', image: 'https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=400&h=400&fit=crop', price: 499 },
+  { name: 'Metallic Foil Business Cards', slug: 'metallic-foil-business-cards', image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&h=400&fit=crop', price: 899 },
+  { name: 'A5 Double-Sided Flyers', slug: 'a5-flyers', image: 'https://images.unsplash.com/photo-1586281380183-ea4a351cc8b6?w=400&h=400&fit=crop', price: 299 },
+  { name: 'Tri-Fold Brochures', slug: 'tri-fold-brochures', image: 'https://images.unsplash.com/photo-1553729784-e91953dec042?w=400&h=400&fit=crop', price: 599 },
 ];
 
 export default function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -564,21 +609,59 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
   const [totalPrice, setTotalPrice] = useState(product?.basePrice || 499);
   const [quantity, setQuantity] = useState(product?.minQty || 100);
-  const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'faq' | 'templates'>('specs');
-  const [showUpload, setShowUpload] = useState(false);
+  const [activeTab, setActiveTab] = useState<'description' | 'templates'>('description');
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const addItem = useCartStore((s) => s.addItem);
   const { addItem: addWish, removeItem: removeWish, productIds } = useWishlistStore();
   const isWished = productIds.includes(slug);
 
+  const [selectedMaterial, setSelectedMaterial] = useState(product?.materials[0]?.name || 'Standard');
+  const [selectedSize, setSelectedSize] = useState(product?.sizes[0]?.name || 'Standard');
+  const [selectedFinish, setSelectedFinish] = useState(product?.finishes[0]?.name || 'Matte');
+
+  const unitPrice = useMemo(() => {
+    if (!product) return 0;
+    const mat = product.materials.find(m => m.name === selectedMaterial);
+    const size = product.sizes.find(s => s.name === selectedSize);
+    const fin = product.finishes.find(f => f.name === selectedFinish);
+    return product.basePrice + (mat?.price_modifier || 0) + (size?.price_modifier || 0) + (fin?.price_modifier || 0);
+  }, [product, selectedMaterial, selectedSize, selectedFinish]);
+
+  const calculatedTotal = useMemo(() => {
+    return unitPrice * quantity;
+  }, [unitPrice, quantity]);
+
+  const pricingTiers = useMemo(() => {
+    if (!product) return [];
+    const tiers = [100, 200, 300, 500, 1000, 2000, 5000, 10000];
+    const filtered = tiers.filter(t => t >= product.minQty && t <= product.maxQty);
+    if (filtered.length === 0 || filtered[0] !== product.minQty) {
+      filtered.unshift(product.minQty);
+    }
+    return filtered.map(qty => {
+      let discount = 0;
+      if (qty >= 10000) discount = 0.44;
+      else if (qty >= 5000) discount = 0.35;
+      else if (qty >= 2000) discount = 0.25;
+      else if (qty >= 1000) discount = 0.15;
+      else if (qty >= 500) discount = 0.10;
+      else if (qty >= 300) discount = 0.05;
+      else if (qty >= 200) discount = 0.03;
+      const baseTotal = unitPrice * qty;
+      const discounted = Math.round(baseTotal * (1 - discount));
+      return { qty, total: discounted, perPiece: Math.round(discounted / qty), discount };
+    });
+  }, [product, unitPrice]);
+
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <Container>
-          <div className="text-center">
-            <Package className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-dark mb-2">Product Not Found</h1>
-            <p className="text-muted mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
-            <Link href="/products" className="px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors">
+          <div className="text-center py-20">
+            <Package className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Product Not Found</h1>
+            <p className="text-gray-500 mb-6">The product you&apos;re looking for doesn&apos;t exist.</p>
+            <Link href="/products" className="px-6 py-3 bg-[#ED1C24] text-white rounded font-semibold hover:bg-red-700 transition-colors inline-block">
               Browse Products
             </Link>
           </div>
@@ -593,375 +676,553 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
       product_name: product.name,
       product_image: product.image || '/placeholder.jpg',
       quantity,
-      material: product.materials[0]?.name || 'Standard',
-      size: product.sizes[0]?.name || 'Standard',
-      finish: product.finishes[0]?.name || 'Matte',
-      unit_price: Math.round(totalPrice / quantity),
+      material: selectedMaterial,
+      size: selectedSize,
+      finish: selectedFinish,
+      unit_price: unitPrice,
     });
   };
 
+  const features = product.features || [
+    'Premium quality printing',
+    'Fast turnaround time',
+    'Full color digital printing',
+    'Free design proof',
+    'Satisfaction guaranteed',
+  ];
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gray-50">
       <Container>
         {/* Breadcrumb */}
-        <div className="py-4">
-          <nav className="flex items-center gap-2 text-xs text-muted">
-            <Link href="/" className="hover:text-primary transition-colors">Home</Link>
+        <div className="py-3 border-b border-gray-200 bg-white">
+          <nav className="flex items-center gap-1.5 text-xs text-gray-500">
+            <Link href="/" className="hover:text-[#ED1C24] transition-colors">Home</Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href="/products" className="hover:text-primary transition-colors">Products</Link>
+            <Link href="/products" className="hover:text-[#ED1C24] transition-colors">Products</Link>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-dark font-medium">{product.name}</span>
+            <span className="text-gray-900 font-medium">{product.name}</span>
           </nav>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 pb-16">
-          {/* Left: Image Gallery */}
-          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <div className="aspect-square bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl overflow-hidden mb-4">
+        {/* Main Product Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white border border-gray-200 mt-4">
+          {/* Left: Product Image (6 cols) */}
+          <div className="lg:col-span-6 p-6 border-b lg:border-b-0 lg:border-r border-gray-200">
+            <div className="aspect-square bg-gray-50 border border-gray-200 rounded overflow-hidden mb-4">
               {product.image ? (
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
+                <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
-                    <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center mx-auto mb-3">
-                      <Package className="w-12 h-12 text-primary" />
-                    </div>
-                    <p className="text-sm text-muted">{product.name}</p>
+                    <Package className="w-16 h-16 text-gray-300 mx-auto mb-2" />
+                    <p className="text-sm text-gray-400">{product.name}</p>
                   </div>
                 </div>
               )}
             </div>
-
             {/* Thumbnails */}
-            <div className="grid grid-cols-4 gap-3">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="aspect-square bg-slate-100 rounded-xl border-2 border-primary/20 cursor-pointer hover:border-primary transition-colors overflow-hidden">
+            <div className="grid grid-cols-5 gap-2">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="aspect-square bg-gray-100 border-2 border-[#ED1C24] rounded cursor-pointer overflow-hidden">
                   {product.image && (
-                    <img src={product.image} alt="" className="w-full h-full object-cover opacity-80" />
+                    <img src={product.image} alt="" className="w-full h-full object-cover" />
                   )}
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* Right: Product Info + Configurator */}
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
-            {/* Badges */}
-            <div className="flex items-center gap-2">
-              <span className="px-3 py-1 bg-primary/10 text-primary text-xs font-bold rounded-full uppercase">
-                {product.category}
-              </span>
-              <span className="px-3 py-1 bg-success/10 text-success text-xs font-bold rounded-full">
-                In Stock
-              </span>
-            </div>
+          {/* Right: Product Details (6 cols) */}
+          <div className="lg:col-span-6 p-6">
+            {/* Brand */}
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">PrintOrbit</p>
 
-            {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-bold text-dark font-heading">{product.name}</h1>
+            {/* Product Name */}
+            <h1 className="text-2xl font-bold text-gray-900 mb-3">{product.name}</h1>
 
             {/* Rating */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-0.5">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-slate-200'}`} />
+                  <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
                 ))}
               </div>
-              <span className="text-sm font-semibold text-dark">{product.rating}</span>
-              <span className="text-sm text-muted">({product.reviews} reviews)</span>
+              <span className="text-sm font-semibold text-gray-900">{product.rating}</span>
+              <span className="text-sm text-gray-500">({product.reviews} reviews)</span>
             </div>
 
-            {/* Description */}
-            <p className="text-slate-600 leading-relaxed">{product.longDescription}</p>
+            {/* Feature List */}
+            <ul className="space-y-2 mb-4">
+              {features.map((feature, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <Check className="w-4 h-4 text-[#ED1C24] mt-0.5 shrink-0" />
+                  {feature}
+                </li>
+              ))}
+            </ul>
 
-            {/* Quick Info */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl">
-                <Truck className="w-4 h-4 text-primary shrink-0" />
-                <div>
-                  <p className="text-[10px] text-muted">Delivery</p>
-                  <p className="text-xs font-semibold text-dark">{product.delivery}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl">
-                <Shield className="w-4 h-4 text-primary shrink-0" />
-                <div>
-                  <p className="text-[10px] text-muted">Quality</p>
-                  <p className="text-xs font-semibold text-dark">Guaranteed</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl">
-                <RotateCcw className="w-4 h-4 text-primary shrink-0" />
-                <div>
-                  <p className="text-[10px] text-muted">Returns</p>
-                  <p className="text-xs font-semibold text-dark">Easy Policy</p>
-                </div>
-              </div>
+            {/* Learn More */}
+            <button className="text-sm text-[#ED1C24] font-semibold hover:underline mb-4">
+              Learn More →
+            </button>
+
+            {/* Starting Price */}
+            <div className="bg-gray-50 border border-gray-200 rounded p-4 mb-4">
+              <p className="text-sm text-gray-600 mb-1">Starting at</p>
+              <p className="text-3xl font-bold text-[#ED1C24]">{formatPrice(product.basePrice)}</p>
+              <p className="text-sm text-gray-500">for {product.minQty} pieces</p>
             </div>
 
-            {/* Configurator */}
-            <ProductConfigurator
-              product={{
-                id: slug,
-                category_id: '1',
-                name: product.name,
-                slug,
-                description: product.description,
-                short_description: product.description,
-                base_price: product.basePrice,
-                min_quantity: product.minQty,
-                max_quantity: product.maxQty,
-                materials: product.materials,
-                finishes: product.finishes,
-                sizes: product.sizes,
-                customizable: true,
-                template_available: true,
-                image_urls: [],
-                gallery_urls: [],
-                specs: product.specs,
-                is_active: true,
-                created_at: '',
-              }}
-              onPriceChange={(price, qty) => { setTotalPrice(price); setQuantity(qty); }}
-            />
+            {/* Shipping Info */}
+            <div className="flex items-center gap-2 text-sm text-gray-600 mb-6">
+              <Truck className="w-4 h-4 text-gray-400" />
+              <span>Ships out in <strong>{product.delivery}</strong></span>
+            </div>
 
-            {/* Design Options - Vistaprint Style */}
-            <div className="space-y-3">
-              <h3 className="text-sm font-bold text-dark uppercase tracking-wide">How would you like to design?</h3>
-
-              {/* Browse Design */}
-              <Link
-                href={`/templates?product=${slug}`}
-                className="flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer"
-              >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                  <Layout className="w-6 h-6 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-dark">Browse Design</p>
-                  <p className="text-xs text-muted">Choose from hundreds of professionally designed templates</p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-colors" />
-              </Link>
-
-              {/* Edit Template */}
-              <Link
-                href={`/design-studio?product=${slug}`}
-                className="flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group cursor-pointer"
-              >
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-accent/20 transition-colors">
-                  <Wand2 className="w-6 h-6 text-accent" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-dark">Edit Template</p>
-                  <p className="text-xs text-muted">Start with a template and customize it to your needs</p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-primary transition-colors" />
-              </Link>
-
-              {/* Upload Design */}
-              <button
-                onClick={() => setShowUpload(!showUpload)}
-                className="w-full flex items-center gap-4 p-4 border-2 border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all group text-left"
-              >
-                <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center shrink-0 group-hover:bg-success/20 transition-colors">
-                  <Upload className="w-6 h-6 text-success" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-bold text-dark">Upload Design</p>
-                  <p className="text-xs text-muted">Upload print-ready PDF, AI, PSD, or PNG files</p>
-                </div>
-                <ChevronRight className={`w-5 h-5 text-slate-300 group-hover:text-primary transition-colors transition-transform ${showUpload ? 'rotate-90' : ''}`} />
-              </button>
-
-              {showUpload && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: 'auto', opacity: 1 }}
-                  className="mx-4 p-6 border border-dashed border-slate-300 rounded-xl text-center bg-slate-50"
-                >
-                  <div className="w-14 h-14 bg-slate-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <Download className="w-7 h-7 text-slate-400" />
+            {/* Specs Quick View */}
+            <div className="border-t border-gray-200 pt-4">
+              <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-3">Specifications</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.entries(product.specs).slice(0, 6).map(([key, value]) => (
+                  <div key={key} className="flex flex-col">
+                    <span className="text-xs text-gray-500">{key}</span>
+                    <span className="text-sm font-medium text-gray-900">{value}</span>
                   </div>
-                  <p className="text-sm font-medium text-dark mb-1">Drag & drop your file here</p>
-                  <p className="text-xs text-muted mb-3">or click to browse</p>
-                  <p className="text-[10px] text-slate-300">PDF, AI, PSD, PNG, JPG — Max 50MB</p>
-                </motion.div>
-              )}
-
-              {/* Build with Orbit AI */}
-              <Link
-                href={`/design-studio?product=${slug}&mode=ai`}
-                className="flex items-center gap-4 p-4 border-2 border-dashed border-purple-200 rounded-xl hover:border-purple-400 hover:bg-purple-50 transition-all group cursor-pointer relative overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shrink-0 shadow-lg shadow-purple-500/20">
-                  <Brain className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1 relative z-10">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-bold text-dark">Build with Orbit AI</p>
-                    <span className="px-1.5 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[9px] font-bold rounded uppercase">AI</span>
-                  </div>
-                  <p className="text-xs text-muted">Describe your design and let AI create it for you</p>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-purple-400 transition-colors" />
-              </Link>
+                ))}
+              </div>
             </div>
-
-            {/* Actions */}
-            <div className="flex gap-3">
-              <button
-                onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-primary text-white rounded-xl font-semibold hover:bg-primary-dark transition-colors shadow-lg shadow-primary/25"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                Add to Cart
-              </button>
-              <button
-                onClick={() => isWished ? removeWish(slug) : addWish(slug)}
-                className={`w-12 h-12 rounded-xl flex items-center justify-center border-2 transition-all ${
-                  isWished ? 'bg-red border-red text-white' : 'border-slate-200 text-slate-400 hover:text-red hover:border-red'
-                }`}
-              >
-                <Heart className="w-5 h-5" fill={isWished ? 'currentColor' : 'none'} />
-              </button>
-              <button className="w-12 h-12 rounded-xl flex items-center justify-center border-2 border-slate-200 text-slate-400 hover:text-primary hover:border-primary transition-all">
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
-          </motion.div>
+          </div>
         </div>
 
-        {/* Tabs: Specs, Reviews, FAQ */}
-        <div className="border-t border-slate-100 py-10">
-          <div className="flex gap-6 border-b border-slate-100 mb-8">
-            {(['specs', 'templates', 'reviews', 'faq'] as const).map((tab) => (
+        {/* Customise This Product + Order Summary */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 bg-white border border-gray-200 mt-4">
+          {/* Customise Section */}
+          <div className="lg:col-span-8 p-6 border-b lg:border-b-0 lg:border-r border-gray-200">
+            <h2 className="text-lg font-bold text-gray-900 mb-6 flex items-center gap-2">
+              <Tag className="w-5 h-5 text-[#ED1C24]" />
+              Customise this product
+            </h2>
+
+            {/* Material Selection */}
+            {product.materials.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Material</label>
+                <div className="flex flex-wrap gap-2">
+                  {product.materials.map((mat) => (
+                    <button
+                      key={mat.name}
+                      onClick={() => setSelectedMaterial(mat.name)}
+                      className={`px-4 py-2 border rounded text-sm font-medium transition-colors ${
+                        selectedMaterial === mat.name
+                          ? 'border-[#ED1C24] bg-[#ED1C24] text-white'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {mat.name}
+                      {mat.price_modifier !== 0 && (
+                        <span className="text-xs ml-1">
+                          ({mat.price_modifier > 0 ? '+' : ''}{formatPrice(mat.price_modifier)})
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Size Selection */}
+            {product.sizes.length > 1 && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Size</label>
+                <div className="flex flex-wrap gap-2">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size.name}
+                      onClick={() => setSelectedSize(size.name)}
+                      className={`px-4 py-2 border rounded text-sm font-medium transition-colors ${
+                        selectedSize === size.name
+                          ? 'border-[#ED1C24] bg-[#ED1C24] text-white'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {size.name}
+                      {size.price_modifier !== 0 && (
+                        <span className="text-xs ml-1">
+                          ({size.price_modifier > 0 ? '+' : ''}{formatPrice(size.price_modifier)})
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Finish Selection */}
+            {product.finishes.length > 0 && (
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-900 mb-2">Finish</label>
+                <div className="flex flex-wrap gap-2">
+                  {product.finishes.map((fin) => (
+                    <button
+                      key={fin.name}
+                      onClick={() => setSelectedFinish(fin.name)}
+                      className={`px-4 py-2 border rounded text-sm font-medium transition-colors ${
+                        selectedFinish === fin.name
+                          ? 'border-[#ED1C24] bg-[#ED1C24] text-white'
+                          : 'border-gray-300 text-gray-700 hover:border-gray-400'
+                      }`}
+                    >
+                      {fin.name}
+                      {fin.price_modifier !== 0 && (
+                        <span className="text-xs ml-1">
+                          ({fin.price_modifier > 0 ? '+' : ''}{formatPrice(fin.price_modifier)})
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Quantity Selector */}
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-gray-900 mb-2">Quantity</label>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    const step = quantity >= 1000 ? 100 : quantity >= 100 ? 10 : 1;
+                    const newVal = Math.max(product.minQty, quantity - step);
+                    setQuantity(newVal);
+                  }}
+                  className="w-10 h-10 border border-gray-300 rounded flex items-center justify-center text-gray-600 hover:border-[#ED1C24] hover:text-[#ED1C24] transition-colors"
+                >
+                  <Minus className="w-4 h-4" />
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value) || product.minQty;
+                    setQuantity(Math.max(product.minQty, Math.min(product.maxQty, val)));
+                  }}
+                  className="w-24 h-10 px-3 border border-gray-300 rounded text-center text-sm font-semibold text-gray-900 focus:border-[#ED1C24] focus:ring-1 focus:ring-[#ED1C24] outline-none"
+                />
+                <button
+                  onClick={() => {
+                    const step = quantity >= 1000 ? 100 : quantity >= 100 ? 10 : 1;
+                    const newVal = Math.min(product.maxQty, quantity + step);
+                    setQuantity(newVal);
+                  }}
+                  className="w-10 h-10 border border-gray-300 rounded flex items-center justify-center text-gray-600 hover:border-[#ED1C24] hover:text-[#ED1C24] transition-colors"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              </div>
+              {/* Quick Quantity */}
+              <div className="flex gap-2 mt-3">
+                {[100, 250, 500, 1000, 2500, 5000].filter(q => q >= product.minQty && q <= product.maxQty).map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => setQuantity(q)}
+                    className={`px-3 py-1 text-xs font-medium rounded transition-colors ${
+                      quantity === q
+                        ? 'bg-[#ED1C24] text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    {q >= 1000 ? `${q / 1000}K` : q}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Pricing Table */}
+            <div className="mb-6">
+              <h3 className="text-sm font-bold text-gray-900 mb-3">Pricing Table — Volume Discounts</h3>
+              <div className="border border-gray-200 rounded overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-gray-50 border-b border-gray-200">
+                    <tr>
+                      <th className="text-left px-4 py-2 font-semibold text-gray-700">Quantity</th>
+                      <th className="text-right px-4 py-2 font-semibold text-gray-700">Total Price</th>
+                      <th className="text-right px-4 py-2 font-semibold text-gray-700">Per Piece</th>
+                      <th className="text-right px-4 py-2 font-semibold text-gray-700">Discount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pricingTiers.map((tier) => (
+                      <tr
+                        key={tier.qty}
+                        className={`border-b border-gray-100 last:border-0 cursor-pointer hover:bg-gray-50 transition-colors ${
+                          quantity === tier.qty ? 'bg-[#ED1C24]/5' : ''
+                        }`}
+                        onClick={() => setQuantity(tier.qty)}
+                      >
+                        <td className="px-4 py-3 font-medium text-gray-900">{tier.qty.toLocaleString()} Pieces</td>
+                        <td className="px-4 py-3 text-right font-semibold text-gray-900">{formatPrice(tier.total)}</td>
+                        <td className="px-4 py-3 text-right text-gray-600">{formatPrice(tier.perPiece)}/pc</td>
+                        <td className="px-4 py-3 text-right">
+                          {tier.discount > 0 ? (
+                            <span className="text-xs font-semibold text-green-600 bg-green-50 px-2 py-0.5 rounded">
+                              Save {Math.round(tier.discount * 100)}%
+                            </span>
+                          ) : (
+                            <span className="text-xs text-gray-400">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Order Summary Sidebar (Sticky) */}
+          <div className="lg:col-span-4">
+            <div className="sticky top-4 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
+
+              {/* Selected Options */}
+              <div className="space-y-2 mb-4 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Material</span>
+                  <span className="font-medium text-gray-900">{selectedMaterial}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Size</span>
+                  <span className="font-medium text-gray-900">{selectedSize}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Finish</span>
+                  <span className="font-medium text-gray-900">{selectedFinish}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500">Quantity</span>
+                  <span className="font-medium text-gray-900">{quantity.toLocaleString()} pcs</span>
+                </div>
+              </div>
+
+              <hr className="border-gray-200 my-4" />
+
+              {/* Price */}
+              <div className="space-y-2 mb-4">
+                <div className="flex justify-between">
+                  <span className="text-gray-500 text-sm">Unit Price</span>
+                  <span className="font-medium text-gray-900 text-sm">{formatPrice(unitPrice)}/pc</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-500 text-sm">Subtotal</span>
+                  <span className="font-medium text-gray-900 text-sm">{formatPrice(calculatedTotal)}</span>
+                </div>
+              </div>
+
+              <hr className="border-gray-200 my-4" />
+
+              <div className="flex justify-between items-baseline mb-6">
+                <span className="text-base font-bold text-gray-900">Total</span>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-[#ED1C24]">{formatPrice(calculatedTotal)}</span>
+                  <span className="text-xs text-gray-500 block">{formatPrice(unitPrice)} per piece</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="space-y-3">
+                <Link
+                  href={`/design-studio?product=${slug}`}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#ED1C24] text-white rounded font-semibold hover:bg-red-700 transition-colors"
+                >
+                  Personalise this product
+                </Link>
+                <button
+                  onClick={() => {
+                    handleAddToCart();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-gray-300 text-gray-700 rounded font-semibold hover:border-gray-400 transition-colors"
+                >
+                  <Upload className="w-4 h-4" />
+                  Upload your own design
+                </button>
+                <button
+                  onClick={handleAddToCart}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 border-2 border-[#ED1C24] text-[#ED1C24] rounded font-semibold hover:bg-[#ED1C24] hover:text-white transition-colors"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Customise & Buy
+                </button>
+              </div>
+
+              {/* Trust Signals */}
+              <div className="mt-6 pt-4 border-t border-gray-200 space-y-2">
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Truck className="w-3.5 h-3.5" />
+                  <span>Free shipping on orders above ₹2,000</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Clock className="w-3.5 h-3.5" />
+                  <span>Express delivery available</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <Info className="w-3.5 h-3.5" />
+                  <span>100% quality guarantee</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Product Description Tabs */}
+        <div className="bg-white border border-gray-200 mt-4">
+          <div className="flex border-b border-gray-200">
+            {(['description', 'templates'] as const).map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-3 text-sm font-semibold capitalize transition-colors border-b-2 ${
+                className={`px-6 py-4 text-sm font-semibold capitalize transition-colors border-b-2 ${
                   activeTab === tab
-                    ? 'text-primary border-primary'
-                    : 'text-muted border-transparent hover:text-dark'
+                    ? 'text-[#ED1C24] border-[#ED1C24]'
+                    : 'text-gray-500 border-transparent hover:text-gray-700'
                 }`}
               >
-                {tab === 'specs' ? 'Specifications' : tab === 'templates' ? `Templates (${PRODUCT_TEMPLATES.length})` : tab === 'reviews' ? `Reviews (${product.reviews})` : 'FAQ'}
+                {tab === 'description' ? 'Description' : 'File Setup Templates'}
               </button>
             ))}
           </div>
 
-          {activeTab === 'templates' && (
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h3 className="text-lg font-bold text-dark font-heading">Design Templates</h3>
-                  <p className="text-sm text-muted">Start with a professionally designed template and customize it in our design studio.</p>
-                </div>
-                <Link href={`/templates?product=${slug}`} className="px-4 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-dark transition-colors">
-                  Browse All Templates
-                </Link>
+          <div className="p-6">
+            {activeTab === 'description' && (
+              <div>
+                <p className="text-gray-700 leading-relaxed mb-4">{product.longDescription}</p>
+                <h4 className="text-sm font-bold text-gray-900 mb-3">Key Features</h4>
+                <ul className="space-y-2">
+                  {features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                      <Check className="w-4 h-4 text-[#ED1C24] mt-0.5 shrink-0" />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {PRODUCT_TEMPLATES.map((template) => (
-                  <Link
-                    key={template.id}
-                    href={`/design-studio?template=${template.id}&product=${slug}`}
-                    className="group relative bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-lg hover:border-primary transition-all"
-                  >
-                    <div
-                      className="aspect-[3/2] flex items-center justify-center"
-                      style={{ background: template.colors[0] }}
-                    >
-                      <div className="text-center">
-                        <div className="w-12 h-6 rounded mx-auto mb-1.5" style={{ background: template.colors[1] }} />
-                        <div className="w-8 h-1.5 rounded mx-auto" style={{ background: template.colors[2] + '40' }} />
-                        <div className="w-10 h-1 rounded mx-auto mt-1" style={{ background: template.colors[2] + '20' }} />
+            )}
+            {activeTab === 'templates' && (
+              <div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Download our file setup templates to ensure your artwork prints perfectly. Use these templates to set up your design with the correct bleed, trim, and safe zones.
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {['Adobe Illustrator (.ai)', 'PDF Template', 'Photoshop (.psd)', 'Canva Template'].map((template, i) => (
+                    <div key={i} className="flex items-center gap-3 p-3 border border-gray-200 rounded hover:border-[#ED1C24] transition-colors cursor-pointer">
+                      <FileText className="w-8 h-8 text-[#ED1C24]" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">{template}</p>
+                        <p className="text-xs text-gray-500">Click to download</p>
                       </div>
+                      <Download className="w-4 h-4 text-gray-400" />
                     </div>
-                    {template.isPremium && (
-                      <span className="absolute top-2 right-2 px-2 py-0.5 bg-accent text-white text-[9px] font-bold rounded uppercase">
-                        PRO
-                      </span>
-                    )}
-                    <div className="p-3">
-                      <p className="text-xs font-semibold text-dark truncate">{template.name}</p>
-                      <p className="text-[10px] text-muted">{template.category}</p>
-                    </div>
-                    <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg shadow-lg">
-                        Customize This Template
-                      </span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'specs' && (
-            <div className="grid grid-cols-2 gap-4 max-w-2xl">
-              {Object.entries(product.specs).map(([key, value]) => (
-                <div key={key} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-                  <span className="text-sm text-muted">{key}</span>
-                  <span className="text-sm font-semibold text-dark">{value}</span>
+                  ))}
                 </div>
-              ))}
-            </div>
-          )}
+              </div>
+            )}
+          </div>
+        </div>
 
-          {activeTab === 'reviews' && (
-            <div className="space-y-4 max-w-2xl">
-              {SAMPLE_REVIEWS.map((review, i) => (
-                <div key={i} className="p-5 bg-slate-50 rounded-xl">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-primary">{review.name[0]}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-dark">{review.name}</p>
-                        <div className="flex items-center gap-1">
-                          {[...Array(5)].map((_, j) => (
-                            <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-slate-200'}`} />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                    <span className="text-xs text-muted">{review.date}</span>
+        {/* FAQ Section */}
+        <div className="bg-white border border-gray-200 mt-4">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-bold text-gray-900">Frequently Asked Questions</h2>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {FAQ_DATA.map((faq, i) => (
+              <div key={i}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full flex items-center justify-between p-6 text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="text-sm font-semibold text-gray-900 pr-4">{faq.q}</span>
+                  <ChevronDown className={`w-5 h-5 text-gray-400 shrink-0 transition-transform ${openFaq === i ? 'rotate-180' : ''}`} />
+                </button>
+                {openFaq === i && (
+                  <div className="px-6 pb-6">
+                    <p className="text-sm text-gray-600 leading-relaxed">{faq.a}</p>
                   </div>
-                  <h4 className="text-sm font-semibold text-dark mb-1">{review.title}</h4>
-                  <p className="text-sm text-slate-600 mb-3">{review.content}</p>
-                  <button className="flex items-center gap-1.5 text-xs text-muted hover:text-primary transition-colors">
-                    <ThumbsUp className="w-3 h-3" />
-                    Helpful ({review.helpful})
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
 
-          {activeTab === 'faq' && (
-            <div className="space-y-3 max-w-2xl">
-              {[
-                { q: 'What file formats do you accept?', a: 'We accept PDF, AI, PSD, PNG, and JPG files. For best results, we recommend PDF with vector artwork and 300 DPI resolution.' },
-                { q: 'How long does delivery take?', a: `${product.delivery} for standard orders. Express delivery (1-2 days) is available at checkout for an additional fee.` },
-                { q: 'Can I request a proof before printing?', a: 'Yes! We provide a digital proof for all orders above 500 pcs. You can approve or request changes before we go to print.' },
-                { q: 'What is the minimum order quantity?', a: `The minimum order quantity is ${product.minQty} pcs for this product. Contact us for custom smaller orders.` },
-              ].map((faq, i) => (
-                <details key={i} className="group p-4 bg-slate-50 rounded-xl">
-                  <summary className="flex items-center justify-between cursor-pointer text-sm font-semibold text-dark">
-                    {faq.q}
-                    <ChevronDown className="w-4 h-4 text-muted group-open:rotate-180 transition-transform" />
-                  </summary>
-                  <p className="text-sm text-slate-600 mt-3 leading-relaxed">{faq.a}</p>
-                </details>
+        {/* Product Reviews */}
+        <div className="bg-white border border-gray-200 mt-4">
+          <div className="p-6 border-b border-gray-200">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-bold text-gray-900">Customer Reviews</h2>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
+                  ))}
+                </div>
+                <span className="text-sm font-semibold text-gray-900">{product.rating}</span>
+                <span className="text-sm text-gray-500">({product.reviews} reviews)</span>
+              </div>
+            </div>
+          </div>
+          <div className="divide-y divide-gray-200">
+            {SAMPLE_REVIEWS.map((review, i) => (
+              <div key={i} className="p-6">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-gray-600">{review.name[0]}</span>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">{review.name}</p>
+                      <div className="flex items-center gap-0.5">
+                        {[...Array(5)].map((_, j) => (
+                          <Star key={j} className={`w-3 h-3 ${j < review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-200'}`} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-500">{review.date}</span>
+                </div>
+                <h4 className="text-sm font-semibold text-gray-900 mb-1">{review.title}</h4>
+                <p className="text-sm text-gray-600 mb-3">{review.content}</p>
+                <button className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-[#ED1C24] transition-colors">
+                  <ThumbsUp className="w-3 h-3" />
+                  Helpful ({review.helpful})
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* You Might Also Like */}
+        <div className="bg-white border border-gray-200 mt-4 mb-8">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-lg font-bold text-gray-900">You Might Also Like</h2>
+          </div>
+          <div className="p-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {RELATED_PRODUCTS.map((rp) => (
+                <Link
+                  key={rp.slug}
+                  href={`/products/${rp.slug}`}
+                  className="group border border-gray-200 rounded overflow-hidden hover:shadow-md transition-shadow"
+                >
+                  <div className="aspect-square bg-gray-50 overflow-hidden">
+                    <img src={rp.image} alt={rp.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  </div>
+                  <div className="p-3">
+                    <p className="text-sm font-medium text-gray-900 truncate">{rp.name}</p>
+                    <p className="text-sm font-bold text-[#ED1C24] mt-1">Starting at {formatPrice(rp.price)}</p>
+                  </div>
+                </Link>
               ))}
             </div>
-          )}
+          </div>
         </div>
       </Container>
     </div>

@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   CreditCard, Smartphone, Building, CheckCircle, ChevronRight, Lock,
-  MapPin, Truck, Shield, Package, ArrowRight, Wallet, FileText,
+  MapPin, Truck, Shield, Package, ArrowRight, Wallet,
 } from 'lucide-react';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
@@ -15,10 +14,10 @@ import { formatPrice } from '@/lib/utils';
 type CheckoutStep = 'address' | 'shipping' | 'payment' | 'confirm';
 
 const STEPS = [
-  { id: 'address', label: 'Address', icon: MapPin },
-  { id: 'shipping', label: 'Shipping', icon: Truck },
+  { id: 'address', label: 'Shipping Address', icon: MapPin },
+  { id: 'shipping', label: 'Delivery', icon: Truck },
   { id: 'payment', label: 'Payment', icon: CreditCard },
-  { id: 'confirm', label: 'Confirm', icon: CheckCircle },
+  { id: 'confirm', label: 'Review', icon: CheckCircle },
 ];
 
 export default function CheckoutPage() {
@@ -43,9 +42,8 @@ export default function CheckoutPage() {
     switch (step) {
       case 'address':
         return (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-            <h2 className="text-lg font-bold text-dark font-heading">Delivery Address</h2>
-
+          <div>
+            <h2 className="text-lg font-bold mb-4" style={{ color: '#0F0F0F' }}>Delivery Address</h2>
             <div className="space-y-3">
               {[
                 { label: 'Office - Faridabad', address: 'Sector 15, Faridabad, Haryana 121001', phone: '+91 98765 43211' },
@@ -54,76 +52,76 @@ export default function CheckoutPage() {
                 <button
                   key={i}
                   onClick={() => setSelectedAddress(i)}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                    selectedAddress === i
-                      ? 'border-primary bg-primary/5'
-                      : 'border-slate-200 hover:border-slate-300'
-                  }`}
+                  className="w-full text-left p-4 border rounded-md transition-colors"
+                  style={{
+                    borderColor: selectedAddress === i ? '#ED1C24' : '#D1D5DB',
+                    backgroundColor: selectedAddress === i ? '#FDF2F2' : '#FFFFFF',
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-dark">{addr.label}</p>
-                      <p className="text-xs text-muted mt-0.5">{addr.address}</p>
-                      <p className="text-xs text-muted">{addr.phone}</p>
+                      <p className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{addr.label}</p>
+                      <p className="text-xs mt-0.5" style={{ color: '#6B7280' }}>{addr.address}</p>
+                      <p className="text-xs" style={{ color: '#6B7280' }}>{addr.phone}</p>
                     </div>
                     {selectedAddress === i && (
-                      <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                      <CheckCircle className="w-5 h-5 shrink-0" style={{ color: '#ED1C24' }} />
                     )}
                   </div>
                 </button>
               ))}
-
-              <button className="w-full p-4 border-2 border-dashed border-slate-300 rounded-xl text-sm font-medium text-primary hover:bg-primary/5 transition-colors">
+              <button
+                className="w-full p-4 border border-dashed rounded-md text-sm font-medium transition-colors"
+                style={{ borderColor: '#D1D5DB', color: '#ED1C24' }}
+              >
                 + Add New Address
               </button>
             </div>
-          </motion.div>
+          </div>
         );
 
       case 'shipping':
         return (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-            <h2 className="text-lg font-bold text-dark font-heading">Shipping Method</h2>
-
+          <div>
+            <h2 className="text-lg font-bold mb-4" style={{ color: '#0F0F0F' }}>Delivery Method</h2>
             <div className="space-y-3">
               {shippingOptions.map((option, i) => (
                 <button
                   key={i}
                   onClick={() => setSelectedShipping(i)}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                    selectedShipping === i
-                      ? 'border-primary bg-primary/5'
-                      : 'border-slate-200 hover:border-slate-300'
-                  }`}
+                  className="w-full text-left p-4 border rounded-md transition-colors"
+                  style={{
+                    borderColor: selectedShipping === i ? '#ED1C24' : '#D1D5DB',
+                    backgroundColor: selectedShipping === i ? '#FDF2F2' : '#FFFFFF',
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <Truck className={`w-5 h-5 ${selectedShipping === i ? 'text-primary' : 'text-slate-400'}`} />
+                      <Truck className="w-5 h-5" style={{ color: selectedShipping === i ? '#ED1C24' : '#9CA3AF' }} />
                       <div>
-                        <p className="text-sm font-semibold text-dark">{option.name}</p>
-                        <p className="text-xs text-muted">Estimated: {option.time}</p>
+                        <p className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{option.name}</p>
+                        <p className="text-xs" style={{ color: '#6B7280' }}>Estimated: {option.time}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-bold text-dark">
+                      <p className="text-sm font-bold" style={{ color: '#0F0F0F' }}>
                         {option.price === 0 ? 'FREE' : formatPrice(option.price)}
                       </p>
                       {selectedShipping === i && (
-                        <CheckCircle className="w-5 h-5 text-primary ml-auto" />
+                        <CheckCircle className="w-5 h-5 ml-auto" style={{ color: '#ED1C24' }} />
                       )}
                     </div>
                   </div>
                 </button>
               ))}
             </div>
-          </motion.div>
+          </div>
         );
 
       case 'payment':
         return (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-            <h2 className="text-lg font-bold text-dark font-heading">Payment Method</h2>
-
+          <div>
+            <h2 className="text-lg font-bold mb-4" style={{ color: '#0F0F0F' }}>Payment Method</h2>
             <div className="space-y-3">
               {[
                 { id: 'upi', label: 'UPI Payment', desc: 'Google Pay, PhonePe, Paytm', icon: Smartphone },
@@ -134,125 +132,118 @@ export default function CheckoutPage() {
                 <button
                   key={method.id}
                   onClick={() => setPaymentMethod(method.id)}
-                  className={`w-full text-left p-4 rounded-xl border-2 transition-all ${
-                    paymentMethod === method.id
-                      ? 'border-primary bg-primary/5'
-                      : 'border-slate-200 hover:border-slate-300'
-                  }`}
+                  className="w-full text-left p-4 border rounded-md transition-colors"
+                  style={{
+                    borderColor: paymentMethod === method.id ? '#ED1C24' : '#D1D5DB',
+                    backgroundColor: paymentMethod === method.id ? '#FDF2F2' : '#FFFFFF',
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <method.icon className={`w-5 h-5 ${paymentMethod === method.id ? 'text-primary' : 'text-slate-400'}`} />
+                      <method.icon className="w-5 h-5" style={{ color: paymentMethod === method.id ? '#ED1C24' : '#9CA3AF' }} />
                       <div>
-                        <p className="text-sm font-semibold text-dark">{method.label}</p>
-                        <p className="text-xs text-muted">{method.desc}</p>
+                        <p className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{method.label}</p>
+                        <p className="text-xs" style={{ color: '#6B7280' }}>{method.desc}</p>
                       </div>
                     </div>
                     {paymentMethod === method.id && (
-                      <CheckCircle className="w-5 h-5 text-primary shrink-0" />
+                      <CheckCircle className="w-5 h-5 shrink-0" style={{ color: '#ED1C24' }} />
                     )}
                   </div>
                 </button>
               ))}
             </div>
 
-            {/* UPI Input */}
             {paymentMethod === 'upi' && (
-              <div className="p-4 bg-slate-50 rounded-xl">
-                <label className="text-xs font-medium text-slate-500 mb-2 block">UPI ID</label>
+              <div className="p-4 mt-4 rounded-md" style={{ backgroundColor: '#F9FAFB' }}>
+                <label className="text-xs font-medium mb-2 block" style={{ color: '#6B7280' }}>UPI ID</label>
                 <input
                   type="text"
                   placeholder="yourname@upi"
-                  className="w-full px-4 py-2.5 bg-white rounded-xl border border-slate-200 text-sm outline-none focus:border-primary"
+                  className="w-full px-4 py-2.5 bg-white rounded-md border text-sm outline-none"
+                  style={{ borderColor: '#D1D5DB' }}
                 />
               </div>
             )}
 
-            {/* Card Input */}
             {paymentMethod === 'card' && (
-              <div className="p-4 bg-slate-50 rounded-xl space-y-3">
+              <div className="p-4 mt-4 rounded-md space-y-3" style={{ backgroundColor: '#F9FAFB' }}>
                 <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Card Number</label>
-                  <input type="text" placeholder="1234 5678 9012 3456" className="w-full px-4 py-2.5 bg-white rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+                  <label className="text-xs font-medium mb-1 block" style={{ color: '#6B7280' }}>Card Number</label>
+                  <input type="text" placeholder="1234 5678 9012 3456" className="w-full px-4 py-2.5 bg-white rounded-md border text-sm outline-none" style={{ borderColor: '#D1D5DB' }} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-xs font-medium text-slate-500 mb-1 block">Expiry</label>
-                    <input type="text" placeholder="MM/YY" className="w-full px-4 py-2.5 bg-white rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+                    <label className="text-xs font-medium mb-1 block" style={{ color: '#6B7280' }}>Expiry</label>
+                    <input type="text" placeholder="MM/YY" className="w-full px-4 py-2.5 bg-white rounded-md border text-sm outline-none" style={{ borderColor: '#D1D5DB' }} />
                   </div>
                   <div>
-                    <label className="text-xs font-medium text-slate-500 mb-1 block">CVV</label>
-                    <input type="password" placeholder="123" className="w-full px-4 py-2.5 bg-white rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+                    <label className="text-xs font-medium mb-1 block" style={{ color: '#6B7280' }}>CVV</label>
+                    <input type="password" placeholder="123" className="w-full px-4 py-2.5 bg-white rounded-md border text-sm outline-none" style={{ borderColor: '#D1D5DB' }} />
                   </div>
                 </div>
               </div>
             )}
-          </motion.div>
+          </div>
         );
 
       case 'confirm':
         return (
-          <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-            <h2 className="text-lg font-bold text-dark font-heading">Review & Confirm</h2>
+          <div>
+            <h2 className="text-lg font-bold mb-4" style={{ color: '#0F0F0F' }}>Review &amp; Confirm</h2>
 
-            {/* Order Items */}
-            <div className="bg-slate-50 rounded-xl p-4 space-y-3">
-              <p className="text-xs font-semibold text-slate-400 uppercase">Order Items</p>
+            <div className="p-4 rounded-md mb-4" style={{ backgroundColor: '#F9FAFB' }}>
+              <p className="text-xs font-semibold uppercase mb-3" style={{ color: '#9CA3AF' }}>Order Items</p>
               {items.map((item) => (
-                <div key={`${item.product_id}-${item.material}`} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                <div key={`${item.product_id}-${item.material}`} className="flex items-center justify-between py-2 border-b last:border-0" style={{ borderColor: '#E5E7EB' }}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                      <Package className="w-5 h-5 text-slate-300" />
+                    <div className="w-10 h-10 rounded-md flex items-center justify-center" style={{ backgroundColor: '#FFFFFF' }}>
+                      <Package className="w-5 h-5" style={{ color: '#D1D5DB' }} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-dark">{item.product_name}</p>
-                      <p className="text-[10px] text-muted">{item.material} · {item.size} · {item.quantity} pcs</p>
+                      <p className="text-sm font-medium" style={{ color: '#0F0F0F' }}>{item.product_name}</p>
+                      <p className="text-[10px]" style={{ color: '#9CA3AF' }}>{item.material} · {item.size} · {item.quantity} pcs</p>
                     </div>
                   </div>
-                  <p className="text-sm font-semibold text-dark">{formatPrice(item.unit_price * item.quantity)}</p>
+                  <p className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{formatPrice(item.unit_price * item.quantity)}</p>
                 </div>
               ))}
             </div>
 
-            {/* Delivery Info */}
-            <div className="bg-slate-50 rounded-xl p-4">
-              <p className="text-xs font-semibold text-slate-400 uppercase mb-2">Delivery</p>
-              <p className="text-sm text-dark">Office - Faridabad, Sector 15, Haryana 121001</p>
-              <p className="text-xs text-muted mt-1">{shippingOptions[selectedShipping].name} ({shippingOptions[selectedShipping].time})</p>
+            <div className="p-4 rounded-md mb-4" style={{ backgroundColor: '#F9FAFB' }}>
+              <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#9CA3AF' }}>Delivery</p>
+              <p className="text-sm" style={{ color: '#0F0F0F' }}>Office - Faridabad, Sector 15, Haryana 121001</p>
+              <p className="text-xs mt-1" style={{ color: '#6B7280' }}>{shippingOptions[selectedShipping].name} ({shippingOptions[selectedShipping].time})</p>
             </div>
 
-            {/* Payment Info */}
-            <div className="bg-slate-50 rounded-xl p-4">
-              <p className="text-xs font-semibold text-slate-400 uppercase mb-2">Payment</p>
-              <p className="text-sm text-dark capitalize">{paymentMethod === 'upi' ? 'UPI Payment' : paymentMethod === 'card' ? 'Credit/Debit Card' : paymentMethod === 'netbanking' ? 'Net Banking' : 'Wallet'}</p>
+            <div className="p-4 rounded-md mb-4" style={{ backgroundColor: '#F9FAFB' }}>
+              <p className="text-xs font-semibold uppercase mb-2" style={{ color: '#9CA3AF' }}>Payment</p>
+              <p className="text-sm capitalize" style={{ color: '#0F0F0F' }}>{paymentMethod === 'upi' ? 'UPI Payment' : paymentMethod === 'card' ? 'Credit/Debit Card' : paymentMethod === 'netbanking' ? 'Net Banking' : 'Wallet'}</p>
             </div>
 
-            {/* Terms */}
-            <div className="flex items-start gap-2 p-3 bg-primary/5 rounded-xl">
-              <input type="checkbox" defaultChecked className="w-4 h-4 mt-0.5 accent-primary" />
-              <p className="text-xs text-muted leading-relaxed">
-                I agree to the <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>. I understand that my order is subject to PrintOrbit&apos;s production timelines.
+            <div className="flex items-start gap-2 p-3 rounded-md" style={{ backgroundColor: '#FDF2F2' }}>
+              <input type="checkbox" defaultChecked className="w-4 h-4 mt-0.5 accent-[#ED1C24]" />
+              <p className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
+                I agree to the <Link href="/terms" className="underline" style={{ color: '#ED1C24' }}>Terms of Service</Link> and <Link href="/privacy" className="underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>. I understand that my order is subject to PrintOrbit&apos;s production timelines.
               </p>
             </div>
-          </motion.div>
+          </div>
         );
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen" style={{ backgroundColor: '#F4F2EF' }}>
       <Container>
         <div className="py-8">
-          {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-xs text-muted mb-6">
-            <Link href="/" className="hover:text-primary">Home</Link>
+          <nav className="flex items-center gap-2 text-xs mb-6" style={{ color: '#6B7280' }}>
+            <Link href="/" className="hover:underline" style={{ color: '#ED1C24' }}>Home</Link>
             <ChevronRight className="w-3 h-3" />
-            <Link href="/cart" className="hover:text-primary">Cart</Link>
+            <Link href="/cart" className="hover:underline" style={{ color: '#ED1C24' }}>Cart</Link>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-dark font-medium">Checkout</span>
+            <span className="font-medium" style={{ color: '#0F0F0F' }}>Checkout</span>
           </nav>
 
-          {/* Steps */}
           <div className="flex items-center justify-center gap-0 mb-10">
             {STEPS.map((s, i) => (
               <div key={s.id} className="flex items-center">
@@ -260,45 +251,42 @@ export default function CheckoutPage() {
                   onClick={() => {
                     if (i <= stepIndex) setStep(s.id as CheckoutStep);
                   }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
-                    s.id === step
-                      ? 'bg-primary text-white shadow-lg shadow-primary/25'
-                      : i < stepIndex
-                        ? 'bg-success/10 text-success'
-                        : 'bg-slate-100 text-slate-400'
-                  }`}
+                  className="flex items-center gap-2 px-4 py-2 rounded-md text-xs font-semibold"
+                  style={{
+                    backgroundColor: s.id === step ? '#ED1C24' : i < stepIndex ? '#D1FAE5' : '#F3F4F6',
+                    color: s.id === step ? '#FFFFFF' : i < stepIndex ? '#065F46' : '#9CA3AF',
+                  }}
                 >
                   {i < stepIndex ? (
                     <CheckCircle className="w-4 h-4" />
                   ) : (
                     <s.icon className="w-4 h-4" />
                   )}
-                  <span className="text-xs font-semibold hidden sm:inline">{s.label}</span>
+                  <span className="hidden sm:inline">{s.label}</span>
                 </button>
                 {i < STEPS.length - 1 && (
-                  <div className={`w-8 h-0.5 mx-1 ${i < stepIndex ? 'bg-success' : 'bg-slate-200'}`} />
+                  <div className="w-8 h-0.5 mx-1" style={{ backgroundColor: i < stepIndex ? '#10B981' : '#E5E7EB' }} />
                 )}
               </div>
             ))}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main Content */}
             <div className="lg:col-span-2">
               {renderStep()}
 
-              {/* Navigation */}
               <div className="flex items-center justify-between mt-8">
                 {stepIndex > 0 ? (
                   <button
                     onClick={() => setStep(STEPS[stepIndex - 1].id as CheckoutStep)}
-                    className="px-6 py-2.5 bg-slate-100 text-slate-600 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-colors"
+                    className="px-6 py-2.5 text-sm font-semibold rounded-md"
+                    style={{ backgroundColor: '#F3F4F6', color: '#4B5563' }}
                   >
                     Back
                   </button>
                 ) : (
-                  <Link href="/cart" className="px-6 py-2.5 text-sm font-medium text-primary hover:text-primary-dark">
-                    ← Back to Cart
+                  <Link href="/cart" className="text-sm font-medium" style={{ color: '#ED1C24' }}>
+                    &larr; Back to Cart
                   </Link>
                 )}
 
@@ -318,46 +306,45 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Order Summary Sidebar */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-2xl border border-slate-100 p-6 sticky top-24 space-y-4">
-                <h3 className="font-bold text-dark font-heading">Order Summary</h3>
+              <div className="bg-white p-6 sticky top-24 space-y-4" style={{ border: '1px solid #E5E7EB' }}>
+                <h3 className="font-bold" style={{ color: '#0F0F0F' }}>Order Summary</h3>
 
                 <div className="space-y-3 max-h-48 overflow-y-auto">
                   {items.map((item) => (
                     <div key={`${item.product_id}-${item.material}`} className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
-                        <Package className="w-4 h-4 text-slate-300" />
+                      <div className="w-10 h-10 rounded-md flex items-center justify-center shrink-0" style={{ backgroundColor: '#F3F4F6' }}>
+                        <Package className="w-4 h-4" style={{ color: '#D1D5DB' }} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-medium text-dark truncate">{item.product_name}</p>
-                        <p className="text-[10px] text-muted">×{item.quantity}</p>
+                        <p className="text-xs font-medium truncate" style={{ color: '#0F0F0F' }}>{item.product_name}</p>
+                        <p className="text-[10px]" style={{ color: '#9CA3AF' }}>×{item.quantity}</p>
                       </div>
-                      <p className="text-xs font-semibold text-dark shrink-0">{formatPrice(item.unit_price * item.quantity)}</p>
+                      <p className="text-xs font-semibold shrink-0" style={{ color: '#0F0F0F' }}>{formatPrice(item.unit_price * item.quantity)}</p>
                     </div>
                   ))}
                 </div>
 
-                <div className="border-t border-slate-100 pt-3 space-y-2">
+                <div className="pt-3 space-y-2" style={{ borderTop: '1px solid #E5E7EB' }}>
                   <div className="flex justify-between">
-                    <span className="text-xs text-muted">Subtotal</span>
-                    <span className="text-xs font-semibold">{formatPrice(subtotal)}</span>
+                    <span className="text-xs" style={{ color: '#6B7280' }}>Subtotal</span>
+                    <span className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>{formatPrice(subtotal)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-xs text-muted">Shipping</span>
-                    <span className={`text-xs font-semibold ${shipping === 0 ? 'text-success' : ''}`}>
+                    <span className="text-xs" style={{ color: '#6B7280' }}>Shipping</span>
+                    <span className="text-xs font-semibold" style={{ color: shipping === 0 ? '#10B981' : '#0F0F0F' }}>
                       {shipping === 0 ? 'FREE' : formatPrice(shipping)}
                     </span>
                   </div>
-                  <div className="flex justify-between pt-2 border-t border-slate-100">
-                    <span className="text-sm font-bold text-dark">Total</span>
-                    <span className="text-lg font-bold text-primary">{formatPrice(total)}</span>
+                  <div className="flex justify-between pt-2" style={{ borderTop: '1px solid #E5E7EB' }}>
+                    <span className="text-sm font-bold" style={{ color: '#0F0F0F' }}>Total</span>
+                    <span className="text-lg font-bold" style={{ color: '#ED1C24' }}>{formatPrice(total)}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-3 bg-success/5 rounded-xl">
-                  <Shield className="w-4 h-4 text-success shrink-0" />
-                  <p className="text-[10px] text-success font-medium">Your payment is secured with 256-bit SSL encryption</p>
+                <div className="flex items-center gap-2 p-3 rounded-md" style={{ backgroundColor: '#D1FAE5' }}>
+                  <Shield className="w-4 h-4 shrink-0" style={{ color: '#065F46' }} />
+                  <p className="text-[10px] font-medium" style={{ color: '#065F46' }}>Your payment is secured with 256-bit SSL encryption</p>
                 </div>
               </div>
             </div>

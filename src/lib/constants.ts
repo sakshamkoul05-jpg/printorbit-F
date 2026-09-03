@@ -10,8 +10,6 @@ export const OFFICES = [
 export interface MegaMenuItem {
   name: string;
   slug: string;
-  description?: string;
-  image?: string;
 }
 
 export interface MegaMenuCategory {
@@ -20,1057 +18,666 @@ export interface MegaMenuCategory {
   items: MegaMenuItem[];
 }
 
-export interface MegaMenuPromo {
-  title: string;
-  description: string;
-  href: string;
-  bg: string;
-}
-
 export interface MegaMenuTab {
   id: string;
   label: string;
-  icon: string;
   categories: MegaMenuCategory[];
-  featured: MegaMenuItem[];
-  bestsellers: MegaMenuItem[];
-  newArrivals: MegaMenuItem[];
-  trending: MegaMenuItem[];
-  promo: MegaMenuPromo;
 }
 
 export const MEGA_MENU_DATA: MegaMenuTab[] = [
   {
-    id: 'marketing',
-    label: 'Marketing Materials',
-    icon: 'Megaphone',
+    id: 'gift-hampers',
+    label: 'Gift Hampers',
     categories: [
       {
-        name: 'Business Cards',
-        slug: 'business-cards',
+        name: 'Gift Hampers',
+        slug: 'gift-hampers',
         items: [
-          { name: 'Standard Business Cards', slug: 'standard-business-cards', description: 'Classic cards, fast turnaround' },
-          { name: 'Premium Business Cards', slug: 'premium-business-cards', description: 'Thick stock, luxe finishes' },
-          { name: 'Metal Business Cards', slug: 'metal-business-cards', description: 'Stainless steel, unforgettable' },
-          { name: 'Circular Business Cards', slug: 'circular-business-cards', description: 'Stand out from the stack' },
-          { name: 'Folded Business Cards', slug: 'folded-business-cards', description: 'Extra space for info' },
-          { name: 'Square Business Cards', slug: 'square-business-cards', description: 'Modern, compact format' },
-          { name: 'Luxury Business Cards', slug: 'luxury-business-cards', description: 'Velvet, foil, emboss' },
-          { name: 'Magnet Business Cards', slug: 'magnet-business-cards', description: 'Sticks to fridges' },
+          { name: 'Diwali Hampers', slug: 'diwali-hampers' },
+          { name: 'Welcome Kits', slug: 'welcome-kits' },
+          { name: 'Festival Gifts', slug: 'festival-gifts' },
+          { name: 'Employee Gifts', slug: 'employee-gifts' },
         ],
       },
+    ],
+  },
+  {
+    id: 'visiting-cards',
+    label: 'Visiting Cards & ID Cards',
+    categories: [
+      {
+        name: 'Visiting Cards',
+        slug: 'visiting-cards',
+        items: [
+          { name: 'Single Sided', slug: 'visiting-cards-single-sided' },
+          { name: 'Front and Back', slug: 'visiting-cards-front-back' },
+          { name: 'Sandwich', slug: 'visiting-cards-sandwich' },
+          { name: 'Slim', slug: 'visiting-cards-slim' },
+          { name: 'Folded', slug: 'visiting-cards-folded' },
+          { name: 'Spot Laminated', slug: 'visiting-cards-spot-laminated' },
+          { name: 'PVC', slug: 'visiting-cards-pvc' },
+          { name: 'Non-Tearable', slug: 'visiting-cards-non-tearable' },
+          { name: 'Recycled', slug: 'visiting-cards-recycled' },
+          { name: 'Square', slug: 'visiting-cards-square' },
+        ],
+      },
+      {
+        name: 'ID Cards',
+        slug: 'id-cards',
+        items: [
+          { name: 'Corporate ID Cards', slug: 'id-cards-corporate' },
+          { name: 'Lanyards', slug: 'id-cards-lanyards' },
+          { name: 'ID Card Holder', slug: 'id-card-holder' },
+          { name: 'Name Badges', slug: 'id-cards-name-badges' },
+          { name: 'Yoyo Holder', slug: 'id-cards-yoyo-holder' },
+          { name: 'Hospital/Doctor ID', slug: 'id-cards-hospital' },
+          { name: 'Student ID Cards', slug: 'id-cards-student' },
+          { name: 'Event ID Cards', slug: 'id-cards-event' },
+          { name: 'Membership Cards', slug: 'id-cards-membership' },
+          { name: 'Visitor ID Cards', slug: 'id-cards-visitor' },
+        ],
+      },
+      {
+        name: 'Visiting Card Holders',
+        slug: 'visiting-card-holders',
+        items: [
+          { name: 'Engraved Card Holders', slug: 'visiting-card-holders-engraved' },
+          { name: 'Leather Card Holders', slug: 'visiting-card-holders-leather' },
+          { name: 'Metal Plated Card Holders', slug: 'visiting-card-holders-metal' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'stationery',
+    label: 'Stationery & Office Supplies',
+    categories: [
+      {
+        name: 'Pens',
+        slug: 'pens',
+        items: [
+          { name: 'Classic Pens', slug: 'pens-classic' },
+          { name: 'Premium Pens', slug: 'pens-premium' },
+          { name: 'Promotional Pens', slug: 'pens-promotional' },
+        ],
+      },
+      {
+        name: 'Letterheads & Envelopes',
+        slug: 'letterheads-envelopes',
+        items: [
+          { name: 'A4 Letterheads', slug: 'letterheads-a4' },
+          { name: 'A5 Letterheads', slug: 'letterheads-a5' },
+          { name: 'Corporate Letterheads', slug: 'letterheads-corporate' },
+          { name: 'DL Envelopes', slug: 'envelopes-dl' },
+          { name: 'C4 Envelopes', slug: 'envelopes-c4' },
+          { name: 'Branded Envelopes', slug: 'envelopes-branded' },
+        ],
+      },
+      {
+        name: 'Personal Stationery',
+        slug: 'personal-stationery',
+        items: [
+          { name: 'Notepads', slug: 'personal-notepads' },
+          { name: 'Memo Pads', slug: 'personal-memo-pads' },
+          { name: 'Sticky Notes', slug: 'personal-sticky-notes' },
+          { name: 'Note Cards', slug: 'personal-note-cards' },
+        ],
+      },
+      {
+        name: 'Diaries & Notebooks',
+        slug: 'diaries-notebooks',
+        items: [
+          { name: 'Personalised Diaries', slug: 'diaries-personalised' },
+          { name: 'A5 Diaries', slug: 'diaries-a5' },
+          { name: 'Notebooks', slug: 'notebooks-custom' },
+          { name: 'A4 Notebooks', slug: 'notebooks-a4' },
+        ],
+      },
+      {
+        name: 'Desk Accessories',
+        slug: 'desk-accessories',
+        items: [
+          { name: 'Desk Pads', slug: 'desk-pads' },
+          { name: 'Mouse Pads', slug: 'mouse-pads' },
+          { name: 'Pen Holders', slug: 'pen-holders' },
+          { name: 'Coasters', slug: 'coasters' },
+        ],
+      },
+      {
+        name: 'Calendars',
+        slug: 'calendars',
+        items: [
+          { name: 'Desk Calendars', slug: 'calendars-desk' },
+          { name: 'Wall Calendars', slug: 'calendars-wall' },
+          { name: 'Flip Calendars', slug: 'calendars-flip' },
+          { name: 'Poster Calendars', slug: 'calendars-poster' },
+        ],
+      },
+      {
+        name: 'Invitation & Greeting Cards',
+        slug: 'invitation-greeting-cards',
+        items: [
+          { name: 'Wedding Invitations', slug: 'invitations-wedding' },
+          { name: 'Birthday Invitations', slug: 'invitations-birthday' },
+          { name: 'Corporate Invitations', slug: 'invitations-corporate' },
+          { name: 'Greeting Cards', slug: 'greeting-cards' },
+          { name: 'Thank You Cards', slug: 'thank-you-cards' },
+        ],
+      },
+      {
+        name: 'Stamps Files & Folders',
+        slug: 'stamps-files-folders',
+        items: [
+          { name: 'Self Inking Stamps', slug: 'stamps-self-inking' },
+          { name: 'Rubber Stamps', slug: 'stamps-rubber' },
+          { name: 'Presentation Folders', slug: 'folders-presentation' },
+          { name: 'Ring Binder Files', slug: 'files-ring-binder' },
+          { name: 'Pocket Folders', slug: 'folders-pocket' },
+        ],
+      },
+      {
+        name: 'Other Stationery',
+        slug: 'other-stationery',
+        items: [
+          { name: 'Bill Books', slug: 'bill-books' },
+          { name: 'Invoice Books', slug: 'invoice-books' },
+          { name: 'Lanyards', slug: 'lanyards-stationery' },
+          { name: 'Certificates', slug: 'certificates' },
+          { name: 'Cash Vouchers', slug: 'cash-vouchers' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'apparel',
+    label: 'Apparel',
+    categories: [
+      {
+        name: 'Polo T-Shirts',
+        slug: 'polo-t-shirts',
+        items: [
+          { name: 'Cotton Polo T-Shirts', slug: 'polo-t-shirts-cotton' },
+          { name: 'Premium Polo T-Shirts', slug: 'polo-t-shirts-premium' },
+          { name: 'Embroidered Polo T-Shirts', slug: 'polo-t-shirts-embroidered' },
+          { name: 'Bulk Polo T-Shirts', slug: 'polo-t-shirts-bulk' },
+        ],
+      },
+      {
+        name: 'T-Shirts',
+        slug: 't-shirts',
+        items: [
+          { name: 'Cotton T-Shirts', slug: 't-shirts-cotton' },
+          { name: 'V-Neck T-Shirts', slug: 't-shirts-vneck' },
+          { name: 'Long Sleeve T-Shirts', slug: 't-shirts-long-sleeve' },
+          { name: 'Tank Tops', slug: 't-shirts-tank-tops' },
+          { name: 'Uniform T-Shirts', slug: 't-shirts-uniform' },
+        ],
+      },
+      {
+        name: 'Jackets & Hoodies',
+        slug: 'jackets-hoodies',
+        items: [
+          { name: 'Hoodies', slug: 'hoodies' },
+          { name: 'Zip Hoodies', slug: 'zip-hoodies' },
+          { name: 'Jackets', slug: 'jackets' },
+          { name: 'Sweatshirts', slug: 'sweatshirts' },
+        ],
+      },
+      {
+        name: 'Sportswear',
+        slug: 'sportswear',
+        items: [
+          { name: 'Sports T-Shirts', slug: 'sportswear-t-shirts' },
+          { name: 'Track Pants', slug: 'sportswear-track-pants' },
+          { name: 'Sports Jerseys', slug: 'sportswear-jerseys' },
+        ],
+      },
+      {
+        name: 'Formal Shirts',
+        slug: 'formal-shirts',
+        items: [
+          { name: 'Corporate Formal Shirts', slug: 'formal-shirts-corporate' },
+          { name: 'Custom Formal Shirts', slug: 'formal-shirts-custom' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'corporate-gifts',
+    label: 'Corporate Gifts',
+    categories: [
+      {
+        name: 'Corporate Gifts',
+        slug: 'corporate-gifts',
+        items: [
+          { name: 'Executive Gifts', slug: 'corporate-executive' },
+          { name: 'Desk Accessories', slug: 'corporate-desk-accessories' },
+          { name: 'Tech Gifts', slug: 'corporate-tech' },
+          { name: 'Wellness Gifts', slug: 'corporate-wellness' },
+        ],
+      },
+      {
+        name: 'Diwali Gifts',
+        slug: 'diwali-gifts',
+        items: [
+          { name: 'Diwali Gift Boxes', slug: 'diwali-gift-boxes' },
+          { name: 'Sweet Hampers', slug: 'diwali-sweet-hampers' },
+          { name: 'Corporate Diwali Gifts', slug: 'diwali-corporate' },
+        ],
+      },
+      {
+        name: 'Welcome Kits',
+        slug: 'welcome-kits',
+        items: [
+          { name: 'Employee Welcome Kits', slug: 'welcome-kits-employee' },
+          { name: 'Corporate Welcome Kits', slug: 'welcome-kits-corporate' },
+          { name: 'Onboarding Kits', slug: 'welcome-kits-onboarding' },
+        ],
+      },
+      {
+        name: 'Employee Gifts',
+        slug: 'employee-gifts',
+        items: [
+          { name: 'Work Anniversary Gifts', slug: 'employee-work-anniversary' },
+          { name: 'Festival Gifts', slug: 'employee-festival' },
+          { name: 'Achievement Gifts', slug: 'employee-achievement' },
+          { name: 'Retirement Gifts', slug: 'employee-retirement' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'marketing',
+    label: 'Marketing & Promotions',
+    categories: [
       {
         name: 'Flyers',
         slug: 'flyers',
         items: [
-          { name: 'A5 Flyers', slug: 'a5-flyers' },
-          { name: 'A4 Flyers', slug: 'a4-flyers' },
-          { name: 'A6 Flyers', slug: 'a6-flyers' },
-          { name: 'DL Flyers', slug: 'dl-flyers' },
-          { name: 'A3 Flyers', slug: 'a3-flyers' },
-          { name: 'Leaflets', slug: 'leaflets' },
+          { name: 'A5 Flyers', slug: 'flyers-a5' },
+          { name: 'A4 Flyers', slug: 'flyers-a4' },
+          { name: 'A6 Flyers', slug: 'flyers-a6' },
+          { name: 'DL Flyers', slug: 'flyers-dl' },
+          { name: 'Leaflets', slug: 'flyers-leaflets' },
         ],
       },
       {
         name: 'Brochures',
         slug: 'brochures',
         items: [
-          { name: 'Bi-Fold Brochures', slug: 'bi-fold-brochures' },
-          { name: 'Tri-Fold Brochures', slug: 'tri-fold-brochures' },
-          { name: 'Z-Fold Brochures', slug: 'z-fold-brochures' },
-          { name: 'Gate Fold Brochures', slug: 'gate-fold-brochures' },
-          { name: 'Booklet Brochures', slug: 'booklet-brochures' },
+          { name: 'Bi-Fold Brochures', slug: 'brochures-bi-fold' },
+          { name: 'Tri-Fold Brochures', slug: 'brochures-tri-fold' },
+          { name: 'Z-Fold Brochures', slug: 'brochures-z-fold' },
+          { name: 'Booklet Brochures', slug: 'brochures-booklet' },
         ],
       },
       {
         name: 'Posters',
         slug: 'posters',
         items: [
-          { name: 'A3 Posters', slug: 'a3-posters' },
-          { name: 'A2 Posters', slug: 'a2-posters' },
-          { name: 'A1 Posters', slug: 'a1-posters' },
-          { name: 'A0 Posters', slug: 'a0-posters' },
-          { name: 'Custom Size Posters', slug: 'custom-posters' },
+          { name: 'A3 Posters', slug: 'posters-a3' },
+          { name: 'A2 Posters', slug: 'posters-a2' },
+          { name: 'A1 Posters', slug: 'posters-a1' },
+          { name: 'A0 Posters', slug: 'posters-a0' },
+          { name: 'Foam Board Posters', slug: 'posters-foam-board' },
         ],
       },
-    ],
-    featured: [
-      { name: 'Premium Matte Cards', slug: 'premium-business-cards', description: '400gsm, soft touch' },
-      { name: 'Tri-Fold Brochures', slug: 'tri-fold-brochures', description: 'Most popular format' },
-      { name: 'A5 Flyers', slug: 'a5-flyers', description: 'Best for handouts' },
-    ],
-    bestsellers: [
-      { name: 'Standard Business Cards', slug: 'standard-business-cards', description: '100+ orders daily' },
-      { name: 'A4 Flyers', slug: 'a4-flyers', description: 'Full color both sides' },
-      { name: 'Bi-Fold Brochures', slug: 'bi-fold-brochures', description: 'Corporate favorite' },
-    ],
-    newArrivals: [
-      { name: 'Luxury Velvet Cards', slug: 'luxury-business-cards', description: 'NEW — Soft velvet finish' },
-      { name: 'Magnet Cards', slug: 'magnet-business-cards', description: 'NEW — Sticks to surfaces' },
-    ],
-    trending: [
-      { name: 'Metal Business Cards', slug: 'metal-business-cards', description: 'Trending — 200% more orders' },
-      { name: 'Circular Cards', slug: 'circular-business-cards', description: 'Trending — Unique shape' },
-    ],
-    promo: {
-      title: 'Design it yourself',
-      description: 'Use our free online design tool to create your perfect marketing materials.',
-      href: '/design-studio',
-      bg: 'from-blue-600 to-blue-800',
-    },
-  },
-  {
-    id: 'signage',
-    label: 'Signage & Banners',
-    icon: 'Flag',
-    categories: [
       {
         name: 'Banners',
         slug: 'banners',
         items: [
-          { name: 'Vinyl Banners', slug: 'vinyl-banners' },
-          { name: 'Mesh Banners', slug: 'mesh-banners' },
-          { name: 'Fabric Banners', slug: 'fabric-banners' },
-          { name: 'Pull-Up Banners', slug: 'pull-up-banners' },
-          { name: 'Backdrop Banners', slug: 'backdrop-banners' },
-          { name: 'Outdoor Banners', slug: 'outdoor-banners' },
+          { name: 'Vinyl Banners', slug: 'banners-vinyl' },
+          { name: 'Mesh Banners', slug: 'banners-mesh' },
+          { name: 'Fabric Banners', slug: 'banners-fabric' },
+          { name: 'Pull-Up Banners', slug: 'banners-pull-up' },
+          { name: 'Backdrop Banners', slug: 'banners-backdrop' },
         ],
       },
       {
-        name: 'Posters',
-        slug: 'large-posters',
+        name: 'Standees',
+        slug: 'standees',
         items: [
-          { name: 'Foam Board Posters', slug: 'foam-board-posters' },
-          { name: 'ACM Posters', slug: 'acm-posters' },
-          { name: 'Coroplast Posters', slug: 'coroplast-posters' },
-          { name: 'Acrylic Posters', slug: 'acrylic-posters' },
+          { name: 'Foam Board Standees', slug: 'standees-foam-board' },
+          { name: 'Tabletop Standees', slug: 'standees-tabletop' },
+          { name: 'Pull-Up Standees', slug: 'standees-pull-up' },
         ],
       },
       {
-        name: 'Sign Boards',
-        slug: 'sign-boards',
+        name: 'Marketing Materials',
+        slug: 'marketing-materials',
         items: [
-          { name: 'ACM Signs', slug: 'acm-signs' },
-          { name: 'LED Signs', slug: 'led-signs' },
-          { name: 'Acrylic Signs', slug: 'acrylic-signs' },
-          { name: 'Wayfinding Signs', slug: 'wayfinding-signs' },
-          { name: 'Shop Signs', slug: 'shop-signs' },
-        ],
-      },
-      {
-        name: 'Wall & Window',
-        slug: 'wall-window',
-        items: [
-          { name: 'Wall Murals', slug: 'wall-murals' },
-          { name: 'Wallpaper', slug: 'custom-wallpaper' },
-          { name: 'Window Film', slug: 'window-film' },
-          { name: 'Window Graphics', slug: 'window-graphics' },
-          { name: 'Wall Stickers', slug: 'wall-stickers' },
+          { name: 'Presentation Folders', slug: 'marketing-presentation-folders' },
+          { name: 'Postcards', slug: 'marketing-postcards' },
+          { name: 'Loyalty Cards', slug: 'marketing-loyalty-cards' },
+          { name: 'Booklets', slug: 'marketing-booklets' },
+          { name: 'Menu Cards', slug: 'marketing-menu-cards' },
         ],
       },
     ],
-    featured: [
-      { name: 'Vinyl Banners', slug: 'vinyl-banners', description: 'Weather-proof' },
-      { name: 'Pull-Up Banners', slug: 'pull-up-banners', description: 'Portable display' },
-      { name: 'Wall Murals', slug: 'wall-murals', description: 'Transform spaces' },
-    ],
-    bestsellers: [
-      { name: 'Vinyl Banners', slug: 'vinyl-banners', description: 'Most ordered' },
-      { name: 'ACM Signs', slug: 'acm-signs', description: 'Premium signage' },
-      { name: 'Window Graphics', slug: 'window-graphics', description: 'Storefront essential' },
-    ],
-    newArrivals: [
-      { name: 'Fabric Banners', slug: 'fabric-banners', description: 'NEW — Premium textile' },
-      { name: 'Window Film', slug: 'window-film', description: 'NEW — Privacy + branding' },
-    ],
-    trending: [
-      { name: 'LED Signs', slug: 'led-signs', description: 'Trending — High visibility' },
-      { name: 'Wall Murals', slug: 'wall-murals', description: 'Trending — Office makeovers' },
-    ],
-    promo: {
-      title: 'Free banner mockup',
-      description: 'See your design on a banner before you order. Free interactive preview.',
-      href: '/design-studio',
-      bg: 'from-emerald-600 to-teal-700',
-    },
   },
   {
-    id: 'packaging',
-    label: 'Packaging',
-    icon: 'Package',
+    id: 'labels-packaging',
+    label: 'Labels, Stickers & Packaging',
     categories: [
+      {
+        name: 'Labels',
+        slug: 'labels',
+        items: [
+          { name: 'Product Labels', slug: 'labels-product' },
+          { name: 'Return Address Labels', slug: 'labels-address' },
+          { name: 'Iron-on Labels', slug: 'labels-iron-on' },
+          { name: 'Transparent Labels', slug: 'labels-transparent' },
+          { name: 'Shipping Labels', slug: 'labels-shipping' },
+          { name: 'Industrial Labels', slug: 'labels-industrial' },
+        ],
+      },
+      {
+        name: 'Stickers',
+        slug: 'stickers',
+        items: [
+          { name: 'Sheet Stickers', slug: 'stickers-sheet' },
+          { name: 'Die-Cut Stickers', slug: 'stickers-die-cut' },
+          { name: 'Clear Stickers', slug: 'stickers-clear' },
+          { name: 'Holographic Stickers', slug: 'stickers-holographic' },
+          { name: 'Foil Stickers', slug: 'stickers-foil' },
+          { name: 'Dome Stickers', slug: 'stickers-dome' },
+          { name: 'QR Code Stickers', slug: 'stickers-qr-code' },
+        ],
+      },
       {
         name: 'Custom Boxes',
         slug: 'custom-boxes',
         items: [
-          { name: 'Mailer Boxes', slug: 'mailer-boxes' },
-          { name: 'Product Boxes', slug: 'product-boxes' },
-          { name: 'Gift Boxes', slug: 'gift-boxes' },
-          { name: 'Shipping Boxes', slug: 'shipping-boxes' },
-          { name: 'Food Boxes', slug: 'food-boxes' },
-          { name: 'Cosmetic Boxes', slug: 'cosmetic-boxes' },
-          { name: 'Favor Boxes', slug: 'favor-boxes' },
-        ],
-      },
-      {
-        name: 'Labels & Stickers',
-        slug: 'labels-stickers',
-        items: [
-          { name: 'Product Labels', slug: 'product-labels' },
-          { name: 'Bumper Stickers', slug: 'bumper-stickers' },
-          { name: 'Die-Cut Stickers', slug: 'die-cut-stickers' },
-          { name: 'Roll Labels', slug: 'roll-labels' },
-          { name: 'Clear Stickers', slug: 'clear-stickers' },
-          { name: 'Holographic Stickers', slug: 'holographic-stickers' },
-          { name: 'Foil Stickers', slug: 'foil-stickers' },
+          { name: 'Mailer Boxes', slug: 'boxes-mailer' },
+          { name: 'Product Boxes', slug: 'boxes-product' },
+          { name: 'Gift Boxes', slug: 'boxes-gift' },
+          { name: 'Tuck Top Boxes', slug: 'boxes-tuck-top' },
+          { name: 'Lock Bottom Boxes', slug: 'boxes-lock-bottom' },
         ],
       },
       {
         name: 'Bags & Envelopes',
         slug: 'bags-envelopes',
         items: [
-          { name: 'Paper Bags', slug: 'paper-bags' },
-          { name: 'Tote Bags', slug: 'tote-bags' },
-          { name: 'Gift Envelopes', slug: 'gift-envelopes' },
-          { name: 'Document Envelopes', slug: 'document-envelopes' },
+          { name: 'Paper Bags', slug: 'bags-paper' },
+          { name: 'Tote Bags', slug: 'bags-tote' },
+          { name: 'Courier Bags', slug: 'bags-courier' },
+          { name: 'Gift Envelopes', slug: 'envelopes-gift' },
+          { name: 'Carry Bags', slug: 'bags-carry' },
         ],
       },
       {
         name: 'Packaging Tape',
         slug: 'packaging-tape',
         items: [
-          { name: 'Custom Tape', slug: 'custom-tape' },
-          { name: 'Kraft Tape', slug: 'kraft-tape' },
+          { name: 'Custom Packaging Tape', slug: 'packaging-tape-custom' },
+          { name: 'Branded Packing Tape', slug: 'packaging-tape-branded' },
+          { name: 'Kraft Tape', slug: 'packaging-tape-kraft' },
         ],
       },
     ],
-    featured: [
-      { name: 'Mailer Boxes', slug: 'mailer-boxes', description: 'E-commerce essential' },
-      { name: 'Product Labels', slug: 'product-labels', description: 'Professional branding' },
-      { name: 'Custom Tape', slug: 'custom-tape', description: 'Branded packaging' },
-    ],
-    bestsellers: [
-      { name: 'Mailer Boxes', slug: 'mailer-boxes', description: '#1 packaging choice' },
-      { name: 'Die-Cut Stickers', slug: 'die-cut-stickers', description: 'Any shape' },
-      { name: 'Product Labels', slug: 'product-labels', description: 'Roll or sheet' },
-    ],
-    newArrivals: [
-      { name: 'Holographic Stickers', slug: 'holographic-stickers', description: 'NEW — Eye-catching' },
-      { name: 'Cosmetic Boxes', slug: 'cosmetic-boxes', description: 'NEW — Premium unboxing' },
-    ],
-    trending: [
-      { name: 'Foil Stickers', slug: 'foil-stickers', description: 'Trending — Metallic finish' },
-      { name: 'Kraft Tape', slug: 'kraft-tape', description: 'Trending — Eco-friendly' },
-    ],
-    promo: {
-      title: 'Custom packaging design',
-      description: 'Our designers can create unique packaging that tells your brand story.',
-      href: '/design-studio',
-      bg: 'from-orange-500 to-red-600',
-    },
   },
   {
-    id: 'stationery',
-    label: 'Stationery',
-    icon: 'PenLine',
+    id: 'drinkware',
+    label: 'Drinkware & Lunchboxes',
     categories: [
       {
-        name: 'Letterheads',
-        slug: 'letterheads',
+        name: 'Water Bottles',
+        slug: 'water-bottles',
         items: [
-          { name: 'A4 Letterheads', slug: 'a4-letterheads' },
-          { name: 'A5 Letterheads', slug: 'a5-letterheads' },
-          { name: 'Letterhead Sets', slug: 'letterhead-sets' },
-          { name: 'Corporate Letterheads', slug: 'corporate-letterheads' },
+          { name: 'Plastic Water Bottles', slug: 'water-bottles-plastic' },
+          { name: 'Steel Water Bottles', slug: 'water-bottles-steel' },
+          { name: 'Glass Water Bottles', slug: 'water-bottles-glass' },
+          { name: 'Filter Water Bottles', slug: 'water-bottles-filter' },
         ],
       },
       {
-        name: 'Envelopes',
-        slug: 'envelopes',
+        name: 'Sippers',
+        slug: 'sippers',
         items: [
-          { name: 'DL Envelopes', slug: 'dl-envelopes' },
-          { name: 'C4 Envelopes', slug: 'c4-envelopes' },
-          { name: 'C5 Envelopes', slug: 'c5-envelopes' },
-          { name: 'Branded Envelopes', slug: 'branded-envelopes' },
-          { name: 'Window Envelopes', slug: 'window-envelopes' },
+          { name: 'Plastic Sippers', slug: 'sippers-plastic' },
+          { name: 'Steel Sippers', slug: 'sippers-steel' },
+          { name: 'Kids Sippers', slug: 'sippers-kids' },
         ],
       },
       {
-        name: 'Notepads & Pads',
-        slug: 'notepads',
+        name: 'Lunch Boxes',
+        slug: 'lunch-boxes',
         items: [
-          { name: 'Custom Notepads', slug: 'custom-notepads' },
-          { name: 'Desk Pads', slug: 'desk-pads' },
-          { name: 'Memo Pads', slug: 'memo-pads' },
-          { name: 'Sticky Notes', slug: 'sticky-notes' },
+          { name: 'Steel Lunch Boxes', slug: 'lunch-boxes-steel' },
+          { name: 'Plastic Lunch Boxes', slug: 'lunch-boxes-plastic' },
+          { name: 'Insulated Lunch Boxes', slug: 'lunch-boxes-insulated' },
         ],
       },
       {
-        name: 'Presentation Folders',
-        slug: 'folders',
+        name: 'Mugs',
+        slug: 'mugs',
         items: [
-          { name: 'A4 Folders', slug: 'a4-folders' },
-          { name: 'A5 Folders', slug: 'a5-folders' },
-          { name: 'Pocket Folders', slug: 'pocket-folders' },
-          { name: 'Laminated Folders', slug: 'laminated-folders' },
+          { name: 'Ceramic Mugs', slug: 'mugs-ceramic' },
+          { name: 'Magic Mugs', slug: 'mugs-magic' },
+          { name: 'Travel Mugs', slug: 'mugs-travel' },
+          { name: 'Glass Mugs', slug: 'mugs-glass' },
+        ],
+      },
+      {
+        name: 'Tumblers',
+        slug: 'tumblers',
+        items: [
+          { name: 'Steel Tumblers', slug: 'tumblers-steel' },
+          { name: 'Plastic Tumblers', slug: 'tumblers-plastic' },
+          { name: 'Insulated Tumblers', slug: 'tumblers-insulated' },
         ],
       },
     ],
-    featured: [
-      { name: 'A4 Letterheads', slug: 'a4-letterheads', description: 'Corporate essential' },
-      { name: 'DL Envelopes', slug: 'dl-envelopes', description: 'Standard business' },
-      { name: 'A4 Folders', slug: 'a4-folders', description: 'Professional presentations' },
-    ],
-    bestsellers: [
-      { name: 'A4 Letterheads', slug: 'a4-letterheads', description: 'Most ordered' },
-      { name: 'DL Envelopes', slug: 'dl-envelopes', description: 'Bulk discounts' },
-      { name: 'Custom Notepads', slug: 'custom-notepads', description: 'Branded stationery' },
-    ],
-    newArrivals: [
-      { name: 'Letterhead Sets', slug: 'letterhead-sets', description: 'NEW — Matching set' },
-      { name: 'Sticky Notes', slug: 'sticky-notes', description: 'NEW — Custom printed' },
-    ],
-    trending: [
-      { name: 'Laminated Folders', slug: 'laminated-folders', description: 'Trending — Premium feel' },
-      { name: 'Desk Pads', slug: 'desk-pads', description: 'Trending — Office upgrade' },
-    ],
-    promo: {
-      title: 'Business stationery bundles',
-      description: 'Save 20% when you order letterheads + envelopes + folders together.',
-      href: '/products',
-      bg: 'from-violet-600 to-purple-700',
-    },
   },
   {
-    id: 'clothing',
-    label: 'Clothing & Merch',
-    icon: 'Shirt',
+    id: 'awards',
+    label: 'Awards & Trophies',
     categories: [
       {
-        name: 'T-Shirts',
-        slug: 'tshirts',
+        name: 'Trophies',
+        slug: 'trophies',
         items: [
-          { name: 'Cotton T-Shirts', slug: 'cotton-tshirts' },
-          { name: 'Polo Shirts', slug: 'polo-shirts' },
-          { name: 'V-Neck T-Shirts', slug: 'vneck-tshirts' },
-          { name: 'Long Sleeve T-Shirts', slug: 'longsleeve-tshirts' },
-          { name: 'Tank Tops', slug: 'tank-tops' },
+          { name: 'Crystal Trophies', slug: 'trophies-crystal' },
+          { name: 'Glass Trophies', slug: 'trophies-glass' },
+          { name: 'Acrylic Trophies', slug: 'trophies-acrylic' },
+          { name: 'Wooden Trophies', slug: 'trophies-wooden' },
         ],
       },
       {
-        name: 'Headwear',
-        slug: 'headwear',
+        name: 'Plaques',
+        slug: 'plaques',
         items: [
-          { name: 'Caps', slug: 'caps' },
-          { name: 'Beanies', slug: 'beanies' },
-          { name: 'Visors', slug: 'visors' },
+          { name: 'Wooden Plaques', slug: 'plaques-wooden' },
+          { name: 'Acrylic Plaques', slug: 'plaques-acrylic' },
+          { name: 'Metal Plaques', slug: 'plaques-metal' },
         ],
       },
       {
-        name: 'Outerwear',
-        slug: 'outerwear',
+        name: 'Medals',
+        slug: 'medals',
         items: [
-          { name: 'Hoodies', slug: 'hoodies' },
-          { name: 'Jackets', slug: 'jackets' },
-          { name: 'Zip Hoodies', slug: 'zip-hoodies' },
-          { name: 'Sweatshirts', slug: 'sweatshirts' },
+          { name: 'Sports Medals', slug: 'medals-sports' },
+          { name: 'Corporate Medals', slug: 'medals-corporate' },
+          { name: 'Custom Medals', slug: 'medals-custom' },
         ],
       },
       {
-        name: 'Workwear',
-        slug: 'workwear',
+        name: 'Certificates',
+        slug: 'certificates',
         items: [
-          { name: 'Uniforms', slug: 'uniforms' },
-          { name: 'Aprons', slug: 'aprons' },
-          { name: 'Hi-Vis Vests', slug: 'hivis-vests' },
+          { name: 'Certificate Frames', slug: 'certificates-frames' },
+          { name: 'Printed Certificates', slug: 'certificates-printed' },
+          { name: 'Achievement Certificates', slug: 'certificates-achievement' },
         ],
       },
     ],
-    featured: [
-      { name: 'Cotton T-Shirts', slug: 'cotton-tshirts', description: 'Premium 100% cotton' },
-      { name: 'Caps', slug: 'caps', description: 'Custom embroidery' },
-      { name: 'Hoodies', slug: 'hoodies', description: 'Fleece lined' },
-    ],
-    bestsellers: [
-      { name: 'Cotton T-Shirts', slug: 'cotton-tshirts', description: '#1 seller' },
-      { name: 'Polo Shirts', slug: 'polo-shirts', description: 'Corporate favorite' },
-      { name: 'Caps', slug: 'caps', description: 'Bulk discounts' },
-    ],
-    newArrivals: [
-      { name: 'V-Neck T-Shirts', slug: 'vneck-tshirts', description: 'NEW — Modern fit' },
-      { name: 'Aprons', slug: 'aprons', description: 'NEW — Restaurant/hotel' },
-    ],
-    trending: [
-      { name: 'Hoodies', slug: 'hoodies', description: 'Trending — Seasonal' },
-      { name: 'Hi-Vis Vests', slug: 'hivis-vests', description: 'Trending — Safety wear' },
-    ],
-    promo: {
-      title: 'Bulk t-shirt pricing',
-      description: 'Order 100+ tees and save up to 35%. Perfect for events and teams.',
-      href: '/products',
-      bg: 'from-rose-500 to-pink-600',
-    },
   },
   {
-    id: 'gifts',
-    label: 'Gifts & Mugs',
-    icon: 'Gift',
+    id: 'bags',
+    label: 'Bags',
     categories: [
       {
-        name: 'Mugs & Drinkware',
-        slug: 'mugs-drinkware',
+        name: 'Tote Bags',
+        slug: 'tote-bags',
         items: [
-          { name: 'Ceramic Mugs', slug: 'ceramic-mugs' },
-          { name: 'Magic Mugs', slug: 'magic-mugs' },
-          { name: 'Travel Mugs', slug: 'travel-mugs' },
-          { name: 'Water Bottles', slug: 'water-bottles' },
-          { name: 'Tumblers', slug: 'tumblers' },
-          { name: 'Flasks', slug: 'flasks' },
-          { name: 'Wine Glasses', slug: 'wine-glasses' },
+          { name: 'Cotton Tote Bags', slug: 'tote-bags-cotton' },
+          { name: 'Canvas Tote Bags', slug: 'tote-bags-canvas' },
+          { name: 'Non-Woven Tote Bags', slug: 'tote-bags-non-woven' },
+          { name: 'Jute Tote Bags', slug: 'tote-bags-jute' },
         ],
       },
       {
-        name: 'Photo Gifts',
-        slug: 'photo-gifts',
+        name: 'Backpacks',
+        slug: 'backpacks',
         items: [
-          { name: 'Photo Books', slug: 'photo-books' },
-          { name: 'Canvas Prints', slug: 'canvas-prints' },
-          { name: 'Photo Cushions', slug: 'photo-cushions' },
-          { name: 'Photo Calendars', slug: 'photo-calendars' },
-          { name: 'Custom Puzzles', slug: 'custom-puzzles' },
-          { name: 'Photo Magnets', slug: 'photo-magnets' },
-          { name: 'Photo Keyrings', slug: 'photo-keyrings' },
+          { name: 'Corporate Backpacks', slug: 'backpacks-corporate' },
+          { name: 'Laptop Backpacks', slug: 'backpacks-laptop' },
+          { name: 'Travel Backpacks', slug: 'backpacks-travel' },
         ],
       },
       {
-        name: 'Tech Accessories',
-        slug: 'tech-accessories',
+        name: 'Duffel Bags',
+        slug: 'duffel-bags',
         items: [
-          { name: 'USB Drives', slug: 'usb-drives' },
-          { name: 'Power Banks', slug: 'power-banks' },
-          { name: 'Phone Cases', slug: 'phone-cases' },
-          { name: 'Mouse Pads', slug: 'mouse-pads' },
-          { name: 'Webcam Covers', slug: 'webcam-covers' },
+          { name: 'Sports Duffel Bags', slug: 'duffel-bags-sports' },
+          { name: 'Corporate Duffel Bags', slug: 'duffel-bags-corporate' },
+          { name: 'Travel Duffel Bags', slug: 'duffel-bags-travel' },
         ],
       },
       {
-        name: 'Bags & Accessories',
-        slug: 'bags-accessories',
+        name: 'Laptop Bags',
+        slug: 'laptop-bags',
         items: [
-          { name: 'Notebooks', slug: 'custom-notebooks' },
-          { name: 'Keychains', slug: 'keychains' },
-          { name: 'Pens', slug: 'pens' },
-          { name: 'Lanyards', slug: 'lanyards' },
-          { name: 'Wristbands', slug: 'wristbands' },
+          { name: 'Laptop Sleeves', slug: 'laptop-bags-sleeves' },
+          { name: 'Laptop Backpacks', slug: 'laptop-bags-backpacks' },
+          { name: 'Laptop Messenger Bags', slug: 'laptop-bags-messenger' },
         ],
       },
     ],
-    featured: [
-      { name: 'Ceramic Mugs', slug: 'ceramic-mugs', description: 'Classic gift' },
-      { name: 'Photo Books', slug: 'photo-books', description: 'Personalized' },
-      { name: 'USB Drives', slug: 'usb-drives', description: 'Corporate gifting' },
+  },
+  {
+    id: 'gadgets',
+    label: 'Gadgets & Accessories',
+    categories: [
+      {
+        name: 'Power Banks',
+        slug: 'power-banks',
+        items: [
+          { name: 'Mini Power Banks', slug: 'power-banks-mini' },
+          { name: 'Standard Power Banks', slug: 'power-banks-standard' },
+          { name: 'Wireless Power Banks', slug: 'power-banks-wireless' },
+        ],
+      },
+      {
+        name: 'USB Drives',
+        slug: 'usb-drives',
+        items: [
+          { name: 'Swivel USB Drives', slug: 'usb-drives-swivel' },
+          { name: 'Card USB Drives', slug: 'usb-drives-card' },
+          { name: 'Wooden USB Drives', slug: 'usb-drives-wooden' },
+          { name: 'Metal USB Drives', slug: 'usb-drives-metal' },
+        ],
+      },
+      {
+        name: 'Phone Cases',
+        slug: 'phone-cases',
+        items: [
+          { name: 'iPhone Cases', slug: 'phone-cases-iphone' },
+          { name: 'Android Cases', slug: 'phone-cases-android' },
+          { name: 'Universal Phone Cases', slug: 'phone-cases-universal' },
+        ],
+      },
+      {
+        name: 'Mouse Pads',
+        slug: 'mouse-pads',
+        items: [
+          { name: 'Standard Mouse Pads', slug: 'mouse-pads-standard' },
+          { name: 'XL Mouse Pads', slug: 'mouse-pads-xl' },
+          { name: 'Ergonomic Mouse Pads', slug: 'mouse-pads-ergonomic' },
+        ],
+      },
     ],
-    bestsellers: [
-      { name: 'Ceramic Mugs', slug: 'ceramic-mugs', description: 'Most gifted' },
-      { name: 'Magic Mugs', slug: 'magic-mugs', description: 'Heat reveal' },
-      { name: 'Keychains', slug: 'keychains', description: 'Bulk promos' },
+  },
+  {
+    id: 'umbrellas',
+    label: 'Umbrellas & Raincoats',
+    categories: [
+      {
+        name: 'Compact Umbrellas',
+        slug: 'compact-umbrellas',
+        items: [
+          { name: 'Standard Compact Umbrellas', slug: 'compact-umbrellas-standard' },
+          { name: 'Windproof Compact Umbrellas', slug: 'compact-umbrellas-windproof' },
+          { name: 'Auto Open Umbrellas', slug: 'compact-umbrellas-auto' },
+        ],
+      },
+      {
+        name: 'Golf Umbrellas',
+        slug: 'golf-umbrellas',
+        items: [
+          { name: 'Classic Golf Umbrellas', slug: 'golf-umbrellas-classic' },
+          { name: 'Windproof Golf Umbrellas', slug: 'golf-umbrellas-windproof' },
+          { name: 'Double Canopy Golf Umbrellas', slug: 'golf-umbrellas-double' },
+        ],
+      },
+      {
+        name: 'Raincoats',
+        slug: 'raincoats',
+        items: [
+          { name: 'Poncho Raincoats', slug: 'raincoats-poncho' },
+          { name: 'Jacket Raincoats', slug: 'raincoats-jacket' },
+          { name: 'Kids Raincoats', slug: 'raincoats-kids' },
+        ],
+      },
     ],
-    newArrivals: [
-      { name: 'Wine Glasses', slug: 'wine-glasses', description: 'NEW — Custom printed' },
-      { name: 'Webcam Covers', slug: 'webcam-covers', description: 'NEW — Branded tech' },
-    ],
-    trending: [
-      { name: 'Power Banks', slug: 'power-banks', description: 'Trending — High demand' },
-      { name: 'Lanyards', slug: 'lanyards', description: 'Trending — Events & conferences' },
-    ],
-    promo: {
-      title: 'Corporate gifting solutions',
-      description: 'Bulk discounts on custom gifts. Perfect for Diwali, Christmas, and employee gifts.',
-      href: '/corporate',
-      bg: 'from-amber-500 to-orange-600',
-    },
   },
 ];
 
 export const PRODUCT_CATEGORIES = [
-  { name: 'Business Cards', slug: 'business-cards', description: 'Make a lasting first impression', icon: 'CreditCard', count: '8 products' },
-  { name: 'Flyers', slug: 'flyers', description: 'Eye-catching promotional flyers', icon: 'FileText', count: '6 products' },
-  { name: 'Brochures', slug: 'brochures', description: 'Informative multi-fold brochures', icon: 'BookOpen', count: '5 products' },
-  { name: 'Posters', slug: 'posters', description: 'Large format posters & prints', icon: 'Image', count: '5 products' },
-  { name: 'Banners', slug: 'banners', description: 'Indoor & outdoor banners', icon: 'Flag', count: '6 products' },
-  { name: 'Sign Boards', slug: 'sign-boards', description: 'Professional signage solutions', icon: 'Square', count: '5 products' },
-  { name: 'Labels & Stickers', slug: 'labels-stickers', description: 'Custom stickers & labels', icon: 'Tag', count: '7 products' },
-  { name: 'Custom Boxes', slug: 'custom-boxes', description: 'Premium packaging boxes', icon: 'Package', count: '7 products' },
-  { name: 'Letterheads', slug: 'letterheads', description: 'Professional letterheads', icon: 'FileText', count: '4 products' },
-  { name: 'Envelopes', slug: 'envelopes', description: 'Custom printed envelopes', icon: 'Mail', count: '5 products' },
-  { name: 'T-Shirts', slug: 'tshirts', description: 'Custom printed t-shirts', icon: 'Shirt', count: '5 products' },
-  { name: 'Mugs', slug: 'mugs-drinkware', description: 'Custom mugs & drinkware', icon: 'Coffee', count: '7 products' },
-  { name: 'Hoodies', slug: 'hoodies', description: 'Custom hoodies & sweatshirts', icon: 'Shirt', count: '4 products' },
-  { name: 'Caps', slug: 'caps', description: 'Custom caps & headwear', icon: 'Crown', count: '3 products' },
-  { name: 'Notebooks', slug: 'custom-notebooks', description: 'Branded notebooks & journals', icon: 'BookOpen', count: '3 products' },
-  { name: 'Photo Gifts', slug: 'photo-gifts', description: 'Personalized photo gifts', icon: 'Camera', count: '7 products' },
-  { name: 'USB Drives', slug: 'usb-drives', description: 'Custom USB flash drives', icon: 'Usb', count: '3 products' },
+  { name: 'Gift Hampers', slug: 'gift-hampers', description: 'Curated gift hampers for corporate gifting', icon: 'Gift', count: '4 products' },
+  { name: 'Visiting Cards', slug: 'visiting-cards', description: 'Premium visiting cards for businesses', icon: 'CreditCard', count: '10 products' },
+  { name: 'ID Cards', slug: 'id-cards', description: 'Corporate and event ID cards', icon: 'CreditCard', count: '10 products' },
+  { name: 'Pens', slug: 'pens', description: 'Custom printed and engraved pens', icon: 'PenLine', count: '3 products' },
+  { name: 'Letterheads', slug: 'letterheads', description: 'Professional letterheads for businesses', icon: 'FileText', count: '6 products' },
+  { name: 'Envelopes', slug: 'envelopes', description: 'Custom printed envelopes', icon: 'Mail', count: '3 products' },
+  { name: 'Diaries & Notebooks', slug: 'diaries-notebooks', description: 'Personalised diaries and notebooks', icon: 'BookOpen', count: '4 products' },
+  { name: 'Calendars', slug: 'calendars', description: 'Custom printed calendars', icon: 'Calendar', count: '4 products' },
+  { name: 'Polo T-Shirts', slug: 'polo-t-shirts', description: 'Custom polo t-shirts for corporates', icon: 'Shirt', count: '4 products' },
+  { name: 'T-Shirts', slug: 't-shirts', description: 'Custom printed t-shirts', icon: 'Shirt', count: '5 products' },
+  { name: 'Jackets & Hoodies', slug: 'jackets-hoodies', description: 'Custom jackets and hoodies', icon: 'Shirt', count: '4 products' },
+  { name: 'Flyers', slug: 'flyers', description: 'Eye-catching promotional flyers', icon: 'FileText', count: '5 products' },
+  { name: 'Brochures', slug: 'brochures', description: 'Informative multi-fold brochures', icon: 'BookOpen', count: '4 products' },
+  { name: 'Posters', slug: 'posters', description: 'Large format posters and prints', icon: 'Image', count: '5 products' },
+  { name: 'Banners', slug: 'banners', description: 'Indoor and outdoor banners', icon: 'Flag', count: '5 products' },
+  { name: 'Stickers', slug: 'stickers', description: 'Custom stickers in any shape', icon: 'Tag', count: '7 products' },
+  { name: 'Labels', slug: 'labels', description: 'Product and packaging labels', icon: 'Tag', count: '6 products' },
+  { name: 'Custom Boxes', slug: 'custom-boxes', description: 'Premium packaging boxes', icon: 'Package', count: '5 products' },
+  { name: 'Water Bottles', slug: 'water-bottles', description: 'Custom printed water bottles', icon: 'Coffee', count: '4 products' },
+  { name: 'Mugs', slug: 'mugs', description: 'Custom printed mugs', icon: 'Coffee', count: '4 products' },
+  { name: 'Trophies', slug: 'trophies', description: 'Custom trophies and awards', icon: 'Award', count: '4 products' },
+  { name: 'Tote Bags', slug: 'tote-bags', description: 'Custom tote bags for promotions', icon: 'ShoppingBag', count: '4 products' },
+  { name: 'Backpacks', slug: 'backpacks', description: 'Corporate backpacks', icon: 'ShoppingBag', count: '3 products' },
   { name: 'Power Banks', slug: 'power-banks', description: 'Branded power banks', icon: 'Battery', count: '3 products' },
-  { name: 'Tote Bags', slug: 'tote-bags', description: 'Custom tote bags', icon: 'ShoppingBag', count: '3 products' },
-  { name: 'Wall & Window', slug: 'wall-window', description: 'Murals, wallpaper & graphics', icon: 'Layout', count: '5 products' },
+  { name: 'USB Drives', slug: 'usb-drives', description: 'Custom USB flash drives', icon: 'Usb', count: '4 products' },
+  { name: 'Umbrellas', slug: 'umbrellas', description: 'Custom printed umbrellas', icon: 'Umbrella', count: '3 products' },
+  { name: 'Raincoats', slug: 'raincoats', description: 'Custom raincoats and ponchos', icon: 'Cloud', count: '3 products' },
 ];
 
 export const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  { label: 'Products', href: '/products' },
-  { label: 'Templates', href: '/templates' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Mockups', href: '/mockup-generator' },
-  { label: 'Contact', href: '/contact' },
-  { label: 'Orbit Magic', href: '#orbit-magic', isOrbitMagic: true },
+  { label: 'Gift Hampers', href: '/products?category=gift-hampers' },
+  { label: 'Visiting Cards & ID Cards', href: '/products?category=visiting-cards' },
+  { label: 'Stationery & Office Supplies', href: '/products?category=stationery' },
+  { label: 'Apparel', href: '/products?category=apparel' },
+  { label: 'Corporate Gifts', href: '/products?category=corporate-gifts' },
+  { label: 'Marketing & Promotions', href: '/products?category=marketing' },
+  { label: 'Labels, Stickers & Packaging', href: '/products?category=labels-packaging' },
+  { label: 'Drinkware & Lunchboxes', href: '/products?category=drinkware' },
+  { label: 'Awards & Trophies', href: '/products?category=awards' },
+  { label: 'Bags', href: '/products?category=bags' },
+  { label: 'Gadgets & Accessories', href: '/products?category=gadgets' },
+  { label: 'Umbrellas & Raincoats', href: '/products?category=umbrellas' },
 ];
-
-export const CATEGORY_BAR = [
-  { label: 'View All', href: '/products' },
-  { label: 'Visiting Cards', href: '/products/standard-business-cards' },
-  { label: 'Stationery, Letterheads & Notebooks', href: '/products/a4-letterheads' },
-  { label: 'Stamps and Ink', href: '/products/a4-letterheads' },
-  { label: 'Signs, Posters & Marketing Materials', href: '/products/vinyl-banners' },
-  { label: 'Labels, Stickers & Packaging', href: '/products/die-cut-stickers' },
-  { label: 'Clothing, Caps & Bags', href: '/products/cotton-tshirts' },
-  { label: 'Mugs, Albums & Gifts', href: '/products/ceramic-mugs' },
-  { label: 'Pens', href: '/products/a4-letterheads' },
-  { label: 'Drinkware', href: '/products/ceramic-mugs' },
-  { label: 'Custom Polo T-shirts', href: '/products/cotton-tshirts' },
-  { label: 'Umbrellas & Rainwear', href: '/products/vinyl-banners' },
-];
-
-export interface CategoryDropdownColumn {
-  title: string;
-  items: { name: string; href: string; isNew?: boolean; description?: string }[];
-}
-
-export interface CategoryDropdown {
-  columns: CategoryDropdownColumn[];
-  seeAllHref: string;
-  seeAllLabel: string;
-}
-
-export const CATEGORY_MEGA_DATA: Record<string, CategoryDropdown> = {
-  'Visiting Cards': {
-    seeAllHref: '/products/standard-business-cards',
-    seeAllLabel: 'All Visiting Cards',
-    columns: [
-      {
-        title: 'Visiting Cards',
-        items: [
-          { name: 'Standard Visiting Cards', href: '/products/standard-business-cards', description: '300gsm cardstock, fast turnaround' },
-          { name: 'Classic Visiting Cards', href: '/products/standard-business-cards', description: 'Traditional size, full color' },
-          { name: 'Rounded Corner Visiting Cards', href: '/products/standard-business-cards', description: 'Modern rounded edges' },
-          { name: 'Square Visiting Cards', href: '/products/standard-business-cards', description: 'Compact square format' },
-          { name: 'Leaf Visiting Cards', href: '/products/standard-business-cards', isNew: true, description: 'Unique leaf shape' },
-          { name: 'Oval Visiting Cards', href: '/products/standard-business-cards', isNew: true, description: 'Elegant oval design' },
-          { name: 'Circle Visiting Cards', href: '/products/standard-business-cards', isNew: true, description: 'Circular die-cut cards' },
-        ],
-      },
-      {
-        title: 'Standard Papers',
-        items: [
-          { name: 'Glossy Visiting Cards', href: '/products/standard-business-cards', description: 'Shiny glossy finish' },
-          { name: 'Matte Visiting Cards', href: '/products/premium-matte-business-cards', description: 'Smooth matte lamination' },
-          { name: 'Bulk Visiting Cards', href: '/products/standard-business-cards', isNew: true, description: '1000+ cards, best price' },
-        ],
-      },
-      {
-        title: 'Specialty Cards',
-        items: [
-          { name: 'Magnetic Visiting Cards', href: '/products/magnet-business-cards', description: 'Sticks to fridges & boards' },
-          { name: 'Transparent Visiting Cards', href: '/products/transparent-business-cards', description: 'Clear plastic cards' },
-          { name: 'Metallic Foil Cards', href: '/products/metallic-foil-business-cards', description: 'Gold, silver & rose gold foil' },
-        ],
-      },
-      {
-        title: 'Premium Papers',
-        items: [
-          { name: 'Premium Plus Visiting Cards', href: '/products/premium-matte-business-cards', description: '400gsm thick cardstock' },
-          { name: 'Non-Tearable Visiting Cards', href: '/products/premium-matte-business-cards', description: 'Synthetic paper, durable' },
-          { name: 'Velvet Touch Visiting Cards', href: '/products/luxury-business-cards', description: 'Soft velvet lamination' },
-          { name: 'Pearl Visiting Cards', href: '/products/premium-matte-business-cards', isNew: true, description: 'Pearlescent finish' },
-          { name: 'Kraft Visiting Cards', href: '/products/standard-business-cards', isNew: true, description: 'Eco-friendly kraft paper' },
-          { name: 'Diamond Visiting Cards', href: '/products/luxury-business-cards', isNew: true, description: 'Premium diamond finish' },
-        ],
-      },
-      {
-        title: 'Design and Logo',
-        items: [
-          { name: 'Design Services', href: '/templates', isNew: true, description: 'Professional design help' },
-          { name: 'Logo Maker', href: '/design-studio', description: 'Create your own logo' },
-        ],
-      },
-      {
-        title: 'Visiting Cards Holder',
-        items: [
-          { name: 'Engraved Metal Card Holders', href: '/products/card-holders', description: 'Premium steel holder' },
-          { name: 'Metal Visiting Card Holder', href: '/products/card-holders', description: 'Sleek metal design' },
-          { name: 'Leatherite Card Holders', href: '/products/card-holders', description: 'Faux leather finish' },
-          { name: 'Premium Metal Card Holders', href: '/products/card-holders', isNew: true, description: 'Brushed metal finish' },
-        ],
-      },
-    ],
-  },
-  'Stationery, Letterheads & Notebooks': {
-    seeAllHref: '/products/a4-letterheads',
-    seeAllLabel: 'All Stationery',
-    columns: [
-      {
-        title: 'Custom Stationery',
-        items: [
-          { name: 'Letterheads', href: '/products/a4-letterheads', description: '120gsm premium paper' },
-          { name: 'Custom Letterhead Pads', href: '/products/a4-letterheads', description: 'Tear-off letterhead pads' },
-          { name: 'Bill Books', href: '/products/a4-letterheads', description: 'Carbon copy bill books' },
-          { name: 'Envelopes', href: '/products/a4-letterheads', description: 'Printed envelopes' },
-          { name: 'Custom Mouse Pads', href: '/products/a4-letterheads', description: 'Branded mouse pads' },
-          { name: 'Envelope Seals', href: '/products/a4-letterheads', description: 'Custom sticker seals' },
-          { name: 'Bulk Letterheads', href: '/products/a4-letterheads', description: '1000+ sheets, best price' },
-        ],
-      },
-      {
-        title: 'Office Supplies',
-        items: [
-          { name: 'Lanyards', href: '/products/a4-letterheads', description: 'Custom printed lanyards' },
-          { name: 'ID Cards', href: '/products/a4-letterheads', description: 'PVC & paper ID cards' },
-          { name: 'Invoice Books', href: '/products/a4-letterheads', description: 'Duplicate invoice books' },
-          { name: 'Note Cards', href: '/products/a4-letterheads', description: 'Thank you & note cards' },
-          { name: 'Custom Certificates', href: '/products/a4-letterheads', description: 'Award certificates' },
-          { name: 'Awards', href: '/products/a4-letterheads', description: 'Custom trophy awards' },
-          { name: 'Cash Vouchers', href: '/products/a4-letterheads', description: 'Gift & cash vouchers' },
-        ],
-      },
-      {
-        title: 'Custom Notebooks & Diaries',
-        items: [
-          { name: 'Personalised Notebooks', href: '/products/custom-notebooks', description: 'Custom cover notebooks' },
-          { name: 'Diary with Pen Holder', href: '/products/custom-notebooks', description: 'Premium diary set' },
-          { name: 'Personalised A5 Diary', href: '/products/custom-notebooks', description: 'A5 softcover diary' },
-          { name: 'Personalised Diary with Magnetic Lock', href: '/products/custom-notebooks', description: 'Lock diary, premium' },
-          { name: 'Notebook A4 Size', href: '/products/custom-notebooks', description: 'Large A4 notebooks' },
-        ],
-      },
-      {
-        title: 'Wedding Stationery',
-        items: [
-          { name: 'Wedding Invitations', href: '/products/wedding-invitations', description: 'Custom wedding invites' },
-          { name: 'Save The Date Cards', href: '/products/wedding-invitations', description: 'Save the date prints' },
-          { name: 'Wedding Menu', href: '/products/wedding-invitations', description: 'Printed menu cards' },
-          { name: 'Wedding Programmes', href: '/products/wedding-invitations', description: 'Programme booklets' },
-        ],
-      },
-      {
-        title: 'Invitations & Announcements',
-        items: [
-          { name: 'Thank You Cards', href: '/products/a4-letterheads', description: 'Personalized thank you cards' },
-          { name: 'Birthday Invitations', href: '/products/a4-letterheads', description: 'Custom birthday invites' },
-          { name: 'Party Invitations', href: '/products/a4-letterheads', description: 'Party & event invites' },
-          { name: 'Moving Announcements', href: '/products/a4-letterheads', description: 'Announcement cards' },
-          { name: 'Gift Tags', href: '/products/a4-letterheads', description: 'Printed gift tags' },
-        ],
-      },
-      {
-        title: 'Files and Folders',
-        items: [
-          { name: 'Presentation Folders', href: '/products/presentation-folders', description: 'Custom pocket folders' },
-          { name: 'Ring Binder File', href: '/products/presentation-folders', description: 'Printed ring binders' },
-          { name: 'Presentation File with Pocket', href: '/products/presentation-folders', description: 'Folder with pockets' },
-        ],
-      },
-    ],
-  },
-  'Stamps and Ink': {
-    seeAllHref: '/products/custom-stamps',
-    seeAllLabel: 'All Stamps and Ink',
-    columns: [
-      {
-        title: 'Stamps',
-        items: [
-          { name: 'Self Inking Stamps', href: '/products/custom-stamps', description: 'Instant ink impression' },
-          { name: 'Basic Rubber Stamps', href: '/products/custom-stamps', description: 'Traditional rubber stamps' },
-          { name: 'Pocket Stamps', href: '/products/custom-stamps', description: 'Portable mini stamps' },
-          { name: 'Name Stamps', href: '/products/custom-stamps', description: 'Custom name & address stamps' },
-          { name: 'Paper Embosser', href: '/products/custom-stamps', description: 'Raised embossed seals' },
-        ],
-      },
-      {
-        title: 'Ink & Accessories',
-        items: [
-          { name: 'Stamp Ink Pads', href: '/products/custom-stamps', description: 'Multi-color ink pads' },
-          { name: 'Refill Ink', href: '/products/custom-stamps', description: 'Stamp ink refill bottles' },
-          { name: 'Stamp Pads', href: '/products/custom-stamps', description: 'Replacement pads' },
-        ],
-      },
-    ],
-  },
-  'Signs, Posters & Marketing Materials': {
-    seeAllHref: '/products/vinyl-banners',
-    seeAllLabel: 'All Signs & Marketing',
-    columns: [
-      {
-        title: 'Signs and Posters',
-        items: [
-          { name: 'Standees', href: '/products/standees', description: 'Portable display standees' },
-          { name: 'Posters', href: '/products/vinyl-banners', description: 'Custom size posters' },
-          { name: 'Bulk Posters', href: '/products/vinyl-banners', description: '100+ posters, best price' },
-          { name: 'Banners', href: '/products/vinyl-banners', description: 'Vinyl & fabric banners' },
-          { name: 'Tabletop Standees', href: '/products/standees', description: 'Small counter displays' },
-          { name: 'Foam Boards', href: '/products/foam-boards', description: 'Lightweight foam board signs' },
-          { name: 'Tabletop Signs', href: '/products/tent-cards', description: 'A-frame table signs' },
-          { name: 'Tent Cards', href: '/products/tent-cards', description: 'Tri-fold tent cards' },
-          { name: 'Acrylic Sign Holder', href: '/products/foam-boards', isNew: true, description: 'Premium acrylic holders' },
-        ],
-      },
-      {
-        title: 'Marketing Materials',
-        items: [
-          { name: 'Flyers', href: '/products/a5-flyers', description: 'Full color flyers' },
-          { name: 'Presentation Folders', href: '/products/a4-letterheads', description: 'Custom pocket folders' },
-          { name: 'Brochures', href: '/products/tri-fold-brochures', description: 'Tri-fold & bi-fold' },
-          { name: 'Booklets', href: '/products/tri-fold-brochures', description: 'Saddle-stitched booklets' },
-          { name: 'Bulk Flyers', href: '/products/a5-flyers', description: '1000+ flyers, best price' },
-          { name: 'Postcards', href: '/products/a5-flyers', description: 'Direct mail postcards' },
-          { name: 'Customized Portable Backdrops', href: '/products/vinyl-banners', isNew: true, description: 'Pop-up backdrop displays' },
-          { name: 'Custom Mouse Pads', href: '/products/a5-flyers', description: 'Branded mouse pads' },
-          { name: 'Custom Bookmarks', href: '/products/a5-flyers', description: 'Printed bookmarks' },
-          { name: 'Promotional Canopy Tents', href: '/products/vinyl-banners', isNew: true, description: 'Branded tent canopies' },
-        ],
-      },
-      {
-        title: 'More in Signs',
-        items: [
-          { name: 'Acrylic Signs', href: '/products/vinyl-banners', description: 'Premium acrylic panels' },
-          { name: 'Outdoor Signs', href: '/products/vinyl-banners', description: 'Weather-resistant signs' },
-          { name: 'Plastic Signboards', href: '/products/vinyl-banners', description: 'Coroplast signboards' },
-          { name: 'Board Signs', href: '/products/vinyl-banners', description: 'Foam board signage' },
-          { name: 'Canvas Signs', href: '/products/vinyl-banners', description: 'Printed canvas wraps' },
-          { name: 'Magnetic Signs', href: '/products/vinyl-banners', description: 'Vehicle magnetic signs' },
-          { name: 'LED Translite Sign Boards', href: '/products/vinyl-banners', isNew: true, description: 'Backlit LED signs' },
-          { name: 'LED Lollipop Display', href: '/products/vinyl-banners', isNew: true, description: 'Round LED displays' },
-        ],
-      },
-      {
-        title: 'More in Marketing',
-        items: [
-          { name: 'Custom Car Door Decals', href: '/products/vinyl-banners', description: 'Vehicle door magnets' },
-          { name: 'Customised Promo Tables', href: '/products/vinyl-banners', isNew: true, description: 'Branded table displays' },
-          { name: 'Custom Logo Flags', href: '/products/vinyl-banners', isNew: true, description: 'Printed flags & banners' },
-          { name: 'Menu Cards', href: '/products/a5-flyers', description: 'Restaurant menu printing' },
-          { name: 'Foldable Pop Up Banners', href: '/products/vinyl-banners', isNew: true, description: 'Portable roll-up banners' },
-          { name: 'Loyalty Cards', href: '/products/loyalty-cards', description: 'Custom loyalty cards' },
-          { name: 'Custom Gift Certificates', href: '/products/gift-certificates', description: 'Printed gift vouchers' },
-          { name: 'Button Badges', href: '/products/button-badges', description: 'Pin-back button badges' },
-          { name: 'Custom Keychains', href: '/products/custom-keychains', description: 'Printed keychains' },
-        ],
-      },
-      {
-        title: 'Table Coverings',
-        items: [
-          { name: 'Custom Tablecloths', href: '/products/table-covers', description: 'Printed table covers' },
-          { name: 'Table Runners', href: '/products/table-covers', description: 'Branded table runners' },
-          { name: 'Table Mats', href: '/products/table-covers', description: 'Custom printed mats' },
-          { name: 'Place Mats', href: '/products/table-covers', description: 'Personalized place mats' },
-        ],
-      },
-      {
-        title: 'Flags',
-        items: [
-          { name: 'Table Flags', href: '/products/custom-flags', isNew: true, description: 'Small desk flags' },
-          { name: 'Cross Stand Table Flags', href: '/products/custom-flags', description: 'X-stand flags' },
-          { name: 'Hanging Flags', href: '/products/custom-flags', description: 'Hanging pennant flags' },
-          { name: 'Tour Guide Flags', href: '/products/custom-flags', description: 'Guide tour flags' },
-          { name: 'Pole Flags', href: '/products/custom-flags', description: 'Full-size pole flags' },
-          { name: 'Wall Mounted Flags', href: '/products/custom-flags', description: 'Wall-hung flags' },
-          { name: 'Rectangle Flags', href: '/products/custom-flags', description: 'Rectangle shape flags' },
-          { name: 'Teardrop Flags', href: '/products/custom-flags', description: 'Teardrop banner flags' },
-        ],
-      },
-    ],
-  },
-  'Labels, Stickers & Packaging': {
-    seeAllHref: '/products/die-cut-stickers',
-    seeAllLabel: 'All Labels & Packaging',
-    columns: [
-      {
-        title: 'Custom Packaging',
-        items: [
-          { name: 'Self Adhesive Tapes', href: '/products/mailer-boxes', description: 'Branded packing tape' },
-          { name: 'Custom Paper Bags', href: '/products/mailer-boxes', description: 'Printed paper bags' },
-          { name: 'Printed Carry Bags', href: '/products/mailer-boxes', description: 'Shopping carry bags' },
-          { name: 'Premium Gift Bags', href: '/products/mailer-boxes', description: 'Luxury gift bags' },
-          { name: 'Courier Bags', href: '/products/mailer-boxes', description: 'Tamper-proof courier bags' },
-          { name: 'Corrugated Boxes', href: '/products/mailer-boxes', description: 'Sturdy corrugated boxes' },
-          { name: 'Flat Mailer Boxes', href: '/products/mailer-boxes', description: 'Slim flat mailers' },
-          { name: 'Metallic Shopping Bags', href: '/products/mailer-boxes', description: 'Shiny metallic finish' },
-          { name: 'Customised Ribbons', href: '/products/mailer-boxes', isNew: true, description: 'Printed satin ribbons' },
-          { name: 'Die Cut Handle Bags', href: '/products/mailer-boxes', description: 'Handle cut-out bags' },
-        ],
-      },
-      {
-        title: 'Custom Stickers',
-        items: [
-          { name: 'Sheet Stickers', href: '/products/die-cut-stickers', description: 'Sticker sheets, any shape' },
-          { name: 'Custom Shape Stickers', href: '/products/die-cut-stickers', description: 'Die-cut any shape' },
-          { name: 'Sticker Singles', href: '/products/die-cut-stickers', description: 'Individual stickers' },
-          { name: 'UV Ink Transfer Stickers', href: '/products/die-cut-stickers', description: 'Premium UV transfer' },
-          { name: 'Window Stickers', href: '/products/die-cut-stickers', description: 'Clear window stickers' },
-          { name: 'Dome Stickers', href: '/products/die-cut-stickers', isNew: true, description: '3D epoxy dome finish' },
-          { name: 'QR Code Stickers', href: '/products/die-cut-stickers', description: 'QR code labels' },
-          { name: 'Custom Car Stickers', href: '/products/die-cut-stickers', description: 'Vehicle decals' },
-          { name: 'Visiting Card Stickers', href: '/products/die-cut-stickers', description: 'Sticker-format cards' },
-          { name: 'Kraft Stickers', href: '/products/die-cut-stickers', isNew: true, description: 'Eco kraft stickers' },
-        ],
-      },
-      {
-        title: 'Custom Labels',
-        items: [
-          { name: 'Product and Packaging Labels', href: '/products/die-cut-stickers', description: 'Product branding labels' },
-          { name: 'Return Address Labels', href: '/products/die-cut-stickers', description: 'Mailing address labels' },
-          { name: 'Custom Iron-on Labels', href: '/products/die-cut-stickers', description: 'Clothing iron-on labels' },
-          { name: 'Transparent Labels', href: '/products/die-cut-stickers', description: 'Clear invisible labels' },
-          { name: 'Industrial Labels', href: '/products/die-cut-stickers', description: 'Durable industrial labels' },
-          { name: 'Shipping and Mailing Labels', href: '/products/die-cut-stickers', description: 'Courier & shipping labels' },
-        ],
-      },
-      {
-        title: 'Tags',
-        items: [
-          { name: 'Hang Tags', href: '/products/die-cut-stickers', description: 'Product hang tags' },
-          { name: 'Folded Hang Tags', href: '/products/die-cut-stickers', description: 'Bi-fold hang tags' },
-          { name: 'Baggage Tags', href: '/products/die-cut-stickers', description: 'Luggage & bag tags' },
-          { name: 'Name Tags', href: '/products/die-cut-stickers', description: 'Event name badges' },
-          { name: 'Raised Foil Hang Tags', href: '/products/die-cut-stickers', isNew: true, description: 'Premium foil tags' },
-        ],
-      },
-      {
-        title: 'Packaging Boxes',
-        items: [
-          { name: 'Promotional Product Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Brand showcase boxes' },
-          { name: 'Tuck Top Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Classic tuck flap boxes' },
-          { name: 'Lock Bottom Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Auto-lock base boxes' },
-          { name: 'Auto Lock Bottom Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Quick assembly boxes' },
-          { name: 'Chocolate Bar Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Confectionery packaging' },
-          { name: 'Soap Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Soap packaging boxes' },
-          { name: 'Pull Out Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Slide-out drawer boxes' },
-          { name: 'Popcorn Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Snack & popcorn boxes' },
-          { name: 'Burger Boxes', href: '/products/mailer-boxes', isNew: true, description: 'Food packaging boxes' },
-        ],
-      },
-      {
-        title: 'Newly Launched',
-        items: [
-          { name: 'Frosted Slider Bags', href: '/products/die-cut-stickers', isNew: true, description: 'Frosted zip slider bags' },
-          { name: 'Holographic Stickers', href: '/products/die-cut-stickers', isNew: true, description: 'Rainbow holographic finish' },
-          { name: 'Metal Stickers', href: '/products/die-cut-stickers', isNew: true, description: 'Brushed metal decals' },
-          { name: 'Transparent Seal Bags', href: '/products/mailer-boxes', description: 'Clear seal bags' },
-          { name: 'Designer Shopping Bags', href: '/products/mailer-boxes', description: 'Premium retail bags' },
-          { name: 'Premium Gift Bags', href: '/products/mailer-boxes', description: 'Luxury gift packaging' },
-          { name: 'Roll Labels', href: '/products/die-cut-stickers', isNew: true, description: 'Roll format labels' },
-        ],
-      },
-    ],
-  },
-  'Clothing, Caps & Bags': {
-    seeAllHref: '/products/cotton-tshirts',
-    seeAllLabel: 'All Clothing',
-    columns: [
-      {
-        title: 'T-Shirts',
-        items: [
-          { name: 'Cotton T-Shirts', href: '/products/cotton-tshirts', description: '100% cotton, custom print' },
-          { name: 'Polo Shirts', href: '/products/polo-tshirts', description: 'Premium polo t-shirts' },
-          { name: 'V-Neck T-Shirts', href: '/products/cotton-tshirts', description: 'V-neck style tees' },
-          { name: 'Long Sleeve T-Shirts', href: '/products/cotton-tshirts', description: 'Full sleeve t-shirts' },
-          { name: 'Tank Tops', href: '/products/cotton-tshirts', description: 'Sleeveless tank tops' },
-        ],
-      },
-      {
-        title: 'Headwear',
-        items: [
-          { name: 'Caps', href: '/products/custom-caps', description: 'Custom embroidered caps' },
-          { name: 'Beanies', href: '/products/custom-caps', description: 'Winter knit beanies' },
-          { name: 'Visors', href: '/products/custom-caps', description: 'Sun visor caps' },
-        ],
-      },
-      {
-        title: 'Outerwear',
-        items: [
-          { name: 'Hoodies', href: '/products/custom-hoodies', description: 'Printed hoodies' },
-          { name: 'Jackets', href: '/products/custom-hoodies', description: 'Custom jackets' },
-          { name: 'Sweatshirts', href: '/products/custom-hoodies', description: 'Pullover sweatshirts' },
-        ],
-      },
-      {
-        title: 'Workwear',
-        items: [
-          { name: 'Uniforms', href: '/products/cotton-tshirts', description: 'Custom staff uniforms' },
-          { name: 'Aprons', href: '/products/cotton-tshirts', description: 'Printed aprons' },
-          { name: 'Hi-Vis Vests', href: '/products/cotton-tshirts', description: 'Safety hi-vis vests' },
-        ],
-      },
-      {
-        title: 'Bags',
-        items: [
-          { name: 'Tote Bags', href: '/products/custom-tote-bags', description: 'Cotton tote bags' },
-          { name: 'Backpacks', href: '/products/custom-tote-bags', description: 'Custom backpacks' },
-          { name: 'Drawstring Bags', href: '/products/custom-tote-bags', description: 'Printed drawstring bags' },
-        ],
-      },
-    ],
-  },
-  'Mugs, Albums & Gifts': {
-    seeAllHref: '/products/ceramic-mugs',
-    seeAllLabel: 'All Gifts & Mugs',
-    columns: [
-      {
-        title: 'Bestsellers',
-        items: [
-          { name: 'Photo Albums', href: '/products/photo-albums', description: 'Custom photo albums' },
-          { name: 'Layflat Photo Albums', href: '/products/photo-albums', description: 'Premium layflat albums' },
-          { name: 'Custom Mouse Pads', href: '/products/a5-flyers', description: 'Printed mouse pads' },
-          { name: 'Canvas Prints', href: '/products/photo-frames', description: 'Photo on canvas' },
-          { name: 'Photo With Frame', href: '/products/photo-frames', description: 'Framed photo prints' },
-          { name: 'Employee Welcome Kit', href: '/products/custom-tote-bags', description: 'Corporate welcome kits' },
-          { name: 'Premium Photo with Frame', href: '/products/photo-frames', description: 'Premium wooden frames' },
-          { name: 'Custom Pen Drive', href: '/products/custom-keychains', description: 'Printed USB drives' },
-          { name: 'Customised Tumblers', href: '/products/custom-tumblers', description: 'Printed tumblers' },
-        ],
-      },
-      {
-        title: 'Mugs',
-        items: [
-          { name: 'Personalised Mugs', href: '/products/ceramic-mugs', description: 'Custom print mugs' },
-          { name: 'Colour Changing Magic Mugs', href: '/products/ceramic-mugs', description: 'Heat reveal mugs' },
-          { name: 'Custom Mugs Black', href: '/products/ceramic-mugs', description: 'Black matte finish' },
-          { name: 'Custom Decorative Mugs', href: '/products/ceramic-mugs', isNew: true, description: 'Artistic decorative mugs' },
-        ],
-      },
-      {
-        title: 'Gift Hampers',
-        items: [
-          { name: 'Travel Accessories Hampers', href: '/products/custom-tote-bags', description: 'Travel gift set' },
-          { name: 'Welcome Kit (Polo T-Shirt, Water Bottle, Coffee Mug, Diary, Pen)', href: '/products/custom-tote-bags', description: 'Corporate welcome kit' },
-          { name: 'Hamper with Stainless Steel Bottle, Tea Coaster, White Mug & more', href: '/products/custom-tote-bags', description: 'Premium gift hamper' },
-        ],
-      },
-      {
-        title: 'Custom Magnets',
-        items: [
-          { name: 'Fridge Magnets', href: '/products/magnet-business-cards', description: 'Printed fridge magnets' },
-          { name: 'Photo Magnets', href: '/products/magnet-business-cards', description: 'Photo on magnets' },
-          { name: 'Magnetic Visiting Cards', href: '/products/magnet-business-cards', description: 'Business card magnets' },
-          { name: 'Acrylic Photo Magnets', href: '/products/magnet-business-cards', description: 'Acrylic crystal magnets' },
-        ],
-      },
-      {
-        title: 'Coasters',
-        items: [
-          { name: 'Customized Coasters', href: '/products/custom-coasters', description: 'Printed coasters' },
-          { name: 'Custom Printed Acrylic Coasters', href: '/products/custom-coasters', description: 'Acrylic coasters' },
-          { name: 'Soft Coasters', href: '/products/custom-coasters', description: 'Neoprene soft coasters' },
-        ],
-      },
-      {
-        title: 'Custom Pens',
-        items: [
-          { name: 'Customized Pens', href: '/products/custom-pens', description: 'Printed ballpoint pens' },
-          { name: 'Personalised Pens', href: '/products/custom-pens', description: 'Engraved pens' },
-          { name: 'Premium Metal Roller Pens', href: '/products/custom-pens', description: 'Metal roller pens' },
-          { name: 'Wooden Finish Ball Pens', href: '/products/custom-pens', description: 'Wood finish pens' },
-          { name: 'Premium Matte Pens', href: '/products/custom-pens', description: 'Matte finish pens' },
-          { name: 'Premium Brass Metal Golden Ball Pens', href: '/products/custom-pens', description: 'Golden brass pens' },
-        ],
-      },
-      {
-        title: 'Custom Calendars',
-        items: [
-          { name: 'Desk Calendars', href: '/products/custom-calendars', description: 'Printed desk calendars' },
-          { name: 'Wall Calendars', href: '/products/custom-calendars', description: 'Large wall calendars' },
-          { name: 'Magnet Calendars', href: '/products/custom-calendars', description: 'Fridge magnet calendars' },
-          { name: 'Flip Desk Calendars', href: '/products/custom-calendars', description: 'Flip-style desk calendars' },
-          { name: 'Poster Calendars', href: '/products/custom-calendars', description: 'Large poster calendars' },
-        ],
-      },
-      {
-        title: 'Custom Photo Frame',
-        items: [
-          { name: 'LED Photo Frames', href: '/products/photo-frames', description: 'Illuminated LED frames' },
-          { name: 'Acrylic Photo Frame', href: '/products/photo-frames', description: 'Clear acrylic frames' },
-        ],
-      },
-    ],
-  },
-  'Pens': {
-    seeAllHref: '/products/custom-pens',
-    seeAllLabel: 'All Pens',
-    columns: [
-      {
-        title: 'Custom Pens',
-        items: [
-          { name: 'Customized Pens', href: '/products/custom-pens', description: 'Printed ballpoint pens' },
-          { name: 'Personalised Pens', href: '/products/custom-pens', description: 'Engraved name pens' },
-          { name: 'Premium Magnetic Metal Roller Pens', href: '/products/custom-pens', description: 'Metal roller pens' },
-          { name: 'Wooden Finish Metal Ball Pens', href: '/products/custom-pens', description: 'Wood finish pens' },
-          { name: 'Premium Matte Pens', href: '/products/custom-pens', description: 'Matte black finish' },
-          { name: 'Premium Brass Metal Golden Ball Pens', href: '/products/custom-pens', description: 'Golden brass pens' },
-          { name: 'Triangle Wire Clip Ball Pens', href: '/products/custom-pens', description: 'Wire clip design' },
-          { name: 'Submarine Sleek Metal Roller Pens', href: '/products/custom-pens', description: 'Sleek metal body' },
-          { name: 'Submarine Artistic Plastic Pens with Round Ring', href: '/products/custom-pens', description: 'Artistic plastic pens' },
-          { name: 'Premium Brush Stone Black Ballpoint Pens', href: '/products/custom-pens', description: 'Brush stone finish' },
-        ],
-      },
-    ],
-  },
-  'Drinkware': {
-    seeAllHref: '/products/ceramic-mugs',
-    seeAllLabel: 'All Drinkware',
-    columns: [
-      {
-        title: 'Mugs',
-        items: [
-          { name: 'Ceramic Mugs', href: '/products/ceramic-mugs', description: 'Classic 11oz/15oz mugs' },
-          { name: 'Colour Changing Magic Mugs', href: '/products/ceramic-mugs', description: 'Heat reveal mugs' },
-          { name: 'Travel Mugs', href: '/products/travel-mugs', description: 'Insulated travel mugs' },
-          { name: 'Water Bottles', href: '/products/water-bottles', description: 'Printed water bottles' },
-          { name: 'Tumblers', href: '/products/custom-tumblers', description: 'Custom printed tumblers' },
-          { name: 'Flasks', href: '/products/travel-mugs', description: 'Insulated flasks' },
-          { name: 'Wine Glasses', href: '/products/ceramic-mugs', description: 'Printed wine glasses' },
-        ],
-      },
-    ],
-  },
-  'Custom Polo T-shirts': {
-    seeAllHref: '/products/polo-tshirts',
-    seeAllLabel: 'All Polo T-shirts',
-    columns: [
-      {
-        title: 'Polo T-shirts',
-        items: [
-          { name: 'Custom Polo Shirts', href: '/products/polo-tshirts', description: 'Printed polo shirts' },
-          { name: 'Premium Polo Shirts', href: '/products/polo-tshirts', description: 'Premium cotton polos' },
-          { name: 'Embroidered Polos', href: '/products/polo-tshirts', description: 'Logo embroidery' },
-          { name: 'Bulk Polo Orders', href: '/products/polo-tshirts', description: '50+ polos, best price' },
-        ],
-      },
-    ],
-  },
-  'Umbrellas & Rainwear': {
-    seeAllHref: '/products/custom-umbrellas',
-    seeAllLabel: 'All Umbrellas',
-    columns: [
-      {
-        title: 'Umbrellas',
-        items: [
-          { name: 'Custom Umbrellas', href: '/products/custom-umbrellas', description: 'Printed umbrellas' },
-          { name: 'Compact Umbrellas', href: '/products/custom-umbrellas', description: 'Foldable travel umbrellas' },
-          { name: 'Golf Umbrellas', href: '/products/custom-umbrellas', description: 'Large golf umbrellas' },
-        ],
-      },
-    ],
-  },
-};
 
 export const HOW_IT_WORKS = [
   { step: 1, title: 'Choose Your Product', description: 'Browse our wide range of printing products and select what you need.' },
@@ -1103,7 +710,7 @@ export const QUOTE_STATUS_MAP: Record<string, { label: string; color: string }> 
 };
 
 export const POPULAR_SEARCHES = [
-  'Business Cards', 'Flyers', 'Brochures', 'Banners', 'Stickers', 'T-Shirts', 'Mugs', 'Letterheads', 'Packaging', 'Labels',
+  'Visiting Cards', 'ID Cards', 'Pens', 'Letterheads', 'T-Shirts', 'Mugs', 'Flyers', 'Banners', 'Stickers', 'Gift Hampers',
 ];
 
 export const TESTIMONIALS = [

@@ -1,58 +1,35 @@
 'use client';
 
 import Link from 'next/link';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  Menu, X, Phone, Mail, Search, ShoppingCart, ChevronDown,
-  ChevronRight, LogIn, ArrowRight, Tag, Percent, Truck, Sparkles,
+  Menu, X, Search, ShoppingCart, ChevronDown, LogIn,
+  Phone, Headphones,
 } from 'lucide-react';
-import { NAV_LINKS, CATEGORY_BAR, CATEGORY_MEGA_DATA } from '@/lib/constants';
+import { NAV_LINKS, MEGA_MENU_DATA } from '@/lib/constants';
+import type { MegaMenuTab } from '@/lib/constants';
 import Logo from '@/components/ui/Logo';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
-import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
-
-const PROMOS = [
-  'Free delivery on orders above ₹5,000',
-  'Get 20% off on first order — Use code WELCOME20',
-  'Business cards starting at ₹99',
-  'Free design templates for every product',
-];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
-  const [scrolled, setScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchFocused, setSearchFocused] = useState(false);
-  const [promoIndex, setPromoIndex] = useState(0);
-  const categoryBarRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const closeTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
-  const timerRef = useRef<ReturnType<typeof setInterval>>(null);
 
   const itemCount = useCartStore((s) => s.getItemCount());
   const { user } = useAuthStore();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setPromoIndex((prev) => (prev + 1) % PROMOS.length);
-    }, 3000);
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, []);
-
-  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (categoryBarRef.current && !categoryBarRef.current.contains(e.target as Node)) {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
         setActiveDropdown(null);
       }
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
@@ -71,326 +48,202 @@ export default function Header() {
     }
   };
 
-  const handleCategoryEnter = (label: string) => {
+  const handleNavEnter = useCallback((label: string) => {
     if (closeTimerRef.current) clearTimeout(closeTimerRef.current);
     setActiveDropdown(label);
-  };
+  }, []);
 
-  const handleCategoryLeave = () => {
-    closeTimerRef.current = setTimeout(() => setActiveDropdown(null), 150);
-  };
+  const handleNavLeave = useCallback(() => {
+    closeTimerRef.current = setTimeout(() => setActiveDropdown(null), 120);
+  }, []);
 
-  const currentDropdown = activeDropdown ? CATEGORY_MEGA_DATA[activeDropdown] : null;
+  const activeTab: MegaMenuTab | undefined = MEGA_MENU_DATA.find(
+    (t) => t.id === activeDropdown
+  );
 
   return (
     <>
-      {/* Promo Banner - Rotating */}
-      <div className="bg-slate-900 text-white text-xs hidden md:block">
+      {/* Top Header Bar */}
+      <header className="sticky top-0 z-50 bg-white border-b border-slate-200">
         <Container>
-          <div className="flex items-center justify-between h-8">
-            <div className="flex items-center gap-4">
-              <a href="tel:+919876543210" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-                <Phone className="w-3 h-3" />
-                <span>+91 98765 43210</span>
-              </a>
-              <a href="mailto:info@printorbit.in" className="flex items-center gap-1.5 hover:text-white/80 transition-colors">
-                <Mail className="w-3 h-3" />
-                <span>info@printorbit.in</span>
-              </a>
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={promoIndex}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="font-medium"
-              >
-                {PROMOS[promoIndex]}
-              </motion.span>
-            </AnimatePresence>
-            <div className="flex items-center gap-3">
-              <Link href="/sample-kit" className="hover:text-white/80 transition-colors">Sample Kit</Link>
-              <span className="text-white/30">|</span>
-              <Link href="/corporate" className="hover:text-white/80 transition-colors">Corporate</Link>
-            </div>
-          </div>
-        </Container>
-      </div>
+          <div className="flex items-center gap-4 h-16">
+            {/* Mobile hamburger */}
+            <button
+              className="lg:hidden p-2 -ml-2 text-slate-600 hover:text-primary transition-colors"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
 
-      {/* Main Header */}
-      <header
-        className={`sticky top-0 z-50 transition-all duration-300 border-b ${
-          scrolled
-            ? 'bg-white shadow-md py-2 backdrop-blur-xl border-slate-100'
-            : 'bg-white py-3 border-slate-100'
-        }`}
-      >
-        <Container>
-          <div className="flex items-center gap-6">
             {/* Logo */}
             <Link href="/" className="shrink-0">
-              <Logo />
+              <Logo size="md" />
             </Link>
 
-            {/* Desktop Nav Links */}
-            <nav className="hidden lg:flex items-center gap-0.5 flex-1">
-              {NAV_LINKS.filter(l => l.label !== 'Products').map((link) =>
-                'isOrbitMagic' in link && link.isOrbitMagic ? (
-                  <button
-                    key="orbit-magic"
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent('toggle-orbit-magic'));
-                    }}
-                    className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-primary hover:text-primary-dark transition-colors rounded-lg bg-primary/5 hover:bg-primary/10 border border-primary/10"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" />
-                    {link.label}
-                  </button>
-                ) : (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-lg hover:bg-primary/5"
-                  >
-                    {link.label}
-                  </Link>
-                )
-              )}
-            </nav>
-
-            {/* Search Bar */}
-            <div ref={searchRef} className="relative hidden lg:block">
-              <form onSubmit={handleSearch}>
-                <div className={`flex items-center gap-2 border rounded-full transition-all duration-200 ${
+            {/* Search Bar - Desktop */}
+            <div ref={searchRef} className="relative hidden lg:flex flex-1 max-w-2xl mx-auto">
+              <form onSubmit={handleSearch} className="w-full">
+                <div className={`flex items-center border rounded-md transition-all duration-200 ${
                   searchFocused
-                    ? 'border-primary bg-white shadow-lg shadow-primary/10 w-72 ring-2 ring-primary/10'
-                    : 'border-slate-200 bg-slate-50 hover:bg-slate-100 w-56'
+                    ? 'border-primary ring-1 ring-primary/20'
+                    : 'border-slate-300 hover:border-slate-400'
                 }`}>
-                  <Search className="w-4 h-4 text-slate-400 ml-3.5 shrink-0" />
+                  <Search className="w-4 h-4 text-slate-400 ml-3 shrink-0" />
                   <input
                     type="text"
-                    placeholder="Search for products..."
+                    placeholder="Product and something awesome..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onFocus={() => setSearchFocused(true)}
-                    className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full py-2 pr-3"
+                    className="bg-transparent outline-none text-sm text-slate-800 placeholder:text-slate-400 w-full py-2.5 px-3"
                   />
+                  <button
+                    type="submit"
+                    className="px-4 py-2.5 bg-primary hover:bg-primary-dark text-white transition-colors text-sm font-medium"
+                  >
+                    Search
+                  </button>
                 </div>
               </form>
-
-              <AnimatePresence>
-                {searchFocused && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 5 }}
-                    className="absolute top-full right-0 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 mt-2 z-50"
-                  >
-                    {!searchQuery ? (
-                      <div className="p-4">
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2.5">Popular Searches</p>
-                        <div className="flex flex-wrap gap-1.5">
-                          {['Business Cards', 'Flyers', 'Brochures', 'Banners', 'Stickers', 'T-Shirts', 'Mugs', 'Labels'].map((term) => (
-                            <button
-                              key={term}
-                              onClick={() => { window.location.href = `/products?q=${encodeURIComponent(term)}`; }}
-                              className="px-2.5 py-1 text-[11px] font-medium text-slate-600 bg-slate-100 rounded-full hover:bg-primary/10 hover:text-primary transition-colors"
-                            >
-                              {term}
-                            </button>
-                          ))}
-                        </div>
-                        <div className="mt-3 pt-3 border-t border-slate-100">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Categories</p>
-                          {['Business Cards', 'Flyers', 'Banners', 'Packaging'].map((cat) => (
-                            <Link
-                              key={cat}
-                              href={`/products?category=${cat.toLowerCase().replace(/ /g, '-')}`}
-                              className="flex items-center gap-2 py-1.5 text-xs text-slate-500 hover:text-primary transition-colors"
-                              onClick={() => setSearchFocused(false)}
-                            >
-                              {cat}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="p-4">
-                        <button
-                          onClick={handleSearch}
-                          className="w-full text-left px-3 py-2 text-sm text-primary hover:bg-primary/5 rounded-lg transition-colors flex items-center gap-2"
-                        >
-                          <Search className="w-4 h-4" />
-                          Search for &ldquo;{searchQuery}&rdquo;
-                        </button>
-                        <div className="mt-2 pt-2 border-t border-slate-100">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Suggested</p>
-                          {['Premium Business Cards', 'A5 Flyers', 'Vinyl Banners'].filter(s => s.toLowerCase().includes(searchQuery.toLowerCase())).map((s) => (
-                            <Link
-                              key={s}
-                              href={`/products?q=${encodeURIComponent(s)}`}
-                              className="block px-3 py-1.5 text-xs text-slate-500 hover:text-primary transition-colors"
-                              onClick={() => setSearchFocused(false)}
-                            >
-                              {s}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </motion.div>
-                )}
-              </AnimatePresence>
             </div>
 
             {/* Right Actions */}
             <div className="flex items-center gap-1 shrink-0">
-              <Link href="/products" className="lg:hidden p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg">
+              {/* Mobile search */}
+              <Link
+                href="/products"
+                className="lg:hidden p-2 text-slate-500 hover:text-primary transition-colors"
+              >
                 <Search className="w-5 h-5" />
               </Link>
 
-              <Link href="/cart" className="p-2.5 text-slate-400 hover:text-primary hover:bg-primary/5 transition-all rounded-lg relative">
+              {/* Support */}
+              <a
+                href="tel:+919876543210"
+                className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 hover:text-primary transition-colors rounded-md hover:bg-slate-50"
+              >
+                <Headphones className="w-4 h-4" />
+                <span className="hidden lg:inline">Support</span>
+              </a>
+
+              {/* Cart */}
+              <Link
+                href="/cart"
+                className="flex items-center gap-1.5 px-3 py-2 text-sm text-slate-600 hover:text-primary transition-colors rounded-md hover:bg-slate-50 relative"
+              >
                 <ShoppingCart className="w-5 h-5" />
+                <span className="hidden sm:inline">Cart</span>
                 {itemCount > 0 && (
-                  <span className="absolute top-1 right-1 min-w-[16px] h-4 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-primary text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
               </Link>
 
+              {/* Login */}
               {user ? (
-                <Link href="/account" className="hidden sm:flex items-center gap-2 px-2.5 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors">
-                  <div className="w-7 h-7 bg-primary/10 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-primary">{user.full_name?.[0] || 'U'}</span>
+                <Link
+                  href="/account"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary transition-colors rounded-md hover:bg-slate-50"
+                >
+                  <div className="w-6 h-6 bg-primary/10 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-bold text-primary">
+                      {user.full_name?.[0] || 'U'}
+                    </span>
                   </div>
                 </Link>
               ) : (
-                <Link href="/auth/login" className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-lg transition-colors">
+                <Link
+                  href="/auth/login"
+                  className="hidden sm:flex items-center gap-1.5 px-4 py-2 text-sm font-medium bg-primary text-white hover:bg-primary-dark transition-colors rounded-md"
+                >
                   <LogIn className="w-4 h-4" />
-                  Sign In
+                  Login
                 </Link>
               )}
-
-              <Link href="/quote/request" className="hidden sm:block">
-                <Button variant="primary" size="sm">
-                  Get a Quote
-                </Button>
-              </Link>
             </div>
-
-            <button
-              className="lg:hidden p-2 text-slate-600 hover:text-primary transition-colors"
-              onClick={() => setMobileOpen(!mobileOpen)}
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
         </Container>
-      </header>
 
-      {/* Category Bar — Vistaprint Style with Per-Category Dropdowns */}
-      <div
-        ref={categoryBarRef}
-        className="hidden lg:block bg-white border-b border-slate-100 sticky top-[60px] z-40"
-        onMouseLeave={handleCategoryLeave}
-      >
-        <Container>
-          <div className="flex items-center gap-0 overflow-x-auto scrollbar-hide py-0">
-            {CATEGORY_BAR.map((cat) => {
-              const hasDropdown = cat.label !== 'View All' && CATEGORY_MEGA_DATA[cat.label];
-              const isActive = activeDropdown === cat.label;
-
-              if (!hasDropdown) {
+        {/* Navigation Bar - Desktop */}
+        <div
+          ref={navRef}
+          className="hidden lg:block border-t border-slate-100 bg-white"
+          onMouseLeave={handleNavLeave}
+        >
+          <Container>
+            <nav className="flex items-center gap-0 overflow-x-auto scrollbar-hide">
+              {MEGA_MENU_DATA.map((tab) => {
+                const isActive = activeDropdown === tab.id;
                 return (
-                  <Link
-                    key={cat.href}
-                    href={cat.href}
-                    className="px-4 py-3 text-xs font-semibold text-slate-600 hover:text-primary whitespace-nowrap transition-colors border-b-2 border-transparent hover:border-primary"
+                  <button
+                    key={tab.id}
+                    onMouseEnter={() => handleNavEnter(tab.id)}
+                    onClick={() => setActiveDropdown(isActive ? null : tab.id)}
+                    className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
+                      isActive
+                        ? 'text-primary border-primary'
+                        : 'text-slate-600 hover:text-primary border-transparent hover:border-primary'
+                    }`}
                   >
-                    {cat.label}
-                  </Link>
+                    {tab.label}
+                    <ChevronDown
+                      className={`inline-block w-3.5 h-3.5 ml-1 transition-transform ${
+                        isActive ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
                 );
-              }
+              })}
+            </nav>
+          </Container>
+        </div>
 
-              return (
-                <button
-                  key={cat.label}
-                  onMouseEnter={() => handleCategoryEnter(cat.label)}
-                  onClick={() => setActiveDropdown(isActive ? null : cat.label)}
-                  className={`px-4 py-3 text-xs font-semibold whitespace-nowrap transition-colors border-b-2 ${
-                    isActive
-                      ? 'text-primary border-primary'
-                      : 'text-slate-600 hover:text-primary border-transparent hover:border-primary'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              );
-            })}
-          </div>
-        </Container>
-
-        {/* Dropdown Panel */}
+        {/* Mega Menu Dropdown */}
         <AnimatePresence>
-          {currentDropdown && (
+          {activeTab && (
             <motion.div
               initial={{ opacity: 0, y: -4 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: 0.15 }}
-              className="bg-white border-b border-slate-100 shadow-lg"
-              onMouseEnter={() => handleCategoryEnter(activeDropdown!)}
-              onMouseLeave={handleCategoryLeave}
+              className="hidden lg:block border-t border-slate-100 bg-white shadow-lg"
+              onMouseEnter={() => handleNavEnter(activeTab.id)}
+              onMouseLeave={handleNavLeave}
             >
               <Container>
                 <div className="py-6">
-                  <div className="grid grid-cols-5 gap-6">
-                    {currentDropdown.columns.map((col) => (
-                      <div key={col.title}>
-                        <h3 className="text-xs font-bold text-dark mb-3">{col.title}</h3>
-                        <ul className="space-y-2.5">
-                          {col.items.map((item) => (
-                            <li key={item.name}>
+                  <div className="grid grid-cols-4 gap-8">
+                    {activeTab.categories.map((cat) => (
+                      <div key={cat.slug}>
+                        <Link
+                          href={`/products/${cat.slug}`}
+                          className="text-sm font-bold text-slate-900 hover:text-primary transition-colors block mb-3"
+                        >
+                          {cat.name}
+                        </Link>
+                        <ul className="space-y-1.5">
+                          {cat.items.map((item) => (
+                            <li key={item.slug}>
                               <Link
-                                href={item.href}
-                                className="text-xs text-slate-500 hover:text-primary transition-colors flex items-center gap-1.5"
-                                onClick={() => setActiveDropdown(null)}
+                                href={`/products/${item.slug}`}
+                                className="text-sm text-slate-500 hover:text-primary transition-colors block"
                               >
                                 {item.name}
-                                {item.isNew && (
-                                  <span className="px-1.5 py-0.5 bg-primary text-white text-[8px] font-bold rounded uppercase leading-none">
-                                    NEW
-                                  </span>
-                                )}
                               </Link>
-                              {item.description && (
-                                <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">{item.description}</p>
-                              )}
                             </li>
                           ))}
                         </ul>
                       </div>
                     ))}
                   </div>
-
-                  {/* See All Link */}
-                  <div className="mt-6 pt-4 border-t border-slate-100">
-                    <Link
-                      href={currentDropdown.seeAllHref}
-                      className="text-sm font-bold text-dark hover:text-primary transition-colors flex items-center gap-2"
-                      onClick={() => setActiveDropdown(null)}
-                    >
-                      See All {currentDropdown.seeAllLabel}
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-                  </div>
                 </div>
               </Container>
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>
@@ -400,81 +253,109 @@ export default function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="lg:hidden bg-white border-b border-slate-100 overflow-hidden fixed inset-x-0 top-0 z-40 max-h-screen overflow-y-auto pt-16"
+            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden fixed inset-x-0 top-16 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto"
           >
             <Container>
               <div className="py-4 space-y-1">
+                {/* Mobile search */}
                 <form onSubmit={handleSearch} className="mb-4">
-                  <div className="flex items-center gap-2 px-4 py-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <Search className="w-4 h-4 text-slate-400" />
-                    <input type="text" placeholder="Search products..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="bg-transparent outline-none text-sm text-dark placeholder:text-slate-400 w-full" />
+                  <div className="flex items-center border border-slate-300 rounded-md">
+                    <Search className="w-4 h-4 text-slate-400 ml-3" />
+                    <input
+                      type="text"
+                      placeholder="Search products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-transparent outline-none text-sm text-slate-800 placeholder:text-slate-400 w-full py-2.5 px-3"
+                    />
                   </div>
                 </form>
 
-                {CATEGORY_BAR.filter(c => c.label !== 'View All').map((cat) => {
-                  const dropdown = CATEGORY_MEGA_DATA[cat.label];
-                  return (
-                    <div key={cat.label}>
-                      <button
-                        className="w-full flex items-center justify-between px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors"
-                        onClick={() => setMobileAccordion(mobileAccordion === cat.label ? null : cat.label)}
-                      >
-                        <span>{cat.label}</span>
-                        <ChevronDown className={`w-4 h-4 transition-transform ${mobileAccordion === cat.label ? 'rotate-180' : ''}`} />
-                      </button>
-                      <AnimatePresence>
-                        {mobileAccordion === cat.label && dropdown && (
-                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                            <div className="pl-6 pb-2 space-y-0.5">
-                              {dropdown.columns.map((col) => (
-                                <div key={col.title}>
-                                  <p className="px-3 py-2 text-xs font-bold text-dark uppercase">{col.title}</p>
-                                  {col.items.slice(0, 4).map((item) => (
-                                    <Link key={item.name} href={item.href} className="block px-3 py-1.5 text-sm text-slate-500 hover:text-primary" onClick={() => setMobileOpen(false)}>
+                {/* Mobile categories accordion */}
+                {MEGA_MENU_DATA.map((tab) => (
+                  <div key={tab.id}>
+                    <button
+                      className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 rounded-md transition-colors"
+                      onClick={() =>
+                        setMobileAccordion(mobileAccordion === tab.id ? null : tab.id)
+                      }
+                    >
+                      <span>{tab.label}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 text-slate-400 transition-transform ${
+                          mobileAccordion === tab.id ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence>
+                      {mobileAccordion === tab.id && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pl-4 pb-2 space-y-3">
+                            {tab.categories.map((cat) => (
+                              <div key={cat.slug}>
+                                <Link
+                                  href={`/products/${cat.slug}`}
+                                  className="block px-3 py-1.5 text-xs font-semibold text-slate-500 uppercase tracking-wider"
+                                  onClick={() => setMobileOpen(false)}
+                                >
+                                  {cat.name}
+                                </Link>
+                                <div className="space-y-0.5">
+                                  {cat.items.slice(0, 5).map((item) => (
+                                    <Link
+                                      key={item.slug}
+                                      href={`/products/${item.slug}`}
+                                      className="block px-3 py-1.5 text-sm text-slate-600 hover:text-primary"
+                                      onClick={() => setMobileOpen(false)}
+                                    >
                                       {item.name}
-                                      {item.isNew && <span className="ml-1.5 px-1 py-0.5 bg-primary text-white text-[8px] font-bold rounded">NEW</span>}
-                                      {item.description && <span className="ml-1 text-[10px] text-slate-400">- {item.description}</span>}
                                     </Link>
                                   ))}
                                 </div>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
 
                 <hr className="border-slate-100 my-3" />
 
-                {NAV_LINKS.filter(l => l.label !== 'Products').map((link) =>
-                  'isOrbitMagic' in link && link.isOrbitMagic ? (
-                    <button
-                      key="orbit-magic-mobile"
-                      onClick={() => {
-                        setMobileOpen(false);
-                        window.dispatchEvent(new CustomEvent('toggle-orbit-magic'));
-                      }}
-                      className="flex items-center gap-2 w-full px-4 py-3 text-sm font-medium text-primary hover:bg-primary/5 rounded-xl transition-colors"
-                    >
-                      <Sparkles className="w-4 h-4" />
-                      {link.label}
-                    </button>
-                  ) : (
-                    <Link key={link.href} href={link.href} className="block px-4 py-3 text-sm font-medium text-slate-600 hover:text-primary hover:bg-primary/5 rounded-xl transition-colors" onClick={() => setMobileOpen(false)}>
-                      {link.label}
-                    </Link>
-                  )
-                )}
+                {/* Quick links */}
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="block px-3 py-2.5 text-sm font-medium text-slate-600 hover:text-primary hover:bg-slate-50 rounded-md transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
 
-                <div className="flex gap-3 pt-4 pb-6">
-                  <Link href="/auth/login" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="outline" className="w-full" size="md">Sign In</Button>
+                <div className="pt-4 pb-6 space-y-2">
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium border border-slate-300 text-slate-700 hover:bg-slate-50 rounded-md transition-colors"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Login
                   </Link>
-                  <Link href="/quote/request" className="flex-1" onClick={() => setMobileOpen(false)}>
-                    <Button variant="primary" className="w-full" size="md">Get a Quote</Button>
-                  </Link>
+                  <a
+                    href="tel:+919876543210"
+                    className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50 rounded-md transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Call Support
+                  </a>
                 </div>
               </div>
             </Container>
