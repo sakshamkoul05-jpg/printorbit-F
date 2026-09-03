@@ -1,31 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import Image from 'next/image';
 import {
-  Search, X, ChevronRight, ChevronDown,
-  CreditCard, FileText, Image, Tag, Package, Shirt, Coffee,
-  PenLine, Mail, Square, Layout, BookOpen, Flag, Crown,
-  ShoppingBag, Usb, Battery, Award, Cloud, Umbrella, Calendar,
+  ChevronDown, ChevronRight, Share2, Heart, Star, Truck, ShoppingBag, Palette, Tag,
+  CreditCard, FileText, Image as ImageIcon, Package, Shirt, Coffee, PenLine, Mail,
+  BookOpen, Flag, Crown, Award, Cloud, Umbrella, Calendar, Battery, Usb, Search,
 } from 'lucide-react';
-import Container from '@/components/ui/Container';
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import type { Product } from '@/types';
 
-const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
-  'visiting-cards': CreditCard, 'id-cards': CreditCard, flyers: FileText,
-  brochures: BookOpen, posters: Image, banners: Flag, stickers: Tag,
-  labels: Tag, 'custom-boxes': Package, letterheads: FileText, envelopes: Mail,
-  't-shirts': Shirt, 'polo-t-shirts': Shirt, 'jackets-hoodies': Shirt,
-  mugs: Coffee, 'water-bottles': Coffee, 'tote-bags': ShoppingBag,
-  'usb-drives': Usb, 'power-banks': Battery, pens: PenLine,
-  trophies: Award, backpacks: ShoppingBag, 'diaries-notebooks': BookOpen,
-  calendars: Calendar, umbrellas: Umbrella, raincoats: Cloud,
-  'gift-hampers': Gift,
-};
-
-function Gift({ className }: { className?: string }) {
+function GiftIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 12 20 22 4 22 4 12" />
@@ -37,11 +23,48 @@ function Gift({ className }: { className?: string }) {
   );
 }
 
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  'gift-hampers': GiftIcon,
+  'visiting-cards': CreditCard,
+  'id-cards': CreditCard,
+  'stationery': PenLine,
+  'pens': PenLine,
+  'letterheads': FileText,
+  'envelopes': Mail,
+  'diaries-notebooks': BookOpen,
+  'calendars': Calendar,
+  'apparel': Shirt,
+  't-shirts': Shirt,
+  'polo-t-shirts': Shirt,
+  'jackets-hoodies': Shirt,
+  'flyers': FileText,
+  'brochures': BookOpen,
+  'posters': ImageIcon,
+  'banners': Flag,
+  'stickers': Tag,
+  'labels': Tag,
+  'custom-boxes': Package,
+  'corporate-gifts': Crown,
+  'drinkware': Coffee,
+  'water-bottles': Coffee,
+  'mugs': Coffee,
+  'awards': Award,
+  'trophies': Award,
+  'bags': ShoppingBag,
+  'tote-bags': ShoppingBag,
+  'backpacks': ShoppingBag,
+  'gadgets': Battery,
+  'power-banks': Battery,
+  'usb-drives': Usb,
+  'umbrellas': Umbrella,
+  'raincoats': Cloud,
+};
+
 const SORT_OPTIONS = [
-  { value: 'popular', label: 'Most Popular' },
-  { value: 'price-low', label: 'Price: Low to High' },
-  { value: 'price-high', label: 'Price: High to Low' },
-  { value: 'name', label: 'Name A-Z' },
+  { value: 'bestselling', label: 'Best Selling' },
+  { value: 'newest', label: 'Newest' },
+  { value: 'price_asc', label: 'Price: Low to High' },
+  { value: 'price_desc', label: 'Price: High to Low' },
 ];
 
 const CATEGORY_ID_MAP: Record<string, string> = {
@@ -57,390 +80,376 @@ const CATEGORY_ID_MAP: Record<string, string> = {
   '15': 'umbrellas',
 };
 
-const POPULAR_PRODUCTS = ['1', '6', '11', '13', '14', '28'];
-const BEST_SELLER_PRODUCTS = ['2', '12', '34', '41'];
-
 const ALL_PRODUCTS: Product[] = [
-  // Business Cards
-  { id: '1', category_id: '1', name: 'Standard Business Cards', slug: 'standard-business-cards', description: 'Classic business cards printed on 300gsm cardstock.', short_description: '300gsm classic cards', base_price: 299, min_quantity: 100, max_quantity: 50000, materials: [{ name: '300gsm', price_modifier: 0 }, { name: '350gsm', price_modifier: 30 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }], sizes: [{ name: 'Standard (85×55)', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '300gsm Cardstock', 'Print': 'Full Color Both Sides' }, is_active: true, created_at: '' },
-  { id: '2', category_id: '1', name: 'Premium Matte Business Cards', slug: 'premium-matte-business-cards', description: 'Thick 400gsm matte cards with a luxurious feel.', short_description: '400gsm premium matte finish', base_price: 499, min_quantity: 100, max_quantity: 10000, materials: [{ name: '350gsm', price_modifier: -50 }, { name: '400gsm', price_modifier: 0 }, { name: '450gsm', price_modifier: 50 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 25 }, { name: 'Soft Touch', price_modifier: 75 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }, { name: 'Slim', width: 90, height: 50, price_modifier: 20 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1572044162444-ad60f128bdea?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Full Color Both Sides' }, is_active: true, created_at: '' },
-  { id: '3', category_id: '1', name: 'Metallic Foil Business Cards', slug: 'metallic-foil-business-cards', description: 'Eye-catching metallic foil stamping on premium cardstock.', short_description: 'Foil stamped premium cards', base_price: 899, min_quantity: 100, max_quantity: 5000, materials: [{ name: '350gsm', price_modifier: -100 }, { name: '400gsm', price_modifier: 0 }], finishes: [{ name: 'Gold Foil', price_modifier: 0 }, { name: 'Silver Foil', price_modifier: 0 }, { name: 'Rose Gold', price_modifier: 50 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '400gsm Premium Cardstock', 'Print': 'Foil Stamping' }, is_active: true, created_at: '' },
-  { id: '4', category_id: '1', name: 'Luxury Velvet Business Cards', slug: 'luxury-business-cards', description: 'Soft velvet lamination with foil accents.', short_description: 'Velvet finish luxury cards', base_price: 1299, min_quantity: 100, max_quantity: 2000, materials: [{ name: '400gsm', price_modifier: 0 }, { name: '500gsm', price_modifier: 100 }], finishes: [{ name: 'Velvet Black', price_modifier: 0 }, { name: 'Velvet Navy', price_modifier: 0 }, { name: 'Velvet Burgundy', price_modifier: 50 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '500gsm Premium', 'Finish': 'Velvet Lamination' }, is_active: true, created_at: '' },
-  { id: '5', category_id: '1', name: 'Magnet Business Cards', slug: 'magnet-business-cards', description: 'Business cards that stick to fridges and boards.', short_description: 'Magnetic backing cards', base_price: 799, min_quantity: 100, max_quantity: 5000, materials: [{ name: 'Magnetic', price_modifier: 0 }], finishes: [{ name: 'Glossy', price_modifier: 0 }, { name: 'Matte', price_modifier: 20 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Magnetic Sheet', 'Print': 'Full Color' }, is_active: true, created_at: '' },
-  // Flyers
-  { id: '6', category_id: '2', name: 'A5 Double-Sided Flyers', slug: 'a5-flyers', description: 'Vibrant full-color A5 flyers on premium paper.', short_description: '170gsm art paper, full color', base_price: 299, min_quantity: 100, max_quantity: 50000, materials: [{ name: '130gsm Art', price_modifier: -30 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 60 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }], sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }, { name: 'A4', width: 210, height: 297, price_modifier: 80 }, { name: 'DL', width: 99, height: 210, price_modifier: -20 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380183-ea4a351cc8b6?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides' }, is_active: true, created_at: '' },
-  { id: '7', category_id: '2', name: 'A4 Double-Sided Flyers', slug: 'a4-flyers', description: 'Large format flyers for maximum impact.', short_description: 'A4 full color flyers', base_price: 499, min_quantity: 100, max_quantity: 50000, materials: [{ name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 80 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 20 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides' }, is_active: true, created_at: '' },
-  // Brochures
-  { id: '8', category_id: '3', name: 'Tri-Fold Brochures', slug: 'tri-fold-brochures', description: 'Popular tri-fold format for marketing.', short_description: 'A4 tri-fold brochure', base_price: 599, min_quantity: 50, max_quantity: 10000, materials: [{ name: '130gsm Art', price_modifier: -50 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 100 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 30 }], sizes: [{ name: 'A4 (folded to DL)', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1553729784-e91953dec042?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Tri-Fold' }, is_active: true, created_at: '' },
-  { id: '9', category_id: '3', name: 'Bi-Fold Brochures', slug: 'bi-fold-brochures', description: 'Professional bi-fold brochures.', short_description: 'A4 bi-fold brochure', base_price: 499, min_quantity: 50, max_quantity: 10000, materials: [{ name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 80 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 25 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1606114069123-1ef1e1c762ee?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Bi-Fold' }, is_active: true, created_at: '' },
-  // Banners
-  { id: '10', category_id: '5', name: 'Vinyl Banner 3×6ft', slug: 'vinyl-banners', description: 'Durable vinyl banner for indoor and outdoor use.', short_description: 'Weather-resistant vinyl', base_price: 599, min_quantity: 1, max_quantity: 100, materials: [{ name: '13oz Vinyl', price_modifier: 0 }, { name: '18oz Vinyl', price_modifier: 200 }], finishes: [{ name: 'Standard', price_modifier: 0 }, { name: 'With Grommets', price_modifier: 50 }], sizes: [{ name: '3×6 ft', width: 914, height: 1829, price_modifier: 0 }, { name: '4×8 ft', width: 1219, height: 2438, price_modifier: 300 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': '13oz Vinyl', 'Print': 'Eco-Solvent' }, is_active: true, created_at: '' },
-  // Stickers
-  { id: '11', category_id: '7', name: 'Die-Cut Vinyl Stickers', slug: 'die-cut-stickers', description: 'Custom die-cut stickers in any shape.', short_description: 'Waterproof vinyl, any shape', base_price: 199, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'White Vinyl', price_modifier: 0 }, { name: 'Clear Vinyl', price_modifier: 30 }, { name: 'Holographic', price_modifier: 80 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 10 }], sizes: [{ name: '2 inch', width: 50, height: 50, price_modifier: 0 }, { name: '3 inch', width: 75, height: 75, price_modifier: 20 }, { name: '4 inch', width: 100, height: 100, price_modifier: 40 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Premium Vinyl', 'Finish': 'Waterproof' }, is_active: true, created_at: '' },
-  // Packaging
-  { id: '12', category_id: '8', name: 'Custom Mailer Boxes', slug: 'mailer-boxes', description: 'Branded corrugated mailer boxes.', short_description: 'Corrugated branded packaging', base_price: 149, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'E-Flute', price_modifier: 0 }, { name: 'B-Flute', price_modifier: 30 }], finishes: [{ name: 'Kraft', price_modifier: 0 }, { name: 'White Board', price_modifier: 20 }, { name: 'Laminated', price_modifier: 50 }], sizes: [{ name: 'Small', width: 150, height: 100, price_modifier: 0 }, { name: 'Medium', width: 250, height: 150, price_modifier: 60 }, { name: 'Large', width: 350, height: 250, price_modifier: 150 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'E-Flute Corrugated', 'Print': 'Full Color Offset' }, is_active: true, created_at: '' },
-  // T-Shirts
-  { id: '13', category_id: '11', name: 'Custom Cotton T-Shirts', slug: 'cotton-tshirts', description: 'Premium 100% cotton t-shirts with custom print.', short_description: '100% cotton, custom print', base_price: 399, min_quantity: 20, max_quantity: 5000, materials: [{ name: '100% Cotton', price_modifier: 0 }, { name: 'Poly-Cotton', price_modifier: -30 }, { name: 'Organic Cotton', price_modifier: 50 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'DTG Print', price_modifier: 30 }, { name: 'Sublimation', price_modifier: 50 }], sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }, { name: 'XXL', width: 0, height: 0, price_modifier: 20 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': '100% Cotton', 'Weight': '180 GSM' }, is_active: true, created_at: '' },
-  // Mugs
-  { id: '14', category_id: '12', name: 'Custom Ceramic Mugs', slug: 'ceramic-mugs', description: 'Classic ceramic mugs with custom print.', short_description: '11oz ceramic, custom print', base_price: 299, min_quantity: 10, max_quantity: 5000, materials: [{ name: 'Ceramic', price_modifier: 0 }, { name: 'Glass', price_modifier: 50 }], finishes: [{ name: 'Standard Print', price_modifier: 0 }, { name: 'Magic (Heat Reveal)', price_modifier: 150 }], sizes: [{ name: '11oz', width: 0, height: 0, price_modifier: 0 }, { name: '15oz', width: 0, height: 0, price_modifier: 40 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Ceramic', 'Capacity': '11oz / 15oz' }, is_active: true, created_at: '' },
-  // Letterheads
-  { id: '15', category_id: '9', name: 'A4 Corporate Letterheads', slug: 'a4-letterheads', description: 'Professional A4 letterheads for businesses.', short_description: '120gsm premium paper', base_price: 399, min_quantity: 100, max_quantity: 10000, materials: [{ name: '100gsm', price_modifier: -30 }, { name: '120gsm', price_modifier: 0 }, { name: '160gsm', price_modifier: 40 }], finishes: [{ name: 'Uncoated', price_modifier: 0 }, { name: 'Wove', price_modifier: 20 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '120gsm Premium', 'Print': 'Full Color' }, is_active: true, created_at: '' },
-  // Card Holders
-  { id: '16', category_id: '1', name: 'Visiting Card Holders', slug: 'card-holders', description: 'Premium metal and leather card holders.', short_description: 'Metal & leather card cases', base_price: 199, min_quantity: 10, max_quantity: 5000, materials: [{ name: 'Metal', price_modifier: 0 }, { name: 'Leatherite', price_modifier: -30 }, { name: 'Leather', price_modifier: 50 }], finishes: [{ name: 'Brushed Steel', price_modifier: 0 }, { name: 'Matte Black', price_modifier: 20 }, { name: 'Gold', price_modifier: 40 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Premium Metal', 'Capacity': '15-20 Cards' }, is_active: true, created_at: '' },
-  // Transparent Cards
-  { id: '17', category_id: '1', name: 'Transparent Business Cards', slug: 'transparent-business-cards', description: 'Clear plastic business cards.', short_description: 'Clear PVC cards', base_price: 799, min_quantity: 100, max_quantity: 5000, materials: [{ name: 'Clear PVC', price_modifier: 0 }, { name: 'Frosted PVC', price_modifier: 30 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 20 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Clear PVC', 'Print': 'Full Color UV' }, is_active: true, created_at: '' },
-  // Polo T-Shirts
-  { id: '18', category_id: '11', name: 'Custom Polo T-Shirts', slug: 'polo-tshirts', description: 'Premium polo shirts with custom print.', short_description: 'Cotton pique polos', base_price: 499, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton Pique', price_modifier: 0 }, { name: 'Dry-Fit', price_modifier: 30 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'Embroidery', price_modifier: 50 }], sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1625910513413-5fc42fba866a?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Cotton Pique', 'Print': 'Screen / Embroidery' }, is_active: true, created_at: '' },
-  // Caps
-  { id: '19', category_id: '11', name: 'Custom Caps & Headwear', slug: 'custom-caps', description: 'Custom embroidered caps and beanies.', short_description: 'Embroidered caps', base_price: 199, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton', price_modifier: 0 }, { name: 'Polyester', price_modifier: -10 }], finishes: [{ name: 'Embroidery', price_modifier: 0 }, { name: 'Screen Print', price_modifier: -10 }], sizes: [{ name: 'S/M', width: 0, height: 0, price_modifier: 0 }, { name: 'L/XL', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Cotton', 'Print': 'Embroidery' }, is_active: true, created_at: '' },
-  // Hoodies
-  { id: '20', category_id: '11', name: 'Custom Hoodies & Sweatshirts', slug: 'custom-hoodies', description: 'Printed hoodies and sweatshirts.', short_description: 'Cotton fleece hoodies', base_price: 699, min_quantity: 10, max_quantity: 2000, materials: [{ name: 'Cotton Fleece', price_modifier: 0 }, { name: 'French Terry', price_modifier: 30 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'DTG Print', price_modifier: 30 }], sizes: [{ name: 'S', width: 0, height: 0, price_modifier: 0 }, { name: 'M', width: 0, height: 0, price_modifier: 0 }, { name: 'L', width: 0, height: 0, price_modifier: 0 }, { name: 'XL', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Cotton Fleece', 'Weight': '320 GSM' }, is_active: true, created_at: '' },
-  // Notebooks
-  { id: '21', category_id: '9', name: 'Custom Notebooks & Diaries', slug: 'custom-notebooks', description: 'Personalized notebooks and diaries.', short_description: 'Custom cover notebooks', base_price: 149, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Paper', price_modifier: 0 }, { name: 'Leather', price_modifier: 100 }], finishes: [{ name: 'Softcover', price_modifier: 0 }, { name: 'Hardcover', price_modifier: 50 }], sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }, { name: 'A4', width: 210, height: 297, price_modifier: 40 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '80gsm', 'Cover': 'Softcover / Hardcover' }, is_active: true, created_at: '' },
-  // Wedding Invitations
-  { id: '22', category_id: '9', name: 'Wedding Invitations', slug: 'wedding-invitations', description: 'Custom wedding invitations and stationery.', short_description: 'Foil & embossed invites', base_price: 999, min_quantity: 50, max_quantity: 5000, materials: [{ name: '300gsm Card', price_modifier: 0 }, { name: 'Cotton Paper', price_modifier: 50 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Gold Foil', price_modifier: 100 }], sizes: [{ name: 'A6', width: 105, height: 148, price_modifier: 0 }, { name: '5x7 inch', width: 127, height: 178, price_modifier: 20 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '300gsm Premium', 'Print': 'Full Color + Foil' }, is_active: true, created_at: '' },
-  // Presentation Folders
-  { id: '23', category_id: '9', name: 'Presentation Folders', slug: 'presentation-folders', description: 'Custom pocket folders.', short_description: 'Pocket folders with print', base_price: 399, min_quantity: 50, max_quantity: 10000, materials: [{ name: '300gsm Card', price_modifier: 0 }, { name: '350gsm Card', price_modifier: 20 }], finishes: [{ name: 'Matte Lamination', price_modifier: 0 }, { name: 'Glossy Lamination', price_modifier: 15 }], sizes: [{ name: 'A4', width: 240, height: 320, price_modifier: 0 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '300gsm Card', 'Pockets': 'Single / Double' }, is_active: true, created_at: '' },
-  // Stamps
-  { id: '24', category_id: '9', name: 'Custom Stamps & Ink', slug: 'custom-stamps', description: 'Self-inking stamps and rubber stamps.', short_description: 'Self-inking stamps', base_price: 249, min_quantity: 1, max_quantity: 500, materials: [{ name: 'Rubber', price_modifier: 0 }, { name: 'Polymer', price_modifier: 20 }], finishes: [{ name: 'Self-Inking', price_modifier: 0 }, { name: 'Wood Handle', price_modifier: -30 }], sizes: [{ name: 'Small', width: 38, height: 14, price_modifier: 0 }, { name: 'Medium', width: 47, height: 18, price_modifier: 20 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Premium Rubber', 'Ink': 'Black / Blue / Red' }, is_active: true, created_at: '' },
-  // Standees
-  { id: '25', category_id: '5', name: 'Standees & Display Boards', slug: 'standees', description: 'Portable standees and display boards.', short_description: 'Roll-up & X-banner standees', base_price: 799, min_quantity: 1, max_quantity: 100, materials: [{ name: 'Vinyl', price_modifier: 0 }, { name: 'Fabric', price_modifier: 50 }], finishes: [{ name: 'Standard', price_modifier: 0 }, { name: 'With Stand', price_modifier: 200 }], sizes: [{ name: 'Counter', width: 152, height: 305, price_modifier: 0 }, { name: 'Medium', width: 610, height: 1600, price_modifier: 400 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Premium Vinyl', 'Stand': 'Roll-Up / X-Frame' }, is_active: true, created_at: '' },
-  // Foam Boards
-  { id: '26', category_id: '5', name: 'Foam Board Printing', slug: 'foam-boards', description: 'Lightweight foam board signs.', short_description: '5mm/10mm foam board', base_price: 499, min_quantity: 1, max_quantity: 100, materials: [{ name: '5mm Foam', price_modifier: 0 }, { name: '10mm Foam', price_modifier: 100 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 20 }], sizes: [{ name: 'A3', width: 297, height: 420, price_modifier: 0 }, { name: 'A2', width: 420, height: 594, price_modifier: 200 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Foam Board', 'Print': 'Full Color UV' }, is_active: true, created_at: '' },
-  // Tent Cards
-  { id: '27', category_id: '5', name: 'Tent Cards & Table Signs', slug: 'tent-cards', description: 'Tri-fold tent cards.', short_description: 'Table tent cards', base_price: 199, min_quantity: 25, max_quantity: 5000, materials: [{ name: '300gsm Card', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 10 }], sizes: [{ name: 'A6 Tent', width: 105, height: 148, price_modifier: 0 }, { name: 'A5 Tent', width: 148, height: 210, price_modifier: 30 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '300gsm Cardstock', 'Fold': 'Tri-Fold Tent' }, is_active: true, created_at: '' },
-  // Loyalty Cards
-  { id: '28', category_id: '1', name: 'Loyalty Cards', slug: 'loyalty-cards', description: 'Custom loyalty and membership cards.', short_description: 'Loyalty & membership cards', base_price: 499, min_quantity: 100, max_quantity: 10000, materials: [{ name: '350gsm Card', price_modifier: 0 }, { name: 'PVC', price_modifier: 50 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }, { name: 'Mini', width: 70, height: 28, price_modifier: -20 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '350gsm / PVC', 'Feature': 'Barcode / QR Code' }, is_active: true, created_at: '' },
-  // Gift Certificates
-  { id: '29', category_id: '2', name: 'Gift Certificates & Vouchers', slug: 'gift-certificates', description: 'Custom gift certificates.', short_description: 'Gift vouchers & certificates', base_price: 399, min_quantity: 50, max_quantity: 10000, materials: [{ name: '300gsm Card', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Gold Foil', price_modifier: 80 }], sizes: [{ name: 'A6', width: 105, height: 148, price_modifier: 0 }, { name: 'DL', width: 99, height: 210, price_modifier: 10 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '300gsm Card', 'Print': 'Full Color + Foil' }, is_active: true, created_at: '' },
-  // Button Badges
-  { id: '30', category_id: '2', name: 'Button Badges & Pins', slug: 'button-badges', description: 'Custom button badges.', short_description: 'Pin-back badges', base_price: 49, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'Metal + Paper', price_modifier: 0 }], finishes: [{ name: 'Standard', price_modifier: 0 }], sizes: [{ name: '1 inch', width: 25, height: 25, price_modifier: 0 }, { name: '2 inch', width: 50, height: 50, price_modifier: 20 }, { name: '3 inch', width: 75, height: 75, price_modifier: 40 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Metal + Paper', 'Back': 'Pin-Back' }, is_active: true, created_at: '' },
-  // Keychains
-  { id: '31', category_id: '2', name: 'Custom Keychains', slug: 'custom-keychains', description: 'Printed and engraved keychains.', short_description: 'Acrylic & metal keychains', base_price: 79, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'Acrylic', price_modifier: 0 }, { name: 'Metal', price_modifier: 30 }], finishes: [{ name: 'Print', price_modifier: 0 }, { name: 'Engraved', price_modifier: 20 }], sizes: [{ name: 'Standard', width: 50, height: 50, price_modifier: 0 }, { name: 'Large', width: 75, height: 75, price_modifier: 20 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Acrylic / Metal', 'Print': 'Full Color / Engraved' }, is_active: true, created_at: '' },
-  // Table Covers
-  { id: '32', category_id: '5', name: 'Custom Table Covers', slug: 'table-covers', description: 'Printed tablecloths and runners.', short_description: 'Event table covers', base_price: 999, min_quantity: 1, max_quantity: 100, materials: [{ name: 'Polyester', price_modifier: 0 }, { name: 'Cotton', price_modifier: 50 }], finishes: [{ name: 'Standard', price_modifier: 0 }, { name: 'Fitted', price_modifier: 100 }], sizes: [{ name: '6ft Table', width: 183, height: 122, price_modifier: 0 }, { name: '8ft Table', width: 244, height: 122, price_modifier: 200 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Polyester', 'Print': 'Dye Sublimation' }, is_active: true, created_at: '' },
-  // Flags
-  { id: '33', category_id: '5', name: 'Custom Flags & Banners', slug: 'custom-flags', description: 'Teardrop and rectangular flags.', short_description: 'Event & table flags', base_price: 499, min_quantity: 1, max_quantity: 100, materials: [{ name: 'Polyester', price_modifier: 0 }], finishes: [{ name: 'With Pole', price_modifier: 0 }, { name: 'With Stand', price_modifier: 300 }], sizes: [{ name: 'Table Flag', width: 150, height: 200, price_modifier: 0 }, { name: 'Teardrop', width: 600, height: 1200, price_modifier: 300 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Polyester', 'Print': 'Dye Sublimation' }, is_active: true, created_at: '' },
-  // Tote Bags
-  { id: '34', category_id: '8', name: 'Custom Tote Bags', slug: 'custom-tote-bags', description: 'Printed cotton and canvas tote bags.', short_description: 'Cotton & canvas totes', base_price: 149, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton', price_modifier: 0 }, { name: 'Canvas', price_modifier: 30 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'Sublimation', price_modifier: 20 }], sizes: [{ name: 'Standard', width: 350, height: 400, price_modifier: 0 }, { name: 'Large', width: 450, height: 500, price_modifier: 30 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Cotton / Canvas', 'Print': 'Screen / Sublimation' }, is_active: true, created_at: '' },
-  // Umbrellas
-  { id: '35', category_id: '15', name: 'Custom Umbrellas', slug: 'custom-umbrellas', description: 'Printed umbrellas for branding.', short_description: 'Compact & golf umbrellas', base_price: 599, min_quantity: 10, max_quantity: 1000, materials: [{ name: 'Polyester', price_modifier: 0 }, { name: 'Nylon', price_modifier: -30 }], finishes: [{ name: 'Single Side Print', price_modifier: 0 }, { name: 'Double Side Print', price_modifier: 100 }], sizes: [{ name: 'Compact', width: 0, height: 0, price_modifier: 0 }, { name: 'Golf', width: 0, height: 0, price_modifier: 200 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1521656693884-cee73588d390?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Polyester', 'Style': 'Compact / Golf' }, is_active: true, created_at: '' },
-  // Photo Albums
-  { id: '36', category_id: '12', name: 'Custom Photo Albums', slug: 'photo-albums', description: 'Personalized photo albums.', short_description: 'Hardcover & layflat albums', base_price: 599, min_quantity: 1, max_quantity: 500, materials: [{ name: 'Paper Pages', price_modifier: 0 }, { name: 'Layflat', price_modifier: 100 }], finishes: [{ name: 'Softcover', price_modifier: 0 }, { name: 'Hardcover', price_modifier: 100 }, { name: 'Layflat', price_modifier: 200 }], sizes: [{ name: 'A5', width: 200, height: 150, price_modifier: 0 }, { name: 'A4', width: 300, height: 200, price_modifier: 150 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Pages': '20-100 pages', 'Cover': 'Hardcover / Softcover' }, is_active: true, created_at: '' },
-  // Photo Frames
-  { id: '37', category_id: '12', name: 'Custom Photo Frames', slug: 'photo-frames', description: 'LED and acrylic photo frames.', short_description: 'LED & acrylic frames', base_price: 499, min_quantity: 1, max_quantity: 200, materials: [{ name: 'Acrylic', price_modifier: 0 }, { name: 'Wood', price_modifier: 50 }, { name: 'LED Acrylic', price_modifier: 100 }], finishes: [{ name: 'Standard', price_modifier: 0 }, { name: 'With LED', price_modifier: 150 }], sizes: [{ name: '4x6 inch', width: 102, height: 152, price_modifier: 0 }, { name: '5x7 inch', width: 127, height: 178, price_modifier: 30 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Acrylic / Wood / LED', 'Print': 'Photo Print' }, is_active: true, created_at: '' },
-  // Coasters
-  { id: '38', category_id: '12', name: 'Custom Coasters', slug: 'custom-coasters', description: 'Printed coasters in various materials.', short_description: 'Cork, acrylic & ceramic', base_price: 99, min_quantity: 25, max_quantity: 5000, materials: [{ name: 'Cork', price_modifier: 0 }, { name: 'Acrylic', price_modifier: 20 }, { name: 'Ceramic', price_modifier: 30 }], finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 10 }], sizes: [{ name: 'Round 3.5"', width: 89, height: 89, price_modifier: 0 }, { name: 'Square 3.5"', width: 89, height: 89, price_modifier: 0 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Cork / Acrylic / Ceramic', 'Print': 'Full Color' }, is_active: true, created_at: '' },
-  // Pens
-  { id: '39', category_id: '12', name: 'Custom Pens', slug: 'custom-pens', description: 'Printed and engraved pens.', short_description: 'Ballpoint & rollerball pens', base_price: 29, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'Plastic', price_modifier: 0 }, { name: 'Metal', price_modifier: 30 }, { name: 'Wood', price_modifier: 20 }], finishes: [{ name: 'Print', price_modifier: 0 }, { name: 'Engraved', price_modifier: 15 }], sizes: [{ name: 'Standard', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Plastic / Metal / Wood', 'Print': 'Logo Print / Engraved' }, is_active: true, created_at: '' },
-  // Calendars
-  { id: '40', category_id: '12', name: 'Custom Calendars', slug: 'custom-calendars', description: 'Desk, wall, and magnet calendars.', short_description: 'Desk & wall calendars', base_price: 199, min_quantity: 25, max_quantity: 5000, materials: [{ name: 'Paper', price_modifier: 0 }, { name: 'Magnet', price_modifier: 20 }], finishes: [{ name: 'Saddle Stitch', price_modifier: 0 }, { name: 'Wire Bound', price_modifier: 20 }], sizes: [{ name: 'Desk A5', width: 148, height: 210, price_modifier: 0 }, { name: 'Wall A4', width: 210, height: 297, price_modifier: 40 }], customizable: true, template_available: true, image_urls: ['https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Paper': '250gsm Art Paper', 'Type': 'Desk / Wall / Magnet' }, is_active: true, created_at: '' },
-  // Water Bottles
-  { id: '41', category_id: '12', name: 'Custom Water Bottles', slug: 'water-bottles', description: 'Printed stainless steel bottles.', short_description: 'Steel & plastic bottles', base_price: 299, min_quantity: 20, max_quantity: 2000, materials: [{ name: 'Stainless Steel', price_modifier: 0 }, { name: 'Aluminum', price_modifier: -30 }], finishes: [{ name: 'Print', price_modifier: 0 }, { name: 'Engraved', price_modifier: 30 }], sizes: [{ name: '500ml', width: 0, height: 0, price_modifier: 0 }, { name: '750ml', width: 0, height: 0, price_modifier: 30 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Stainless Steel', 'Capacity': '500ml / 750ml' }, is_active: true, created_at: '' },
-  // Tumblers
-  { id: '42', category_id: '12', name: 'Custom Tumblers', slug: 'custom-tumblers', description: 'Printed travel tumblers.', short_description: 'Insulated tumblers', base_price: 399, min_quantity: 10, max_quantity: 2000, materials: [{ name: 'Stainless Steel', price_modifier: 0 }], finishes: [{ name: 'Sublimation', price_modifier: 0 }, { name: 'Screen Print', price_modifier: -20 }], sizes: [{ name: '12oz', width: 0, height: 0, price_modifier: 0 }, { name: '16oz', width: 0, height: 0, price_modifier: 30 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Stainless Steel', 'Capacity': '12oz / 16oz' }, is_active: true, created_at: '' },
-  // Travel Mugs
-  { id: '43', category_id: '12', name: 'Custom Travel Mugs', slug: 'travel-mugs', description: 'Insulated travel mugs.', short_description: 'Double-wall insulated', base_price: 449, min_quantity: 10, max_quantity: 2000, materials: [{ name: 'Stainless Steel', price_modifier: 0 }], finishes: [{ name: 'Print', price_modifier: 0 }, { name: 'Engraved', price_modifier: 40 }], sizes: [{ name: '12oz', width: 0, height: 0, price_modifier: 0 }, { name: '16oz', width: 0, height: 0, price_modifier: 40 }], customizable: true, template_available: false, image_urls: ['https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=450&fit=crop'], gallery_urls: [], specs: { 'Material': 'Stainless Steel', 'Insulated': 'Double Wall' }, is_active: true, created_at: '' },
+  { id: '1', category_id: '1', name: 'Standard Business Cards', slug: 'standard-business-cards', description: 'Classic business cards printed on 300gsm cardstock.', short_description: '300gsm classic cards', base_price: 299, min_quantity: 100, max_quantity: 50000, materials: [{ name: '300gsm', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '2', category_id: '1', name: 'Premium Matte Business Cards', slug: 'premium-matte-business-cards', description: 'Thick 400gsm matte cards.', short_description: '400gsm premium matte', base_price: 499, min_quantity: 100, max_quantity: 10000, materials: [{ name: '400gsm', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '3', category_id: '1', name: 'Metallic Foil Business Cards', slug: 'metallic-foil-business-cards', description: 'Metallic foil stamping on premium cardstock.', short_description: 'Foil stamped cards', base_price: 899, min_quantity: 100, max_quantity: 5000, materials: [{ name: '400gsm', price_modifier: 0 }], finishes: [{ name: 'Gold Foil', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '4', category_id: '1', name: 'Luxury Velvet Business Cards', slug: 'luxury-business-cards', description: 'Velvet lamination with foil accents.', short_description: 'Velvet luxury cards', base_price: 1299, min_quantity: 100, max_quantity: 2000, materials: [{ name: '500gsm', price_modifier: 0 }], finishes: [{ name: 'Velvet Black', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '5', category_id: '1', name: 'Magnet Business Cards', slug: 'magnet-business-cards', description: 'Magnetic backing cards.', short_description: 'Magnetic cards', base_price: 799, min_quantity: 100, max_quantity: 5000, materials: [{ name: 'Magnetic', price_modifier: 0 }], finishes: [{ name: 'Glossy', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '6', category_id: '2', name: 'A5 Double-Sided Flyers', slug: 'a5-flyers', description: 'Vibrant A5 flyers.', short_description: '170gsm art paper', base_price: 299, min_quantity: 100, max_quantity: 50000, materials: [{ name: '170gsm Art', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '7', category_id: '2', name: 'A4 Double-Sided Flyers', slug: 'a4-flyers', description: 'Large format A4 flyers.', short_description: 'A4 full color', base_price: 499, min_quantity: 100, max_quantity: 50000, materials: [{ name: '170gsm Art', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '8', category_id: '3', name: 'Tri-Fold Brochures', slug: 'tri-fold-brochures', description: 'Popular tri-fold format.', short_description: 'A4 tri-fold', base_price: 599, min_quantity: 50, max_quantity: 10000, materials: [{ name: '170gsm Art', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '9', category_id: '3', name: 'Bi-Fold Brochures', slug: 'bi-fold-brochures', description: 'Professional bi-fold brochures.', short_description: 'A4 bi-fold', base_price: 499, min_quantity: 50, max_quantity: 10000, materials: [{ name: '170gsm Art', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '10', category_id: '5', name: 'Vinyl Banner 3x6ft', slug: 'vinyl-banners', description: 'Durable vinyl banner.', short_description: 'Weather-resistant vinyl', base_price: 599, min_quantity: 1, max_quantity: 100, materials: [{ name: '13oz Vinyl', price_modifier: 0 }], finishes: [{ name: 'Standard', price_modifier: 0 }], sizes: [{ name: '3x6 ft', width: 914, height: 1829, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '11', category_id: '7', name: 'Die-Cut Vinyl Stickers', slug: 'die-cut-stickers', description: 'Custom die-cut stickers.', short_description: 'Waterproof vinyl', base_price: 199, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'White Vinyl', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: '2 inch', width: 50, height: 50, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '12', category_id: '8', name: 'Custom Mailer Boxes', slug: 'mailer-boxes', description: 'Branded corrugated mailer boxes.', short_description: 'Corrugated packaging', base_price: 149, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'E-Flute', price_modifier: 0 }], finishes: [{ name: 'Kraft', price_modifier: 0 }], sizes: [{ name: 'Small', width: 150, height: 100, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '13', category_id: '11', name: 'Custom Cotton T-Shirts', slug: 'cotton-tshirts', description: '100% cotton t-shirts.', short_description: '100% cotton, custom print', base_price: 399, min_quantity: 20, max_quantity: 5000, materials: [{ name: '100% Cotton', price_modifier: 0 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }], sizes: [{ name: 'M', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '14', category_id: '12', name: 'Custom Ceramic Mugs', slug: 'ceramic-mugs', description: 'Classic ceramic mugs.', short_description: '11oz ceramic', base_price: 299, min_quantity: 10, max_quantity: 5000, materials: [{ name: 'Ceramic', price_modifier: 0 }], finishes: [{ name: 'Standard Print', price_modifier: 0 }], sizes: [{ name: '11oz', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '15', category_id: '9', name: 'A4 Corporate Letterheads', slug: 'a4-letterheads', description: 'Professional letterheads.', short_description: '120gsm premium paper', base_price: 399, min_quantity: 100, max_quantity: 10000, materials: [{ name: '120gsm', price_modifier: 0 }], finishes: [{ name: 'Uncoated', price_modifier: 0 }], sizes: [{ name: 'A4', width: 210, height: 297, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '16', category_id: '11', name: 'Custom Polo T-Shirts', slug: 'polo-tshirts', description: 'Premium polo shirts.', short_description: 'Cotton pique polos', base_price: 499, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton Pique', price_modifier: 0 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }], sizes: [{ name: 'M', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '17', category_id: '11', name: 'Custom Caps & Headwear', slug: 'custom-caps', description: 'Custom embroidered caps.', short_description: 'Embroidered caps', base_price: 199, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton', price_modifier: 0 }], finishes: [{ name: 'Embroidery', price_modifier: 0 }], sizes: [{ name: 'One Size', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '18', category_id: '11', name: 'Custom Hoodies', slug: 'custom-hoodies', description: 'Printed hoodies.', short_description: 'Cotton fleece hoodies', base_price: 699, min_quantity: 10, max_quantity: 2000, materials: [{ name: 'Cotton Fleece', price_modifier: 0 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }], sizes: [{ name: 'M', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '19', category_id: '12', name: 'Custom Water Bottles', slug: 'water-bottles', description: 'Printed steel bottles.', short_description: 'Steel & plastic bottles', base_price: 299, min_quantity: 20, max_quantity: 2000, materials: [{ name: 'Stainless Steel', price_modifier: 0 }], finishes: [{ name: 'Print', price_modifier: 0 }], sizes: [{ name: '500ml', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '20', category_id: '12', name: 'Custom Tumblers', slug: 'custom-tumblers', description: 'Printed travel tumblers.', short_description: 'Insulated tumblers', base_price: 399, min_quantity: 10, max_quantity: 2000, materials: [{ name: 'Stainless Steel', price_modifier: 0 }], finishes: [{ name: 'Sublimation', price_modifier: 0 }], sizes: [{ name: '12oz', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '21', category_id: '15', name: 'Custom Umbrellas', slug: 'custom-umbrellas', description: 'Printed umbrellas.', short_description: 'Compact & golf umbrellas', base_price: 599, min_quantity: 10, max_quantity: 1000, materials: [{ name: 'Polyester', price_modifier: 0 }], finishes: [{ name: 'Single Side Print', price_modifier: 0 }], sizes: [{ name: 'Compact', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '22', category_id: '8', name: 'Custom Tote Bags', slug: 'custom-tote-bags', description: 'Printed cotton tote bags.', short_description: 'Cotton & canvas totes', base_price: 149, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Cotton', price_modifier: 0 }], finishes: [{ name: 'Screen Print', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 350, height: 400, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '23', category_id: '12', name: 'Custom Pens', slug: 'custom-pens', description: 'Printed and engraved pens.', short_description: 'Ballpoint pens', base_price: 29, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'Plastic', price_modifier: 0 }], finishes: [{ name: 'Print', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '24', category_id: '12', name: 'Custom Calendars', slug: 'custom-calendars', description: 'Desk and wall calendars.', short_description: 'Desk & wall calendars', base_price: 199, min_quantity: 25, max_quantity: 5000, materials: [{ name: 'Paper', price_modifier: 0 }], finishes: [{ name: 'Saddle Stitch', price_modifier: 0 }], sizes: [{ name: 'Desk A5', width: 148, height: 210, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '25', category_id: '12', name: 'Custom Notebooks', slug: 'custom-notebooks', description: 'Personalised notebooks.', short_description: 'Custom cover notebooks', base_price: 149, min_quantity: 20, max_quantity: 5000, materials: [{ name: 'Paper', price_modifier: 0 }], finishes: [{ name: 'Softcover', price_modifier: 0 }], sizes: [{ name: 'A5', width: 148, height: 210, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '26', category_id: '12', name: 'Custom Trophies', slug: 'custom-trophies', description: 'Custom trophies and awards.', short_description: 'Crystal & wooden trophies', base_price: 499, min_quantity: 1, max_quantity: 200, materials: [{ name: 'Crystal', price_modifier: 0 }], finishes: [{ name: 'Engraved', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 0, height: 0, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '27', category_id: '12', name: 'Custom Keychains', slug: 'custom-keychains', description: 'Printed keychains.', short_description: 'Acrylic & metal keychains', base_price: 79, min_quantity: 50, max_quantity: 10000, materials: [{ name: 'Acrylic', price_modifier: 0 }], finishes: [{ name: 'Print', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 50, height: 50, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '28', category_id: '12', name: 'Custom Coasters', slug: 'custom-coasters', description: 'Printed coasters.', short_description: 'Cork, acrylic & ceramic', base_price: 99, min_quantity: 25, max_quantity: 5000, materials: [{ name: 'Cork', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'Round 3.5"', width: 89, height: 89, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '29', category_id: '1', name: 'Loyalty Cards', slug: 'loyalty-cards', description: 'Custom loyalty cards.', short_description: 'Loyalty & membership cards', base_price: 499, min_quantity: 100, max_quantity: 10000, materials: [{ name: '350gsm Card', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '30', category_id: '1', name: 'Transparent Business Cards', slug: 'transparent-business-cards', description: 'Clear plastic cards.', short_description: 'Clear PVC cards', base_price: 799, min_quantity: 100, max_quantity: 5000, materials: [{ name: 'Clear PVC', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '31', category_id: '5', name: 'Standees & Display Boards', slug: 'standees', description: 'Portable standees.', short_description: 'Roll-up & X-banner', base_price: 799, min_quantity: 1, max_quantity: 100, materials: [{ name: 'Vinyl', price_modifier: 0 }], finishes: [{ name: 'Standard', price_modifier: 0 }], sizes: [{ name: 'Medium', width: 610, height: 1600, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '32', category_id: '5', name: 'Foam Board Printing', slug: 'foam-boards', description: 'Lightweight foam board signs.', short_description: '5mm/10mm foam board', base_price: 499, min_quantity: 1, max_quantity: 100, materials: [{ name: '5mm Foam', price_modifier: 0 }], finishes: [{ name: 'Matte', price_modifier: 0 }], sizes: [{ name: 'A3', width: 297, height: 420, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '33', category_id: '1', name: 'Visiting Card Holders', slug: 'card-holders', description: 'Premium card holders.', short_description: 'Metal & leather cases', base_price: 199, min_quantity: 10, max_quantity: 5000, materials: [{ name: 'Metal', price_modifier: 0 }], finishes: [{ name: 'Brushed Steel', price_modifier: 0 }], sizes: [{ name: 'Standard', width: 85, height: 55, price_modifier: 0 }], customizable: true, template_available: false, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
+  { id: '34', category_id: '12', name: 'Custom Photo Albums', slug: 'photo-albums', description: 'Personalised photo albums.', short_description: 'Hardcover albums', base_price: 599, min_quantity: 1, max_quantity: 500, materials: [{ name: 'Paper Pages', price_modifier: 0 }], finishes: [{ name: 'Hardcover', price_modifier: 0 }], sizes: [{ name: 'A5', width: 200, height: 150, price_modifier: 0 }], customizable: true, template_available: true, image_urls: [''], gallery_urls: [], specs: {}, is_active: true, created_at: '' },
 ];
 
 function getProductCategorySlug(product: Product): string {
   return CATEGORY_ID_MAP[product.category_id] || '';
 }
 
-function getRelatedCategories(currentSlug: string) {
-  const cat = PRODUCT_CATEGORIES.find((c) => c.slug === currentSlug);
-  if (!cat) return PRODUCT_CATEGORIES.slice(0, 6);
-  const currentIdx = PRODUCT_CATEGORIES.indexOf(cat);
-  const related: typeof PRODUCT_CATEGORIES = [];
-  for (let i = 1; related.length < 6; i++) {
-    const idx = (currentIdx + i) % PRODUCT_CATEGORIES.length;
-    related.push(PRODUCT_CATEGORIES[idx]);
-  }
-  return related;
+const categoryImageMap: Record<string, string> = {
+  'gift-hampers': 'bg-gradient-to-br from-rose-100 to-amber-50',
+  'visiting-cards': 'bg-gradient-to-br from-blue-50 to-indigo-100',
+  'id-cards': 'bg-gradient-to-br from-blue-50 to-indigo-100',
+  'pens': 'bg-gradient-to-br from-green-50 to-emerald-100',
+  'letterheads': 'bg-gradient-to-br from-slate-50 to-gray-100',
+  'envelopes': 'bg-gradient-to-br from-slate-50 to-gray-100',
+  'diaries-notebooks': 'bg-gradient-to-br from-amber-50 to-yellow-100',
+  'calendars': 'bg-gradient-to-br from-amber-50 to-yellow-100',
+  't-shirts': 'bg-gradient-to-br from-red-50 to-pink-100',
+  'polo-t-shirts': 'bg-gradient-to-br from-red-50 to-pink-100',
+  'jackets-hoodies': 'bg-gradient-to-br from-red-50 to-pink-100',
+  'flyers': 'bg-gradient-to-br from-purple-50 to-violet-100',
+  'brochures': 'bg-gradient-to-br from-purple-50 to-violet-100',
+  'posters': 'bg-gradient-to-br from-orange-50 to-amber-100',
+  'banners': 'bg-gradient-to-br from-orange-50 to-amber-100',
+  'stickers': 'bg-gradient-to-br from-teal-50 to-cyan-100',
+  'labels': 'bg-gradient-to-br from-teal-50 to-cyan-100',
+  'custom-boxes': 'bg-gradient-to-br from-orange-50 to-amber-100',
+  'mugs': 'bg-gradient-to-br from-sky-50 to-blue-100',
+  'water-bottles': 'bg-gradient-to-br from-sky-50 to-blue-100',
+  'tote-bags': 'bg-gradient-to-br from-lime-50 to-green-100',
+  'trophies': 'bg-gradient-to-br from-yellow-50 to-amber-100',
+  'keychains': 'bg-gradient-to-br from-pink-50 to-rose-100',
+  'coasters': 'bg-gradient-to-br from-stone-50 to-gray-100',
+  'photo-albums': 'bg-gradient-to-br from-violet-50 to-purple-100',
+};
+
+const SIDEBAR_CATEGORIES = [
+  { name: 'Visiting Cards & ID Cards', slug: 'visiting-cards', subcategories: ['Visiting Cards', 'ID Cards', 'Visiting Card Holders'] },
+  { name: 'Stationery & Office Supplies', slug: 'stationery', subcategories: ['Pens', 'Letterheads', 'Envelopes', 'Diaries & Notebooks', 'Calendars'] },
+  { name: 'Apparel', slug: 'apparel', subcategories: ['T-Shirts', 'Polo T-Shirts', 'Jackets & Hoodies'] },
+  { name: 'Corporate Gifts', slug: 'corporate-gifts', subcategories: ['Gift Hampers', 'Custom Keychains', 'Custom Coasters'] },
+  { name: 'Marketing & Promotions', slug: 'marketing', subcategories: ['Flyers', 'Brochures', 'Posters', 'Banners'] },
+  { name: 'Labels, Stickers & Packaging', slug: 'labels-packaging', subcategories: ['Stickers', 'Labels', 'Custom Boxes'] },
+  { name: 'Drinkware & Lunchboxes', slug: 'drinkware', subcategories: ['Mugs', 'Water Bottles', 'Tumblers'] },
+  { name: 'Awards & Trophies', slug: 'awards', subcategories: ['Trophies'] },
+  { name: 'Bags', slug: 'bags', subcategories: ['Tote Bags'] },
+  { name: 'Gadgets & Accessories', slug: 'gadgets', subcategories: ['USB Drives', 'Power Banks'] },
+  { name: 'Umbrellas & Raincoats', slug: 'umbrellas', subcategories: ['Umbrellas', 'Raincoats'] },
+];
+
+const SUBCATEGORY_TABS = [
+  'Gift Hampers', 'Visiting Cards & ID Cards', 'Stationery & Office Supplies', 'Apparel',
+  'Corporate Gifts', 'Marketing & Promotions', 'Labels, Stickers & Packaging', 'Drinkware & Lunchboxes',
+  'Awards & Trophies', 'Bags', 'Gadgets & Accessories', 'Umbrellas & Raincoats',
+];
+
+const HOW_IT_WORKS_STEPS = [
+  { icon: Palette, title: 'Customise', description: 'Choose your product and personalise it with your design, logo, or artwork.' },
+  { icon: ShoppingBag, title: 'Add to Cart', description: 'Select quantity, review your order, and add it to your cart.' },
+  { icon: Truck, title: 'Receive Delivery', description: 'We print and deliver your order to your doorstep across India.' },
+];
+
+const REVIEWS = [
+  { name: 'Priya Sharma', company: 'TechVista Solutions', content: 'PrintOrbit delivered exceptional quality business cards. The metallic finish exceeded our expectations.', rating: 5 },
+  { name: 'Rahul Mehta', company: 'GreenLeaf Organics', content: 'Our product labels are stunning. The team understood our brand perfectly and delivered on time.', rating: 5 },
+  { name: 'Anjali Patel', company: 'Sparkle Events', content: 'The banners for our exhibition were vibrant and high-quality. Will definitely order again.', rating: 5 },
+];
+
+const ARTICLES = [
+  { title: 'Top 10 Corporate Gift Ideas for 2024', excerpt: 'Discover trending corporate gifts that leave a lasting impression on clients and employees.', category: 'Corporate Gifting' },
+  { title: 'How to Design Effective Visiting Cards', excerpt: 'Tips and tricks for creating professional business cards that stand out from the crowd.', category: 'Design Tips' },
+  { title: 'Sustainable Packaging Solutions', excerpt: 'Eco-friendly packaging options that are good for your brand and the planet.', category: 'Sustainability' },
+];
+
+export default async function ProductsPage(props: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const searchParams = await props.searchParams;
+
+  const initialCategory = typeof searchParams.category === 'string' ? searchParams.category : '';
+
+  return <ProductsPageClient initialCategory={initialCategory} />;
 }
 
-export default function ProductsPage() {
-  const searchParams = useSearchParams();
-  const initialCategory = searchParams.get('category') || '';
-  const initialQuery = searchParams.get('q') || '';
-
-  const [search, setSearch] = useState(initialQuery);
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-  const [sortBy, setSortBy] = useState('popular');
+function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
+  const [activeCategory, setActiveCategory] = useState(initialCategory);
+  const [sortBy, setSortBy] = useState<'bestselling' | 'newest' | 'price_asc' | 'price_desc'>('bestselling');
   const [showSort, setShowSort] = useState(false);
+  const [expandedSidebar, setExpandedSidebar] = useState(true);
+  const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
+  const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    setActiveCategory(initialCategory);
+  }, [initialCategory]);
 
   const filteredProducts = ALL_PRODUCTS.filter((p) => {
-    if (selectedCategory && getProductCategorySlug(p) !== selectedCategory) return false;
-    if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (activeCategory) {
+      const slug = getProductCategorySlug(p);
+      if (slug !== activeCategory) return false;
+    }
     return true;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
-      case 'price-low': return a.base_price - b.base_price;
-      case 'price-high': return b.base_price - a.base_price;
-      case 'name': return a.name.localeCompare(b.name);
+      case 'price_asc': return a.base_price - b.base_price;
+      case 'price_desc': return b.base_price - a.base_price;
+      case 'newest': return Number(b.id) - Number(a.id);
       default: return 0;
     }
   });
 
-  const currentCat = selectedCategory
-    ? PRODUCT_CATEGORIES.find((c) => c.slug === selectedCategory)
-    : null;
+  const toggleLike = (id: string) => {
+    setLikedProducts((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
-  const relatedCategories = getRelatedCategories(selectedCategory);
+  const activeCat = activeCategory ? SIDEBAR_CATEGORIES.find((c) => c.slug === activeCategory) : null;
+  const activeTabName = activeCat?.name || 'All';
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--background)' }}>
-      {/* Breadcrumb */}
-      <div className="bg-white border-b border-gray-100">
-        <Container>
-          <nav className="flex items-center gap-2 py-3 text-xs text-gray-500">
-            <Link href="/" className="hover:text-[var(--color-primary)] transition-colors">Home</Link>
-            <ChevronRight className="w-3 h-3" />
-            <span className="text-gray-800 font-medium">
-              {currentCat ? currentCat.name : 'All Products'}
-            </span>
-          </nav>
-        </Container>
-      </div>
+    <div style={{ background: '#F4F2EF', minHeight: '100vh' }}>
+      <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+        {/* Header Section */}
+        <div className="pt-8 pb-6">
+          <h1 className="text-3xl md:text-4xl font-light" style={{ color: '#ED1C24' }}>
+            Explore the Best
+          </h1>
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-1">
+            T-Shirts and Corporate Gifts
+          </h2>
+          <p className="text-gray-600 mt-2 text-sm md:text-base">
+            The one-stop shop for your corporate gifting needs
+          </p>
+        </div>
 
-      {/* Category Header */}
-      <div className="bg-white border-b border-gray-100">
-        <Container>
-          <div className="py-6">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
-              {currentCat ? currentCat.name : 'All Products'}
-            </h1>
-            <p className="text-sm text-gray-500">
-              {currentCat
-                ? currentCat.description
-                : 'Browse our complete range of premium printing products. Customize and order online.'}
-            </p>
-          </div>
-        </Container>
-      </div>
-
-      {/* Category Tabs + Search + Sort */}
-      <div className="bg-white border-b border-gray-100 sticky top-0 z-30">
-        <Container>
-          <div className="flex items-center gap-4 py-3">
-            {/* Category Tabs */}
-            <div className="flex-1 overflow-x-auto scrollbar-hide">
-              <div className="flex gap-1.5">
+        {/* Subcategory Tabs */}
+        <div className="bg-white rounded-lg border border-gray-200 mb-6 overflow-x-auto">
+          <div className="flex items-center gap-0 min-w-max">
+            {SUBCATEGORY_TABS.map((tab) => {
+              const isActive = activeTabName === tab;
+              return (
                 <button
-                  onClick={() => setSelectedCategory('')}
-                  className={`px-3.5 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${
-                    !selectedCategory
-                      ? 'bg-[var(--color-primary)] text-white'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  key={tab}
+                  onClick={() => {
+                    const match = SIDEBAR_CATEGORIES.find((c) => c.name === tab);
+                    setActiveCategory(match ? match.slug : '');
+                  }}
+                  className={`px-4 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
+                    isActive
+                      ? 'border-[#ED1C24] text-[#ED1C24]'
+                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
                   }`}
                 >
-                  All
+                  {tab}
                 </button>
-                {PRODUCT_CATEGORIES.map((cat) => {
-                  const Icon = CATEGORY_ICONS[cat.slug] || Package;
-                  return (
-                    <button
-                      key={cat.slug}
-                      onClick={() => setSelectedCategory(cat.slug)}
-                      className={`flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-full whitespace-nowrap transition-colors ${
-                        selectedCategory === cat.slug
-                          ? 'bg-[var(--color-primary)] text-white'
-                          : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                      }`}
-                    >
-                      <Icon className="w-3 h-3" />
-                      {cat.name}
-                    </button>
-                  );
-                })}
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex gap-6 pb-12">
+          {/* Filter Sidebar */}
+          <aside className="hidden lg:block w-[250px] shrink-0">
+            <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <button
+                onClick={() => setExpandedSidebar(!expandedSidebar)}
+                className="flex items-center justify-between w-full mb-3"
+              >
+                <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Category</span>
+                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${expandedSidebar ? 'rotate-180' : ''}`} />
+              </button>
+              {expandedSidebar && (
+                <div className="space-y-0.5">
+                  <button
+                    onClick={() => setActiveCategory('')}
+                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                      !activeCategory ? 'bg-[#ED1C24]/10 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
+                    }`}
+                  >
+                    All Products
+                  </button>
+                  {SIDEBAR_CATEGORIES.map((cat) => (
+                    <div key={cat.slug}>
+                      <button
+                        onClick={() => setActiveCategory(cat.slug)}
+                        className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
+                          activeCategory === cat.slug ? 'bg-[#ED1C24]/10 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
+                        }`}
+                      >
+                        {cat.name}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1 min-w-0">
+            {/* Sort Bar */}
+            <div className="flex items-center justify-between mb-4">
+              <p className="text-sm text-gray-500">
+                {sortedProducts.length} product{sortedProducts.length !== 1 ? 's' : ''}
+                {activeCategory && (
+                  <> in <span className="font-medium text-gray-700">{activeCat?.name || activeCategory}</span></>
+                )}
+              </p>
+              <div className="relative">
+                <button
+                  onClick={() => setShowSort(!showSort)}
+                  className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-gray-300"
+                >
+                  <span className="text-gray-400">SORT BY:</span> {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+                {showSort && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowSort(false)} />
+                    <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 min-w-[180px]">
+                      {SORT_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.value}
+                          onClick={() => { setSortBy(opt.value as typeof sortBy); setShowSort(false); }}
+                          className={`w-full text-left px-4 py-2 text-xs transition-colors ${
+                            sortBy === opt.value ? 'bg-[#ED1C24]/5 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
-            {/* Search */}
-            <div className="relative shrink-0 hidden sm:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs placeholder:text-gray-400 outline-none focus:border-[var(--color-primary)] focus:ring-1 focus:ring-[var(--color-primary)]/20 w-56 transition-colors"
-              />
-              {search && (
+            {/* Product Grid */}
+            {sortedProducts.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {sortedProducts.map((product) => {
+                  const catSlug = getProductCategorySlug(product);
+                  const bgClass = categoryImageMap[catSlug] || 'bg-gradient-to-br from-gray-50 to-gray-100';
+                  const Icon = CATEGORY_ICONS[catSlug] || Package;
+                  const mrp = Math.round(product.base_price * 1.4);
+                  const discount = Math.round(((mrp - product.base_price) / mrp) * 100);
+                  const isHovered = hoveredProduct === product.id;
+                  const isLiked = likedProducts.has(product.id);
+
+                  return (
+                    <Link
+                      key={product.id}
+                      href={`/products/${product.slug}`}
+                      className="bg-white rounded-lg border border-gray-200 overflow-hidden group"
+                      onMouseEnter={() => setHoveredProduct(product.id)}
+                      onMouseLeave={() => setHoveredProduct(null)}
+                    >
+                      {/* Product Image */}
+                      <div className={`relative aspect-[4/3] ${bgClass} flex items-center justify-center`}>
+                        <Icon className="w-16 h-16 text-gray-300" />
+                        {/* Quick Actions */}
+                        <div className={`absolute top-3 right-3 flex flex-col gap-2 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+                          <button
+                            onClick={(e) => { e.preventDefault(); }}
+                            className="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:bg-gray-50"
+                          >
+                            <Share2 className="w-3.5 h-3.5 text-gray-600" />
+                          </button>
+                          <button
+                            onClick={(e) => { e.preventDefault(); toggleLike(product.id); }}
+                            className="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:bg-gray-50"
+                          >
+                            <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="p-3">
+                        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
+                          PrintStop
+                        </p>
+                        <h3 className="text-sm font-semibold text-gray-900 leading-snug mb-1.5 line-clamp-2 group-hover:text-[#ED1C24] transition-colors">
+                          {product.name}
+                        </h3>
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <span className="text-sm font-bold text-gray-900">₹{product.base_price}</span>
+                          <span className="text-[10px] text-gray-400">MRP</span>
+                          <span className="text-[10px] text-gray-400 line-through">₹{mrp}</span>
+                          <span className="text-[10px] font-semibold text-green-600">{discount}% off</span>
+                        </div>
+                        <p className="text-[11px] text-gray-500 mb-2">
+                          ₹{product.base_price} for {product.min_quantity.toLocaleString()}+ units
+                        </p>
+                        <div className="flex items-center gap-0.5">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Star key={star} className="w-3 h-3 fill-amber-400 text-amber-400" />
+                          ))}
+                          <span className="text-[10px] text-gray-400 ml-1">(120)</span>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-white rounded-lg border border-gray-200">
+                <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
+                <p className="text-sm text-gray-500 mb-6">Try adjusting your filter criteria</p>
                 <button
-                  onClick={() => setSearch('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  onClick={() => setActiveCategory('')}
+                  className="px-6 py-2.5 bg-[#ED1C24] text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
                 >
-                  <X className="w-3 h-3" />
+                  View All Products
                 </button>
-              )}
-            </div>
+              </div>
+            )}
 
-            {/* Sort Dropdown */}
-            <div className="relative shrink-0">
-              <button
-                onClick={() => setShowSort(!showSort)}
-                className="flex items-center gap-1.5 px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-[var(--color-primary)] transition-colors"
-              >
-                {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
-                <ChevronDown className="w-3 h-3" />
-              </button>
-              {showSort && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setShowSort(false)} />
-                  <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 min-w-[160px]">
-                    {SORT_OPTIONS.map((opt) => (
-                      <button
-                        key={opt.value}
-                        onClick={() => { setSortBy(opt.value); setShowSort(false); }}
-                        className={`w-full text-left px-3 py-2 text-xs transition-colors ${
-                          sortBy === opt.value
-                            ? 'bg-[var(--color-primary)]/5 text-[var(--color-primary)] font-medium'
-                            : 'text-gray-600 hover:bg-gray-50'
-                        }`}
-                      >
-                        {opt.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </Container>
-      </div>
-
-      {/* Active Filters */}
-      {(selectedCategory || search) && (
-        <div className="bg-white border-b border-gray-100">
-          <Container>
-            <div className="flex items-center gap-2 py-2.5">
-              <span className="text-xs text-gray-500">Active:</span>
-              {selectedCategory && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-[var(--color-primary)]/5 text-[var(--color-primary)] text-xs font-medium rounded-full">
-                  {PRODUCT_CATEGORIES.find((c) => c.slug === selectedCategory)?.name}
-                  <button onClick={() => setSelectedCategory('')}>
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              )}
-              {search && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-gray-100 text-gray-600 text-xs font-medium rounded-full">
-                  &ldquo;{search}&rdquo;
-                  <button onClick={() => setSearch('')}>
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              )}
-              <button
-                onClick={() => { setSelectedCategory(''); setSearch(''); }}
-                className="text-xs text-gray-400 hover:text-gray-600 ml-1"
-              >
-                Clear all
-              </button>
-            </div>
-          </Container>
-        </div>
-      )}
-
-      {/* Products Grid */}
-      <Container>
-        <div className="py-6">
-          {/* Results Count */}
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-gray-500">
-              {sortedProducts.length} product{sortedProducts.length !== 1 ? 's' : ''}
-              {currentCat && <> in <span className="font-medium text-gray-700">{currentCat.name}</span></>}
-            </p>
-          </div>
-
-          {sortedProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sortedProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/products/${product.slug}`}
-                  className="clean-card group overflow-hidden"
-                >
-                  {/* Image */}
-                  <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
-                    <img
-                      src={product.image_urls[0]}
-                      alt={product.name}
-                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    {/* Badges */}
-                    {POPULAR_PRODUCTS.includes(product.id) && (
-                      <span className="absolute top-2 left-2 px-2 py-0.5 bg-[var(--color-primary)] text-white text-[10px] font-semibold rounded">
-                        Popular
-                      </span>
-                    )}
-                    {BEST_SELLER_PRODUCTS.includes(product.id) && (
-                      <span className="absolute top-2 left-2 px-2 py-0.5 bg-amber-500 text-white text-[10px] font-semibold rounded">
-                        Best Seller
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-3">
-                    <p className="text-[10px] font-semibold text-[var(--color-primary)] uppercase tracking-wider mb-0.5">
-                      PrintStop
-                    </p>
-                    <h3 className="text-sm font-semibold text-gray-900 leading-snug mb-1 line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors">
-                      {product.name}
-                    </h3>
-                    <p className="text-xs text-gray-500 mb-2">
-                      for {product.min_quantity.toLocaleString()} pieces
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-bold text-gray-900">
-                        &#8377;{product.base_price.toLocaleString()}
-                      </p>
-                      <span className="text-xs font-medium text-[var(--color-primary)] group-hover:underline">
-                        Details
-                      </span>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
-              <p className="text-sm text-gray-500 mb-6">Try adjusting your search or filter criteria</p>
-              <button
-                onClick={() => { setSelectedCategory(''); setSearch(''); }}
-                className="px-6 py-2.5 bg-[var(--color-primary)] text-white rounded-lg text-sm font-semibold hover:bg-[var(--color-primary-dark)] transition-colors"
-              >
-                Clear All Filters
-              </button>
-            </div>
-          )}
-        </div>
-      </Container>
-
-      {/* You Might Also Like */}
-      {sortedProducts.length > 0 && (
-        <div className="bg-white border-t border-gray-100">
-          <Container>
-            <div className="py-8">
+            {/* You Might Also Like */}
+            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
               <h2 className="text-lg font-bold text-gray-900 mb-4">You might also like</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                {relatedCategories.map((cat) => {
+                {PRODUCT_CATEGORIES.slice(0, 6).map((cat) => {
                   const Icon = CATEGORY_ICONS[cat.slug] || Package;
                   return (
                     <Link
                       key={cat.slug}
                       href={`/products?category=${cat.slug}`}
-                      className="clean-card p-4 text-center group"
+                      className="p-3 rounded-lg border border-gray-100 text-center hover:border-[#ED1C24]/30 hover:bg-red-50/30 transition-colors"
                     >
-                      <div className="w-10 h-10 rounded-full bg-[var(--color-primary)]/5 flex items-center justify-center mx-auto mb-2 group-hover:bg-[var(--color-primary)]/10 transition-colors">
-                        <Icon className="w-5 h-5 text-[var(--color-primary)]" />
+                      <div className="w-10 h-10 rounded-full bg-[#ED1C24]/5 flex items-center justify-center mx-auto mb-2">
+                        <Icon className="w-5 h-5 text-[#ED1C24]" />
                       </div>
                       <h3 className="text-xs font-semibold text-gray-900 mb-0.5">{cat.name}</h3>
                       <p className="text-[10px] text-gray-500">{cat.count}</p>
@@ -449,9 +458,79 @@ export default function ProductsPage() {
                 })}
               </div>
             </div>
-          </Container>
+
+            {/* How It Works */}
+            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-6">How It Works</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {HOW_IT_WORKS_STEPS.map((step, i) => {
+                  const Icon = step.icon;
+                  return (
+                    <div key={i} className="text-center">
+                      <div className="w-14 h-14 rounded-full bg-[#ED1C24]/10 flex items-center justify-center mx-auto mb-3">
+                        <Icon className="w-6 h-6 text-[#ED1C24]" />
+                      </div>
+                      <h3 className="text-sm font-bold text-gray-900 mb-1">{step.title}</h3>
+                      <p className="text-xs text-gray-500 leading-relaxed">{step.description}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Most Helpful Reviews */}
+            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Most Helpful Reviews</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {REVIEWS.map((review, i) => (
+                  <div key={i} className="border border-gray-100 rounded-lg p-4">
+                    <div className="flex items-center gap-0.5 mb-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star key={star} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-600 leading-relaxed mb-3">&ldquo;{review.content}&rdquo;</p>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-900">{review.name}</p>
+                      <p className="text-[10px] text-gray-500">{review.company}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Related Articles */}
+            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">Related Articles</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {ARTICLES.map((article, i) => (
+                  <Link key={i} href="#" className="group">
+                    <div className="aspect-[16/9] bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                      <FileText className="w-8 h-8 text-gray-300" />
+                    </div>
+                    <p className="text-[10px] font-semibold text-[#ED1C24] uppercase tracking-wider mb-1">{article.category}</p>
+                    <h3 className="text-sm font-semibold text-gray-900 leading-snug mb-1 group-hover:text-[#ED1C24] transition-colors">{article.title}</h3>
+                    <p className="text-xs text-gray-500 line-clamp-2">{article.excerpt}</p>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Let's Talk Business Banner */}
+            <div className="mt-8 bg-[#ED1C24] rounded-lg p-8 text-center">
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Let&apos;s Talk Business</h2>
+              <p className="text-white/80 text-sm mb-4">Get custom quotes for bulk orders. Our team is ready to help you.</p>
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-[#ED1C24] rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors"
+              >
+                Contact Us
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }

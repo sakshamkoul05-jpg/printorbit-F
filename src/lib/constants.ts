@@ -719,3 +719,235 @@ export const TESTIMONIALS = [
   { name: 'Anjali Patel', company: 'Sparkle Events', content: 'The banners for our exhibition were vibrant and high-quality. Will definitely order again.', rating: 5 },
   { name: 'Vikram Singh', company: 'Urban Eats', content: 'Custom packaging boxes transformed our brand perception. Customers love the unboxing experience.', rating: 5 },
 ];
+
+export interface Product {
+  slug: string;
+  name: string;
+  brand: string;
+  category: string;
+  subcategory: string;
+  description: string;
+  longDescription: string;
+  basePrice: number;
+  originalPrice: number;
+  minQty: number;
+  maxQty: number;
+  rating: number;
+  reviewCount: number;
+  sku: string;
+  materials: { name: string; price_modifier: number }[];
+  sizes: { name: string; price_modifier: number }[];
+  finishes: { name: string; price_modifier: number }[];
+  paperTypes: string[];
+  printAreas: string[];
+  printTypes: string[];
+  laminationTypes: string[];
+  cornerTypes: string[];
+  specs: Record<string, string>;
+  delivery: string;
+  features: string[];
+  image: string;
+}
+
+export const ALL_PRODUCTS: Product[] = [
+  {
+    slug: 'standard-business-cards', name: 'Standard Business Cards', brand: 'PRINTSTOP', category: 'Business Cards', subcategory: 'Visiting Cards',
+    description: 'Classic business cards printed on 300gsm cardstock.', longDescription: 'Our standard business cards are printed on 300gsm cardstock with full-color digital printing. Perfect for everyday networking and professional use. Affordable, fast turnaround, and available in matte or glossy finish. These cards feature sharp text and vibrant colors that leave a lasting impression on your clients and partners.',
+    basePrice: 299, originalPrice: 450, minQty: 100, maxQty: 50000, rating: 4.6, reviewCount: 384, sku: 'BC-STD-001',
+    materials: [{ name: '300gsm Cardstock', price_modifier: 0 }, { name: '350gsm Cardstock', price_modifier: 30 }],
+    sizes: [{ name: 'Standard (85x55)', price_modifier: 0 }, { name: 'Slim (90x50)', price_modifier: 20 }],
+    finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }],
+    paperTypes: ['300gsm Cardstock', '350gsm Cardstock', '400gsm Cardstock'],
+    printAreas: ['Front & Back', 'Front Only'],
+    printTypes: ['Digital Print', 'Offset Print'],
+    laminationTypes: ['No Lamination', 'Matte Lamination', 'Glossy Lamination'],
+    cornerTypes: ['Standard', 'Rounded'],
+    specs: { 'Material': '300gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte or Glossy', 'Size': '85 x 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
+    delivery: '2-4 Business Days', features: ['Printed on premium 300gsm cardstock', 'Full color both sides', 'Matte or glossy finish options', 'Fast 2-4 day turnaround', 'Free design proof before printing'],
+    image: '',
+  },
+  {
+    slug: 'premium-matte-business-cards', name: 'Premium Matte Business Cards', brand: 'PRINTSTOP', category: 'Business Cards', subcategory: 'Visiting Cards',
+    description: 'Thick 400gsm matte cards with a luxurious feel.', longDescription: 'Our premium matte business cards are printed on 400gsm cardstock with a soft-touch matte lamination. These cards make a lasting impression with their substantial weight and smooth finish. Ideal for professionals, executives, and anyone who wants to convey quality and sophistication.',
+    basePrice: 499, originalPrice: 750, minQty: 100, maxQty: 10000, rating: 4.8, reviewCount: 247, sku: 'BC-PM-002',
+    materials: [{ name: '350gsm', price_modifier: -50 }, { name: '400gsm', price_modifier: 0 }, { name: '450gsm', price_modifier: 50 }],
+    sizes: [{ name: 'Standard', price_modifier: 0 }, { name: 'Slim', price_modifier: 20 }],
+    finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 25 }, { name: 'Soft Touch', price_modifier: 75 }],
+    paperTypes: ['350gsm Cardstock', '400gsm Cardstock', '450gsm Cardstock'],
+    printAreas: ['Front & Back', 'Front Only'],
+    printTypes: ['Digital Print', 'Offset Print'],
+    laminationTypes: ['No Lamination', 'Matte Lamination', 'Soft Touch Lamination'],
+    cornerTypes: ['Standard', 'Rounded'],
+    specs: { 'Material': '400gsm Premium Cardstock', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Size': '85 x 55 mm', 'Bleed': '3mm on all sides', 'File Format': 'PDF, AI, PSD, PNG' },
+    delivery: '3-5 Business Days', features: ['Premium 400gsm thick cardstock', 'Soft-touch matte lamination', 'Luxurious tactile feel', 'Perfect for professionals'],
+    image: '',
+  },
+  {
+    slug: 'a5-flyers', name: 'A5 Double-Sided Flyers', brand: 'PRINTSTOP', category: 'Marketing', subcategory: 'Flyers',
+    description: 'Vibrant full-color A5 flyers on premium 170gsm art paper.', longDescription: 'Our A5 double-sided flyers are printed on premium 170gsm art paper with full-color digital printing. Perfect for promotions, events, and marketing campaigns. Available in matte or glossy finish.',
+    basePrice: 299, originalPrice: 400, minQty: 100, maxQty: 50000, rating: 4.7, reviewCount: 412, sku: 'FL-A5-001',
+    materials: [{ name: '130gsm Art', price_modifier: -30 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 60 }],
+    sizes: [{ name: 'A5', price_modifier: 0 }, { name: 'A4', price_modifier: 80 }, { name: 'DL', price_modifier: -20 }],
+    finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 15 }],
+    paperTypes: ['130gsm Art Paper', '170gsm Art Paper', '250gsm Art Paper'],
+    printAreas: ['Front & Back', 'Front Only'],
+    printTypes: ['Digital Print', 'Offset Print'],
+    laminationTypes: ['No Lamination', 'Matte Lamination', 'Glossy Lamination'],
+    cornerTypes: ['Standard'],
+    specs: { 'Paper': '170gsm Art Paper', 'Print': 'Full Color Both Sides', 'Finish': 'Matte Lamination', 'Sizes': 'A5, A4, DL', 'File Format': 'PDF, AI, PSD, PNG' },
+    delivery: '2-4 Business Days', features: ['Premium 170gsm art paper', 'Full color both sides', 'Available in A5, A4, DL sizes', 'Matte or glossy finish'],
+    image: '',
+  },
+  {
+    slug: 'cotton-tshirts', name: 'Custom Cotton T-Shirts', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'T-Shirts',
+    description: 'Premium 100% cotton t-shirts with custom print.', longDescription: 'Get custom printed t-shirts on premium 100% cotton fabric. Available in screen print, DTG (direct-to-garment), and sublimation printing. Perfect for events, teams, businesses, and promotional giveaways.',
+    basePrice: 399, originalPrice: 600, minQty: 20, maxQty: 5000, rating: 4.5, reviewCount: 312, sku: 'AP-TS-001',
+    materials: [{ name: '100% Cotton', price_modifier: 0 }, { name: 'Poly-Cotton', price_modifier: -30 }, { name: 'Organic Cotton', price_modifier: 50 }],
+    sizes: [{ name: 'S', price_modifier: 0 }, { name: 'M', price_modifier: 0 }, { name: 'L', price_modifier: 0 }, { name: 'XL', price_modifier: 0 }, { name: 'XXL', price_modifier: 20 }],
+    finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'DTG Print', price_modifier: 30 }, { name: 'Sublimation', price_modifier: 50 }],
+    paperTypes: [],
+    printAreas: ['Front', 'Back', 'Front & Back', 'Full Front'],
+    printTypes: ['Screen Print', 'DTG Print', 'Sublimation'],
+    laminationTypes: [],
+    cornerTypes: [],
+    specs: { 'Material': '100% Cotton', 'Weight': '180 GSM', 'Print': 'Screen / DTG / Sublimation', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red', 'File Format': 'PNG, AI, PSD (300 DPI)' },
+    delivery: '5-7 Business Days', features: ['Premium 100% cotton fabric', 'Screen print, DTG, or sublimation', 'Available in S to XXL', '180 GSM weight'],
+    image: '',
+  },
+  {
+    slug: 'ceramic-mugs', name: 'Custom Ceramic Mugs', brand: 'PRINTSTOP', category: 'Gifts & Mugs', subcategory: 'Mugs',
+    description: 'Classic ceramic mugs with custom print. Great for gifts.', longDescription: 'Our custom ceramic mugs are printed with vibrant, long-lasting colors. Available in standard 11oz and large 15oz sizes. Choose standard print or upgrade to our magic heat-reveal mug that changes color when hot liquid is poured.',
+    basePrice: 299, originalPrice: 450, minQty: 10, maxQty: 5000, rating: 4.7, reviewCount: 278, sku: 'GF-MG-001',
+    materials: [{ name: 'Ceramic', price_modifier: 0 }, { name: 'Glass', price_modifier: 50 }],
+    sizes: [{ name: '11oz', price_modifier: 0 }, { name: '15oz', price_modifier: 40 }],
+    finishes: [{ name: 'Standard Print', price_modifier: 0 }, { name: 'Magic (Heat Reveal)', price_modifier: 150 }],
+    paperTypes: [],
+    printAreas: ['Wrap Around', 'One Side'],
+    printTypes: ['Sublimation'],
+    laminationTypes: [],
+    cornerTypes: [],
+    specs: { 'Material': 'Ceramic', 'Capacity': '11oz / 15oz', 'Print': 'Full Color Sublimation', 'Dishwasher Safe': 'Yes', 'Microwave Safe': 'Yes', 'File Format': 'PNG, JPG, AI' },
+    delivery: '3-5 Business Days', features: ['Vibrant, long-lasting colors', '11oz and 15oz sizes', 'Dishwasher and microwave safe', 'Magic heat-reveal option available'],
+    image: '',
+  },
+  {
+    slug: 'tri-fold-brochures', name: 'Tri-Fold Brochures', brand: 'PRINTSTOP', category: 'Marketing', subcategory: 'Brochures',
+    description: 'Popular tri-fold format perfect for marketing and information.', longDescription: 'Our tri-fold brochures are the most popular format for marketing collateral. Printed on premium 170gsm art paper with full-color printing. The tri-fold design gives you 6 panels to showcase your business, products, and services.',
+    basePrice: 599, originalPrice: 800, minQty: 50, maxQty: 10000, rating: 4.8, reviewCount: 201, sku: 'BR-TF-001',
+    materials: [{ name: '130gsm Art', price_modifier: -50 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 100 }],
+    sizes: [{ name: 'A4 (folded to DL)', price_modifier: 0 }],
+    finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 30 }],
+    paperTypes: ['130gsm Art Paper', '170gsm Art Paper', '250gsm Art Paper'],
+    printAreas: ['Front & Back'],
+    printTypes: ['Digital Print', 'Offset Print'],
+    laminationTypes: ['No Lamination', 'Matte Lamination', 'Glossy Lamination'],
+    cornerTypes: ['Standard'],
+    specs: { 'Paper': '170gsm Art Paper', 'Fold': 'Tri-Fold (6 panels)', 'Print': 'Full Color Both Sides', 'Folded Size': '99 x 210 mm', 'File Format': 'PDF, AI, PSD' },
+    delivery: '3-5 Business Days', features: ['6-panel tri-fold design', 'Premium 170gsm art paper', 'Full color both sides', 'Most popular brochure format'],
+    image: '',
+  },
+  {
+    slug: 'die-cut-stickers', name: 'Die-Cut Vinyl Stickers', brand: 'PRINTSTOP', category: 'Labels & Stickers', subcategory: 'Stickers',
+    description: 'Custom die-cut stickers in any shape. Waterproof vinyl.', longDescription: 'Create custom die-cut stickers in any shape you want. Printed on premium waterproof vinyl with strong adhesive. Perfect for product labels, branding, laptops, water bottles, and more.',
+    basePrice: 199, originalPrice: 300, minQty: 50, maxQty: 10000, rating: 4.8, reviewCount: 523, sku: 'LB-DC-001',
+    materials: [{ name: 'White Vinyl', price_modifier: 0 }, { name: 'Clear Vinyl', price_modifier: 30 }, { name: 'Holographic', price_modifier: 80 }],
+    sizes: [{ name: '2 inch', price_modifier: 0 }, { name: '3 inch', price_modifier: 20 }, { name: '4 inch', price_modifier: 40 }],
+    finishes: [{ name: 'Matte', price_modifier: 0 }, { name: 'Glossy', price_modifier: 10 }],
+    paperTypes: [],
+    printAreas: ['Full Shape'],
+    printTypes: ['Eco-Solvent'],
+    laminationTypes: ['No Lamination'],
+    cornerTypes: ['Custom Die-Cut'],
+    specs: { 'Material': 'Premium Vinyl', 'Print': 'Eco-Solvent', 'Finish': 'Waterproof', 'Adhesive': 'Permanent', 'File Format': 'PDF, AI, PNG' },
+    delivery: '2-4 Business Days', features: ['Custom die-cut in any shape', 'Waterproof vinyl material', 'Strong permanent adhesive', 'White, Clear, or Holographic options'],
+    image: '',
+  },
+  {
+    slug: 'mailer-boxes', name: 'Custom Mailer Boxes', brand: 'PRINTSTOP', category: 'Packaging', subcategory: 'Custom Boxes',
+    description: 'Branded corrugated mailer boxes with full-color printing.', longDescription: 'Elevate your unboxing experience with custom printed mailer boxes. Full-color printing on corrugated board with easy fold assembly. Available in kraft, white, or laminated finish.',
+    basePrice: 149, originalPrice: 250, minQty: 50, maxQty: 10000, rating: 4.7, reviewCount: 89, sku: 'PK-MB-001',
+    materials: [{ name: 'E-Flute', price_modifier: 0 }, { name: 'B-Flute', price_modifier: 30 }],
+    sizes: [{ name: 'Small', price_modifier: 0 }, { name: 'Medium', price_modifier: 60 }, { name: 'Large', price_modifier: 150 }],
+    finishes: [{ name: 'Kraft', price_modifier: 0 }, { name: 'White Board', price_modifier: 20 }, { name: 'Laminated', price_modifier: 50 }],
+    paperTypes: [],
+    printAreas: ['Outside Only', 'Inside & Outside'],
+    printTypes: ['Offset Print'],
+    laminationTypes: ['No Lamination', 'Matte Lamination', 'Glossy Lamination'],
+    cornerTypes: ['Standard'],
+    specs: { 'Material': 'E-Flute Corrugated', 'Print': 'Full Color Offset', 'Finish': 'Matte Lamination', 'Assembly': 'Easy Fold', 'File Format': 'PDF, AI' },
+    delivery: '7-10 Business Days', features: ['Full-color offset printing', 'Easy fold assembly', 'Kraft, White, or Laminated finish', 'E-Flute and B-Flute options'],
+    image: '',
+  },
+  {
+    slug: 'vinyl-banners', name: 'Vinyl Banner 3x6ft', brand: 'PRINTSTOP', category: 'Signs & Displays', subcategory: 'Banners',
+    description: 'Durable vinyl banner for indoor and outdoor use.', longDescription: 'Our vinyl banners are printed on premium 13oz or 18oz vinyl with eco-solvent inks. Weather-resistant and UV-protected, these banners are perfect for events, storefronts, and exhibitions. Includes hemmed edges and grommets.',
+    basePrice: 599, originalPrice: 900, minQty: 1, maxQty: 100, rating: 4.6, reviewCount: 156, sku: 'SD-VB-001',
+    materials: [{ name: '13oz Vinyl', price_modifier: 0 }, { name: '18oz Vinyl', price_modifier: 200 }],
+    sizes: [{ name: '3x6 ft', price_modifier: 0 }, { name: '4x8 ft', price_modifier: 300 }, { name: '6x10 ft', price_modifier: 800 }],
+    finishes: [{ name: 'Standard', price_modifier: 0 }, { name: 'With Grommets', price_modifier: 50 }, { name: 'With Pole Pockets', price_modifier: 100 }],
+    paperTypes: [],
+    printAreas: ['Single Side'],
+    printTypes: ['Eco-Solvent'],
+    laminationTypes: [],
+    cornerTypes: ['Hemmed'],
+    specs: { 'Material': '13oz Premium Vinyl', 'Print': 'Eco-Solvent Full Color', 'Finish': 'Weather Resistant', 'Edge': 'Hemmed with Grommets', 'File Format': 'PDF, AI, PSD' },
+    delivery: '3-5 Business Days', features: ['Weather-resistant and UV-protected', 'Eco-solvent inks', 'Hemmed edges with grommets', 'Indoor and outdoor use'],
+    image: '',
+  },
+  {
+    slug: 'a4-letterheads', name: 'A4 Corporate Letterheads', brand: 'PRINTSTOP', category: 'Stationery', subcategory: 'Letterheads',
+    description: 'Professional A4 letterheads for businesses.', longDescription: 'Our A4 corporate letterheads are printed on premium 120gsm uncoated paper. Perfect for official correspondence, invoices, and business communication. Full-color printing with your logo and branding.',
+    basePrice: 399, originalPrice: 550, minQty: 100, maxQty: 10000, rating: 4.6, reviewCount: 178, sku: 'ST-LH-001',
+    materials: [{ name: '100gsm', price_modifier: -30 }, { name: '120gsm', price_modifier: 0 }, { name: '160gsm', price_modifier: 40 }],
+    sizes: [{ name: 'A4', price_modifier: 0 }],
+    finishes: [{ name: 'Uncoated', price_modifier: 0 }, { name: 'Wove', price_modifier: 20 }],
+    paperTypes: ['100gsm Paper', '120gsm Paper', '160gsm Paper'],
+    printAreas: ['Front'],
+    printTypes: ['Digital Print', 'Offset Print'],
+    laminationTypes: [],
+    cornerTypes: ['Standard'],
+    specs: { 'Paper': '120gsm Premium', 'Print': 'Full Color', 'Size': 'A4 (210 x 297 mm)', 'Finish': 'Uncoated / Wove', 'File Format': 'PDF, AI, PSD' },
+    delivery: '3-5 Business Days', features: ['Premium 120gsm uncoated paper', 'Full-color logo printing', 'Perfect for official correspondence', 'Uncoated or Wove finish'],
+    image: '',
+  },
+  {
+    slug: 'polo-tshirts', name: 'Custom Polo T-Shirts', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'Polo T-Shirts',
+    description: 'Premium polo shirts with custom embroidery or print.', longDescription: 'Get custom polo shirts for your team, events, or brand. Available in cotton pique, dry-fit, and premium pique fabrics. Choose screen print, DTG, or embroidery for your logo.',
+    basePrice: 499, originalPrice: 750, minQty: 20, maxQty: 5000, rating: 4.6, reviewCount: 234, sku: 'AP-PT-001',
+    materials: [{ name: 'Cotton Pique', price_modifier: 0 }, { name: 'Dry-Fit', price_modifier: 30 }, { name: 'Premium Pique', price_modifier: 50 }],
+    sizes: [{ name: 'S', price_modifier: 0 }, { name: 'M', price_modifier: 0 }, { name: 'L', price_modifier: 0 }, { name: 'XL', price_modifier: 0 }, { name: 'XXL', price_modifier: 20 }],
+    finishes: [{ name: 'Screen Print', price_modifier: 0 }, { name: 'Embroidery', price_modifier: 50 }, { name: 'DTG Print', price_modifier: 30 }],
+    paperTypes: [],
+    printAreas: ['Left Chest', 'Front', 'Back', 'Front & Back'],
+    printTypes: ['Screen Print', 'Embroidery', 'DTG Print'],
+    laminationTypes: [],
+    cornerTypes: [],
+    specs: { 'Material': 'Cotton Pique', 'Weight': '220 GSM', 'Print': 'Screen / Embroidery / DTG', 'Sizes': 'S, M, L, XL, XXL', 'Colors': 'White, Black, Navy, Grey, Red' },
+    delivery: '5-7 Business Days', features: ['Cotton Pique, Dry-Fit, or Premium Pique', 'Screen print, DTG, or embroidery', 'Available in S to XXL', '220 GSM weight'],
+    image: '',
+  },
+  {
+    slug: 'custom-caps', name: 'Custom Caps & Headwear', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'Caps',
+    description: 'Custom embroidered caps, beanies, and visors.', longDescription: 'Brand your team with custom caps and headwear. Available in baseball caps, snapbacks, beanies, and visors. Premium embroidery and print options for your logo.',
+    basePrice: 199, originalPrice: 350, minQty: 20, maxQty: 5000, rating: 4.5, reviewCount: 178, sku: 'AP-CP-001',
+    materials: [{ name: 'Cotton', price_modifier: 0 }, { name: 'Polyester', price_modifier: -10 }, { name: 'Wool Blend', price_modifier: 30 }],
+    sizes: [{ name: 'S/M', price_modifier: 0 }, { name: 'L/XL', price_modifier: 0 }, { name: 'One Size', price_modifier: 0 }],
+    finishes: [{ name: 'Embroidery', price_modifier: 0 }, { name: 'Screen Print', price_modifier: -10 }],
+    paperTypes: [],
+    printAreas: ['Front', 'Side', 'Back'],
+    printTypes: ['Embroidery', 'Screen Print'],
+    laminationTypes: [],
+    cornerTypes: [],
+    specs: { 'Material': 'Cotton / Polyester', 'Print': 'Embroidery / Screen Print', 'Style': 'Baseball, Snapback, Beanie, Visor', 'Closure': 'Snapback / Velcro / Strap' },
+    delivery: '5-7 Business Days', features: ['Baseball caps, snapbacks, beanies, visors', 'Premium embroidery options', 'Cotton, Polyester, or Wool Blend', 'Multiple closure styles'],
+    image: '',
+  },
+];
+
+export function getProductBySlug(slug: string): Product | undefined {
+  return ALL_PRODUCTS.find(p => p.slug === slug);
+}
+
+export function getAllProducts(): Product[] {
+  return ALL_PRODUCTS;
+}

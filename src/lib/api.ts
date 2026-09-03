@@ -87,6 +87,51 @@ export const reviewsAPI = {
     }),
 };
 
+export interface CartItemType {
+  product_id: string;
+  product_name: string;
+  product_image: string;
+  quantity: number;
+  material: string;
+  size: string;
+  finish: string;
+  unit_price: number;
+}
+
+export const getCart = async (): Promise<CartItemType[]> => {
+  try {
+    const data = await fetchAPI('/cart');
+    return data.items || [];
+  } catch {
+    return [];
+  }
+};
+
+export const updateCartItemQuantity = async (
+  productId: string,
+  material: string,
+  size: string,
+  finish: string,
+  quantity: number
+): Promise<void> => {
+  await fetchAPI('/cart/update', {
+    method: 'PUT',
+    body: JSON.stringify({ productId, material, size, finish, quantity }),
+  });
+};
+
+export const removeFromCart = async (
+  productId: string,
+  material: string,
+  size: string,
+  finish: string
+): Promise<void> => {
+  await fetchAPI('/cart/remove', {
+    method: 'DELETE',
+    body: JSON.stringify({ productId, material, size, finish }),
+  });
+};
+
 export const uploadAPI = {
   image: async (token: string, file: File) => {
     const formData = new FormData();
