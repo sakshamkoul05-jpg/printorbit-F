@@ -19,16 +19,17 @@ export default function Newsletter() {
   };
 
   return (
-    <section className="py-16 bg-slate-50 border-t border-slate-100">
+    <section className="py-4 bg-slate-50 border-top border-light">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="max-w-2xl mx-auto text-center"
+          className="mx-auto text-center"
+          style={{ maxWidth: '640px' }}
         >
-          <h3 className="text-xl font-bold font-heading text-dark mb-2">Stay Updated</h3>
-          <p className="text-sm text-muted mb-6">
+          <h3 className="fs-4 fw-bold font-heading text-dark mb-2">Stay Updated</h3>
+          <p className="text-muted mb-4" style={{ fontSize: '14px' }}>
             Get printing tips, exclusive offers, and industry insights delivered to your inbox.
           </p>
 
@@ -36,22 +37,23 @@ export default function Newsletter() {
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center justify-center gap-2 text-success"
+              className="d-flex align-items-center justify-content-center gap-2 text-success"
             >
-              <CheckCircle className="w-5 h-5" />
-              <span className="font-medium">Thank you for subscribing!</span>
+              <CheckCircle size={20} />
+              <span className="fw-medium">Thank you for subscribing!</span>
             </motion.div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex gap-3 max-w-md mx-auto">
+            <form onSubmit={handleSubmit} className="d-flex gap-3 mx-auto" style={{ maxWidth: '448px' }}>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:border-primary/30 transition-colors"
+                className="flex-fill px-3 py-2 rounded-4 border border-light form-control"
+                style={{ fontSize: '14px' }}
                 required
               />
-              <Button type="submit" variant="primary" icon={<Send className="w-4 h-4" />}>
+              <Button type="submit" variant="primary" icon={<Send size={16} />}>
                 Subscribe
               </Button>
             </form>

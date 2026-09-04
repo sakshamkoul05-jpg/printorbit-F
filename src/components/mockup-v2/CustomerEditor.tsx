@@ -39,9 +39,6 @@ export default function CustomerEditor({
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
 
-
-
-  // ── Init canvas ──
   useEffect(() => {
     if (!canvasElRef.current || cRef.current) return;
     const c = new Canvas(canvasElRef.current, {
@@ -63,7 +60,6 @@ export default function CustomerEditor({
     return () => { c.dispose(); cRef.current = null; };
   }, []);
 
-  // ── Bg rect (non-interactive) ──
   useEffect(() => {
     const c = cRef.current;
     if (!c) return;
@@ -85,7 +81,6 @@ export default function CustomerEditor({
     (bg as any).data = { type: 'bg-slot', offsetX: ox, offsetY: oy, scale };
     c.add(bg); c.sendObjectToBack(bg);
 
-    // printable area guide
     const pa = metadata.printArea;
     const pr = new Rect({
       left: ox + pa.x * scale, top: oy + pa.y * scale,
@@ -99,7 +94,6 @@ export default function CustomerEditor({
     if (oldPr) c.remove(oldPr);
     c.add(pr);
 
-    // Corners markers
     const corners = [metadata.corners.tl, metadata.corners.tr, metadata.corners.br, metadata.corners.bl];
     const colors = ['#ff4444', '#44ff44', '#4488ff', '#ffaa00'];
     const labels = ['TL', 'TR', 'BR', 'BL'];
@@ -118,7 +112,6 @@ export default function CustomerEditor({
     c.renderAll();
   }, [metadata]);
 
-  // ── Load artwork ──
   useEffect(() => {
     const c = cRef.current;
     if (!c) return;
@@ -164,7 +157,6 @@ export default function CustomerEditor({
       c.renderAll();
       artworkRef.current = fi;
 
-      // save initial state
       const getState = (o: FabricImage) => ({
         left: o.left, top: o.top,
         scaleX: o.scaleX || 1, scaleY: o.scaleY || 1,
@@ -177,7 +169,6 @@ export default function CustomerEditor({
       setCanRedo(false);
       onArtworkChange(initState);
 
-      // snap + state tracking
       fi.on('moving', () => doSnap(c, fi, offsetX, offsetY, scale, metadata));
       fi.on('scaling', () => doSnap(c, fi, offsetX, offsetY, scale, metadata));
 
@@ -208,7 +199,6 @@ export default function CustomerEditor({
     };
   }, [artworkDataUrl, mockupId]);
 
-  // ── Snap logic ──
   const doSnap = useCallback((c: Canvas, obj: FabricImage, ox: number, oy: number, sc: number, meta: typeof metadata) => {
     const pa = meta.printArea;
     const paL = ox + pa.x * sc;
@@ -231,12 +221,11 @@ export default function CustomerEditor({
     let guideH: number | null = null;
     let guideV: number | null = null;
 
-    // horizontal snaps
     const hPairs: [number, number, () => number][] = [
       [aL, paL, () => { guideV = paL; return paL; }],
       [aL, paR, () => { guideV = paR; return paR; }],
-      [aR, paL, () => { guideV = paL; return paL + br.width; }],
-      [aR, paR, () => { guideV = paR; return paR + br.width; }],
+      [aR, paL, () => { guideV = paL; return paL; }],
+      [aR, paR, () => { guideV = paR; return paR; }],
       [aCx, paCx, () => { guideV = paCx; return paCx - br.width / 2; }],
     ];
     for (const [a, p, getDest] of hPairs) {
@@ -246,7 +235,6 @@ export default function CustomerEditor({
       }
     }
 
-    // vertical snaps
     const vPairs: [number, number, () => number][] = [
       [aT, paT, () => { guideH = paT; return paT; }],
       [aT, paB, () => { guideH = paB; return paB + br.height; }],
@@ -265,7 +253,6 @@ export default function CustomerEditor({
     if (snapY !== null) obj.set('top', snapY);
     obj.setCoords();
 
-    // draw guides
     clearSnapGuides(c);
     if (guideH !== null) {
       const ln = new Line([0, guideH, 860, guideH], {
@@ -291,7 +278,6 @@ export default function CustomerEditor({
     guides.forEach(o => c.remove(o));
   }, []);
 
-  // ── Undo / Redo ──
   const undo = useCallback(() => {
     const idx = historyIdxRef.current;
     if (idx <= 0 || !artworkRef.current || !cRef.current) return;
@@ -328,7 +314,6 @@ export default function CustomerEditor({
     obj.setCoords();
   };
 
-  // ── Keyboard ──
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (!artworkRef.current || !cRef.current) return;
@@ -372,16 +357,14 @@ export default function CustomerEditor({
     c.setZoom(1); c.absolutePan(new Point(0, 0)); c.renderAll(); setZoom(1);
   }, []);
 
-
-
   return (
-    <div className="bg-slate-900 rounded-xl border border-slate-700 overflow-hidden">
-      {/* Toolbar */}
-      <div className="px-4 py-2 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+    <div className="rounded-3 overflow-hidden" style={{ backgroundColor: '#0f172a', border: '1px solid #334155' }}>
+      <div className="d-flex align-items-center justify-content-between px-3 py-2" style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
+        <div className="d-flex align-items-center gap-2">
           <button onClick={onUploadClick}
-            className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5">
-            <Upload className="w-3.5 h-3.5" />
+            className="d-flex align-items-center gap-1 btn"
+            style={{ padding: '0.375rem 0.75rem', backgroundColor: '#2563eb', color: 'var(--bs-white)', fontSize: '0.75rem', fontWeight: 500, borderRadius: '0.5rem', transition: 'background-color 0.15s', border: 'none' }}>
+            <Upload size={14} />
             Upload Artwork
           </button>
           {artworkRef.current && (
@@ -393,57 +376,58 @@ export default function CustomerEditor({
                historyRef.current = []; historyIdxRef.current = -1; setCanUndo(false); setCanRedo(false);
               cRef.current.renderAll();
             }}
-              className="px-3 py-1.5 bg-red-600/20 hover:bg-red-600/40 text-red-400 text-xs font-medium rounded-lg transition-colors flex items-center gap-1.5">
-              <Trash2 className="w-3.5 h-3.5" />
+              className="d-flex align-items-center gap-1 btn"
+              style={{ padding: '0.375rem 0.75rem', backgroundColor: 'rgba(220,38,38,0.2)', color: '#f87171', fontSize: '0.75rem', fontWeight: 500, borderRadius: '0.5rem', transition: 'background-color 0.15s', border: 'none' }}>
+              <Trash2 size={14} />
               Remove
             </button>
           )}
         </div>
 
-        <div className="flex items-center gap-1">
-          <span className="text-[10px] text-slate-500 mr-1 font-mono">
+        <div className="d-flex align-items-center gap-1">
+          <span style={{ fontSize: '10px', color: '#64748b', marginRight: '0.25rem', fontFamily: 'monospace' }}>
             {artworkRef.current ? `${Math.round(artworkRef.current.scaleX! * 100)}%` : '—'}
           </span>
           <button onClick={undo} disabled={!canUndo}
-            className="p-1.5 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-700 rounded-lg text-xs">↶</button>
+            className="btn"
+            style={{ padding: '0.375rem', color: '#94a3b8', opacity: canUndo ? 1 : 0.3, cursor: canUndo ? 'pointer' : 'not-allowed', backgroundColor: 'transparent', borderRadius: '0.5rem', fontSize: '0.75rem', border: 'none' }}>↶</button>
           <button onClick={redo} disabled={!canRedo}
-            className="p-1.5 text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed hover:bg-slate-700 rounded-lg text-xs">↷</button>
-          <div className="w-px h-4 bg-slate-700 mx-1" />
-          <button onClick={zoomOut} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><ZoomOut className="w-4 h-4" /></button>
-          <span className="text-xs text-slate-500 w-10 text-center font-mono">{Math.round(zoom * 100)}%</span>
-          <button onClick={zoomIn} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><ZoomIn className="w-4 h-4" /></button>
-          <button onClick={fitToScreen} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><Maximize className="w-4 h-4" /></button>
+            className="btn"
+            style={{ padding: '0.375rem', color: '#94a3b8', opacity: canRedo ? 1 : 0.3, cursor: canRedo ? 'pointer' : 'not-allowed', backgroundColor: 'transparent', borderRadius: '0.5rem', fontSize: '0.75rem', border: 'none' }}>↷</button>
+          <div style={{ width: '1px', height: '1rem', backgroundColor: '#334155', margin: '0 0.25rem' }} />
+          <button onClick={zoomOut} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><ZoomOut size={16} /></button>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', width: '2.5rem', textAlign: 'center', fontFamily: 'monospace' }}>{Math.round(zoom * 100)}%</span>
+          <button onClick={zoomIn} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><ZoomIn size={16} /></button>
+          <button onClick={fitToScreen} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><Maximize size={16} /></button>
         </div>
       </div>
 
-      {/* Canvas */}
-      <div className="relative" style={{ width: 860, height: 640 }}>
+      <div className="position-relative" style={{ width: 860, height: 640 }}>
         <img
           src={`/mockups/${mockupId}/background.png`}
           alt=""
-          className="absolute inset-0 w-full h-full object-contain pointer-events-none opacity-30"
-          style={{ zIndex: 0 }}
+          className="position-absolute"
+          style={{ inset: 0, width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', opacity: 0.3, zIndex: 0 }}
         />
-        <canvas ref={canvasElRef} width={860} height={640} className="relative" style={{ zIndex: 1 }} />
+        <canvas ref={canvasElRef} width={860} height={640} className="position-relative" style={{ zIndex: 1 }} />
         {!artworkDataUrl && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
-            <div className="text-center text-slate-500">
-              <svg className="w-12 h-12 mx-auto mb-3 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="position-absolute d-flex align-items-center justify-content-center" style={{ inset: 0, pointerEvents: 'none', zIndex: 20 }}>
+            <div className="text-center" style={{ color: '#64748b' }}>
+              <svg style={{ width: '3rem', height: '3rem', margin: '0 auto 0.75rem', opacity: 0.4 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-sm">Upload your artwork above</p>
-              <p className="text-xs text-slate-600 mt-1">Drag to position, scale with handles</p>
-              <div className="mt-3 flex items-center justify-center gap-2 text-[10px] text-slate-600">
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-[9px]">Delete</kbd> remove
-                <kbd className="px-1.5 py-0.5 bg-slate-800 rounded text-[9px]">⌘Z</kbd> undo
+              <p style={{ fontSize: '0.875rem' }}>Upload your artwork above</p>
+              <p style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.25rem' }}>Drag to position, scale with handles</p>
+              <div className="d-flex align-items-center justify-content-center gap-2 mt-2" style={{ fontSize: '10px', color: '#475569' }}>
+                <kbd style={{ padding: '0.125rem 0.375rem', backgroundColor: '#1e293b', borderRadius: '0.25rem', fontSize: '9px' }}>Delete</kbd> remove
+                <kbd style={{ padding: '0.125rem 0.375rem', backgroundColor: '#1e293b', borderRadius: '0.25rem', fontSize: '9px' }}>⌘Z</kbd> undo
               </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Footer */}
-      <div className="px-4 py-2 bg-slate-800/50 border-t border-slate-700 text-[10px] text-slate-500 flex items-center gap-4">
+      <div className="d-flex align-items-center gap-3 px-3 py-2" style={{ backgroundColor: 'rgba(30,41,59,0.5)', borderTop: '1px solid #334155', fontSize: '10px', color: '#64748b' }}>
         <span>Scroll to zoom</span>
         <span>Drag artwork to position</span>
         <span>Snaps to printable area</span>

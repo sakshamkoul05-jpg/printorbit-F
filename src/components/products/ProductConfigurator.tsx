@@ -32,7 +32,6 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
     const finishMod = selectedFinish.price_modifier || 0;
     const unitPrice = base + materialMod + sizeMod + finishMod;
 
-    // Volume discounts
     let discount = 0;
     if (quantity >= 10000) discount = 0.35;
     else if (quantity >= 5000) discount = 0.25;
@@ -60,15 +59,14 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
   };
 
   return (
-    <div className="space-y-6">
-      {/* Material Selection */}
+    <div className="d-flex flex-column gap-4">
       {product.materials && product.materials.length > 0 && (
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-dark mb-3">
-            <Layers className="w-4 h-4 text-primary" />
+          <label className="d-flex align-items-center gap-2 mb-2" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+            <Layers size={16} style={{ color: 'var(--bs-primary, #0d6efd)' }} />
             Material
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
             {product.materials.map((mat) => (
               <button
                 key={mat.name}
@@ -76,20 +74,23 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
                   setSelectedMaterial(mat);
                   onPriceChange(calculatedPrice, quantity);
                 }}
-                className={`relative px-4 py-3 rounded-xl border-2 text-left transition-all ${
-                  selectedMaterial.name === mat.name
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
+                className="position-relative text-start btn"
+                style={{
+                  padding: '0.75rem 1rem',
+                  borderRadius: '0.75rem',
+                  border: `2px solid ${selectedMaterial.name === mat.name ? 'var(--bs-primary, #0d6efd)' : '#e2e8f0'}`,
+                  backgroundColor: selectedMaterial.name === mat.name ? 'rgba(13,110,253,0.05)' : 'var(--bs-white)',
+                  transition: 'all 0.15s',
+                }}
               >
                 {selectedMaterial.name === mat.name && (
-                  <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-white" />
+                  <div className="position-absolute d-flex align-items-center justify-content-center rounded-circle" style={{ top: '0.5rem', right: '0.5rem', width: '1.25rem', height: '1.25rem', backgroundColor: 'var(--bs-primary, #0d6efd)' }}>
+                    <Check size={12} style={{ color: 'var(--bs-white)' }} />
                   </div>
                 )}
-                <span className="text-sm font-medium text-dark block">{mat.name}</span>
+                <span className="d-block" style={{ fontSize: '0.875rem', fontWeight: 500, color: '#1e293b' }}>{mat.name}</span>
                 {mat.price_modifier !== 0 && (
-                  <span className="text-xs text-muted">
+                  <span style={{ fontSize: '0.75rem', color: '#6c757d' }}>
                     {mat.price_modifier > 0 ? '+' : ''}{formatPrice(mat.price_modifier)} per unit
                   </span>
                 )}
@@ -99,14 +100,13 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
         </div>
       )}
 
-      {/* Size Selection */}
       {product.sizes && product.sizes.length > 0 && (
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-dark mb-3">
-            <Ruler className="w-4 h-4 text-primary" />
+          <label className="d-flex align-items-center gap-2 mb-2" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+            <Ruler size={16} style={{ color: 'var(--bs-primary, #0d6efd)' }} />
             Size
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
             {product.sizes.map((size) => (
               <button
                 key={size.name}
@@ -114,23 +114,26 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
                   setSelectedSize(size);
                   onPriceChange(calculatedPrice, quantity);
                 }}
-                className={`relative px-4 py-3 rounded-xl border-2 text-left transition-all ${
-                  selectedSize.name === size.name
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
+                className="position-relative text-start btn"
+                style={{
+                  padding: '0.75rem 1rem',
+                  borderRadius: '0.75rem',
+                  border: `2px solid ${selectedSize.name === size.name ? 'var(--bs-primary, #0d6efd)' : '#e2e8f0'}`,
+                  backgroundColor: selectedSize.name === size.name ? 'rgba(13,110,253,0.05)' : 'var(--bs-white)',
+                  transition: 'all 0.15s',
+                }}
               >
                 {selectedSize.name === size.name && (
-                  <div className="absolute top-2 right-2 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="w-3 h-3 text-white" />
+                  <div className="position-absolute d-flex align-items-center justify-content-center rounded-circle" style={{ top: '0.5rem', right: '0.5rem', width: '1.25rem', height: '1.25rem', backgroundColor: 'var(--bs-primary, #0d6efd)' }}>
+                    <Check size={12} style={{ color: 'var(--bs-white)' }} />
                   </div>
                 )}
-                <span className="text-sm font-medium text-dark block">{size.name}</span>
+                <span className="d-block" style={{ fontSize: '0.875rem', fontWeight: 500, color: '#1e293b' }}>{size.name}</span>
                 {size.width > 0 && (
-                  <span className="text-xs text-muted">{size.width} × {size.height} mm</span>
+                  <span style={{ fontSize: '0.75rem', color: '#6c757d' }}>{size.width} × {size.height} mm</span>
                 )}
                 {size.price_modifier !== 0 && (
-                  <span className="text-xs text-muted block">
+                  <span className="d-block" style={{ fontSize: '0.75rem', color: '#6c757d' }}>
                     {size.price_modifier > 0 ? '+' : ''}{formatPrice(size.price_modifier)}
                   </span>
                 )}
@@ -140,14 +143,13 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
         </div>
       )}
 
-      {/* Finish Selection */}
       {product.finishes && product.finishes.length > 0 && (
         <div>
-          <label className="flex items-center gap-2 text-sm font-semibold text-dark mb-3">
-            <Palette className="w-4 h-4 text-primary" />
+          <label className="d-flex align-items-center gap-2 mb-2" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+            <Palette size={16} style={{ color: 'var(--bs-primary, #0d6efd)' }} />
             Finish
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.5rem' }}>
             {product.finishes.map((fin) => (
               <button
                 key={fin.name}
@@ -155,20 +157,23 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
                   setSelectedFinish(fin);
                   onPriceChange(calculatedPrice, quantity);
                 }}
-                className={`relative px-3 py-3 rounded-xl border-2 text-center transition-all ${
-                  selectedFinish.name === fin.name
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-slate-200 hover:border-slate-300 bg-white'
-                }`}
+                className="position-relative text-center btn"
+                style={{
+                  padding: '0.75rem',
+                  borderRadius: '0.75rem',
+                  border: `2px solid ${selectedFinish.name === fin.name ? 'var(--bs-primary, #0d6efd)' : '#e2e8f0'}`,
+                  backgroundColor: selectedFinish.name === fin.name ? 'rgba(13,110,253,0.05)' : 'var(--bs-white)',
+                  transition: 'all 0.15s',
+                }}
               >
                 {selectedFinish.name === fin.name && (
-                  <div className="absolute top-1.5 right-1.5 w-4 h-4 bg-primary rounded-full flex items-center justify-center">
-                    <Check className="w-2.5 h-2.5 text-white" />
+                  <div className="position-absolute d-flex align-items-center justify-content-center rounded-circle" style={{ top: '0.375rem', right: '0.375rem', width: '1rem', height: '1rem', backgroundColor: 'var(--bs-primary, #0d6efd)' }}>
+                    <Check size={10} style={{ color: 'var(--bs-white)' }} />
                   </div>
                 )}
-                <span className="text-sm font-medium text-dark">{fin.name}</span>
+                <span style={{ fontSize: '0.875rem', fontWeight: 500, color: '#1e293b' }}>{fin.name}</span>
                 {fin.price_modifier !== 0 && (
-                  <span className="text-[10px] text-muted block">
+                  <span className="d-block" style={{ fontSize: '10px', color: '#6c757d' }}>
                     {fin.price_modifier > 0 ? '+' : ''}{formatPrice(fin.price_modifier)}
                   </span>
                 )}
@@ -178,70 +183,79 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
         </div>
       )}
 
-      {/* Shape Selection (for applicable products) */}
       <div>
-        <label className="flex items-center gap-2 text-sm font-semibold text-dark mb-3">
-          <Sparkles className="w-4 h-4 text-primary" />
+        <label className="d-flex align-items-center gap-2 mb-2" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
+          <Sparkles size={16} style={{ color: 'var(--bs-primary, #0d6efd)' }} />
           Shape
         </label>
-        <div className="flex gap-2">
+        <div className="d-flex" style={{ gap: '0.5rem' }}>
           {SHAPE_OPTIONS.map((shape) => (
             <button
               key={shape.name}
               onClick={() => setSelectedShape(shape.name)}
-              className={`flex-1 px-3 py-3 rounded-xl border-2 text-center transition-all ${
-                selectedShape === shape.name
-                  ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-slate-200 hover:border-slate-300 bg-white'
-              }`}
+              className="flex-fill text-center btn"
+              style={{
+                padding: '0.75rem',
+                borderRadius: '0.75rem',
+                border: `2px solid ${selectedShape === shape.name ? 'var(--bs-primary, #0d6efd)' : '#e2e8f0'}`,
+                backgroundColor: selectedShape === shape.name ? 'rgba(13,110,253,0.05)' : 'var(--bs-white)',
+                transition: 'all 0.15s',
+              }}
             >
-              <span className="text-xl block mb-0.5">{shape.icon}</span>
-              <span className="text-xs font-medium text-dark">{shape.name}</span>
+              <span className="d-block mb-0" style={{ fontSize: '1.25rem' }}>{shape.icon}</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#1e293b' }}>{shape.name}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* Quantity */}
       <div>
-        <label className="flex items-center justify-between text-sm font-semibold text-dark mb-3">
+        <label className="d-flex align-items-center justify-content-between mb-2" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>
           <span>Quantity</span>
-          <span className="text-xs font-normal text-muted">
+          <span style={{ fontSize: '0.75rem', fontWeight: 400, color: '#6c757d' }}>
             {product.min_quantity} — {product.max_quantity?.toLocaleString() || '10,000+'} pcs
           </span>
         </label>
-        <div className="flex items-center gap-3">
+        <div className="d-flex align-items-center" style={{ gap: '0.75rem' }}>
           <button
             onClick={() => handleQuantityChange(quantity - (quantity >= 1000 ? 100 : quantity >= 100 ? 10 : 1))}
-            className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors"
+            className="d-flex align-items-center justify-content-center"
+            style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', color: '#94a3b8', transition: 'all 0.15s', backgroundColor: 'var(--bs-white)' }}
           >
-            <Minus className="w-4 h-4" />
+            <Minus size={16} />
           </button>
           <input
             type="number"
             value={quantity}
             onChange={(e) => handleQuantityChange(parseInt(e.target.value) || product.min_quantity)}
-            className="flex-1 h-10 px-4 rounded-xl border border-slate-200 text-center text-sm font-semibold text-dark focus:border-primary focus:ring-2 focus:ring-primary/10 outline-none transition-all"
+            className="flex-fill text-center"
+            style={{ height: '2.5rem', padding: '0 1rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', fontSize: '0.875rem', fontWeight: 600, color: '#1e293b', outline: 'none' }}
           />
           <button
             onClick={() => handleQuantityChange(quantity + (quantity >= 1000 ? 100 : quantity >= 100 ? 10 : 1))}
-            className="w-10 h-10 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-colors"
+            className="d-flex align-items-center justify-content-center"
+            style={{ width: '2.5rem', height: '2.5rem', borderRadius: '0.75rem', border: '1px solid #e2e8f0', color: '#94a3b8', transition: 'all 0.15s', backgroundColor: 'var(--bs-white)' }}
           >
-            <Plus className="w-4 h-4" />
+            <Plus size={16} />
           </button>
         </div>
 
-        {/* Quick Quantity Buttons */}
-        <div className="flex gap-2 mt-3">
+        <div className="d-flex mt-2" style={{ gap: '0.5rem' }}>
           {[100, 250, 500, 1000, 2500, 5000].filter(q => q >= (product.min_quantity || 1)).map((q) => (
             <button
               key={q}
               onClick={() => handleQuantityChange(q)}
-              className={`flex-1 py-1.5 text-xs font-medium rounded-lg transition-all ${
-                quantity === q
-                  ? 'bg-primary text-white'
-                  : 'bg-slate-100 text-slate-500 hover:bg-primary/10 hover:text-primary'
-              }`}
+              className="flex-fill"
+              style={{
+                padding: '0.375rem',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                borderRadius: '0.5rem',
+                transition: 'all 0.15s',
+                backgroundColor: quantity === q ? 'var(--bs-primary, #0d6efd)' : '#f1f5f9',
+                color: quantity === q ? 'var(--bs-white)' : '#64748b',
+                border: 'none',
+              }}
             >
               {q >= 1000 ? `${q / 1000}K` : q}
             </button>
@@ -249,30 +263,30 @@ export default function ProductConfigurator({ product, onPriceChange }: ProductC
         </div>
       </div>
 
-      {/* Price Summary */}
       <motion.div
         key={`${selectedMaterial.name}-${selectedSize.name}-${selectedFinish.name}-${quantity}`}
         initial={{ scale: 0.98 }}
         animate={{ scale: 1 }}
-        className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl p-5 border border-primary/10"
+        className="rounded-3 p-4"
+        style={{ background: 'linear-gradient(to bottom right, rgba(13,110,253,0.05), rgba(111,66,193,0.05))', border: '1px solid rgba(13,110,253,0.1)' }}
       >
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-muted">Unit Price</span>
-          <span className="text-sm font-semibold text-dark">{formatPrice(unitPrice)}/pc</span>
+        <div className="d-flex align-items-center justify-content-between mb-2">
+          <span style={{ fontSize: '0.875rem', color: '#6c757d' }}>Unit Price</span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>{formatPrice(unitPrice)}/pc</span>
         </div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-muted">Quantity</span>
-          <span className="text-sm font-semibold text-dark">{quantity.toLocaleString()} pcs</span>
+        <div className="d-flex align-items-center justify-content-between mb-2">
+          <span style={{ fontSize: '0.875rem', color: '#6c757d' }}>Quantity</span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>{quantity.toLocaleString()} pcs</span>
         </div>
-        <div className="flex items-center justify-between mb-3">
-          <span className="text-sm text-muted">Subtotal</span>
-          <span className="text-sm font-semibold text-dark">{formatPrice(unitPrice * quantity)}</span>
+        <div className="d-flex align-items-center justify-content-between mb-2">
+          <span style={{ fontSize: '0.875rem', color: '#6c757d' }}>Subtotal</span>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>{formatPrice(unitPrice * quantity)}</span>
         </div>
-        <div className="border-t border-primary/10 pt-3 flex items-center justify-between">
-          <span className="text-sm font-semibold text-dark">Total Price</span>
-          <div className="text-right">
-            <span className="text-2xl font-bold text-primary">{formatPrice(calculatedPrice)}</span>
-            <span className="text-xs text-success block font-medium">
+        <div className="d-flex align-items-center justify-content-between pt-2" style={{ borderTop: '1px solid rgba(13,110,253,0.1)' }}>
+          <span style={{ fontSize: '0.875rem', fontWeight: 600, color: '#1e293b' }}>Total Price</span>
+          <div className="text-end">
+            <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--bs-primary, #0d6efd)' }}>{formatPrice(calculatedPrice)}</span>
+            <span className="d-block" style={{ fontSize: '0.75rem', color: 'var(--bs-success, #198754)', fontWeight: 500 }}>
               You save {formatPrice(unitPrice * quantity - calculatedPrice)}
             </span>
           </div>

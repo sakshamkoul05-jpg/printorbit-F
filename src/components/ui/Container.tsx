@@ -5,20 +5,25 @@ interface ContainerProps {
   children: ReactNode;
   className?: string;
   size?: 'default' | 'narrow' | 'wide';
+  style?: React.CSSProperties;
 }
 
-export default function Container({ children, className, size = 'default' }: ContainerProps) {
+export default function Container({ children, className, size = 'default', style }: ContainerProps) {
   return (
     <div
       className={cn(
-        'mx-auto px-4 sm:px-6 lg:px-8',
+        'mx-auto px-3 px-sm-4 px-lg-5',
         {
-          'max-w-7xl': size === 'default',
-          'max-w-5xl': size === 'narrow',
-          'max-w-[1400px]': size === 'wide',
+          'container': size === 'default',
+          'container-narrow': size === 'narrow',
+          'container-wide': size === 'wide',
         },
         className
       )}
+      style={{
+        maxWidth: size === 'narrow' ? '960px' : size === 'wide' ? '1400px' : undefined,
+        ...style,
+      }}
     >
       {children}
     </div>

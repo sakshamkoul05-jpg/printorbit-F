@@ -65,7 +65,6 @@ export default function PreflightChecker() {
 
       const res: PreflightResult[] = [];
 
-      // --- RGB detection ---
       const imageData = ctx.getImageData(0, 0, w, h).data;
       let totalPixels = 0;
       let wideGamutCount = 0;
@@ -100,7 +99,6 @@ export default function PreflightChecker() {
         });
       }
 
-      // --- DPI estimation ---
       const COMMON_PRINT_DPI = 300;
       const LARGE_FORMAT_DPI = 150;
       const mmPerInch = 25.4;
@@ -138,7 +136,6 @@ export default function PreflightChecker() {
         });
       }
 
-      // --- Resolution check ---
       const pixelsTotal = w * h;
       if (pixelsTotal < 1000000) {
         res.push({
@@ -160,7 +157,6 @@ export default function PreflightChecker() {
         });
       }
 
-      // --- Dimension match ---
       const matchedSizes: string[] = [];
       const tolerance = 0.05;
       for (const size of PRINT_SIZES) {
@@ -185,7 +181,6 @@ export default function PreflightChecker() {
         });
       }
 
-      // --- Aspect ratio ---
       const aspect = w / h;
       res.push({
         label: 'Aspect Ratio',
@@ -193,7 +188,6 @@ export default function PreflightChecker() {
         detail: `${aspect.toFixed(2)}:1 (${w}×${h}px)`,
       });
 
-      // --- File size ---
       const fileSizeMB = f.size / (1024 * 1024);
       if (fileSizeMB < 0.5) {
         res.push({
@@ -241,32 +235,33 @@ export default function PreflightChecker() {
 
   const statusIcon = (s: 'pass' | 'warn' | 'fail') =>
     s === 'pass' ? (
-      <CheckCircle className="w-5 h-5 text-green-500" />
+      <CheckCircle size={20} style={{ color: '#22c55e' }} />
     ) : s === 'warn' ? (
-      <AlertTriangle className="w-5 h-5 text-yellow-500" />
+      <AlertTriangle size={20} style={{ color: '#eab308' }} />
     ) : (
-      <AlertTriangle className="w-5 h-5 text-red-500" />
+      <AlertTriangle size={20} style={{ color: '#ef4444' }} />
     );
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Ruler className="w-5 h-5 text-purple-500" />
-        <h3 className="text-lg font-semibold text-gray-900">Print File Preflight Checker</h3>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-2 mb-2">
+        <Ruler size={20} style={{ color: '#a855f7' }} />
+        <h3 className="h5 fw-semibold text-dark">Print File Preflight Checker</h3>
       </div>
 
       <div
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50/50 transition-all"
+        className="border border-2 border-dashed rounded-xl p-4 text-center"
+        style={{ cursor: 'pointer', borderColor: '#dee2e6' }}
       >
-        <Upload className="w-10 h-10 mx-auto text-gray-400 mb-3" />
-        <p className="text-sm text-gray-600">
+        <Upload size={40} className="mx-auto mb-3 text-muted" />
+        <p className="text-sm text-muted">
           {file ? file.name : 'Drop an image file or click to upload'}
         </p>
         {dimensions && (
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-muted mt-1">
             {dimensions.w} × {dimensions.h} px
           </p>
         )}
@@ -275,39 +270,41 @@ export default function PreflightChecker() {
           type="file"
           accept="image/*"
           onChange={handleChange}
-          className="hidden"
+          className="d-none"
         />
       </div>
 
       {preview && (
-        <div className="rounded-xl overflow-hidden border border-gray-200">
-          <img src={preview} alt="Preview" className="max-h-48 w-full object-contain bg-gray-100" />
+        <div className="rounded-xl overflow-hidden border">
+          <img src={preview} alt="Preview" className="w-100" style={{ maxHeight: '192px', objectFit: 'contain', backgroundColor: '#f3f4f6' }} />
         </div>
       )}
 
       {loading && (
-        <div className="flex items-center justify-center py-6">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+        <div className="d-flex align-items-center justify-content-center py-4">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
         </div>
       )}
 
       {results.length > 0 && (
-        <div className="space-y-2">
+        <div className="d-flex flex-column gap-2">
           {results.map((r, i) => (
             <div
               key={i}
-              className={`flex items-start gap-3 p-3 rounded-lg border ${
+              className={`d-flex align-items-start gap-3 p-3 rounded-lg border ${
                 r.status === 'pass'
-                  ? 'bg-green-50 border-green-200'
+                  ? 'bg-light border-success'
                   : r.status === 'warn'
-                    ? 'bg-yellow-50 border-yellow-200'
-                    : 'bg-red-50 border-red-200'
+                    ? 'bg-warning bg-opacity-10 border-warning'
+                    : 'bg-danger bg-opacity-10 border-danger'
               }`}
             >
               {statusIcon(r.status)}
               <div className="min-w-0">
-                <p className="text-sm font-medium text-gray-900">{r.label}</p>
-                <p className="text-xs text-gray-600">{r.detail}</p>
+                <p className="text-sm fw-medium text-dark">{r.label}</p>
+                <p className="text-xs text-muted">{r.detail}</p>
               </div>
             </div>
           ))}
@@ -396,15 +393,15 @@ export function CMYKSimulator() {
   const swatch = (r: number, g: number, b: number) => `rgb(${r},${g},${b})`;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Droplets className="w-5 h-5 text-blue-500" />
-        <h3 className="text-lg font-semibold text-gray-900">CMYK Simulator</h3>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-2 mb-2">
+        <Droplets size={20} style={{ color: '#3b82f6' }} />
+        <h3 className="h5 fw-semibold text-dark">CMYK Simulator</h3>
       </div>
 
-      <div className="flex items-center gap-3">
-        <label className="text-sm font-medium text-gray-700">HEX Color:</label>
-        <div className="flex items-center gap-2">
+      <div className="d-flex align-items-center gap-3">
+        <label className="text-sm fw-medium text-muted">HEX Color:</label>
+        <div className="d-flex align-items-center gap-2">
           <input
             type="color"
             value={hex}
@@ -412,7 +409,8 @@ export function CMYKSimulator() {
               setHex(e.target.value);
               setCustomHex(e.target.value);
             }}
-            className="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+            className="form-control form-control-color"
+            style={{ width: '40px', height: '40px', padding: 0, border: 'none' }}
           />
           <input
             type="text"
@@ -422,63 +420,66 @@ export function CMYKSimulator() {
               setCustomHex(v);
               if (/^#[0-9A-Fa-f]{6}$/.test(v)) setHex(v);
             }}
-            className="w-28 px-3 py-2 border border-gray-300 rounded-lg text-sm font-mono focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="form-control form-control-sm font-monospace"
+            style={{ width: '112px' }}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="text-center">
+      <div className="row g-4">
+        <div className="col-6 text-center">
           <div
-            className="h-24 rounded-xl border border-gray-200 shadow-sm"
-            style={{ backgroundColor: swatch(rgb.r, rgb.g, rgb.b) }}
+            className="rounded-xl border"
+            style={{ height: '96px', backgroundColor: swatch(rgb.r, rgb.g, rgb.b) }}
           />
-          <p className="text-xs text-gray-500 mt-2 font-medium">RGB Original</p>
-          <p className="text-xs font-mono text-gray-600">
+          <p className="text-xs text-muted mt-2 fw-medium">RGB Original</p>
+          <p className="text-xs font-monospace text-muted">
             {rgb.r}, {rgb.g}, {rgb.b}
           </p>
         </div>
-        <div className="text-center">
+        <div className="col-6 text-center">
           <div
-            className="h-24 rounded-xl border border-gray-200 shadow-sm"
-            style={{ backgroundColor: swatch(simulated.r, simulated.g, simulated.b) }}
+            className="rounded-xl border"
+            style={{ height: '96px', backgroundColor: swatch(simulated.r, simulated.g, simulated.b) }}
           />
-          <p className="text-xs text-gray-500 mt-2 font-medium">CMYK Simulated</p>
-          <p className="text-xs font-mono text-gray-600">
+          <p className="text-xs text-muted mt-2 fw-medium">CMYK Simulated</p>
+          <p className="text-xs font-monospace text-muted">
             {simulated.r}, {simulated.g}, {simulated.b}
           </p>
         </div>
       </div>
 
-      <div className="bg-gray-50 rounded-xl p-4 space-y-2">
-        <h4 className="text-sm font-semibold text-gray-700">CMYK Values</h4>
-        <div className="grid grid-cols-4 gap-2 text-center">
+      <div className="p-3 rounded-xl" style={{ backgroundColor: '#f8f9fa' }}>
+        <h4 className="text-sm fw-semibold text-muted mb-2">CMYK Values</h4>
+        <div className="row g-2 text-center">
           {[
-            { label: 'C', value: cmyk.c, color: 'bg-cyan-100 text-cyan-700' },
-            { label: 'M', value: cmyk.m, color: 'bg-pink-100 text-pink-700' },
-            { label: 'Y', value: cmyk.y, color: 'bg-yellow-100 text-yellow-700' },
-            { label: 'K', value: cmyk.k, color: 'bg-gray-200 text-gray-700' },
+            { label: 'C', value: cmyk.c, bgColor: '#cffafe', textColor: '#0891b2' },
+            { label: 'M', value: cmyk.m, bgColor: '#fce7f3', textColor: '#db2777' },
+            { label: 'Y', value: cmyk.y, bgColor: '#fef9c3', textColor: '#ca8a04' },
+            { label: 'K', value: cmyk.k, bgColor: '#e5e7eb', textColor: '#374151' },
           ].map((c) => (
-            <div key={c.label} className={`rounded-lg py-2 ${c.color}`}>
-              <p className="text-xs font-bold">{c.label}</p>
-              <p className="text-sm font-mono">{c.value}%</p>
+            <div key={c.label} className="col-3">
+              <div className="rounded-lg py-2" style={{ backgroundColor: c.bgColor, color: c.textColor }}>
+                <p className="text-xs fw-bold mb-0">{c.label}</p>
+                <p className="text-sm font-monospace mb-0">{c.value}%</p>
+              </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className={`p-4 rounded-xl border ${outOfGamut ? 'bg-orange-50 border-orange-200' : 'bg-green-50 border-green-200'}`}>
-        <div className="flex items-center gap-2">
+      <div className={`p-3 rounded-xl border ${outOfGamut ? 'bg-warning bg-opacity-10 border-warning' : 'bg-success bg-opacity-10 border-success'}`}>
+        <div className="d-flex align-items-center gap-2">
           {outOfGamut ? (
-            <AlertTriangle className="w-5 h-5 text-orange-500" />
+            <AlertTriangle size={20} style={{ color: '#f97316' }} />
           ) : (
-            <CheckCircle className="w-5 h-5 text-green-500" />
+            <CheckCircle size={20} style={{ color: '#22c55e' }} />
           )}
           <div>
-            <p className="text-sm font-semibold text-gray-900">
+            <p className="text-sm fw-semibold text-dark mb-0">
               Delta-E: {de.toFixed(2)} {outOfGamut ? '(Out of Gamut)' : '(Within Gamut)'}
             </p>
-            <p className="text-xs text-gray-600">
+            <p className="text-xs text-muted mb-0">
               {de < 1
                 ? 'Imperceptible difference.'
                 : de < 3
@@ -517,29 +518,29 @@ export function TrapWidthCalculator() {
   const trapWidthMm = Math.round((trapWidthPts * 0.3528) * 100) / 100;
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Square className="w-5 h-5 text-green-500" />
-        <h3 className="text-lg font-semibold text-gray-900">Trap Width Calculator</h3>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-2 mb-2">
+        <Square size={20} style={{ color: '#22c55e' }} />
+        <h3 className="h5 fw-semibold text-dark">Trap Width Calculator</h3>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Line Count (LPI)</label>
+      <div className="row g-3">
+        <div className="col-4">
+          <label className="form-label text-sm fw-medium text-muted">Line Count (LPI)</label>
           <input
             type="number"
             value={lpi}
             onChange={(e) => setLpi(Number(e.target.value) || 1)}
             min={1}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Paper Type</label>
+        <div className="col-4">
+          <label className="form-label text-sm fw-medium text-muted">Paper Type</label>
           <select
             value={paper}
             onChange={(e) => setPaper(Number(e.target.value))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="form-select form-select-sm"
           >
             {PAPER_TYPES.map((p, i) => (
               <option key={i} value={i}>
@@ -548,35 +549,32 @@ export function TrapWidthCalculator() {
             ))}
           </select>
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Overprint Colors</label>
+        <div className="col-4">
+          <label className="form-label text-sm fw-medium text-muted">Overprint Colors</label>
           <input
             type="number"
             value={colors}
             onChange={(e) => setColors(Math.max(1, Number(e.target.value) || 1))}
             min={1}
             max={10}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
       </div>
 
-      <div className="bg-green-50 rounded-xl p-4 border border-green-200">
-        <p className="text-sm font-semibold text-gray-900 mb-1">Recommended Trap Width</p>
-        <p className="text-2xl font-bold text-green-600">{trapWidthPts} pts ({trapWidthMm} mm)</p>
+      <div className="p-3 rounded-xl border" style={{ backgroundColor: '#f0fdf4', borderColor: '#bbf7d0' }}>
+        <p className="text-sm fw-semibold text-dark mb-1">Recommended Trap Width</p>
+        <p className="h4 fw-bold text-success mb-0">{trapWidthPts} pts ({trapWidthMm} mm)</p>
       </div>
 
-      {/* Visual Diagram */}
-      <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-        <p className="text-xs font-medium text-gray-500 mb-3 text-center">Trap Visualization</p>
-        <svg viewBox="0 0 300 120" className="w-full max-w-sm mx-auto">
-          {/* Left rectangle */}
+      <div className="p-3 rounded-xl border" style={{ backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}>
+        <p className="text-xs fw-medium text-muted mb-3 text-center">Trap Visualization</p>
+        <svg viewBox="0 0 300 120" className="w-100" style={{ maxWidth: '320px', margin: '0 auto', display: 'block' }}>
           <rect x={30} y={20} width={110} height={80} fill="#3B82F6" rx={2} opacity={0.8} />
           <text x={85} y={65} textAnchor="middle" fill="white" fontSize={11} fontWeight="bold">
             Color 1
           </text>
 
-          {/* Trap overlap area */}
           <rect
             x={130}
             y={20}
@@ -595,13 +593,11 @@ export function TrapWidthCalculator() {
             strokeDasharray="4,2"
           />
 
-          {/* Right rectangle */}
           <rect x={130 + trapWidthPts * 3} y={20} width={110 - trapWidthPts * 3} height={80} fill="#EF4444" rx={2} opacity={0.8} />
           <text x={185} y={65} textAnchor="middle" fill="white" fontSize={11} fontWeight="bold">
             Color 2
           </text>
 
-          {/* Trap dimension */}
           <line
             x1={130}
             y1={110}
@@ -679,7 +675,6 @@ export function SpotUVGenerator() {
     if (tool === 'freehand') {
       setCurrentPoints((prev) => [...prev, pos]);
     }
-    // For rect/circle, preview is handled in render
   };
 
   const handleMouseUp = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -710,56 +705,23 @@ export function SpotUVGenerator() {
     const opacity = preview ? 0.5 : 1;
     if (s.type === 'rect') {
       return (
-        <rect
-          key={i}
-          x={s.x}
-          y={s.y}
-          width={s.w}
-          height={s.h}
-          fill="white"
-          opacity={opacity}
-        />
+        <rect key={i} x={s.x} y={s.y} width={s.w} height={s.h} fill="white" opacity={opacity} />
       );
     }
     if (s.type === 'circle') {
       return (
-        <circle
-          key={i}
-          cx={s.cx}
-          cy={s.cy}
-          r={s.r}
-          fill="white"
-          opacity={opacity}
-        />
+        <circle key={i} cx={s.cx} cy={s.cy} r={s.r} fill="white" opacity={opacity} />
       );
     }
     if (s.type === 'freehand') {
       const d = s.points.map((p, j) => `${j === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
       return (
-        <path
-          key={i}
-          d={d}
-          fill="none"
-          stroke="white"
-          strokeWidth={8}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          opacity={opacity}
-        />
+        <path key={i} d={d} fill="none" stroke="white" strokeWidth={8} strokeLinecap="round" strokeLinejoin="round" opacity={opacity} />
       );
     }
     if (s.type === 'text') {
       return (
-        <text
-          key={i}
-          x={s.x}
-          y={s.y}
-          fill="white"
-          fontSize={36}
-          fontWeight="bold"
-          fontFamily="Arial, sans-serif"
-          opacity={opacity}
-        >
+        <text key={i} x={s.x} y={s.y} fill="white" fontSize={36} fontWeight="bold" fontFamily="Arial, sans-serif" opacity={opacity}>
           {s.text}
         </text>
       );
@@ -823,50 +785,46 @@ export function SpotUVGenerator() {
   };
 
   const toolButtons: { t: DrawTool; icon: React.ReactNode; label: string }[] = [
-    { t: 'rect', icon: <Square className="w-4 h-4" />, label: 'Rectangle' },
-    { t: 'circle', icon: <Circle className="w-4 h-4" />, label: 'Circle' },
-    { t: 'freehand', icon: <Pencil className="w-4 h-4" />, label: 'Freehand' },
-    { t: 'text', icon: <Type className="w-4 h-4" />, label: 'Text' },
+    { t: 'rect', icon: <Square size={16} />, label: 'Rectangle' },
+    { t: 'circle', icon: <Circle size={16} />, label: 'Circle' },
+    { t: 'freehand', icon: <Pencil size={16} />, label: 'Freehand' },
+    { t: 'text', icon: <Type size={16} />, label: 'Text' },
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Droplets className="w-5 h-5 text-indigo-500" />
-        <h3 className="text-lg font-semibold text-gray-900">Spot UV Template Generator</h3>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-2 mb-2">
+        <Droplets size={20} style={{ color: '#6366f1' }} />
+        <h3 className="h5 fw-semibold text-dark">Spot UV Template Generator</h3>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Width (mm)</label>
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Width (mm)</label>
           <input
             type="number"
             value={widthMm}
             onChange={(e) => setWidthMm(Math.max(10, Number(e.target.value) || 10))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Height (mm)</label>
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Height (mm)</label>
           <input
             type="number"
             value={heightMm}
             onChange={(e) => setHeightMm(Math.max(10, Number(e.target.value) || 10))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
+      <div className="d-flex gap-2 flex-wrap">
         {toolButtons.map(({ t, icon, label }) => (
           <button
             key={t}
             onClick={() => setTool(t)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-              tool === t
-                ? 'bg-indigo-100 text-indigo-700 border border-indigo-300'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
-            }`}
+            className={`btn btn-sm d-flex align-items-center gap-1 ${tool === t ? 'btn-primary' : 'btn-outline-secondary'}`}
           >
             {icon}
             {label}
@@ -874,20 +832,19 @@ export function SpotUVGenerator() {
         ))}
         <button
           onClick={() => setShapes([])}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200"
+          className="btn btn-sm btn-outline-secondary d-flex align-items-center gap-1"
         >
-          <RotateCcw className="w-4 h-4" />
+          <RotateCcw size={16} />
           Clear
         </button>
       </div>
 
-      <div className="flex justify-center bg-gray-900 rounded-xl p-4 overflow-auto">
+      <div className="d-flex justify-content-center rounded-xl p-3 overflow-auto" style={{ backgroundColor: '#1f2937' }}>
         <canvas
           ref={canvasRef}
           width={canvasW}
           height={canvasH}
-          style={{ width: Math.min(canvasW, 500), height: Math.min(canvasH, 500) * (canvasH / canvasW) }}
-          className="border border-gray-700 cursor-crosshair rounded-lg"
+          style={{ width: Math.min(canvasW, 500), height: Math.min(canvasH, 500) * (canvasH / canvasW), border: '1px solid #374151', borderRadius: '8px', cursor: 'crosshair' }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -901,10 +858,9 @@ export function SpotUVGenerator() {
         />
       </div>
 
-      {/* SVG preview */}
-      <div className="bg-gray-100 rounded-xl p-4 border border-gray-200">
-        <p className="text-xs font-medium text-gray-500 mb-2 text-center">Mask Preview (White = UV Area)</p>
-        <div className="flex justify-center bg-black rounded-lg p-2">
+      <div className="p-3 rounded-xl border" style={{ backgroundColor: '#f3f4f6', borderColor: '#dee2e6' }}>
+        <p className="text-xs fw-medium text-muted mb-2 text-center">Mask Preview (White = UV Area)</p>
+        <div className="d-flex justify-content-center p-2 rounded-lg" style={{ backgroundColor: '#000' }}>
           <svg
             viewBox={`0 0 ${canvasW} ${canvasH}`}
             style={{ width: Math.min(canvasW, 400), maxHeight: 200 }}
@@ -918,9 +874,9 @@ export function SpotUVGenerator() {
       <button
         onClick={exportPNG}
         disabled={shapes.length === 0}
-        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
       >
-        <Download className="w-4 h-4" />
+        <Download size={16} />
         Export PNG Mask ({widthMm}×{heightMm}mm)
       </button>
     </div>
@@ -940,17 +896,17 @@ interface ShapeOption {
 }
 
 const SHAPES: ShapeOption[] = [
-  { type: 'circle', label: 'Circle', icon: <Circle className="w-4 h-4" /> },
-  { type: 'rounded-rect', label: 'Rounded Rect', icon: <RectangleHorizontal className="w-4 h-4" /> },
+  { type: 'circle', label: 'Circle', icon: <Circle size={16} /> },
+  { type: 'rounded-rect', label: 'Rounded Rect', icon: <RectangleHorizontal size={16} /> },
   { type: 'oval', label: 'Oval', icon: <OvalIcon /> },
-  { type: 'heart', label: 'Heart', icon: <Heart className="w-4 h-4" /> },
-  { type: 'star', label: 'Star', icon: <Star className="w-4 h-4" /> },
+  { type: 'heart', label: 'Heart', icon: <Heart size={16} /> },
+  { type: 'star', label: 'Star', icon: <Star size={16} /> },
   { type: 'polygon', label: 'Polygon (6)', icon: <HexIcon /> },
 ];
 
 function OvalIcon() {
   return (
-    <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg width={16} height={16} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
       <ellipse cx={8} cy={8} rx={7} ry={5} />
     </svg>
   );
@@ -958,7 +914,7 @@ function OvalIcon() {
 
 function HexIcon() {
   return (
-    <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <svg width={16} height={16} viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
       <polygon points="8,1 14,4 14,12 8,15 2,12 2,4" />
     </svg>
   );
@@ -1061,18 +1017,12 @@ export function DieCutTemplateGenerator() {
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalW} ${totalH}" width="${totalW}" height="${totalH}">
   <rect width="${totalW}" height="${totalH}" fill="white"/>
   <g transform="translate(${offsetX}, ${offsetY})">
-    <!-- Bleed line (green) -->
     <path d="${bleedPath}" fill="none" stroke="#22C55E" stroke-width="1.5" stroke-dasharray="8,4"/>
-    <!-- Cut line (red) -->
     <path d="${cutPath}" fill="none" stroke="#EF4444" stroke-width="2"/>
-    <!-- Safe zone (blue) -->
     <path d="${safePath}" fill="none" stroke="#3B82F6" stroke-width="1" stroke-dasharray="4,3"/>
-    ${showFold ? `<!-- Fold line (blue dashed) -->
-    <line x1="${offsetX + 10}" y1="${offsetY + totalH / 2 - offsetY}" x2="${offsetX + totalW - 20}" y2="${offsetY + totalH / 2 - offsetY}" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="6,3"/>` : ''}
-    <!-- Center marks -->
+    ${showFold ? `<line x1="${offsetX + 10}" y1="${offsetY + totalH / 2 - offsetY}" x2="${offsetX + totalW - 20}" y2="${offsetY + totalH / 2 - offsetY}" stroke="#3B82F6" stroke-width="1.5" stroke-dasharray="6,3"/>` : ''}
     <line x1="${cx - 8}" y1="${cy}" x2="${cx + 8}" y2="${cy}" stroke="#374151" stroke-width="0.5"/>
     <line x1="${cx}" y1="${cy - 8}" x2="${cx}" y2="${cy + 8}" stroke="#374151" stroke-width="0.5"/>
-    <!-- Dimensions -->
     <text x="${cx}" y="${totalH - 5}" textAnchor="middle" fill="#6B7280" fontSize="9" fontFamily="Arial">${widthMm}mm × ${heightMm}mm</text>
   </g>
 </svg>`;
@@ -1087,90 +1037,82 @@ export function DieCutTemplateGenerator() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center gap-2 mb-2">
-        <Scissors className="w-5 h-5 text-red-500" />
-        <h3 className="text-lg font-semibold text-gray-900">Die-Cut Template Generator</h3>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-2 mb-2">
+        <Scissors size={20} style={{ color: '#ef4444' }} />
+        <h3 className="h5 fw-semibold text-dark">Die-Cut Template Generator</h3>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Shape</label>
-        <div className="grid grid-cols-3 gap-2">
+        <label className="form-label text-sm fw-medium text-muted mb-2">Shape</label>
+        <div className="row g-2">
           {SHAPES.map((s) => (
-            <button
-              key={s.type}
-              onClick={() => setShape(s.type)}
-              className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                shape === s.type
-                  ? 'bg-red-100 text-red-700 border border-red-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-200'
-              }`}
-            >
-              {s.icon}
-              {s.label}
-            </button>
+            <div key={s.type} className="col-4">
+              <button
+                onClick={() => setShape(s.type)}
+                className={`btn btn-sm w-100 d-flex align-items-center justify-content-center gap-1 ${shape === s.type ? 'btn-danger' : 'btn-outline-secondary'}`}
+              >
+                {s.icon}
+                {s.label}
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Width (mm)</label>
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Width (mm)</label>
           <input
             type="number"
             value={widthMm}
             onChange={(e) => setWidthMm(Math.max(10, Number(e.target.value) || 10))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Height (mm)</label>
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Height (mm)</label>
           <input
             type="number"
             value={heightMm}
             onChange={(e) => setHeightMm(Math.max(10, Number(e.target.value) || 10))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
       </div>
 
       {(shape === 'rounded-rect' || shape === 'oval') && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Corner Radius (mm)</label>
+          <label className="form-label text-sm fw-medium text-muted">Corner Radius (mm)</label>
           <input
             type="number"
             value={cornerRadius}
             onChange={(e) => setCornerRadius(Math.max(0, Number(e.target.value) || 0))}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-red-500 focus:border-transparent"
+            className="form-control form-control-sm"
           />
         </div>
       )}
 
-      <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+      <label className="d-flex align-items-center gap-2 text-sm text-muted" style={{ cursor: 'pointer' }}>
         <input
           type="checkbox"
           checked={showFold}
           onChange={(e) => setShowFold(e.target.checked)}
-          className="w-4 h-4 rounded border-gray-300 text-red-600 focus:ring-red-500"
+          className="form-check-input"
         />
         Show fold line (horizontal center)
       </label>
 
-      {/* SVG Preview */}
-      <div className="bg-gray-50 rounded-xl p-4 border border-gray-200 overflow-auto">
-        <p className="text-xs font-medium text-gray-500 mb-3 text-center">Template Preview</p>
-        <div className="flex justify-center">
+      <div className="p-3 rounded-xl border overflow-auto" style={{ backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}>
+        <p className="text-xs fw-medium text-muted mb-3 text-center">Template Preview</p>
+        <div className="d-flex justify-content-center">
           <svg
             viewBox={`0 0 ${totalW} ${totalH}`}
-            style={{ width: Math.min(totalW, 500), maxHeight: 300 }}
-            className="border border-gray-200 bg-white rounded-lg"
+            style={{ width: Math.min(totalW, 500), maxHeight: 300, border: '1px solid #dee2e6', borderRadius: '8px', backgroundColor: '#fff' }}
           >
             <g transform={`translate(${offsetX}, ${offsetY})`}>
-              {/* Bleed */}
               <path d={bleedPath} fill="none" stroke="#22C55E" strokeWidth={1.5} strokeDasharray="8,4" />
-              {/* Cut */}
               <path d={cutPath} fill="none" stroke="#EF4444" strokeWidth={2} />
-              {/* Safe */}
               <path d={safePath} fill="none" stroke="#3B82F6" strokeWidth={1} strokeDasharray="4,3" />
 
               {showFold && (
@@ -1185,11 +1127,9 @@ export function DieCutTemplateGenerator() {
                 />
               )}
 
-              {/* Center marks */}
               <line x1={cx - 8} y1={cy} x2={cx + 8} y2={cy} stroke="#374151" strokeWidth={0.5} />
               <line x1={cx} y1={cy - 8} x2={cx} y2={cy + 8} stroke="#374151" strokeWidth={0.5} />
 
-              {/* Dimensions */}
               <text x={cx} y={totalH - 5} textAnchor="middle" fill="#6B7280" fontSize={9} fontFamily="Arial">
                 {widthMm}mm × {heightMm}mm
               </text>
@@ -1197,23 +1137,22 @@ export function DieCutTemplateGenerator() {
           </svg>
         </div>
 
-        {/* Legend */}
-        <div className="flex justify-center gap-4 mt-4 text-xs">
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 h-0.5 bg-red-500 inline-block" />
+        <div className="d-flex justify-content-center gap-4 mt-3 text-xs">
+          <span className="d-flex align-items-center gap-1">
+            <span className="d-inline-block" style={{ width: '16px', height: '2px', backgroundColor: '#ef4444' }} />
             Cut
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 h-0.5 bg-green-500 inline-block border-t border-dashed border-green-500" />
+          <span className="d-flex align-items-center gap-1">
+            <span className="d-inline-block" style={{ width: '16px', height: '2px', backgroundColor: '#22c55e', borderTop: '2px dashed #22c55e' }} />
             Bleed (3mm)
           </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 h-0.5 bg-blue-500 inline-block" style={{ borderTop: '1px dashed #3B82F6' }} />
+          <span className="d-flex align-items-center gap-1">
+            <span className="d-inline-block" style={{ width: '16px', height: '2px', backgroundColor: '#3b82f6', borderTop: '1px dashed #3b82f6' }} />
             Safe (5mm)
           </span>
           {showFold && (
-            <span className="flex items-center gap-1.5">
-              <span className="w-4 h-0.5 inline-block" style={{ borderTop: '1.5px dashed #3B82F6' }} />
+            <span className="d-flex align-items-center gap-1">
+              <span className="d-inline-block" style={{ width: '16px', height: '2px', borderTop: '1.5px dashed #3b82f6' }} />
               Fold
             </span>
           )}
@@ -1222,9 +1161,9 @@ export function DieCutTemplateGenerator() {
 
       <button
         onClick={exportSVG}
-        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm font-semibold hover:bg-red-700 transition-colors"
+        className="btn btn-danger w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
       >
-        <Download className="w-4 h-4" />
+        <Download size={16} />
         Export SVG Template
       </button>
     </div>

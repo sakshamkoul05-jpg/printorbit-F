@@ -56,42 +56,53 @@ export default function AIAgentPanel({
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: 400, opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-          className="w-80 bg-white border-l border-slate-200 flex flex-col overflow-hidden shrink-0"
+          className="d-flex flex-column overflow-hidden"
+          style={{ width: '20rem', backgroundColor: 'var(--bs-white)', borderLeft: '1px solid var(--bs-slate-200, #e2e8f0)', flexShrink: 0 }}
         >
           {/* Header */}
-          <div className="h-12 bg-gradient-to-r from-primary to-primary-dark flex items-center justify-between px-4 shrink-0">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-sm font-semibold text-white">AI Agent</span>
+          <div className="d-flex align-items-center justify-content-between px-3" style={{ height: '3rem', background: 'linear-gradient(to right, var(--bs-primary), var(--bs-primary))', flexShrink: 0 }}>
+            <div className="d-flex align-items-center gap-2">
+              <Sparkles size={16} style={{ color: 'var(--bs-white)' }} />
+              <span className="small fw-semibold" style={{ color: 'var(--bs-white)' }}>AI Agent</span>
             </div>
             <button
               onClick={onClose}
-              className="p-1 text-white/70 hover:text-white rounded-lg transition-colors"
+              className="btn p-1 rounded-3"
+              style={{ color: 'rgba(255,255,255,0.7)', transition: 'color 0.15s' }}
             >
-              <X className="w-4 h-4" />
+              <X size={16} />
             </button>
           </div>
 
           {/* Tabs */}
-          <div className="flex border-b border-slate-200 shrink-0">
+          <div className="d-flex" style={{ borderBottom: '1px solid var(--bs-slate-200, #e2e8f0)', flexShrink: 0 }}>
             {TABS.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'text-primary border-b-2 border-primary bg-primary/5'
-                    : 'text-slate-400 hover:text-slate-600'
-                }`}
+                className={`flex-fill d-flex align-items-center justify-content-center gap-1`}
+                style={{
+                  padding: '0.625rem 0',
+                  fontSize: '0.75rem',
+                  fontWeight: 500,
+                  transition: 'color 0.15s',
+                  color: activeTab === tab.id ? 'var(--bs-primary, #0d6efd)' : '#94a3b8',
+                  borderBottom: activeTab === tab.id ? '2px solid var(--bs-primary, #0d6efd)' : '2px solid transparent',
+                  backgroundColor: activeTab === tab.id ? 'rgba(13,110,253,0.05)' : 'transparent',
+                  border: 'none',
+                  borderBottomWidth: '2px',
+                  borderBottomStyle: 'solid',
+                  borderBottomColor: activeTab === tab.id ? 'var(--bs-primary, #0d6efd)' : 'transparent',
+                }}
               >
-                <tab.icon className="w-3.5 h-3.5" />
+                <tab.icon size={14} />
                 {tab.label}
               </button>
             ))}
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto">
+          <div className="flex-fill overflow-y-auto">
             {activeTab === 'generate' && (
               <AIDesignGenerator
                 canvasWidth={canvasWidth}
@@ -117,7 +128,7 @@ export default function AIAgentPanel({
           </div>
 
           {/* Quick Actions Footer */}
-          <div className="p-3 border-t border-slate-200 shrink-0">
+          <div className="p-3" style={{ borderTop: '1px solid var(--bs-slate-200, #e2e8f0)', flexShrink: 0 }}>
             <button
               onClick={async () => {
                 setPaletteLoading(true);
@@ -133,12 +144,23 @@ export default function AIAgentPanel({
                 setPaletteLoading(false);
               }}
               disabled={paletteLoading}
-              className="w-full flex items-center justify-center gap-2 py-2 bg-slate-100 text-slate-600 text-xs font-medium rounded-lg hover:bg-slate-200 transition-colors disabled:opacity-50"
+              className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+              style={{
+                padding: '0.5rem',
+                backgroundColor: '#f1f5f9',
+                color: '#475569',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                borderRadius: '0.5rem',
+                transition: 'background-color 0.15s',
+                opacity: paletteLoading ? 0.5 : 1,
+                border: 'none',
+              }}
             >
               {paletteLoading ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 size={14} className="animate-spin" />
               ) : (
-                <Palette className="w-3.5 h-3.5" />
+                <Palette size={14} />
               )}
               Generate Color Palette
             </button>

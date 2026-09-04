@@ -24,21 +24,21 @@ export default function FAQPage() {
     <>
       <section className="bg-navy py-14">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">FAQ</h1>
-          <p className="text-white/50 max-w-xl mx-auto">
+          <h1 className="display-5 fw-bold text-white mb-3">FAQ</h1>
+          <p className="text-white/50 mx-auto" style={{ maxWidth: '36rem' }}>
             Find answers to common questions about our printing services.
           </p>
         </div>
       </section>
 
       <section className="py-14">
-        <div className="max-w-3xl mx-auto px-4">
-          <div className="space-y-3">
+        <div className="mx-auto px-4" style={{ maxWidth: '48rem' }}>
+          <div className="d-flex flex-column gap-3">
             {faqs.map((faq, i) => (
-              <details key={i} className="bg-white rounded-lg border border-slate-200 overflow-hidden group">
-                <summary className="flex items-center justify-between p-5 cursor-pointer list-none">
-                  <h3 className="text-sm font-semibold text-navy pr-4">{faq.question}</h3>
-                  <ChevronDown className="w-4 h-4 text-slate-400 group-open:rotate-180 transition-transform flex-shrink-0" />
+              <details key={i} className="bg-white rounded-3 border border-slate-200 overflow-hidden group">
+                <summary className="d-flex align-items-center justify-content-between p-5 cursor-pointer list-none">
+                  <h3 className="text-sm fw-semibold text-navy pe-4">{faq.question}</h3>
+                  <ChevronDown size={16} className="text-slate-400 flex-shrink-0 transition-transform" />
                 </summary>
                 <div className="px-5 pb-5">
                   <p className="text-sm text-slate-500 leading-relaxed">{faq.answer}</p>

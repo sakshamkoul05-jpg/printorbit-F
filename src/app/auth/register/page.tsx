@@ -37,88 +37,87 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-16" style={{ backgroundColor: '#F4F2EF' }}>
-      <div className="w-full max-w-md">
+    <div className="d-flex align-items-center justify-content-center px-4 py-16 min-vh-100" style={{ backgroundColor: '#F4F2EF' }}>
+      <div className="w-100" style={{ maxWidth: '28rem' }}>
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="inline-block">
-            <div className="w-12 h-12 flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: '#ED1C24' }}>
-              <span className="text-white font-bold text-lg">P</span>
+          <Link href="/" className="d-inline-block">
+            <div className="w-12 h-12 d-flex align-items-center justify-content-center mx-auto mb-4" style={{ backgroundColor: '#ED1C24' }}>
+              <span className="text-white fw-bold fs-5">P</span>
             </div>
           </Link>
-          <h1 className="text-2xl font-bold" style={{ color: '#0F0F0F' }}>Sign Up for PrintStop</h1>
+          <h1 className="fs-3 fw-bold" style={{ color: '#0F0F0F' }}>Sign Up for PrintStop</h1>
         </div>
 
         {/* Card */}
         <div className="bg-white p-6" style={{ border: '1px solid #E5E5E5' }}>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="d-flex flex-column gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#0F0F0F' }}>Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+              <label className="form-label text-sm fw-medium" style={{ color: '#0F0F0F' }}>Email Address</label>
+              <div className="position-relative">
+                <Mail size={16} className="position-absolute" style={{ left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm"
-                  style={{ border: '1px solid #E5E5E5', outline: 'none' }}
+                  className="form-control text-sm"
+                  style={{ paddingLeft: '2.5rem' }}
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#0F0F0F' }}>Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+              <label className="form-label text-sm fw-medium" style={{ color: '#0F0F0F' }}>Password</label>
+              <div className="position-relative">
+                <Lock size={16} className="position-absolute" style={{ left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   value={formData.password}
                   onChange={(e) => handleChange('password', e.target.value)}
                   placeholder="Create a password"
-                  className="w-full pl-10 pr-10 py-2.5 text-sm"
-                  style={{ border: '1px solid #E5E5E5', outline: 'none' }}
+                  className="form-control text-sm"
+                  style={{ paddingLeft: '2.5rem', paddingRight: '2.5rem' }}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: '#9CA3AF' }}
+                  className="position-absolute border-0 bg-transparent"
+                  style={{ right: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5" style={{ color: '#0F0F0F' }}>Phone Number</label>
-              <div className="relative">
-                <Smartphone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: '#9CA3AF' }} />
+              <label className="form-label text-sm fw-medium" style={{ color: '#0F0F0F' }}>Phone Number</label>
+              <div className="position-relative">
+                <Smartphone size={16} className="position-absolute" style={{ left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
                 <input
                   type="tel"
                   value={formData.phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
                   placeholder="+91 XXXXX XXXXX"
-                  className="w-full pl-10 pr-4 py-2.5 text-sm"
-                  style={{ border: '1px solid #E5E5E5', outline: 'none' }}
+                  className="form-control text-sm"
+                  style={{ paddingLeft: '2.5rem' }}
                 />
               </div>
             </div>
 
             {/* Terms Checkbox */}
-            <label className="flex items-start gap-2 cursor-pointer pt-2">
+            <label className="d-flex align-items-start gap-2 cursor-pointer pt-2">
               <input
                 type="checkbox"
                 checked={termsAccepted}
                 onChange={(e) => setTermsAccepted(e.target.checked)}
-                className="w-4 h-4 mt-0.5"
-                style={{ accentColor: '#ED1C24' }}
+                className="form-check-input mt-1"
               />
               <span className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
                 I agree to the{' '}
-                <Link href="/terms" className="underline" style={{ color: '#ED1C24' }}>Terms of Service</Link>
+                <Link href="/terms" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Terms of Service</Link>
                 {' '}and{' '}
-                <Link href="/privacy" className="underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
+                <Link href="/privacy" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
               </span>
             </label>
 
@@ -126,7 +125,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading || !formData.email || !formData.password || !termsAccepted}
-              className="w-full py-3 text-sm font-semibold text-white"
+              className="w-100 py-3 text-sm fw-semibold text-white"
               style={{ backgroundColor: '#ED1C24', opacity: loading || !formData.email || !formData.password || !termsAccepted ? 0.5 : 1 }}
             >
               {loading ? 'Creating Account...' : 'Sign Up'}
@@ -138,7 +137,7 @@ export default function RegisterPage() {
         <div className="mt-6 text-center">
           <p className="text-sm" style={{ color: '#6B7280' }}>
             Already have an account?{' '}
-            <Link href="/auth/login" className="font-semibold" style={{ color: '#ED1C24' }}>
+            <Link href="/auth/login" className="fw-semibold" style={{ color: '#ED1C24' }}>
               Login
             </Link>
           </p>

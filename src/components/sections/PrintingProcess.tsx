@@ -16,14 +16,14 @@ const steps = [
 
 export default function PrintingProcess() {
   return (
-    <section className="py-20 bg-dark relative overflow-hidden">
+    <section className="py-5 bg-dark position-relative overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+      <div className="position-absolute inset-0">
+        <div className="position-absolute top-0" style={{ left: '25%', width: '384px', height: '384px', background: 'rgba(var(--bs-primary-rgb), 0.1)', borderRadius: '50%', filter: 'blur(96px)' }} />
+        <div className="position-absolute bottom-0" style={{ right: '25%', width: '384px', height: '384px', background: 'rgba(var(--bs-accent-rgb), 0.1)', borderRadius: '50%', filter: 'blur(96px)' }} />
       </div>
 
-      <Container className="relative z-10">
+      <Container className="position-relative" style={{ zIndex: 10 }}>
         <SectionHeader
           badge="How It Works"
           title="Simple 6-Step Process"
@@ -31,40 +31,40 @@ export default function PrintingProcess() {
           className="text-white"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-16">
+        <div className="row g-4 mt-4">
           {steps.map((step, i) => (
             <motion.div
               key={step.title}
+              className="col-12 col-md-6 col-lg-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="relative"
             >
-              <div className="glass-dark rounded-2xl p-6 h-full">
-                <div className="flex items-start gap-4">
+              <div className="glass-dark rounded-4 p-4 h-100">
+                <div className="d-flex align-items-start gap-3">
                   <div className="flex-shrink-0">
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      step.color === 'primary' ? 'bg-primary/20' :
-                      step.color === 'accent' ? 'bg-accent/20' : 'bg-success/20'
-                    }`}>
-                      <step.icon className={`w-6 h-6 ${
+                    <div className={`rounded-4 d-flex align-items-center justify-content-center ${
+                      step.color === 'primary' ? 'bg-primary' :
+                      step.color === 'accent' ? 'bg-accent' : 'bg-success'
+                    }`} style={{ width: '48px', height: '48px', backgroundColor: step.color === 'primary' ? 'rgba(var(--bs-primary-rgb), 0.2)' : step.color === 'accent' ? 'rgba(var(--bs-accent-rgb), 0.2)' : 'rgba(var(--bs-success-rgb), 0.2)' }}>
+                      <step.icon size={24} className={
                         step.color === 'primary' ? 'text-primary-light' :
                         step.color === 'accent' ? 'text-accent-light' : 'text-success-light'
-                      }`} />
+                      } />
                     </div>
                   </div>
                   <div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs font-bold text-white/40">STEP {i + 1}</span>
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <span className="fw-bold text-white" style={{ fontSize: '12px', opacity: 0.4 }}>STEP {i + 1}</span>
                     </div>
-                    <h3 className="font-semibold font-heading text-white mb-2">{step.title}</h3>
-                    <p className="text-sm text-white/60 leading-relaxed">{step.description}</p>
+                    <h3 className="fw-semibold font-heading text-white mb-2">{step.title}</h3>
+                    <p className="text-white" style={{ fontSize: '14px', opacity: 0.6, lineHeight: 1.6 }}>{step.description}</p>
                   </div>
                 </div>
               </div>
               {i < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-white/10" />
+                <div className="d-none d-lg-block position-absolute" style={{ top: '50%', right: '-16px', width: '32px', height: '2px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
               )}
             </motion.div>
           ))}

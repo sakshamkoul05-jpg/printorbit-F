@@ -199,57 +199,57 @@ function DPICalculator() {
   }
 
   const getQuality = () => {
-    if (dpi === 0) return { label: 'Enter values', color: 'text-slate-400', icon: null };
-    if (dpi >= 300) return { label: 'Print Ready', color: 'text-green-600', icon: CheckCircle };
-    if (dpi >= 150) return { label: 'Acceptable for large format', color: 'text-yellow-600', icon: AlertTriangle };
-    return { label: 'Too low for print', color: 'text-red-600', icon: AlertTriangle };
+    if (dpi === 0) return { label: 'Enter values', color: 'text-muted', icon: null };
+    if (dpi >= 300) return { label: 'Print Ready', color: 'text-success', icon: CheckCircle };
+    if (dpi >= 150) return { label: 'Acceptable for large format', color: 'text-warning', icon: AlertTriangle };
+    return { label: 'Too low for print', color: 'text-danger', icon: AlertTriangle };
   };
 
   const quality = getQuality();
 
   return (
-    <div className="space-y-5">
-      <div className="flex gap-2">
-        <button onClick={() => setUnit('mm')} className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors ${unit === 'mm' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}>Millimeters</button>
-        <button onClick={() => setUnit('inches')} className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors ${unit === 'inches' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}>Inches</button>
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex gap-2">
+        <button onClick={() => setUnit('mm')} className={`px-4 py-2 text-xs fw-bold rounded-lg ${unit === 'mm' ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>Millimeters</button>
+        <button onClick={() => setUnit('inches')} className={`px-4 py-2 text-xs fw-bold rounded-lg ${unit === 'inches' ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>Inches</button>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Print Width ({unit})</label>
-          <input type="number" step="any" value={printW} onChange={(e) => setPrintW(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Print Width ({unit})</label>
+          <input type="number" step="any" value={printW} onChange={(e) => setPrintW(e.target.value)} placeholder="0" className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Print Height ({unit})</label>
-          <input type="number" step="any" value={printH} onChange={(e) => setPrintH(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Print Height ({unit})</label>
+          <input type="number" step="any" value={printH} onChange={(e) => setPrintH(e.target.value)} placeholder="0" className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Pixel Width</label>
-          <input type="number" value={pxW} onChange={(e) => setPxW(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Pixel Width</label>
+          <input type="number" value={pxW} onChange={(e) => setPxW(e.target.value)} placeholder="0" className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Pixel Height</label>
-          <input type="number" value={pxH} onChange={(e) => setPxH(e.target.value)} placeholder="0" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Pixel Height</label>
+          <input type="number" value={pxH} onChange={(e) => setPxH(e.target.value)} placeholder="0" className="form-control form-control-sm" />
         </div>
       </div>
       {dpi > 0 && (
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-          <div className="flex justify-between"><span className="text-sm text-muted">Horizontal DPI</span><span className="text-sm font-bold text-dark">{dpiW.toFixed(1)}</span></div>
-          <div className="flex justify-between"><span className="text-sm text-muted">Vertical DPI</span><span className="text-sm font-bold text-dark">{dpiH.toFixed(1)}</span></div>
-          <div className="border-t border-slate-200 pt-2 flex justify-between items-center">
-            <span className="text-sm font-semibold text-dark">Effective DPI</span>
-            <span className={`text-lg font-bold ${quality.color}`}>{dpi.toFixed(1)}</span>
+        <div className="bg-light border rounded-xl p-4 d-flex flex-column gap-2">
+          <div className="d-flex justify-content-between"><span className="text-sm text-muted">Horizontal DPI</span><span className="text-sm fw-bold text-dark">{dpiW.toFixed(1)}</span></div>
+          <div className="d-flex justify-content-between"><span className="text-sm text-muted">Vertical DPI</span><span className="text-sm fw-bold text-dark">{dpiH.toFixed(1)}</span></div>
+          <div className="border-top pt-2 d-flex justify-content-between align-items-center">
+            <span className="text-sm fw-semibold text-dark">Effective DPI</span>
+            <span className={`text-lg fw-bold ${quality.color}`}>{dpi.toFixed(1)}</span>
           </div>
-          <div className={`flex items-center gap-2 text-sm font-medium ${quality.color}`}>
-            {quality.icon && <quality.icon className="w-4 h-4" />}
+          <div className={`d-flex align-items-center gap-2 text-sm fw-medium ${quality.color}`}>
+            {quality.icon && <quality.icon size={16} />}
             {quality.label}
           </div>
         </div>
       )}
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Quick Presets</label>
-        <div className="flex flex-wrap gap-2">
+        <label className="text-xs fw-semibold text-muted mb-2 d-block">Quick Presets</label>
+        <div className="d-flex flex-wrap gap-2">
           {presets.map((p) => (
-            <button key={p.name} onClick={() => { setUnit(p.u); setPrintW(String(p.w)); setPrintH(String(p.h)); }} className="px-3 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-medium rounded-lg hover:bg-primary/10 hover:text-primary transition-colors">{p.name}</button>
+            <button key={p.name} onClick={() => { setUnit(p.u); setPrintW(String(p.w)); setPrintH(String(p.h)); }} className="px-3 py-1 bg-light text-secondary fw-medium rounded-lg" style={{ fontSize: '10px' }}>{p.name}</button>
           ))}
         </div>
       </div>
@@ -297,49 +297,51 @@ function BleedCalculator() {
   const safeBoxH = Math.max(0, safeH) * scale;
 
   return (
-    <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-2">
+    <div className="d-flex flex-column gap-4">
+      <div className="row g-2">
         {products.map((p, i) => (
-          <button key={p.name} onClick={() => setSelected(i)} className={`px-3 py-2 text-xs font-medium rounded-lg transition-colors ${selected === i ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{p.name}</button>
+          <div key={p.name} className="col-6">
+            <button onClick={() => setSelected(i)} className={`w-100 px-3 py-2 text-xs fw-medium rounded-lg ${selected === i ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>{p.name}</button>
+          </div>
         ))}
       </div>
       {selected === products.length - 1 && (
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Width (mm)</label>
-            <input type="number" value={customW} onChange={(e) => setCustomW(Number(e.target.value))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="row g-3">
+          <div className="col-4">
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Width (mm)</label>
+            <input type="number" value={customW} onChange={(e) => setCustomW(Number(e.target.value))} className="form-control form-control-sm" />
           </div>
-          <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Height (mm)</label>
-            <input type="number" value={customH} onChange={(e) => setCustomH(Number(e.target.value))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+          <div className="col-4">
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Height (mm)</label>
+            <input type="number" value={customH} onChange={(e) => setCustomH(Number(e.target.value))} className="form-control form-control-sm" />
           </div>
-          <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Bleed (mm)</label>
-            <input type="number" step="0.5" value={bleedVal} onChange={(e) => setBleedVal(Number(e.target.value))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+          <div className="col-4">
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Bleed (mm)</label>
+            <input type="number" step="0.5" value={bleedVal} onChange={(e) => setBleedVal(Number(e.target.value))} className="form-control form-control-sm" />
           </div>
         </div>
       )}
-      <div className="flex justify-center">
-        <div className="relative border-2 border-dashed border-slate-400 bg-slate-50 rounded-lg" style={{ width: totalBoxW, height: totalBoxH }}>
-          <div className="absolute bg-primary/5 border border-primary/30 rounded" style={{ width: boxW, height: boxH, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+      <div className="d-flex justify-content-center">
+        <div className="position-relative border-2 border-dashed bg-light rounded-lg" style={{ width: totalBoxW, height: totalBoxH, borderColor: '#adb5bd' }}>
+          <div className="position-absolute bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded" style={{ width: boxW, height: boxH, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             {safeW > 0 && safeH > 0 && (
-              <div className="absolute border border-dashed border-green-400 bg-green-50/50 rounded" style={{ width: safeBoxW, height: safeBoxH, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+              <div className="position-absolute border border-dashed border-success bg-success bg-opacity-10 rounded" style={{ width: safeBoxW, height: safeBoxH, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
             )}
           </div>
-          <div className="absolute -top-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-slate-500">Total: {totalW} x {totalH} mm</div>
-          <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 text-[9px] font-bold text-primary">Trim: {fw} x {fh} mm</div>
+          <div className="position-absolute fw-bold text-secondary" style={{ fontSize: '9px', top: '-20px', left: '50%', transform: 'translateX(-50%)' }}>Total: {totalW} x {totalH} mm</div>
+          <div className="position-absolute fw-bold text-primary" style={{ fontSize: '9px', bottom: '-20px', left: '50%', transform: 'translateX(-50%)' }}>Trim: {fw} x {fh} mm</div>
         </div>
       </div>
-      <div className="flex gap-4 text-xs justify-center">
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 border-2 border-dashed border-slate-400 bg-slate-50 rounded" /><span className="text-muted">Bleed Area</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 border border-primary/30 bg-primary/5 rounded" /><span className="text-muted">Trim Size</span></div>
-        <div className="flex items-center gap-1.5"><div className="w-3 h-3 border border-dashed border-green-400 bg-green-50 rounded" /><span className="text-muted">Safe Zone</span></div>
+      <div className="d-flex gap-4 text-xs justify-content-center">
+        <div className="d-flex align-items-center gap-2"><div className="border-2 border-dashed bg-light rounded" style={{ width: '12px', height: '12px', borderColor: '#adb5bd' }} /><span className="text-muted">Bleed Area</span></div>
+        <div className="d-flex align-items-center gap-2"><div className="border border-primary border-opacity-25 bg-primary bg-opacity-10 rounded" style={{ width: '12px', height: '12px' }} /><span className="text-muted">Trim Size</span></div>
+        <div className="d-flex align-items-center gap-2"><div className="border border-dashed border-success bg-success bg-opacity-10 rounded" style={{ width: '12px', height: '12px' }} /><span className="text-muted">Safe Zone</span></div>
       </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-        <div className="flex justify-between"><span className="text-sm text-muted">Final Trim Size</span><span className="text-sm font-bold text-dark">{fw} x {fh} mm</span></div>
-        <div className="flex justify-between"><span className="text-sm text-muted">Bleed per side</span><span className="text-sm font-bold text-dark">{bl} mm</span></div>
-        <div className="flex justify-between"><span className="text-sm text-muted">Total File Size</span><span className="text-sm font-bold text-dark">{totalW} x {totalH} mm</span></div>
-        <div className="flex justify-between"><span className="text-sm text-muted">Safe Zone</span><span className="text-sm font-bold text-dark">{Math.max(0, safeW)} x {Math.max(0, safeH)} mm</span></div>
+      <div className="bg-light border rounded-xl p-4 d-flex flex-column gap-2">
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Final Trim Size</span><span className="text-sm fw-bold text-dark">{fw} x {fh} mm</span></div>
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Bleed per side</span><span className="text-sm fw-bold text-dark">{bl} mm</span></div>
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Total File Size</span><span className="text-sm fw-bold text-dark">{totalW} x {totalH} mm</span></div>
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Safe Zone</span><span className="text-sm fw-bold text-dark">{Math.max(0, safeW)} x {Math.max(0, safeH)} mm</span></div>
       </div>
     </div>
   );
@@ -376,28 +378,28 @@ function UnitConverter() {
   const results = units.map((u) => ({ unit: u, value: fromMm[u](mmVal, dpi) }));
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-1 block">DPI Setting</label>
-        <input type="number" value={dpi} onChange={(e) => setDpi(Number(e.target.value) || 72)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <label className="text-xs fw-semibold text-muted mb-1 d-block">DPI Setting</label>
+        <input type="number" value={dpi} onChange={(e) => setDpi(Number(e.target.value) || 72)} className="form-control form-control-sm" />
       </div>
-      <div className="flex gap-3">
-        <div className="flex-1">
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Value</label>
-          <input type="number" step="any" value={value} onChange={(e) => setValue(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+      <div className="d-flex gap-3">
+        <div className="flex-grow-1">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Value</label>
+          <input type="number" step="any" value={value} onChange={(e) => setValue(e.target.value)} className="form-control form-control-sm" />
         </div>
-        <div className="w-40">
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Unit</label>
-          <select value={fromUnit} onChange={(e) => setFromUnit(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none">
+        <div style={{ width: '160px' }}>
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Unit</label>
+          <select value={fromUnit} onChange={(e) => setFromUnit(e.target.value)} className="form-select form-select-sm">
             {units.map((u) => <option key={u} value={u}>{u}</option>)}
           </select>
         </div>
       </div>
-      <div className="space-y-2">
+      <div className="d-flex flex-column gap-2">
         {results.map((r) => (
-          <div key={r.unit} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
-            <span className="text-sm font-medium text-muted capitalize">{r.unit === 'px' ? 'Pixels' : r.unit === 'mm' ? 'Millimeters' : r.unit === 'cm' ? 'Centimeters' : r.unit === 'points' ? 'Points' : r.unit === 'picas' ? 'Picas' : 'Inches'}</span>
-            <span className="text-sm font-bold text-dark">{r.unit === 'px' ? Math.round(r.value) : r.value.toFixed(4)} {r.unit}</span>
+          <div key={r.unit} className="d-flex align-items-center justify-content-between p-3 bg-light border rounded-xl">
+            <span className="text-sm fw-medium text-muted text-capitalize">{r.unit === 'px' ? 'Pixels' : r.unit === 'mm' ? 'Millimeters' : r.unit === 'cm' ? 'Centimeters' : r.unit === 'points' ? 'Points' : r.unit === 'picas' ? 'Picas' : 'Inches'}</span>
+            <span className="text-sm fw-bold text-dark">{r.unit === 'px' ? Math.round(r.value) : r.value.toFixed(4)} {r.unit}</span>
           </div>
         ))}
       </div>
@@ -431,24 +433,24 @@ function PaperSizeReference() {
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+    <div className="d-flex flex-column gap-4">
+      <div className="table-responsive">
+        <table className="table table-sm">
           <thead>
-            <tr className="border-b border-slate-200">
-              <th className="text-left py-3 px-4 text-xs font-semibold text-slate-400">Size</th>
-              <th className="text-right py-3 px-4 text-xs font-semibold text-slate-400">mm</th>
-              <th className="text-right py-3 px-4 text-xs font-semibold text-slate-400">inches</th>
-              <th className="text-right py-3 px-4 text-xs font-semibold text-slate-400">px @300dpi</th>
+            <tr className="border-bottom">
+              <th className="text-start py-3 px-4 text-xs fw-semibold text-muted">Size</th>
+              <th className="text-end py-3 px-4 text-xs fw-semibold text-muted">mm</th>
+              <th className="text-end py-3 px-4 text-xs fw-semibold text-muted">inches</th>
+              <th className="text-end py-3 px-4 text-xs fw-semibold text-muted">px @300dpi</th>
             </tr>
           </thead>
           <tbody>
             {sizes.map((s) => (
-              <tr key={s.name} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                <td className="py-3 px-4 font-bold text-dark">{s.name}</td>
-                <td className="py-3 px-4 text-right text-muted">{s.mmW} x {s.mmH}</td>
-                <td className="py-3 px-4 text-right text-muted">{(s.mmW / 25.4).toFixed(2)} x {(s.mmH / 25.4).toFixed(2)}</td>
-                <td className="py-3 px-4 text-right text-muted">{Math.round((s.mmW / 25.4) * 300)} x {Math.round((s.mmH / 25.4) * 300)}</td>
+              <tr key={s.name} className="border-bottom">
+                <td className="py-3 px-4 fw-bold text-dark">{s.name}</td>
+                <td className="py-3 px-4 text-end text-muted">{s.mmW} x {s.mmH}</td>
+                <td className="py-3 px-4 text-end text-muted">{(s.mmW / 25.4).toFixed(2)} x {(s.mmH / 25.4).toFixed(2)}</td>
+                <td className="py-3 px-4 text-end text-muted">{Math.round((s.mmW / 25.4) * 300)} x {Math.round((s.mmH / 25.4) * 300)}</td>
               </tr>
             ))}
           </tbody>
@@ -492,41 +494,41 @@ function ColorConverter() {
   const copyToClipboard = (text: string) => navigator.clipboard?.writeText(text);
 
   return (
-    <div className="space-y-5">
-      <div className="flex gap-3 items-end">
-        <div className="w-16 h-16 rounded-xl border-2 border-slate-200 shrink-0" style={{ backgroundColor: hex }} />
-        <div className="flex-1">
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Enter any color value</label>
-          <input type="text" value={customInput} onChange={(e) => handleCustomInput(e.target.value)} placeholder="#FF0000 or rgb(255,0,0)" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex gap-3 align-items-end">
+        <div className="rounded-xl border" style={{ width: '64px', height: '64px', backgroundColor: hex, borderColor: '#dee2e6' }} />
+        <div className="flex-grow-1">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Enter any color value</label>
+          <input type="text" value={customInput} onChange={(e) => handleCustomInput(e.target.value)} placeholder="#FF0000 or rgb(255,0,0)" className="form-control form-control-sm" />
         </div>
-        <input type="color" value={hex} onChange={(e) => { setHex(e.target.value.toUpperCase()); setCustomInput(e.target.value.toUpperCase()); }} className="w-12 h-12 rounded-lg cursor-pointer border-0" />
+        <input type="color" value={hex} onChange={(e) => { setHex(e.target.value.toUpperCase()); setCustomInput(e.target.value.toUpperCase()); }} className="form-control form-control-color" style={{ width: '48px', height: '48px' }} />
       </div>
-      <div className="space-y-2">
+      <div className="d-flex flex-column gap-2">
         {[
           { label: 'HEX', value: hex },
           { label: 'RGB', value: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` },
           { label: 'CMYK', value: `C:${cmyk.c} M:${cmyk.m} Y:${cmyk.y} K:${cmyk.k}` },
           { label: 'HSL', value: `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` },
         ].map((item) => (
-          <div key={item.label} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
+          <div key={item.label} className="d-flex align-items-center justify-content-between p-3 bg-light border rounded-xl">
             <div>
-              <span className="text-[10px] font-bold text-slate-400 uppercase">{item.label}</span>
-              <p className="text-sm font-medium text-dark">{item.value}</p>
+              <span className="fw-bold text-muted text-uppercase" style={{ fontSize: '10px' }}>{item.label}</span>
+              <p className="text-sm fw-medium text-dark">{item.value}</p>
             </div>
-            <button onClick={() => copyToClipboard(item.value)} className="p-2 hover:bg-slate-200 rounded-lg transition-colors"><Copy className="w-3.5 h-3.5 text-slate-400" /></button>
+            <button onClick={() => copyToClipboard(item.value)} className="btn btn-sm btn-light"><Copy size={14} className="text-muted" /></button>
           </div>
         ))}
       </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-2">
-          <BookOpenCheck className="w-4 h-4 text-primary" />
-          <span className="text-xs font-bold text-dark">Closest Pantone Match</span>
+      <div className="bg-light border rounded-xl p-4">
+        <div className="d-flex align-items-center gap-2 mb-2">
+          <BookOpenCheck size={16} className="text-primary" />
+          <span className="text-xs fw-bold text-dark">Closest Pantone Match</span>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg border border-slate-200" style={{ backgroundColor: closestPantone.hex }} />
+        <div className="d-flex align-items-center gap-3">
+          <div className="rounded-lg border" style={{ width: '40px', height: '40px', backgroundColor: closestPantone.hex, borderColor: '#dee2e6' }} />
           <div>
-            <p className="text-sm font-bold text-dark">{closestPantone.name}</p>
-            <p className="text-[10px] text-muted">{closestPantone.hex}</p>
+            <p className="text-sm fw-bold text-dark">{closestPantone.name}</p>
+            <p className="text-muted" style={{ fontSize: '10px' }}>{closestPantone.hex}</p>
           </div>
         </div>
       </div>
@@ -556,44 +558,44 @@ function RichBlackCalculator() {
   ];
 
   return (
-    <div className="space-y-5">
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-xl text-sm text-yellow-800 flex gap-2">
-        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+    <div className="d-flex flex-column gap-4">
+      <div className="p-4 bg-warning bg-opacity-10 border border-warning rounded-xl text-sm text-warning d-flex gap-2">
+        <AlertTriangle size={16} className="shrink-0 mt-1" />
         Pure black (K=100 only) looks washed out in print. Use rich black for large solid black areas. Total ink must be ≤300%.
       </div>
-      <div className="grid grid-cols-4 gap-3">
+      <div className="row g-3">
         {[
-          { label: 'C', val: c, set: setC, color: 'bg-cyan-500' },
-          { label: 'M', val: m, set: setM, color: 'bg-pink-500' },
-          { label: 'Y', val: y, set: setY, color: 'bg-yellow-400' },
-          { label: 'K', val: k, set: setK, color: 'bg-slate-800' },
+          { label: 'C', val: c, set: setC, color: '#06b6d4' },
+          { label: 'M', val: m, set: setM, color: '#ec4899' },
+          { label: 'Y', val: y, set: setY, color: '#facc15' },
+          { label: 'K', val: k, set: setK, color: '#1e293b' },
         ].map((ch) => (
-          <div key={ch.label}>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">{ch.label} (%)</label>
-            <input type="number" min={0} max={100} value={ch.val} onChange={(e) => ch.set(Math.min(100, Math.max(0, Number(e.target.value))))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary text-center" />
-            <input type="range" min={0} max={100} value={ch.val} onChange={(e) => ch.set(Number(e.target.value))} className="w-full accent-primary mt-1" />
+          <div key={ch.label} className="col-3">
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">{ch.label} (%)</label>
+            <input type="number" min={0} max={100} value={ch.val} onChange={(e) => ch.set(Math.min(100, Math.max(0, Number(e.target.value))))} className="form-control form-control-sm text-center" />
+            <input type="range" min={0} max={100} value={ch.val} onChange={(e) => ch.set(Number(e.target.value))} className="form-range mt-1" style={{ accentColor: ch.color }} />
           </div>
         ))}
       </div>
-      <div className="flex gap-3 items-center">
-        <div className="w-20 h-20 rounded-xl border-2 border-slate-200" style={{ backgroundColor: hex }} />
-        <div className="flex-1 space-y-1">
-          <p className="text-sm font-bold text-dark">{hex}</p>
+      <div className="d-flex gap-3 align-items-center">
+        <div className="rounded-xl border" style={{ width: '80px', height: '80px', backgroundColor: hex, borderColor: '#dee2e6' }} />
+        <div className="flex-grow-1 d-flex flex-column gap-1">
+          <p className="text-sm fw-bold text-dark">{hex}</p>
           <p className="text-xs text-muted">RGB({rgb.r}, {rgb.g}, {rgb.b})</p>
-          <div className={`flex items-center gap-1 text-xs font-bold ${total > 300 ? 'text-red-600' : total > 250 ? 'text-yellow-600' : 'text-green-600'}`}>
-            {total > 300 ? <AlertTriangle className="w-3 h-3" /> : <CheckCircle className="w-3 h-3" />}
+          <div className={`d-flex align-items-center gap-1 text-xs fw-bold ${total > 300 ? 'text-danger' : total > 250 ? 'text-warning' : 'text-success'}`}>
+            {total > 300 ? <AlertTriangle size={12} /> : <CheckCircle size={12} />}
             Total Ink: {total}% {total > 300 ? '(EXCEEDS LIMIT!)' : '(OK)'}
           </div>
         </div>
       </div>
-      <div className="space-y-2">
-        <label className="text-xs font-semibold text-slate-400 block">Presets</label>
+      <div className="d-flex flex-column gap-2">
+        <label className="text-xs fw-semibold text-muted d-block">Presets</label>
         {presets.map((p) => (
-          <button key={p.name} onClick={() => { setC(p.c); setM(p.m); setY(p.y); setK(p.k); }} className="w-full flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl hover:border-primary/50 transition-colors">
-            {(() => { const rgb = cmykToRgb(p.c, p.m, p.y, p.k); return <div className="w-8 h-8 rounded-lg border border-slate-200 shrink-0" style={{ backgroundColor: rgbToHex(rgb.r, rgb.g, rgb.b) }} />; })()}
-            <div className="text-left">
-              <p className="text-xs font-bold text-dark">{p.name}</p>
-              <p className="text-[10px] text-muted">C:{p.c} M:{p.m} Y:{p.y} K:{p.k} | {getInkPercent(p.c, p.m, p.y, p.k)}%</p>
+          <button key={p.name} onClick={() => { setC(p.c); setM(p.m); setY(p.y); setK(p.k); }} className="w-100 d-flex align-items-center gap-3 p-3 bg-light border rounded-xl">
+            {(() => { const rgb = cmykToRgb(p.c, p.m, p.y, p.k); return <div className="rounded-lg border shrink-0" style={{ width: '32px', height: '32px', backgroundColor: rgbToHex(rgb.r, rgb.g, rgb.b), borderColor: '#dee2e6' }} />; })()}
+            <div className="text-start">
+              <p className="text-xs fw-bold text-dark">{p.name}</p>
+              <p className="text-muted" style={{ fontSize: '10px' }}>C:{p.c} M:{p.m} Y:{p.y} K:{p.k} | {getInkPercent(p.c, p.m, p.y, p.k)}%</p>
             </div>
           </button>
         ))}
@@ -634,25 +636,25 @@ function PaletteGenerator() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="flex items-center gap-3">
-        <input type="color" value={baseColor} onChange={(e) => setBaseColor(e.target.value)} className="w-14 h-14 rounded-xl cursor-pointer border-0" />
-        <div className="flex-1">
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Base Color</label>
-          <input type="text" value={baseColor} onChange={(e) => setBaseColor(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3">
+        <input type="color" value={baseColor} onChange={(e) => setBaseColor(e.target.value)} className="form-control form-control-color" style={{ width: '56px', height: '56px' }} />
+        <div className="flex-grow-1">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Base Color</label>
+          <input type="text" value={baseColor} onChange={(e) => setBaseColor(e.target.value)} className="form-control form-control-sm" />
         </div>
       </div>
-      <button onClick={generate} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Sparkles className="w-4 h-4" /> Generate Palettes</button>
+      <button onClick={generate} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Sparkles size={16} /> Generate Palettes</button>
       {palettes.length > 0 && (
-        <div className="space-y-4">
+        <div className="d-flex flex-column gap-4">
           {palettes.map((p) => (
             <div key={p.name}>
-              <p className="text-xs font-bold text-dark mb-2">{p.name}</p>
-              <div className="flex gap-2">
+              <p className="text-xs fw-bold text-dark mb-2">{p.name}</p>
+              <div className="d-flex gap-2">
                 {p.colors.map((c, i) => (
-                  <div key={i} className="flex-1 text-center">
-                    <div className="h-14 rounded-lg border border-slate-200 cursor-pointer hover:scale-105 transition-transform" style={{ backgroundColor: c }} onClick={() => navigator.clipboard?.writeText(c)} />
-                    <p className="text-[9px] text-slate-400 mt-1">{c}</p>
+                  <div key={i} className="flex-grow-1 text-center">
+                    <div className="rounded-lg border cursor-pointer" style={{ height: '56px', backgroundColor: c, borderColor: '#dee2e6' }} onClick={() => navigator.clipboard?.writeText(c)} />
+                    <p className="text-muted mt-1" style={{ fontSize: '9px' }}>{c}</p>
                   </div>
                 ))}
               </div>
@@ -716,36 +718,36 @@ function ImageCompression() {
   };
 
   return (
-    <div className="space-y-5">
-      <div onClick={() => ref.current?.click()} className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{original ? original.name : 'Click to upload image (JPG, PNG, WebP)'}</p>
+    <div className="d-flex flex-column gap-4">
+      <div onClick={() => ref.current?.click()} className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer" style={{ borderColor: '#dee2e6' }}>
+        <Upload size={32} className="text-muted mx-auto mb-2" />
+        <p className="text-sm text-secondary">{original ? original.name : 'Click to upload image (JPG, PNG, WebP)'}</p>
       </div>
-      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="d-none" />
       {original && (
         <>
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Quality: {quality}%</label>
-            <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="w-full accent-primary" />
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Quality: {quality}%</label>
+            <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
           </div>
-          <div className="flex gap-4 text-xs">
-            <div className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+          <div className="row g-3 text-xs">
+            <div className="col-4 p-3 bg-light border rounded-xl text-center">
               <p className="text-muted mb-1">Original</p>
-              <p className="font-bold text-dark">{formatSize(originalSize)}</p>
+              <p className="fw-bold text-dark">{formatSize(originalSize)}</p>
             </div>
-            <div className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+            <div className="col-4 p-3 bg-light border rounded-xl text-center">
               <p className="text-muted mb-1">Compressed</p>
-              <p className="font-bold text-dark">{compressedSize > 0 ? formatSize(compressedSize) : '—'}</p>
+              <p className="fw-bold text-dark">{compressedSize > 0 ? formatSize(compressedSize) : '—'}</p>
             </div>
-            <div className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+            <div className="col-4 p-3 bg-light border rounded-xl text-center">
               <p className="text-muted mb-1">Saved</p>
-              <p className={`font-bold ${Number(savings) > 0 ? 'text-green-600' : 'text-slate-400'}`}>{savings > 0 ? `${savings}%` : '—'}</p>
+              <p className={`fw-bold ${Number(savings) > 0 ? 'text-success' : 'text-muted'}`}>{savings > 0 ? `${savings}%` : '—'}</p>
             </div>
           </div>
-          <button onClick={compress} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Minimize2 className="w-4 h-4" /> Compress Image</button>
+          <button onClick={compress} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Minimize2 size={16} /> Compress Image</button>
           {compressedUrl && (
-            <a href={compressedUrl} download={`compressed-${original.name}`} className="w-full flex items-center justify-center gap-2 py-3 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 transition-colors">
-              <Download className="w-4 h-4" /> Download Compressed Image
+            <a href={compressedUrl} download={`compressed-${original.name}`} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-success text-white text-sm fw-bold rounded-xl text-decoration-none">
+              <Download size={16} /> Download Compressed Image
             </a>
           )}
         </>
@@ -806,48 +808,50 @@ function WatermarkTool() {
   };
 
   return (
-    <div className="space-y-5">
-      <div onClick={() => ref.current?.click()} className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{imageFile ? imageFile.name : 'Click to upload image'}</p>
+    <div className="d-flex flex-column gap-4">
+      <div onClick={() => ref.current?.click()} className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer" style={{ borderColor: '#dee2e6' }}>
+        <Upload size={32} className="text-muted mx-auto mb-2" />
+        <p className="text-sm text-secondary">{imageFile ? imageFile.name : 'Click to upload image'}</p>
       </div>
-      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="d-none" />
       {imageUrl && (
         <>
-          <div className="relative rounded-xl overflow-hidden border border-slate-200">
-            <img src={imageUrl} alt="Preview" className="w-full max-h-64 object-contain bg-slate-100" />
+          <div className="position-relative rounded-xl overflow-hidden border" style={{ borderColor: '#dee2e6' }}>
+            <img src={imageUrl} alt="Preview" className="w-100" style={{ maxHeight: '256px', objectFit: 'contain', backgroundColor: '#f8f9fa' }} />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2">
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Watermark Text</label>
-              <input type="text" value={text} onChange={(e) => setText(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+          <div className="row g-3">
+            <div className="col-12">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Watermark Text</label>
+              <input type="text" value={text} onChange={(e) => setText(e.target.value)} className="form-control form-control-sm" />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Font Size: {fontSize}px</label>
-              <input type="range" min={12} max={200} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="w-full accent-primary" />
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Font Size: {fontSize}px</label>
+              <input type="range" min={12} max={200} value={fontSize} onChange={(e) => setFontSize(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Opacity: {opacity}%</label>
-              <input type="range" min={1} max={100} value={opacity} onChange={(e) => setOpacity(Number(e.target.value))} className="w-full accent-primary" />
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Opacity: {opacity}%</label>
+              <input type="range" min={1} max={100} value={opacity} onChange={(e) => setOpacity(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Rotation: {rotation}°</label>
-              <input type="range" min={-180} max={180} value={rotation} onChange={(e) => setRotation(Number(e.target.value))} className="w-full accent-primary" />
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Rotation: {rotation}°</label>
+              <input type="range" min={-180} max={180} value={rotation} onChange={(e) => setRotation(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Color</label>
-              <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="w-full h-10 rounded-lg cursor-pointer" />
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Color</label>
+              <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="form-control form-control-color w-100" />
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-2 block">Position</label>
-            <div className="grid grid-cols-3 gap-2">
+            <label className="text-xs fw-semibold text-muted mb-2 d-block">Position</label>
+            <div className="row g-2">
               {positions.map((p, i) => (
-                <button key={p} onClick={() => setPosition(i)} className={`px-2 py-2 text-[10px] font-medium rounded-lg transition-colors ${position === i ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{p}</button>
+                <div key={p} className="col-4">
+                  <button onClick={() => setPosition(i)} className={`w-100 px-2 py-2 fw-medium rounded-lg ${position === i ? 'bg-primary text-white' : 'bg-light text-secondary'}`} style={{ fontSize: '10px' }}>{p}</button>
+                </div>
               ))}
             </div>
           </div>
-          <button onClick={download} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Download className="w-4 h-4" /> Download Watermarked Image</button>
+          <button onClick={download} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Download size={16} /> Download Watermarked Image</button>
         </>
       )}
     </div>
@@ -901,28 +905,28 @@ function BackgroundRemover() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-xl text-sm text-blue-800 flex gap-2">
-        <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+    <div className="d-flex flex-column gap-4">
+      <div className="p-4 bg-primary bg-opacity-10 border border-primary border-opacity-25 rounded-xl text-sm text-primary d-flex gap-2">
+        <AlertTriangle size={16} className="shrink-0 mt-1" />
         This tool works best on images with white or very light solid backgrounds. Results vary with complex backgrounds.
       </div>
-      <div onClick={() => ref.current?.click()} className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{imageUrl ? imageName : 'Click to upload image'}</p>
+      <div onClick={() => ref.current?.click()} className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer" style={{ borderColor: '#dee2e6' }}>
+        <Upload size={32} className="text-muted mx-auto mb-2" />
+        <p className="text-sm text-secondary">{imageUrl ? imageName : 'Click to upload image'}</p>
       </div>
-      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+      <input ref={ref} type="file" accept="image/*" onChange={loadImage} className="d-none" />
       {imageUrl && (
         <>
-          <img src={imageUrl} alt="Preview" className="w-full rounded-xl border border-slate-200 max-h-48 object-contain" style={{ background: 'repeating-conic-gradient(#e2e8f0 0% 25%, white 0% 50%) 0 0 / 20px 20px' }} />
+          <img src={imageUrl} alt="Preview" className="w-100 rounded-xl border" style={{ maxHeight: '192px', objectFit: 'contain', borderColor: '#dee2e6', background: 'repeating-conic-gradient(#e2e8f0 0% 25%, white 0% 50%) 0 0 / 20px 20px' }} />
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Brightness Threshold: {threshold}</label>
-            <input type="range" min={150} max={255} value={threshold} onChange={(e) => setThreshold(Number(e.target.value))} className="w-full accent-primary" />
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Brightness Threshold: {threshold}</label>
+            <input type="range" min={150} max={255} value={threshold} onChange={(e) => setThreshold(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Tolerance: {tolerance}</label>
-            <input type="range" min={5} max={100} value={tolerance} onChange={(e) => setTolerance(Number(e.target.value))} className="w-full accent-primary" />
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Tolerance: {tolerance}</label>
+            <input type="range" min={5} max={100} value={tolerance} onChange={(e) => setTolerance(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
           </div>
-          <button onClick={remove} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Wand2 className="w-4 h-4" /> Remove Background & Download</button>
+          <button onClick={remove} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Wand2 size={16} /> Remove Background & Download</button>
         </>
       )}
     </div>
@@ -974,33 +978,35 @@ function FormatConverter() {
   };
 
   return (
-    <div className="space-y-5">
-      <div onClick={() => ref.current?.click()} className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{imageName || 'Click to upload image (PNG, JPG, WebP)'}</p>
+    <div className="d-flex flex-column gap-4">
+      <div onClick={() => ref.current?.click()} className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer" style={{ borderColor: '#dee2e6' }}>
+        <Upload size={32} className="text-muted mx-auto mb-2" />
+        <p className="text-sm text-secondary">{imageName || 'Click to upload image (PNG, JPG, WebP)'}</p>
       </div>
-      <input ref={ref} type="file" accept="image/png,image/jpeg,image/webp" onChange={loadImage} className="hidden" />
+      <input ref={ref} type="file" accept="image/png,image/jpeg,image/webp" onChange={loadImage} className="d-none" />
       {imageUrl && (
         <>
-          <img src={imageUrl} alt="Preview" className="w-full rounded-xl border border-slate-200 max-h-48 object-contain" />
+          <img src={imageUrl} alt="Preview" className="w-100 rounded-xl border" style={{ maxHeight: '192px', objectFit: 'contain', borderColor: '#dee2e6' }} />
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-2 block">Output Format</label>
-            <div className="grid grid-cols-3 gap-2">
+            <label className="text-xs fw-semibold text-muted mb-2 d-block">Output Format</label>
+            <div className="row g-2">
               {formats.map((f) => (
-                <button key={f.value} onClick={() => setFormat(f.value)} className={`p-3 rounded-xl border text-center transition-colors ${format === f.value ? 'border-primary bg-primary/5' : 'border-slate-200 hover:border-slate-300'}`}>
-                  <p className="text-sm font-bold text-dark">{f.label}</p>
-                  <p className="text-[10px] text-muted">{f.desc}</p>
-                </button>
+                <div key={f.value} className="col-4">
+                  <button onClick={() => setFormat(f.value)} className={`w-100 p-3 rounded-xl border text-center ${format === f.value ? 'border-primary bg-primary bg-opacity-10' : ''}`} style={format !== f.value ? { borderColor: '#dee2e6' } : {}}>
+                    <p className="text-sm fw-bold text-dark">{f.label}</p>
+<p className="text-muted" style={{ fontSize: '10px' }}>{f.desc}</p>
+                  </button>
+                </div>
               ))}
             </div>
           </div>
           {format !== 'image/png' && (
             <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Quality: {quality}%</label>
-              <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="w-full accent-primary" />
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Quality: {quality}%</label>
+              <input type="range" min={1} max={100} value={quality} onChange={(e) => setQuality(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
             </div>
           )}
-          <button onClick={convert} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><FileDown className="w-4 h-4" /> Convert & Download</button>
+          <button onClick={convert} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><FileDown size={16} /> Convert & Download</button>
         </>
       )}
     </div>
@@ -1051,36 +1057,36 @@ function SVGtoPNG() {
   };
 
   return (
-    <div className="space-y-5">
-      <div onClick={() => ref.current?.click()} className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{svgContent ? 'SVG loaded' : 'Click to upload SVG file'}</p>
+    <div className="d-flex flex-column gap-4">
+      <div onClick={() => ref.current?.click()} className="border-2 border-dashed rounded-xl p-8 text-center cursor-pointer" style={{ borderColor: '#dee2e6' }}>
+        <Upload size={32} className="text-muted mx-auto mb-2" />
+        <p className="text-sm text-secondary">{svgContent ? 'SVG loaded' : 'Click to upload SVG file'}</p>
       </div>
-      <input ref={ref} type="file" accept=".svg,image/svg+xml" onChange={loadSvg} className="hidden" />
+      <input ref={ref} type="file" accept=".svg,image/svg+xml" onChange={loadSvg} className="d-none" />
       {svgContent && (
         <>
-          <div className="border border-slate-200 rounded-xl p-4 bg-white flex items-center justify-center" style={{ background: 'repeating-conic-gradient(#e2e8f0 0% 25%, white 0% 50%) 0 0 / 20px 20px' }}>
-            <img src={svgPreview} alt="SVG Preview" className="max-w-full max-h-48 object-contain" />
+          <div className="border rounded-xl p-4 bg-white d-flex align-items-center justify-content-center" style={{ borderColor: '#dee2e6', background: 'repeating-conic-gradient(#e2e8f0 0% 25%, white 0% 50%) 0 0 / 20px 20px' }}>
+            <img src={svgPreview} alt="SVG Preview" className="img-fluid" style={{ maxHeight: '192px', objectFit: 'contain' }} />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Width (px)</label>
-              <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+          <div className="row g-3">
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Width (px)</label>
+              <input type="number" value={width} onChange={(e) => setWidth(Number(e.target.value))} className="form-control form-control-sm" />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Height (px)</label>
-              <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+            <div className="col-6">
+              <label className="text-xs fw-semibold text-muted mb-1 d-block">Height (px)</label>
+              <input type="number" value={height} onChange={(e) => setHeight(Number(e.target.value))} className="form-control form-control-sm" />
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Output DPI: {dpi}</label>
-            <input type="range" min={72} max={600} step={1} value={dpi} onChange={(e) => setDpi(Number(e.target.value))} className="w-full accent-primary" />
-            <div className="flex justify-between text-[10px] text-slate-400 mt-1"><span>72 (Screen)</span><span>150 (Draft)</span><span>300 (Print)</span><span>600 (High quality)</span></div>
+            <label className="text-xs fw-semibold text-muted mb-1 d-block">Output DPI: {dpi}</label>
+            <input type="range" min={72} max={600} step={1} value={dpi} onChange={(e) => setDpi(Number(e.target.value))} className="form-range" style={{ accentColor: 'var(--bs-primary)' }} />
+            <div className="d-flex justify-content-between text-muted mt-1" style={{ fontSize: '10px' }}><span>72 (Screen)</span><span>150 (Draft)</span><span>300 (Print)</span><span>600 (High quality)</span></div>
           </div>
-          <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs text-muted">
+          <div className="p-3 bg-light border rounded-xl text-xs text-muted">
             Output: {Math.round(width * (dpi / 96))} x {Math.round(height * (dpi / 96))} px at {dpi} DPI
           </div>
-          <button onClick={convert} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Grid2x2 className="w-4 h-4" /> Convert & Download PNG</button>
+          <button onClick={convert} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Grid2x2 size={16} /> Convert & Download PNG</button>
         </>
       )}
     </div>
@@ -1186,30 +1192,32 @@ function BarcodeGenerator() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Barcode Format</label>
-        <div className="grid grid-cols-2 gap-2">
+        <label className="text-xs fw-semibold text-muted mb-2 d-block">Barcode Format</label>
+        <div className="row g-2">
           {formats.map((f) => (
-            <button key={f.id} onClick={() => setFormat(f.id)} className={`p-3 rounded-xl border text-left transition-colors ${format === f.id ? 'border-primary bg-primary/5' : 'border-slate-200 hover:border-slate-300'}`}>
-              <p className="text-xs font-bold text-dark">{f.name}</p>
-              <p className="text-[10px] text-muted">{f.desc}</p>
-            </button>
+            <div key={f.id} className="col-6">
+              <button onClick={() => setFormat(f.id)} className={`w-100 p-3 rounded-xl border text-start ${format === f.id ? 'border-primary bg-primary bg-opacity-10' : ''}`} style={format !== f.id ? { borderColor: '#dee2e6' } : {}}>
+                <p className="text-xs fw-bold text-dark">{f.name}</p>
+                <p className="text-muted" style={{ fontSize: '10px' }}>{f.desc}</p>
+              </button>
+            </div>
           ))}
         </div>
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-1 block">Data / Content</label>
-        <input type="text" value={data} onChange={(e) => setData(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" placeholder="Enter barcode data..." />
+        <label className="text-xs fw-semibold text-muted mb-1 d-block">Data / Content</label>
+        <input type="text" value={data} onChange={(e) => setData(e.target.value)} className="form-control form-control-sm" placeholder="Enter barcode data..." />
       </div>
-      <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
-        <input type="checkbox" checked={showText} onChange={(e) => setShowText(e.target.checked)} className="accent-primary" />
+      <label className="d-flex align-items-center gap-2 text-sm text-secondary cursor-pointer">
+        <input type="checkbox" checked={showText} onChange={(e) => setShowText(e.target.checked)} className="form-check-input" style={{ accentColor: 'var(--bs-primary)' }} />
         Show text below barcode
       </label>
-      <div className="flex justify-center bg-white border border-slate-200 rounded-xl p-4">
-        <canvas ref={canvasRef} width={400} height={120} className="max-w-full" />
+      <div className="d-flex justify-content-center bg-white border rounded-xl p-4" style={{ borderColor: '#dee2e6' }}>
+        <canvas ref={canvasRef} width={400} height={120} className="img-fluid" />
       </div>
-      <button onClick={() => { drawBarcode(); setTimeout(download, 100); }} disabled={!data.trim()} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark disabled:opacity-50 transition-colors"><Hash className="w-4 h-4" /> Generate & Download Barcode</button>
+      <button onClick={() => { drawBarcode(); setTimeout(download, 100); }} disabled={!data.trim()} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Hash size={16} /> Generate & Download Barcode</button>
     </div>
   );
 }
@@ -1258,23 +1266,23 @@ function PlaceholderTextGenerator() {
   };
 
   return (
-    <div className="space-y-5">
-      <div className="flex gap-2">
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex gap-2">
         {(['paragraphs', 'words', 'characters'] as const).map((m) => (
-          <button key={m} onClick={() => setMode(m)} className={`px-4 py-2 text-xs font-bold rounded-lg capitalize transition-colors ${mode === m ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}>{m}</button>
+          <button key={m} onClick={() => setMode(m)} className={`px-4 py-2 text-xs fw-bold rounded-lg text-capitalize ${mode === m ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>{m}</button>
         ))}
       </div>
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-1 block">Number of {mode}</label>
-        <input type="number" min={1} max={100} value={count} onChange={(e) => setCount(Math.max(1, Math.min(100, Number(e.target.value))))} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <label className="text-xs fw-semibold text-muted mb-1 d-block">Number of {mode}</label>
+        <input type="number" min={1} max={100} value={count} onChange={(e) => setCount(Math.max(1, Math.min(100, Number(e.target.value))))} className="form-control form-control-sm" />
       </div>
-      <button onClick={generate} className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors"><Type className="w-4 h-4" /> Generate Text</button>
+      <button onClick={generate} className="w-100 d-flex align-items-center justify-content-center gap-2 py-3 bg-primary text-white text-sm fw-bold rounded-xl"><Type size={16} /> Generate Text</button>
       {generated && (
-        <div className="space-y-3">
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 max-h-64 overflow-y-auto">
-            <p className="text-sm text-dark whitespace-pre-wrap leading-relaxed">{generated}</p>
+        <div className="d-flex flex-column gap-3">
+          <div className="bg-light border rounded-xl p-4" style={{ maxHeight: '256px', overflowY: 'auto' }}>
+            <p className="text-sm text-dark" style={{ whiteSpace: 'pre-wrap', lineHeight: 1.6 }}>{generated}</p>
           </div>
-          <button onClick={() => navigator.clipboard?.writeText(generated)} className="w-full flex items-center justify-center gap-2 py-2 bg-slate-100 text-slate-700 text-xs font-medium rounded-lg hover:bg-slate-200 transition-colors"><Copy className="w-3.5 h-3.5" /> Copy to Clipboard</button>
+          <button onClick={() => navigator.clipboard?.writeText(generated)} className="w-100 d-flex align-items-center justify-content-center gap-2 py-2 bg-light text-secondary text-xs fw-medium rounded-lg"><Copy size={14} /> Copy to Clipboard</button>
         </div>
       )}
     </div>
@@ -1299,33 +1307,33 @@ function BusinessCardSizes() {
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
+    <div className="d-flex flex-column gap-4">
+      <div className="table-responsive">
+        <table className="table table-sm">
           <thead>
-            <tr className="border-b border-slate-200">
-              <th className="text-left py-3 px-3 text-xs font-semibold text-slate-400">Region</th>
-              <th className="text-right py-3 px-3 text-xs font-semibold text-slate-400">mm</th>
-              <th className="text-right py-3 px-3 text-xs font-semibold text-slate-400">inches</th>
-              <th className="text-right py-3 px-3 text-xs font-semibold text-slate-400">px @{dpi}</th>
+            <tr className="border-bottom">
+              <th className="text-start py-3 px-3 text-xs fw-semibold text-muted">Region</th>
+              <th className="text-end py-3 px-3 text-xs fw-semibold text-muted">mm</th>
+              <th className="text-end py-3 px-3 text-xs fw-semibold text-muted">inches</th>
+              <th className="text-end py-3 px-3 text-xs fw-semibold text-muted">px @{dpi}</th>
             </tr>
           </thead>
           <tbody>
             {sizes.map((s) => (
-              <tr key={s.region} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+              <tr key={s.region} className="border-bottom">
                 <td className="py-3 px-3">
-                  <p className="font-bold text-dark text-xs">{s.region}</p>
-                  <p className="text-[10px] text-muted">{s.note}</p>
+                  <p className="fw-bold text-dark text-xs">{s.region}</p>
+                  <p className="text-muted" style={{ fontSize: '10px' }}>{s.note}</p>
                 </td>
-                <td className="py-3 px-3 text-right text-xs text-muted">{s.w} x {s.h}</td>
-                <td className="py-3 px-3 text-right text-xs text-muted">{(s.w / 25.4).toFixed(2)} x {(s.h / 25.4).toFixed(2)}</td>
-                <td className="py-3 px-3 text-right text-xs text-muted">{Math.round((s.w / 25.4) * dpi)} x {Math.round((s.h / 25.4) * dpi)}</td>
+                <td className="py-3 px-3 text-end text-xs text-muted">{s.w} x {s.h}</td>
+                <td className="py-3 px-3 text-end text-xs text-muted">{(s.w / 25.4).toFixed(2)} x {(s.h / 25.4).toFixed(2)}</td>
+                <td className="py-3 px-3 text-end text-xs text-muted">{Math.round((s.w / 25.4) * dpi)} x {Math.round((s.h / 25.4) * dpi)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl">
+      <div className="p-4 bg-light border rounded-xl">
         <p className="text-xs text-muted">
           <strong className="text-dark">Note:</strong> All pixel dimensions calculated at {dpi} DPI. Include 3mm bleed on each side for print production. Safe zone is typically 5mm from trim edge.
         </p>
@@ -1367,49 +1375,51 @@ function PrintPriceEstimator() {
   const maxPrice = Math.round(totalPrice * 1.3);
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Product Type</label>
-        <div className="grid grid-cols-3 gap-2">
+        <label className="text-xs fw-semibold text-muted mb-2 d-block">Product Type</label>
+        <div className="row g-2">
           {Object.keys(products).map((p) => (
-            <button key={p} onClick={() => setProduct(p)} className={`px-3 py-2 text-xs font-medium rounded-lg capitalize transition-colors ${product === p ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{p.replace(/([A-Z])/g, ' $1')}</button>
+            <div key={p} className="col-4">
+              <button onClick={() => setProduct(p)} className={`w-100 px-3 py-2 text-xs fw-medium rounded-lg text-capitalize ${product === p ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>{p.replace(/([A-Z])/g, ' $1')}</button>
+            </div>
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Size</label>
-          <select value={size} onChange={(e) => setSize(e.target.value)} className="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none">
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Size</label>
+          <select value={size} onChange={(e) => setSize(e.target.value)} className="form-select form-select-sm">
             {productData.sizes.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Quantity</label>
-          <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Quantity</label>
+          <select value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="form-select form-select-sm">
             {[50, 100, 250, 500, 1000, 2000, 5000, 10000].map((q) => <option key={q} value={q}>{q.toLocaleString()}</option>)}
           </select>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Paper Stock</label>
-          <select value={paper} onChange={(e) => setPaper(e.target.value)} className="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none">
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Paper Stock</label>
+          <select value={paper} onChange={(e) => setPaper(e.target.value)} className="form-select form-select-sm">
             {productData.papers.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Finish</label>
-          <select value={finish} onChange={(e) => setFinish(e.target.value)} className="w-full px-3 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Finish</label>
+          <select value={finish} onChange={(e) => setFinish(e.target.value)} className="form-select form-select-sm">
             {productData.finishes.map((f) => <option key={f} value={f}>{f.replace(/-/g, ' ')}</option>)}
           </select>
         </div>
       </div>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 text-center space-y-2">
-        <p className="text-xs text-muted uppercase tracking-wider font-semibold">Estimated Price Range</p>
-        <p className="text-3xl font-bold text-dark">₹{minPrice.toLocaleString()} - ₹{maxPrice.toLocaleString()}</p>
+      <div className="bg-light border rounded-xl p-5 text-center d-flex flex-column gap-2">
+        <p className="text-xs text-muted text-uppercase tracking-wider fw-semibold">Estimated Price Range</p>
+        <p className="text-3xl fw-bold text-dark">₹{minPrice.toLocaleString()} - ₹{maxPrice.toLocaleString()}</p>
         <p className="text-xs text-muted">For {quantity.toLocaleString()} units • Price varies by vendor and location</p>
       </div>
-      <p className="text-[10px] text-slate-400 text-center">This is an estimate only. Actual prices depend on vendor, location, design complexity, and current material costs.</p>
+      <p className="text-muted text-center" style={{ fontSize: '10px' }}>This is an estimate only. Actual prices depend on vendor, location, design complexity, and current material costs.</p>
     </div>
   );
 }
@@ -1459,62 +1469,61 @@ function GangSheetCalculator() {
   const wastePercent = ((1 - (result.count * itemW * itemH) / (sheetW * sheetH)) * 100).toFixed(1);
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Sheet Presets</label>
-        <div className="flex flex-wrap gap-2">
+        <label className="text-xs fw-semibold text-muted mb-2 d-block">Sheet Presets</label>
+        <div className="d-flex flex-wrap gap-2">
           {presets.map((p) => (
-            <button key={p.name} onClick={() => { if (p.w > 0) { setSheetW(p.w); setSheetH(p.h); setSheetName(p.name); } }} className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${sheetName === p.name ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>{p.name}</button>
+            <button key={p.name} onClick={() => { if (p.w > 0) { setSheetW(p.w); setSheetH(p.h); setSheetName(p.name); } }} className={`px-3 py-1 text-xs fw-medium rounded-lg ${sheetName === p.name ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>{p.name}</button>
           ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Sheet Width (mm)</label>
-          <input type="number" value={sheetW} onChange={(e) => { setSheetW(Number(e.target.value)); setSheetName('Custom'); }} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Sheet Width (mm)</label>
+          <input type="number" value={sheetW} onChange={(e) => { setSheetW(Number(e.target.value)); setSheetName('Custom'); }} className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Sheet Height (mm)</label>
-          <input type="number" value={sheetH} onChange={(e) => { setSheetH(Number(e.target.value)); setSheetName('Custom'); }} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Sheet Height (mm)</label>
+          <input type="number" value={sheetH} onChange={(e) => { setSheetH(Number(e.target.value)); setSheetName('Custom'); }} className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Item Width (mm)</label>
-          <input type="number" value={itemW} onChange={(e) => setItemW(Number(e.target.value))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Item Width (mm)</label>
+          <input type="number" value={itemW} onChange={(e) => setItemW(Number(e.target.value))} className="form-control form-control-sm" />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Item Height (mm)</label>
-          <input type="number" value={itemH} onChange={(e) => setItemH(Number(e.target.value))} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <div className="col-6">
+          <label className="text-xs fw-semibold text-muted mb-1 d-block">Item Height (mm)</label>
+          <input type="number" value={itemH} onChange={(e) => setItemH(Number(e.target.value))} className="form-control form-control-sm" />
         </div>
       </div>
-      <label className="flex items-center gap-2 text-sm text-slate-600 cursor-pointer">
-        <input type="checkbox" checked={allowRotation} onChange={(e) => setAllowRotation(e.target.checked)} className="accent-primary" />
+      <label className="d-flex align-items-center gap-2 text-sm text-secondary cursor-pointer">
+        <input type="checkbox" checked={allowRotation} onChange={(e) => setAllowRotation(e.target.checked)} className="form-check-input" style={{ accentColor: 'var(--bs-primary)' }} />
         Allow item rotation for better fit
       </label>
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
-        <div className="flex justify-between items-center">
+      <div className="bg-light border rounded-xl p-5 d-flex flex-column gap-3">
+        <div className="d-flex justify-content-between align-items-center">
           <span className="text-sm text-muted">Items per Sheet</span>
-          <span className="text-2xl font-bold text-primary">{result.count}</span>
+          <span className="text-2xl fw-bold text-primary">{result.count}</span>
         </div>
-        <div className="flex justify-between"><span className="text-sm text-muted">Sheet Size</span><span className="text-sm font-bold text-dark">{sheetW} x {sheetH} mm</span></div>
-        <div className="flex justify-between"><span className="text-sm text-muted">Item Size</span><span className="text-sm font-bold text-dark">{itemW} x {itemH} mm</span></div>
-        {allowRotation && result.rotated && <p className="text-xs text-primary font-medium">Items rotated for optimal fit</p>}
-        <div className="flex justify-between"><span className="text-sm text-muted">Waste</span><span className="text-sm font-bold text-dark">{wastePercent}%</span></div>
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Sheet Size</span><span className="text-sm fw-bold text-dark">{sheetW} x {sheetH} mm</span></div>
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Item Size</span><span className="text-sm fw-bold text-dark">{itemW} x {itemH} mm</span></div>
+        {allowRotation && result.rotated && <p className="text-xs text-primary fw-medium">Items rotated for optimal fit</p>}
+        <div className="d-flex justify-content-between"><span className="text-sm text-muted">Waste</span><span className="text-sm fw-bold text-dark">{wastePercent}%</span></div>
       </div>
       {sheetW > 0 && sheetH > 0 && itemW > 0 && itemH > 0 && (
-        <div className="border border-slate-200 rounded-xl p-4">
-          <p className="text-xs font-semibold text-slate-400 mb-2">Visual Layout ({result.cols} x {result.rows})</p>
-          <div className="relative border border-dashed border-slate-300 bg-slate-50 rounded-lg" style={{ width: '100%', aspectRatio: `${sheetW}/${sheetH}` }}>
+        <div className="border rounded-xl p-4" style={{ borderColor: '#dee2e6' }}>
+          <p className="text-xs fw-semibold text-muted mb-2">Visual Layout ({result.cols} x {result.rows})</p>
+          <div className="position-relative border border-dashed bg-light rounded-lg" style={{ width: '100%', aspectRatio: `${sheetW}/${sheetH}`, borderColor: '#dee2e6' }}>
             {Array.from({ length: Math.min(result.count, 50) }).map((_, i) => {
               const col = i % result.cols;
               const row = Math.floor(i / result.cols);
-              const itemAspect = result.rotated ? itemH / itemW : itemW / itemH;
-              const sheetAspect = sheetW / sheetH;
               const cellW = (1 / result.cols) * 100;
               const cellH = (1 / result.rows) * 100;
               return (
-                <div key={i} className="absolute border border-primary/30 bg-primary/10 rounded-sm" style={{
+                <div key={i} className="position-absolute border rounded-sm" style={{
                   left: `${col * cellW}%`, top: `${row * cellH}%`,
                   width: `${cellW - 0.5}%`, height: `${cellH - 0.5}%`,
+                  borderColor: 'rgba(13, 110, 253, 0.3)', backgroundColor: 'rgba(13, 110, 253, 0.1)',
                 }} />
               );
             })}
@@ -1569,33 +1578,33 @@ function FontPairingGuide() {
   const currentPairings = pairings[category] || pairings.modern;
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Preview Text</label>
-        <input type="text" value={previewText} onChange={(e) => setPreviewText(e.target.value)} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary" />
+        <label className="text-xs fw-semibold text-muted mb-2 d-block">Preview Text</label>
+        <input type="text" value={previewText} onChange={(e) => setPreviewText(e.target.value)} className="form-control form-control-sm" />
       </div>
-      <div className="flex gap-2">
+      <div className="d-flex gap-2">
         {categories.map((c) => (
-          <button key={c.id} onClick={() => setCategory(c.id)} className={`px-4 py-2 text-xs font-bold rounded-lg transition-colors ${category === c.id ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'}`}>{c.name}</button>
+          <button key={c.id} onClick={() => setCategory(c.id)} className={`px-4 py-2 text-xs fw-bold rounded-lg ${category === c.id ? 'bg-primary text-white' : 'bg-light text-secondary'}`}>{c.name}</button>
         ))}
       </div>
-      <div className="space-y-4">
+      <div className="d-flex flex-column gap-4">
         {currentPairings.map((pair) => (
-          <div key={pair.name} className="bg-slate-50 border border-slate-200 rounded-xl p-5 space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-primary">{pair.name}</p>
-              <p className="text-[10px] text-muted">{pair.heading} + {pair.body}</p>
+          <div key={pair.name} className="bg-light border rounded-xl p-5 d-flex flex-column gap-3">
+            <div className="d-flex align-items-center justify-content-between">
+              <p className="text-xs fw-bold text-primary">{pair.name}</p>
+              <p className="text-muted" style={{ fontSize: '10px' }}>{pair.heading} + {pair.body}</p>
             </div>
-            <div className="bg-white border border-slate-200 rounded-lg p-4">
-              <p style={{ fontFamily: pair.heading }} className="text-2xl font-bold text-dark mb-2">{previewText}</p>
-              <p style={{ fontFamily: pair.body }} className="text-sm text-muted leading-relaxed">
+            <div className="bg-white border rounded-lg p-4" style={{ borderColor: '#dee2e6' }}>
+              <p style={{ fontFamily: pair.heading }} className="text-2xl fw-bold text-dark mb-2">{previewText}</p>
+              <p className="text-sm text-muted" style={{ fontFamily: pair.body, lineHeight: 1.6 }}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
               </p>
             </div>
-            <p className="text-[10px] text-muted">{pair.description}</p>
-            <div className="flex gap-2">
-              <span className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] text-dark">Heading: {pair.heading}</span>
-              <span className="px-2 py-1 bg-white border border-slate-200 rounded text-[10px] text-dark">Body: {pair.body}</span>
+            <p className="text-muted" style={{ fontSize: '10px' }}>{pair.description}</p>
+            <div className="d-flex gap-2">
+              <span className="px-2 py-1 bg-white border rounded text-dark" style={{ borderColor: '#dee2e6', fontSize: '10px' }}>Heading: {pair.heading}</span>
+              <span className="px-2 py-1 bg-white border rounded text-dark" style={{ borderColor: '#dee2e6', fontSize: '10px' }}>Body: {pair.body}</span>
             </div>
           </div>
         ))}
@@ -1661,29 +1670,29 @@ export default function UtilitiesPage() {
   const categories = [...new Set(tools.map((t) => t.category))];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="bg-white border-b border-slate-200">
+    <div className="min-vh-100 bg-light">
+      <div className="bg-white border-bottom">
         <Container>
           <div className="py-6">
-            <Link href="/" className="text-xs text-primary hover:underline mb-3 inline-block">← Back to Home</Link>
-            <h1 className="text-2xl md:text-3xl font-bold text-dark font-heading">Print Utilities & Tools</h1>
-            <p className="text-sm text-muted mt-1">45+ essential tools for designers & print professionals · <Link href="/utilities/mockups" className="text-primary hover:underline font-medium">Mockup Scene Generator →</Link></p>
+            <Link href="/" className="text-xs text-primary text-decoration-underline mb-3 d-inline-block">← Back to Home</Link>
+            <h1 className="text-2xl text-md-3xl fw-bold text-dark font-heading">Print Utilities & Tools</h1>
+            <p className="text-sm text-muted mt-1">45+ essential tools for designers & print professionals · <Link href="/utilities/mockups" className="text-primary text-decoration-underline fw-medium">Mockup Scene Generator →</Link></p>
           </div>
         </Container>
       </div>
       <Container>
-        <div className="py-8 flex flex-col lg:flex-row gap-8">
-          <div className="w-full lg:w-72 shrink-0">
-            <div className="bg-white rounded-xl border border-slate-200 p-2 sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
+        <div className="py-8 d-flex flex-column flex-lg-row gap-4">
+          <div className="w-100" style={{ maxWidth: '288px' }}>
+            <div className="bg-white rounded-xl border p-2 sticky-top" style={{ top: '96px', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto', borderColor: '#dee2e6' }}>
               {categories.map((cat) => (
                 <div key={cat} className="mb-2">
-                  <p className="px-4 py-2 text-[10px] font-bold text-slate-400 uppercase tracking-wider">{cat}</p>
+                  <p className="px-4 py-2 fw-bold text-muted text-uppercase tracking-wider" style={{ fontSize: '10px' }}>{cat}</p>
                   {tools.filter((t) => t.category === cat).map((t) => (
-                    <button key={t.id} onClick={() => setActive(t.id)} className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-left transition-all ${active === t.id ? 'bg-primary text-white shadow-sm' : 'text-slate-600 hover:bg-slate-50'}`}>
-                      <t.icon className="w-4 h-4 shrink-0" />
+                    <button key={t.id} onClick={() => setActive(t.id)} className={`w-100 d-flex align-items-center gap-3 px-4 py-2 rounded-lg text-start ${active === t.id ? 'bg-primary text-white shadow-sm' : 'text-secondary'}`}>
+                      <t.icon size={16} className="shrink-0" />
                       <div>
-                        <div className="text-xs font-medium">{t.name}</div>
-                        <div className={`text-[9px] ${active === t.id ? 'text-white/70' : 'text-slate-400'}`}>{t.description}</div>
+                        <div className="text-xs fw-medium">{t.name}</div>
+                        <div className={`${active === t.id ? 'text-white-50' : 'text-muted'}`} style={{ fontSize: '9px' }}>{t.description}</div>
                       </div>
                     </button>
                   ))}
@@ -1691,12 +1700,12 @@ export default function UtilitiesPage() {
               ))}
             </div>
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="bg-white rounded-xl border border-slate-200 p-6">
-              <div className="mb-6">
-                <div className="flex items-center gap-2 mb-1">
-                  {(() => { const t = tools.find((t) => t.id === active); return t ? <t.icon className="w-5 h-5 text-primary" /> : null; })()}
-                  <h2 className="text-lg font-bold text-dark">{tools.find((t) => t.id === active)?.name}</h2>
+          <div className="flex-grow-1" style={{ minWidth: 0 }}>
+            <div className="bg-white rounded-xl border p-4" style={{ borderColor: '#dee2e6' }}>
+              <div className="mb-4">
+                <div className="d-flex align-items-center gap-2 mb-1">
+                  {(() => { const t = tools.find((t) => t.id === active); return t ? <t.icon size={20} className="text-primary" /> : null; })()}
+                  <h2 className="text-lg fw-bold text-dark">{tools.find((t) => t.id === active)?.name}</h2>
                 </div>
                 <p className="text-sm text-muted">{tools.find((t) => t.id === active)?.description}</p>
               </div>

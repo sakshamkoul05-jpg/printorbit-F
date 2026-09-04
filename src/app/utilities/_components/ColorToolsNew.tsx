@@ -160,94 +160,102 @@ export function ColorBlindSimulator() {
   }, []);
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-        <Eye className="h-5 w-5 text-cyan-400" /> Color Blind Simulator
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2 mb-4">
+        <Eye size={20} style={{ color: '#22d3ee' }} /> Color Blind Simulator
       </h3>
 
-      <div className="mb-4 flex flex-wrap items-center gap-4">
-        <label className="text-sm text-white/70">HEX Color:</label>
-        <div className="flex items-center gap-2">
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <label className="text-sm text-muted">HEX Color:</label>
+        <div className="d-flex align-items-center gap-2">
           <input
             type="color"
             value={hex}
             onChange={(e) => setHex(e.target.value)}
-            className="h-10 w-10 cursor-pointer rounded border-0"
+            className="form-control form-control-color"
+            style={{ width: '40px', height: '40px', padding: 0, border: 'none' }}
           />
           <input
             type="text"
             value={hex}
             onChange={(e) => setHex(e.target.value)}
-            className="w-28 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-white uppercase"
+            className="form-control form-control-sm text-uppercase"
+            style={{ width: '112px' }}
             maxLength={7}
           />
         </div>
       </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-        <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-          <div
-            className="mx-auto mb-2 h-16 w-16 rounded-lg"
-            style={{ backgroundColor: hex }}
-          />
-          <span className="text-xs font-medium text-white">Original</span>
+      <div className="row g-3 mb-4">
+        <div className="col-6 col-sm-4 col-md-3 col-lg">
+          <div className="border rounded-lg p-3 text-center">
+            <div
+              className="mx-auto mb-2 rounded-lg"
+              style={{ backgroundColor: hex, width: '64px', height: '64px' }}
+            />
+            <span className="text-xs fw-medium">Original</span>
+          </div>
         </div>
         {CB_TYPES.map((cb) => {
           const sim = simulateCB(rgb.r, rgb.g, rgb.b, cb.matrix);
           const simHex = rgbToHex(sim.r, sim.g, sim.b);
           return (
-            <div key={cb.id} className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
-              <div
-                className="mx-auto mb-2 h-16 w-16 rounded-lg"
-                style={{ backgroundColor: simHex }}
-              />
-              <span className="text-xs font-medium text-white">{cb.label}</span>
-              <span className="mt-1 block text-[10px] text-white/50">{simHex.toUpperCase()}</span>
+            <div key={cb.id} className="col-6 col-sm-4 col-md-3 col-lg">
+              <div className="border rounded-lg p-3 text-center">
+                <div
+                  className="mx-auto mb-2 rounded-lg"
+                  style={{ backgroundColor: simHex, width: '64px', height: '64px' }}
+                />
+                <span className="text-xs fw-medium">{cb.label}</span>
+                <span className="d-block text-muted" style={{ fontSize: '10px' }}>{simHex.toUpperCase()}</span>
+              </div>
             </div>
           );
         })}
       </div>
 
-      <div className="mt-6 border-t border-white/10 pt-4">
-        <p className="mb-3 text-sm font-medium text-white/80">Or upload a design image:</p>
-        <div className="flex items-center gap-3">
+      <div className="border-top pt-4 mt-4">
+        <p className="mb-3 text-sm fw-medium text-muted">Or upload a design image:</p>
+        <div className="d-flex align-items-center gap-3">
           <input
             ref={fileRef}
             type="file"
             accept="image/*"
             onChange={handleImageUpload}
-            className="hidden"
+            className="d-none"
             id="cb-image-input"
           />
           <label
             htmlFor="cb-image-input"
-            className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-white/30 bg-white/5 px-4 py-2 text-sm text-white/70 transition hover:bg-white/10"
+            className="btn btn-sm d-flex align-items-center gap-2"
+            style={{ border: '1px dashed #dee2e6', backgroundColor: '#f8f9fa', cursor: 'pointer' }}
           >
-            <Upload className="h-4 w-4" /> Upload Image
+            <Upload size={16} /> Upload Image
           </label>
           {imageFile && (
-            <button onClick={clearImage} className="text-white/50 hover:text-white">
-              <X className="h-4 w-4" />
+            <button onClick={clearImage} className="btn btn-sm p-1 text-muted">
+              <X size={16} />
             </button>
           )}
         </div>
 
         {imagePreview && (
           <div className="mt-4">
-            <p className="mb-2 text-xs text-white/50">Original:</p>
-            <img src={imagePreview} alt="Original" className="mb-4 max-h-48 rounded-lg object-contain" />
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <p className="mb-2 text-xs text-muted">Original:</p>
+            <img src={imagePreview} alt="Original" className="mb-4 rounded-lg" style={{ maxHeight: '192px', objectFit: 'contain' }} />
+            <div className="row g-3">
               {CB_TYPES.map((cb) => (
-                <div key={cb.id}>
-                  <p className="mb-1 text-xs text-white/50">{cb.label}</p>
+                <div key={cb.id} className="col-6 col-md-3">
+                  <p className="mb-1 text-xs text-muted">{cb.label}</p>
                   {simulatedImages[cb.id] ? (
                     <img
                       src={simulatedImages[cb.id]}
                       alt={cb.label}
-                      className="max-h-36 rounded-lg object-contain"
+                      className="rounded-lg"
+                      style={{ maxHeight: '144px', objectFit: 'contain' }}
                     />
                   ) : (
-                    <div className="flex h-36 items-center justify-center rounded-lg bg-white/5 text-xs text-white/40">
+                    <div className="d-flex align-items-center justify-content-center rounded-lg text-xs text-muted" style={{ height: '144px', backgroundColor: '#f8f9fa' }}>
                       Processing...
                     </div>
                   )}
@@ -325,90 +333,96 @@ export function ContrastChecker() {
   const suggestion = suggestFix(fg, bg);
 
   const PassIcon = ({ pass }: { pass: boolean }) =>
-    pass ? <CheckCircle className="inline h-4 w-4 text-emerald-400" /> : <AlertTriangle className="inline h-4 w-4 text-red-400" />;
+    pass ? <CheckCircle className="inline" size={16} style={{ color: '#34d399' }} /> : <AlertTriangle className="inline" size={16} style={{ color: '#f87171' }} />;
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-        <CheckCircle className="h-5 w-5 text-emerald-400" /> Color Contrast Checker
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2 mb-4">
+        <CheckCircle size={20} style={{ color: '#34d399' }} /> Color Contrast Checker
       </h3>
 
-      <div className="mb-6 flex flex-wrap items-center gap-6">
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-white/70">Foreground:</label>
-          <input type="color" value={fg} onChange={(e) => setFg(e.target.value)} className="h-10 w-10 cursor-pointer rounded border-0" />
+      <div className="d-flex flex-wrap align-items-center gap-4 mb-4">
+        <div className="d-flex align-items-center gap-2">
+          <label className="text-sm text-muted">Foreground:</label>
+          <input type="color" value={fg} onChange={(e) => setFg(e.target.value)} className="form-control form-control-color" style={{ width: '40px', height: '40px', padding: 0, border: 'none' }} />
           <input
             type="text"
             value={fg}
             onChange={(e) => setFg(e.target.value)}
-            className="w-24 rounded-lg border border-white/20 bg-white/10 px-2 py-1 text-sm text-white uppercase"
+            className="form-control form-control-sm text-uppercase"
+            style={{ width: '96px' }}
             maxLength={7}
           />
         </div>
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-white/70">Background:</label>
-          <input type="color" value={bg} onChange={(e) => setBg(e.target.value)} className="h-10 w-10 cursor-pointer rounded border-0" />
+        <div className="d-flex align-items-center gap-2">
+          <label className="text-sm text-muted">Background:</label>
+          <input type="color" value={bg} onChange={(e) => setBg(e.target.value)} className="form-control form-control-color" style={{ width: '40px', height: '40px', padding: 0, border: 'none' }} />
           <input
             type="text"
             value={bg}
             onChange={(e) => setBg(e.target.value)}
-            className="w-24 rounded-lg border border-white/20 bg-white/10 px-2 py-1 text-sm text-white uppercase"
+            className="form-control form-control-sm text-uppercase"
+            style={{ width: '96px' }}
             maxLength={7}
           />
         </div>
         <button
           onClick={() => { setFg('#ffffff'); setBg('#1a1a2e'); }}
-          className="flex items-center gap-1 rounded-lg border border-white/20 px-3 py-1.5 text-xs text-white/60 hover:bg-white/10"
+          className="btn btn-sm d-flex align-items-center gap-1"
+          style={{ border: '1px solid #dee2e6' }}
         >
-          <RotateCcw className="h-3 w-3" /> Reset
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
       <div
-        className="mb-6 rounded-xl border border-white/10 p-6"
-        style={{ backgroundColor: bg, color: fg }}
+        className="mb-4 rounded-xl p-4"
+        style={{ backgroundColor: bg, color: fg, border: '1px solid rgba(255,255,255,0.1)' }}
       >
-        <p className="text-2xl font-bold">Sample Heading</p>
-        <p className="mt-1 text-base">This is body text. The quick brown fox jumps over the lazy dog.</p>
-        <p className="mt-1 text-sm">Small text (14px) for fine print and labels.</p>
+        <p className="h4 fw-bold mb-1">Sample Heading</p>
+        <p className="mb-1">This is body text. The quick brown fox jumps over the lazy dog.</p>
+        <p className="text-sm">Small text (14px) for fine print and labels.</p>
       </div>
 
-      <div className="mb-4 rounded-xl border border-white/10 bg-white/5 p-4">
-        <p className="mb-2 text-sm font-semibold text-white">
-          Contrast Ratio: <span className="text-cyan-400">{result.ratio}:1</span>
+      <div className="border rounded-xl p-4 mb-4">
+        <p className="mb-2 text-sm fw-semibold">
+          Contrast Ratio: <span style={{ color: '#22d3ee' }}>{result.ratio}:1</span>
         </p>
-        <table className="w-full text-sm text-white/80">
-          <thead>
-            <tr className="border-b border-white/10 text-left text-xs text-white/50">
-              <th className="pb-2">Level</th>
-              <th className="pb-2">AA Normal</th>
-              <th className="pb-2">AA Large</th>
-              <th className="pb-2">AAA Normal</th>
-              <th className="pb-2">AAA Large</th>
-              <th className="pb-2">UI</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="py-2 font-medium text-white">Result</td>
-              <td className="py-2"><PassIcon pass={result.normalAA} /></td>
-              <td className="py-2"><PassIcon pass={result.largeAA} /></td>
-              <td className="py-2"><PassIcon pass={result.normalAAA} /></td>
-              <td className="py-2"><PassIcon pass={result.largeAAA} /></td>
-              <td className="py-2"><PassIcon pass={result.uiAA} /></td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="table-responsive">
+          <table className="table table-sm text-sm">
+            <thead>
+              <tr style={{ borderBottom: '1px solid #dee2e6' }}>
+                <th>Level</th>
+                <th>AA Normal</th>
+                <th>AA Large</th>
+                <th>AAA Normal</th>
+                <th>AAA Large</th>
+                <th>UI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="fw-medium">Result</td>
+                <td><PassIcon pass={result.normalAA} /></td>
+                <td><PassIcon pass={result.largeAA} /></td>
+                <td><PassIcon pass={result.normalAAA} /></td>
+                <td><PassIcon pass={result.largeAAA} /></td>
+                <td><PassIcon pass={result.uiAA} /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {suggestion && (
-        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm text-amber-200">
-          <p className="mb-1 font-semibold">Suggested foreground color for AA compliance:</p>
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg border border-white/20" style={{ backgroundColor: suggestion }} />
+        <div className="rounded-xl p-4 text-sm" style={{ backgroundColor: '#fffbeb', border: '1px solid #fed7aa', color: '#92400e' }}>
+          <p className="mb-1 fw-semibold">Suggested foreground color for AA compliance:</p>
+          <div className="d-flex align-items-center gap-3">
+            <div className="rounded-lg" style={{ width: '32px', height: '32px', backgroundColor: suggestion, border: '1px solid rgba(255,255,255,0.2)' }} />
             <button
               onClick={() => setFg(suggestion)}
-              className="rounded-lg bg-amber-500/20 px-3 py-1 text-xs font-medium text-amber-200 hover:bg-amber-500/30"
+              className="btn btn-sm"
+              style={{ backgroundColor: '#f59e0b20', color: '#92400e' }}
             >
               Apply {suggestion.toUpperCase()}
             </button>
@@ -541,11 +555,9 @@ export function ICCProfileComparison() {
     const toX = (x: number) => pad + x * (W - 2 * pad);
     const toY = (y: number) => H - pad - y * (H - 2 * pad);
 
-    // CIE chromaticity background (simplified horseshoe)
     ctx.fillStyle = 'rgba(255,255,255,0.03)';
     ctx.fillRect(0, 0, W, H);
 
-    // Spectral locus outline
     const locusPoints = [
       [0.1741, 0.005], [0.1714, 0.0046], [0.1668, 0.0048], [0.1582, 0.0063],
       [0.1452, 0.0109], [0.1295, 0.0201], [0.1124, 0.0358], [0.0957, 0.0603],
@@ -567,7 +579,6 @@ export function ICCProfileComparison() {
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Draw profile gamuts
     selected.forEach((pid, idx) => {
       const profile = ICC_PROFILES.find((p) => p.id === pid);
       if (!profile) return;
@@ -584,7 +595,6 @@ export function ICCProfileComparison() {
       ctx.lineWidth = 2;
       ctx.stroke();
 
-      // Primary dots
       profile.primaries.forEach((pt) => {
         ctx.beginPath();
         ctx.arc(toX(pt.x), toY(pt.y), 4, 0, Math.PI * 2);
@@ -592,14 +602,12 @@ export function ICCProfileComparison() {
         ctx.fill();
       });
 
-      // White point
       ctx.beginPath();
       ctx.arc(toX(profile.whitePoint.x), toY(profile.whitePoint.y), 3, 0, Math.PI * 2);
       ctx.fillStyle = color;
       ctx.fill();
     });
 
-    // Axes labels
     ctx.fillStyle = 'rgba(255,255,255,0.4)';
     ctx.font = '11px sans-serif';
     ctx.fillText('CIE x →', W - 70, H - 15);
@@ -615,54 +623,55 @@ export function ICCProfileComparison() {
   });
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-        <Monitor className="h-5 w-5 text-violet-400" /> ICC Profile Comparison
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2 mb-4">
+        <Monitor size={20} style={{ color: '#a78bfa' }} /> ICC Profile Comparison
       </h3>
 
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="d-flex flex-wrap gap-2 mb-4">
         {ICC_PROFILES.map((p, idx) => (
           <button
             key={p.id}
             onClick={() => toggleProfile(p.id)}
-            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition ${
-              selected.includes(p.id)
-                ? 'border-2 bg-white/15 text-white'
-                : 'border border-white/20 text-white/50 hover:bg-white/10'
-            }`}
-            style={selected.includes(p.id) ? { borderColor: PROFILE_COLORS[idx % PROFILE_COLORS.length] } : undefined}
+            className={`btn btn-sm d-flex align-items-center gap-1 ${selected.includes(p.id) ? 'text-white' : ''}`}
+            style={selected.includes(p.id)
+              ? { backgroundColor: PROFILE_COLORS[idx % PROFILE_COLORS.length] + '30', borderColor: PROFILE_COLORS[idx % PROFILE_COLORS.length], color: '#000' }
+              : { border: '1px solid #dee2e6' }
+            }
           >
             <span
-              className="mr-1 inline-block h-2 w-2 rounded-full"
-              style={{ backgroundColor: PROFILE_COLORS[idx % PROFILE_COLORS.length] }}
+              className="rounded-circle d-inline-block"
+              style={{ width: '8px', height: '8px', backgroundColor: PROFILE_COLORS[idx % PROFILE_COLORS.length] }}
             />
             {p.label}
           </button>
         ))}
       </div>
 
-      <div className="mb-4 flex items-center gap-2">
-        <label className="text-sm text-white/70">Reference color:</label>
+      <div className="d-flex align-items-center gap-2 mb-4">
+        <label className="text-sm text-muted">Reference color:</label>
         <input
           type="color"
           value={referenceHex}
           onChange={(e) => setReferenceHex(e.target.value)}
-          className="h-8 w-8 cursor-pointer rounded border-0"
+          className="form-control form-control-color"
+          style={{ width: '32px', height: '32px', padding: 0, border: 'none' }}
         />
         <input
           type="text"
           value={referenceHex}
           onChange={(e) => setReferenceHex(e.target.value)}
-          className="w-24 rounded-lg border border-white/20 bg-white/10 px-2 py-1 text-sm text-white uppercase"
+          className="form-control form-control-sm text-uppercase"
+          style={{ width: '96px' }}
           maxLength={7}
         />
       </div>
 
-      <div className="mb-4 rounded-xl border border-white/10 bg-black/30">
-        <canvas ref={canvasRef} width={500} height={400} className="h-auto w-full" />
+      <div className="border rounded-xl overflow-hidden mb-4" style={{ backgroundColor: '#000' }}>
+        <canvas ref={canvasRef} width={500} height={400} className="w-100" style={{ height: 'auto' }} />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="row g-3">
         {selected.map((pid, idx) => {
           const profile = ICC_PROFILES.find((p) => p.id === pid);
           if (!profile) return null;
@@ -673,23 +682,25 @@ export function ICCProfileComparison() {
             [0, 0, 1],
           ]);
           return (
-            <div key={pid} className="rounded-lg border border-white/10 bg-white/5 p-3">
-              <div className="mb-2 flex items-center gap-2">
-                <span className="h-3 w-3 rounded-full" style={{ backgroundColor: color }} />
-                <span className="text-sm font-semibold text-white">{profile.label}</span>
+            <div key={pid} className="col-12 col-sm-6">
+              <div className="border rounded-lg p-3">
+                <div className="d-flex align-items-center gap-2 mb-2">
+                  <span className="rounded-circle" style={{ width: '12px', height: '12px', backgroundColor: color }} />
+                  <span className="text-sm fw-semibold">{profile.label}</span>
+                </div>
+                <p className="text-xs text-muted mb-2">{profile.description}</p>
+                <div className="d-flex align-items-center gap-2">
+                  <div className="rounded" style={{ width: '32px', height: '32px', backgroundColor: referenceHex }} />
+                  <span className="text-muted">→</span>
+                  <div className="rounded" style={{ width: '32px', height: '32px', backgroundColor: rgbToHex(sim.r, sim.g, sim.b) }} />
+                  <span style={{ fontSize: '10px', color: '#6c757d' }}>
+                    ({rgbToHex(sim.r, sim.g, sim.b).toUpperCase()})
+                  </span>
+                </div>
+                <p className="mt-1" style={{ fontSize: '10px', color: '#6c757d' }}>
+                  White: ({profile.whitePoint.x.toFixed(3)}, {profile.whitePoint.y.toFixed(3)})
+                </p>
               </div>
-              <p className="mb-2 text-xs text-white/50">{profile.description}</p>
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 rounded" style={{ backgroundColor: referenceHex }} />
-                <span className="text-xs text-white/40">→</span>
-                <div className="h-8 w-8 rounded" style={{ backgroundColor: rgbToHex(sim.r, sim.g, sim.b) }} />
-                <span className="text-[10px] text-white/40">
-                  ({rgbToHex(sim.r, sim.g, sim.b).toUpperCase()})
-                </span>
-              </div>
-              <p className="mt-1 text-[10px] text-white/40">
-                White: ({profile.whitePoint.x.toFixed(3)}, {profile.whitePoint.y.toFixed(3)})
-              </p>
             </div>
           );
         })}
@@ -715,7 +726,6 @@ interface FontEntry {
 }
 
 const FONT_DB: FontEntry[] = [
-  // Serif
   { name: 'Times New Roman', category: 'Serif', windows: true, mac: true, linux: true, web: true, safeAlt: 'Georgia' },
   { name: 'Georgia', category: 'Serif', windows: true, mac: true, linux: true, web: true, safeAlt: 'Times New Roman' },
   { name: 'Garamond', category: 'Serif', windows: true, mac: true, linux: false, web: false, safeAlt: 'Georgia' },
@@ -736,8 +746,6 @@ const FONT_DB: FontEntry[] = [
   { name: 'EB Garamond', category: 'Serif', windows: false, mac: false, linux: false, web: true, safeAlt: 'Georgia' },
   { name: 'Old Standard TT', category: 'Serif', windows: false, mac: false, linux: false, web: true, safeAlt: 'Georgia' },
   { name: 'Cardo', category: 'Serif', windows: false, mac: false, linux: false, web: true, safeAlt: 'Georgia' },
-
-  // Sans-serif
   { name: 'Arial', category: 'Sans-serif', windows: true, mac: true, linux: true, web: true, safeAlt: 'Helvetica' },
   { name: 'Helvetica', category: 'Sans-serif', windows: false, mac: true, linux: false, web: true, safeAlt: 'Arial' },
   { name: 'Verdana', category: 'Sans-serif', windows: true, mac: true, linux: true, web: true, safeAlt: 'Arial' },
@@ -768,8 +776,6 @@ const FONT_DB: FontEntry[] = [
   { name: 'Ubuntu', category: 'Sans-serif', windows: false, mac: false, linux: true, web: true, safeAlt: 'Arial' },
   { name: 'Fira Sans', category: 'Sans-serif', windows: false, mac: false, linux: true, web: true, safeAlt: 'Arial' },
   { name: 'DM Sans', category: 'Sans-serif', windows: false, mac: false, linux: false, web: true, safeAlt: 'Arial' },
-
-  // Script
   { name: 'Brush Script MT', category: 'Script', windows: true, mac: true, linux: false, web: false, safeAlt: 'Comic Sans MS' },
   { name: 'Segoe Script', category: 'Script', windows: true, mac: false, linux: false, web: false, safeAlt: 'Comic Sans MS' },
   { name: 'Lucida Handwriting', category: 'Script', windows: true, mac: true, linux: false, web: false, safeAlt: 'Comic Sans MS' },
@@ -780,11 +786,8 @@ const FONT_DB: FontEntry[] = [
   { name: 'Great Vibes', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
   { name: 'Sacramento', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
   { name: 'Caveat', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
-  { name: 'Satisfy', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
   { name: 'Kalam', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
   { name: 'Indie Flower', category: 'Script', windows: false, mac: false, linux: false, web: true, safeAlt: 'Comic Sans MS' },
-
-  // Decorative
   { name: 'Arial Black', category: 'Decorative', windows: true, mac: true, linux: true, web: true, safeAlt: 'Impact' },
   { name: 'Cooper Black', category: 'Decorative', windows: true, mac: true, linux: false, web: false, safeAlt: 'Arial Black' },
   { name: 'Copperplate', category: 'Decorative', windows: false, mac: true, linux: false, web: false, safeAlt: 'Arial Black' },
@@ -795,8 +798,6 @@ const FONT_DB: FontEntry[] = [
   { name: 'Rockwell', category: 'Decorative', windows: true, mac: true, linux: false, web: false, safeAlt: 'Courier New' },
   { name: 'Stencil', category: 'Decorative', windows: true, mac: false, linux: false, web: false, safeAlt: 'Arial Black' },
   { name: 'Playfair Display SC', category: 'Decorative', windows: false, mac: false, linux: false, web: true, safeAlt: 'Georgia' },
-
-  // Monospace
   { name: 'Courier New', category: 'Monospace', windows: true, mac: true, linux: true, web: true, safeAlt: 'Courier' },
   { name: 'Courier', category: 'Monospace', windows: true, mac: true, linux: true, web: true, safeAlt: 'Courier New' },
   { name: 'Consolas', category: 'Monospace', windows: true, mac: true, linux: false, web: false, safeAlt: 'Courier New' },
@@ -812,7 +813,7 @@ const FONT_DB: FontEntry[] = [
   { name: 'Space Mono', category: 'Monospace', windows: false, mac: false, linux: false, web: true, safeAlt: 'Courier New' },
 ];
 
-const CATEGORIES: FontCategory[] = ['Serif', 'Sans-serif', 'Script', 'Decorative', 'Monospace'];
+const FONT_CATEGORIES: FontCategory[] = ['Serif', 'Sans-serif', 'Script', 'Decorative', 'Monospace'];
 
 export function SafeFontList() {
   const [query, setQuery] = useState('');
@@ -826,43 +827,40 @@ export function SafeFontList() {
 
   const PlatformDot = ({ available }: { available: boolean }) =>
     available ? (
-      <CheckCircle className="inline h-4 w-4 text-emerald-400" />
+      <CheckCircle className="inline" size={16} style={{ color: '#34d399' }} />
     ) : (
-      <X className="inline h-4 w-4 text-red-400/60" />
+      <X className="inline" size={16} style={{ color: '#f8717160' }} />
     );
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-        <Type className="h-5 w-5 text-amber-400" /> Safe Font List
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2 mb-4">
+        <Type size={20} style={{ color: '#fbbf24' }} /> Safe Font List
       </h3>
 
-      <div className="mb-4 flex flex-wrap items-center gap-3">
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search font name..."
-          className="w-64 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder-white/40"
+          className="form-control form-control-sm"
+          style={{ width: '256px' }}
         />
-        <div className="flex flex-wrap gap-1">
+        <div className="d-flex flex-wrap gap-1">
           <button
             onClick={() => setActiveCategory('All')}
-            className={`rounded-lg px-2.5 py-1 text-xs ${
-              activeCategory === 'All' ? 'bg-white/20 text-white' : 'text-white/50 hover:bg-white/10'
-            }`}
+            className={`btn btn-sm ${activeCategory === 'All' ? 'btn-dark' : 'btn-outline-secondary'}`}
           >
             All ({FONT_DB.length})
           </button>
-          {CATEGORIES.map((cat) => {
+          {FONT_CATEGORIES.map((cat) => {
             const count = FONT_DB.filter((f) => f.category === cat).length;
             return (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`rounded-lg px-2.5 py-1 text-xs ${
-                  activeCategory === cat ? 'bg-white/20 text-white' : 'text-white/50 hover:bg-white/10'
-                }`}
+                className={`btn btn-sm ${activeCategory === cat ? 'btn-dark' : 'btn-outline-secondary'}`}
               >
                 {cat} ({count})
               </button>
@@ -871,34 +869,34 @@ export function SafeFontList() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm text-white/80">
+      <div className="table-responsive">
+        <table className="table table-sm text-sm">
           <thead>
-            <tr className="border-b border-white/10 text-left text-xs text-white/50">
-              <th className="pb-2 pr-4">Font</th>
-              <th className="pb-2 pr-4">Category</th>
-              <th className="pb-2 pr-2">Windows</th>
-              <th className="pb-2 pr-2">Mac</th>
-              <th className="pb-2 pr-2">Linux</th>
-              <th className="pb-2 pr-4">Web</th>
-              <th className="pb-2">Safe Alt</th>
+            <tr style={{ borderBottom: '1px solid #dee2e6' }}>
+              <th>Font</th>
+              <th>Category</th>
+              <th>Windows</th>
+              <th>Mac</th>
+              <th>Linux</th>
+              <th>Web</th>
+              <th>Safe Alt</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((f) => (
-              <tr key={f.name} className="border-b border-white/5 hover:bg-white/5">
-                <td className="py-2 pr-4 font-medium text-white">{f.name}</td>
-                <td className="py-2 pr-4 text-xs text-white/50">{f.category}</td>
-                <td className="py-2 pr-2"><PlatformDot available={f.windows} /></td>
-                <td className="py-2 pr-2"><PlatformDot available={f.mac} /></td>
-                <td className="py-2 pr-2"><PlatformDot available={f.linux} /></td>
-                <td className="py-2 pr-4"><PlatformDot available={f.web} /></td>
-                <td className="py-2 text-xs text-white/40">{f.safeAlt}</td>
+              <tr key={f.name} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                <td className="fw-medium">{f.name}</td>
+                <td className="text-muted text-xs">{f.category}</td>
+                <td><PlatformDot available={f.windows} /></td>
+                <td><PlatformDot available={f.mac} /></td>
+                <td><PlatformDot available={f.linux} /></td>
+                <td><PlatformDot available={f.web} /></td>
+                <td className="text-muted text-xs">{f.safeAlt}</td>
               </tr>
             ))}
             {filtered.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-white/40">
+                <td colSpan={7} className="text-center text-muted py-4">
                   No fonts found matching &quot;{query}&quot;
                 </td>
               </tr>
@@ -1016,103 +1014,111 @@ export function ColorMixCalculator() {
     'Poor — significant color shift';
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-      <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-white">
-        <Droplets className="h-5 w-5 text-orange-400" /> Print Color Mixing Calculator
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2 mb-4">
+        <Droplets size={20} style={{ color: '#fb923c' }} /> Print Color Mixing Calculator
       </h3>
 
-      <div className="mb-4 flex flex-wrap items-center gap-4">
-        <div className="flex items-center gap-2">
-          <label className="text-sm text-white/70">Target Color:</label>
+      <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
+        <div className="d-flex align-items-center gap-2">
+          <label className="text-sm text-muted">Target Color:</label>
           <input
             type="color"
             value={targetHex}
             onChange={(e) => setTargetHex(e.target.value)}
-            className="h-10 w-10 cursor-pointer rounded border-0"
+            className="form-control form-control-color"
+            style={{ width: '40px', height: '40px', padding: 0, border: 'none' }}
           />
           <input
             type="text"
             value={targetHex}
             onChange={(e) => setTargetHex(e.target.value)}
-            className="w-28 rounded-lg border border-white/20 bg-white/10 px-3 py-1.5 text-sm text-white uppercase"
+            className="form-control form-control-sm text-uppercase"
+            style={{ width: '112px' }}
             maxLength={7}
           />
         </div>
         <button
           onClick={handleAutoMix}
-          className="rounded-lg bg-orange-500/20 px-4 py-2 text-sm font-medium text-orange-300 transition hover:bg-orange-500/30"
+          className="btn btn-sm"
+          style={{ backgroundColor: '#fb923c20', color: '#c2410c' }}
         >
           Auto-Mix
         </button>
         <button
           onClick={handleReset}
-          className="flex items-center gap-1 rounded-lg border border-white/20 px-3 py-2 text-xs text-white/60 hover:bg-white/10"
+          className="btn btn-sm d-flex align-items-center gap-1"
+          style={{ border: '1px solid #dee2e6' }}
         >
-          <RotateCcw className="h-3 w-3" /> Reset
+          <RotateCcw size={14} /> Reset
         </button>
       </div>
 
-      <div className="mb-4 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="row g-3 mb-4">
         {INKS.map((ink, idx) => (
-          <div key={ink.name} className="rounded-lg border border-white/10 bg-white/5 p-3">
-            <div className="mb-2 flex items-center gap-2">
-              <div className="h-5 w-5 rounded" style={{ backgroundColor: ink.hex }} />
-              <span className="text-xs font-medium text-white">{ink.name}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={percentages[idx]}
-                onChange={(e) => updatePercent(idx, Number(e.target.value))}
-                className="h-1.5 flex-1 cursor-pointer appearance-none rounded-full bg-white/20 accent-orange-500"
-              />
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={percentages[idx]}
-                onChange={(e) => updatePercent(idx, Number(e.target.value))}
-                className="w-14 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-center text-xs text-white"
-              />
-              <span className="text-[10px] text-white/40">%</span>
+          <div key={ink.name} className="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div className="border rounded-lg p-3">
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <div className="rounded" style={{ width: '20px', height: '20px', backgroundColor: ink.hex }} />
+                <span className="text-xs fw-medium">{ink.name}</span>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={percentages[idx]}
+                  onChange={(e) => updatePercent(idx, Number(e.target.value))}
+                  className="form-range flex-grow-1"
+                  style={{ accentColor: '#fb923c' }}
+                />
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={percentages[idx]}
+                  onChange={(e) => updatePercent(idx, Number(e.target.value))}
+                  className="form-control form-control-sm text-center"
+                  style={{ width: '56px' }}
+                />
+                <span style={{ fontSize: '10px', color: '#6c757d' }}>%</span>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="mb-4 rounded-xl border border-white/10 bg-white/5 p-4">
-        <div className="mb-2 flex items-center gap-3">
-          <span className="text-xs text-white/50">Total: {totalPct.toFixed(1)}%</span>
-          <span className="text-xs text-white/50">|</span>
-          <span className="text-xs text-white/50">Delta-E: <span className={`font-bold ${de < 2 ? 'text-emerald-400' : de < 5 ? 'text-amber-400' : 'text-red-400'}`}>{de.toFixed(1)}</span></span>
+      <div className="border rounded-xl p-4 mb-4">
+        <div className="d-flex align-items-center gap-3 mb-2">
+          <span className="text-xs text-muted">Total: {totalPct.toFixed(1)}%</span>
+          <span className="text-xs text-muted">|</span>
+          <span className="text-xs text-muted">Delta-E: <span className={`fw-bold ${de < 2 ? 'text-success' : de < 5 ? 'text-warning' : 'text-danger'}`}>{de.toFixed(1)}</span></span>
         </div>
-        <p className="mb-3 text-xs text-white/40">{deQuality}</p>
+        <p className="mb-3 text-xs text-muted">{deQuality}</p>
 
-        <div className="flex items-center gap-4">
+        <div className="d-flex align-items-center gap-4">
           <div className="text-center">
-            <div className="mx-auto mb-1 h-20 w-20 rounded-xl border border-white/20" style={{ backgroundColor: targetHex }} />
-            <span className="text-[10px] text-white/50">Target</span>
+            <div className="mx-auto mb-1 rounded-xl" style={{ width: '80px', height: '80px', backgroundColor: targetHex, border: '1px solid rgba(0,0,0,0.1)' }} />
+            <span style={{ fontSize: '10px', color: '#6c757d' }}>Target</span>
           </div>
-          <span className="text-lg text-white/30">→</span>
+          <span className="text-lg text-muted">→</span>
           <div className="text-center">
             <div
-              className="mx-auto mb-1 h-20 w-20 rounded-xl border border-white/20"
-              style={{ backgroundColor: rgbToHex(mixed.r, mixed.g, mixed.b) }}
+              className="mx-auto mb-1 rounded-xl"
+              style={{ width: '80px', height: '80px', backgroundColor: rgbToHex(mixed.r, mixed.g, mixed.b), border: '1px solid rgba(0,0,0,0.1)' }}
             />
-            <span className="text-[10px] text-white/50">Mixed</span>
+            <span style={{ fontSize: '10px', color: '#6c757d' }}>Mixed</span>
           </div>
         </div>
       </div>
 
       {autoResult && (
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
+        <div className="rounded-xl p-3 text-sm" style={{ backgroundColor: '#f0fdf4', border: '1px solid #bbf7d0', color: '#166534' }}>
           Auto-mix result:
           {INKS.map((ink, i) =>
             autoResult[i] > 0 ? (
-              <span key={ink.name} className="ml-2 inline-flex items-center gap-1 text-xs">
-                <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: ink.hex }} />
+              <span key={ink.name} className="ms-2 d-inline-flex align-items-center gap-1 text-xs">
+                <span className="d-inline-block rounded-circle" style={{ width: '8px', height: '8px', backgroundColor: ink.hex }} />
                 {ink.name} {autoResult[i]}%
               </span>
             ) : null

@@ -18,7 +18,7 @@ const products = [
 
 export default function FeaturedProducts() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
         <SectionHeader
           badge="Featured"
@@ -26,48 +26,48 @@ export default function FeaturedProducts() {
           description="Handpicked products loved by our customers"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        <div className="row g-4 mt-3">
           {products.map((product, i) => (
             <motion.div
               key={product.name}
+              className="col-12 col-sm-6 col-lg-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group"
             >
-              <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:border-primary/30 hover:shadow-xl transition-all duration-400">
+              <div className="bg-white rounded-4 border border-light overflow-hidden">
                 {/* Image */}
-                <div className="relative aspect-[4/3] bg-gradient-to-br from-primary/5 to-accent/5 overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-6xl group-hover:scale-110 transition-transform duration-500">{product.emoji}</span>
+                <div className="position-relative" style={{ aspectRatio: '4/3', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-accent-rgb), 0.05))' }}>
+                  <div className="position-absolute inset-0 d-flex align-items-center justify-content-center">
+                    <span className="display-6">{product.emoji}</span>
                   </div>
-                  <Badge variant="accent" className="absolute top-4 left-4">
+                  <Badge variant="accent" className="position-absolute" style={{ top: '16px', left: '16px' }}>
                     {product.badge}
                   </Badge>
-                  <button className="absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100">
-                    <Heart className="w-5 h-5" />
+                  <button className="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center border-0" style={{ top: '16px', right: '16px', width: '40px', height: '40px', opacity: 0.8, backgroundColor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(4px)' }}>
+                    <Heart size={20} className="text-muted" />
                   </button>
                 </div>
 
                 {/* Content */}
-                <div className="p-5">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-accent fill-accent" />
-                      <span className="text-sm font-semibold text-dark">{product.rating}</span>
+                <div className="p-4">
+                  <div className="d-flex align-items-center gap-2 mb-2">
+                    <div className="d-flex align-items-center gap-1">
+                      <Star size={16} className="text-accent" style={{ fill: 'var(--bs-accent)' }} />
+                      <span className="fw-semibold text-dark">{product.rating}</span>
                     </div>
-                    <span className="text-sm text-muted">({product.reviews})</span>
+                    <span className="text-muted">({product.reviews})</span>
                   </div>
-                  <h3 className="font-semibold font-heading text-dark mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="fw-semibold font-heading text-dark mb-3">
                     {product.name}
                   </h3>
-                  <div className="flex items-center justify-between">
+                  <div className="d-flex align-items-center justify-content-between">
                     <div>
-                      <span className="text-lg font-bold text-primary">{product.price}</span>
-                      <span className="text-xs text-muted ml-1">/ 50 pcs</span>
+                      <span className="fs-5 fw-bold text-primary">{product.price}</span>
+                      <span className="text-muted ms-1" style={{ fontSize: '12px' }}>/ 50 pcs</span>
                     </div>
-                    <Button variant="primary" size="sm" icon={<ShoppingCart className="w-4 h-4" />}>
+                    <Button variant="primary" size="sm" icon={<ShoppingCart size={16} />}>
                       Add to Quote
                     </Button>
                   </div>
@@ -81,7 +81,7 @@ export default function FeaturedProducts() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-4"
         >
           <Button variant="outline" size="lg">
             View All Products

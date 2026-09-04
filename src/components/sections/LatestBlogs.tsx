@@ -14,7 +14,7 @@ const posts = [
 
 export default function LatestBlogs() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
         <SectionHeader
           badge="Blog"
@@ -22,33 +22,33 @@ export default function LatestBlogs() {
           description="Printing tips, design guides, and industry insights"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+        <div className="row g-4 mt-3">
           {posts.map((post, i) => (
             <motion.div
               key={post.id}
+              className="col-12 col-md-6 col-lg-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group"
             >
-              <Link href={`/blog/${post.slug}`}>
-                <div className="bg-slate-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-400 border border-transparent hover:border-primary/30">
-                  <div className="aspect-video bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
-                    <span className="text-5xl group-hover:scale-110 transition-transform duration-500">{post.emoji}</span>
+              <Link href={`/blog/${post.slug}`} className="text-decoration-none">
+                <div className="bg-slate-50 rounded-4 overflow-hidden border border-transparent">
+                  <div className="d-flex align-items-center justify-content-center" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-accent-rgb), 0.05))' }}>
+                    <span className="display-6">{post.emoji}</span>
                   </div>
-                  <div className="p-5">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs font-medium text-primary bg-primary/10 px-2 py-1 rounded-full">{post.tag}</span>
-                      <span className="flex items-center gap-1 text-xs text-muted">
-                        <Calendar className="w-3 h-3" />
+                  <div className="p-4">
+                    <div className="d-flex align-items-center gap-2 mb-2">
+                      <span className="fw-medium text-primary px-2 py-1 rounded-pill" style={{ fontSize: '12px', backgroundColor: 'rgba(var(--bs-primary-rgb), 0.1)' }}>{post.tag}</span>
+                      <span className="d-flex align-items-center gap-1 text-muted" style={{ fontSize: '12px' }}>
+                        <Calendar size={12} />
                         {new Date(post.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                       </span>
                     </div>
-                    <h3 className="font-semibold font-heading text-dark mb-2 group-hover:text-primary transition-colors line-clamp-2">{post.title}</h3>
-                    <p className="text-sm text-muted leading-relaxed line-clamp-2">{post.excerpt}</p>
-                    <div className="flex items-center gap-1 mt-4 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                      Read More <ArrowRight className="w-4 h-4" />
+                    <h3 className="fw-semibold font-heading text-dark mb-2">{post.title}</h3>
+                    <p className="text-muted" style={{ fontSize: '14px', lineHeight: 1.6 }}>{post.excerpt}</p>
+                    <div className="d-flex align-items-center gap-1 mt-3 text-primary fw-medium" style={{ fontSize: '14px' }}>
+                      Read More <ArrowRight size={16} />
                     </div>
                   </div>
                 </div>
@@ -61,10 +61,10 @@ export default function LatestBlogs() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-4"
         >
-          <Link href="/blog" className="text-primary font-medium hover:text-primary-dark transition-colors inline-flex items-center gap-2">
-            View All Articles <ArrowRight className="w-4 h-4" />
+          <Link href="/blog" className="text-primary fw-medium d-inline-flex align-items-center gap-2 text-decoration-none">
+            View All Articles <ArrowRight size={16} />
           </Link>
         </motion.div>
       </Container>

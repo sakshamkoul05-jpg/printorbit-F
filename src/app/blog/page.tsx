@@ -76,10 +76,10 @@ const posts = [
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen" style={{ background: '#F4F2EF' }}>
+    <div className="min-vh-100" style={{ background: '#F4F2EF' }}>
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <nav className="flex items-center gap-2 text-sm" style={{ color: '#6D6D6D' }}>
+        <nav className="d-flex align-items-center gap-2 text-sm" style={{ color: '#6D6D6D' }}>
           <Link href="/" className="hover:underline" style={{ color: '#2E2E2E' }}>Home</Link>
           <span>/</span>
           <span style={{ color: '#2E2E2E' }}>Blog</span>
@@ -87,58 +87,62 @@ export default function BlogPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4" style={{ color: '#0F0F0F' }}>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 py-md-12">
+        <h1 className="display-5 fw-bold mb-4" style={{ color: '#0F0F0F' }}>
           Print Tales &amp; Insights
         </h1>
-        <p className="text-base md:text-lg max-w-3xl" style={{ color: '#505050' }}>
+        <p className="fs-6 fs-md-5 mx-auto" style={{ color: '#505050', maxWidth: '48rem' }}>
           Get inspired by our stories, explore branding trends, and learn why corporate gifting builds stronger teams.
         </p>
       </section>
 
       {/* Blog Grid */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="row g-4">
           {posts.map((post) => (
             <article
               key={post.id}
-              className="rounded-lg overflow-hidden border"
-              style={{
-                background: '#FFFFFF',
-                borderColor: '#E5E5E5',
-              }}
+              className="col-12 col-md-6 col-lg-4"
             >
               <div
-                className="w-full h-48 flex items-center justify-center"
-                style={{ background: '#F4F2EF' }}
+                className="rounded-3 overflow-hidden border h-100"
+                style={{
+                  background: '#FFFFFF',
+                  borderColor: '#E5E5E5',
+                }}
               >
-                <span className="text-sm" style={{ color: '#9CA3AF' }}>
-                  Image Placeholder
-                </span>
-              </div>
-              <div className="p-5">
-                <div className="flex items-center gap-2 mb-3">
-                  <Calendar className="w-4 h-4" style={{ color: '#9CA3AF' }} />
-                  <span className="text-xs" style={{ color: '#9CA3AF' }}>
-                    {post.date}
+                <div
+                  className="w-100 d-flex align-items-center justify-content-center"
+                  style={{ height: '12rem', background: '#F4F2EF' }}
+                >
+                  <span className="text-sm" style={{ color: '#9CA3AF' }}>
+                    Image Placeholder
                   </span>
                 </div>
-                <h2
-                  className="text-base font-bold mb-2 leading-snug"
-                  style={{ color: '#0F0F0F' }}
-                >
-                  {post.title}
-                </h2>
-                <p className="text-sm mb-4 leading-relaxed" style={{ color: '#505050' }}>
-                  {post.excerpt}
-                </p>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="inline-flex items-center gap-1 text-sm font-medium"
-                  style={{ color: '#ED1C24' }}
-                >
-                  Read More <ArrowRight className="w-4 h-4" />
-                </Link>
+                <div className="p-5">
+                  <div className="d-flex align-items-center gap-2 mb-3">
+                    <Calendar size={16} style={{ color: '#9CA3AF' }} />
+                    <span className="text-xs" style={{ color: '#9CA3AF' }}>
+                      {post.date}
+                    </span>
+                  </div>
+                  <h2
+                    className="text-base fw-bold mb-2 leading-snug"
+                    style={{ color: '#0F0F0F' }}
+                  >
+                    {post.title}
+                  </h2>
+                  <p className="text-sm mb-4 leading-relaxed" style={{ color: '#505050' }}>
+                    {post.excerpt}
+                  </p>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="d-inline-flex align-items-center gap-1 text-sm fw-medium"
+                    style={{ color: '#ED1C24' }}
+                  >
+                    Read More <ArrowRight size={16} />
+                  </Link>
+                </div>
               </div>
             </article>
           ))}
@@ -148,11 +152,11 @@ export default function BlogPage() {
       {/* Let's Talk Business Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
         <div
-          className="rounded-lg p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6"
+          className="rounded-3 p-8 p-md-12 d-flex flex-column flex-md-row align-items-center justify-content-between gap-6"
           style={{ background: '#0F0F0F' }}
         >
-          <div className="text-center md:text-left">
-            <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+          <div className="text-center text-md-start">
+            <h2 className="fs-3 fw-bold text-white mb-2">
               Let&apos;s Talk Business
             </h2>
             <p className="text-sm text-white/70">
@@ -161,10 +165,10 @@ export default function BlogPage() {
           </div>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-md text-white font-semibold text-sm"
+            className="d-inline-flex align-items-center gap-2 px-6 py-3 rounded text-white fw-semibold text-sm"
             style={{ background: '#ED1C24' }}
           >
-            <Phone className="w-4 h-4" />
+            <Phone size={16} />
             Contact Us
           </Link>
         </div>
@@ -172,13 +176,13 @@ export default function BlogPage() {
 
       {/* Our Services */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-        <h2 className="text-2xl font-bold mb-6" style={{ color: '#0F0F0F' }}>
+        <h2 className="fs-3 fw-bold mb-6" style={{ color: '#0F0F0F' }}>
           Our Services
         </h2>
-        <div className="flex flex-wrap gap-4">
+        <div className="d-flex flex-wrap gap-4">
           <Link
             href="/corporate"
-            className="inline-flex items-center px-5 py-3 rounded-md text-sm font-medium border"
+            className="d-inline-flex align-items-center px-5 py-3 rounded text-sm fw-medium border"
             style={{
               background: '#FFFFFF',
               borderColor: '#E5E5E5',
@@ -189,7 +193,7 @@ export default function BlogPage() {
           </Link>
           <Link
             href="/products/personalised-gifts"
-            className="inline-flex items-center px-5 py-3 rounded-md text-sm font-medium border"
+            className="d-inline-flex align-items-center px-5 py-3 rounded text-sm fw-medium border"
             style={{
               background: '#FFFFFF',
               borderColor: '#E5E5E5',
@@ -200,7 +204,7 @@ export default function BlogPage() {
           </Link>
           <Link
             href="/corporate/diwali-gifts"
-            className="inline-flex items-center px-5 py-3 rounded-md text-sm font-medium border"
+            className="d-inline-flex align-items-center px-5 py-3 rounded text-sm fw-medium border"
             style={{
               background: '#FFFFFF',
               borderColor: '#E5E5E5',
@@ -214,8 +218,8 @@ export default function BlogPage() {
 
       {/* SEO Text Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="max-w-4xl">
-          <h2 className="text-2xl font-bold mb-4" style={{ color: '#0F0F0F' }}>
+        <div style={{ maxWidth: '56rem' }}>
+          <h2 className="fs-3 fw-bold mb-4" style={{ color: '#0F0F0F' }}>
             Corporate Gifting: Building Stronger Teams and Lasting Impressions
           </h2>
           <p className="text-sm leading-relaxed mb-4" style={{ color: '#505050' }}>

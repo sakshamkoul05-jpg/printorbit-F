@@ -58,19 +58,19 @@ export default function AIEditTool({
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="d-flex flex-column gap-3 p-3">
       {elements.length === 0 ? (
-        <div className="text-center py-10">
-          <Pencil className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-          <p className="text-sm text-slate-500 font-medium">No design to edit</p>
-          <p className="text-xs text-slate-400 mt-1">
+        <div className="text-center py-5">
+          <Pencil size={40} className="mx-auto mb-3" style={{ color: '#cbd5e1' }} />
+          <p className="mb-0" style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 500 }}>No design to edit</p>
+          <p className="mt-1 mb-0" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
             Generate a design first, then edit it here.
           </p>
         </div>
       ) : (
         <>
           <div>
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+            <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Edit command
             </label>
             <textarea
@@ -78,19 +78,40 @@ export default function AIEditTool({
               onChange={(e) => setCommand(e.target.value)}
               placeholder="e.g., Make the heading larger and change to blue..."
               rows={2}
-              className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 resize-none transition-all"
+              className="w-100"
+              style={{
+                padding: '0.625rem 0.75rem',
+                backgroundColor: '#f8fafc',
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.75rem',
+                fontSize: '0.875rem',
+                outline: 'none',
+                resize: 'none',
+                transition: 'all 0.15s',
+              }}
             />
           </div>
 
           <button
             onClick={handleEdit}
             disabled={loading || !command.trim()}
-            className="w-full flex items-center justify-center gap-2 py-2.5 bg-accent text-white text-sm font-semibold rounded-xl hover:bg-accent-dark transition-colors disabled:opacity-50 shadow-sm"
+            className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+            style={{
+              padding: '0.625rem',
+              backgroundColor: 'var(--bs-primary, #0d6efd)',
+              color: 'var(--bs-white)',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              borderRadius: '0.75rem',
+              transition: 'background-color 0.15s',
+              opacity: loading || !command.trim() ? 0.5 : 1,
+              border: 'none',
+            }}
           >
             {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 size={16} className="animate-spin" />
             ) : (
-              <Pencil className="w-4 h-4" />
+              <Pencil size={16} />
             )}
             {loading ? 'Applying...' : 'Apply Edit'}
           </button>
@@ -99,7 +120,8 @@ export default function AIEditTool({
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-xs text-red bg-red/5 px-3 py-2 rounded-lg"
+              className="mb-0"
+              style={{ fontSize: '0.75rem', color: 'var(--bs-red, #dc3545)', backgroundColor: 'rgba(220,53,69,0.05)', padding: '0.5rem 0.75rem', borderRadius: '0.5rem' }}
             >
               {error}
             </motion.p>
@@ -109,42 +131,51 @@ export default function AIEditTool({
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-success/5 border border-success/20 rounded-xl p-3"
+              style={{ backgroundColor: 'rgba(25,135,84,0.05)', border: '1px solid rgba(25,135,84,0.2)', borderRadius: '0.75rem', padding: '0.75rem' }}
             >
-              <div className="flex items-center gap-2 mb-2">
-                <Check className="w-3.5 h-3.5 text-success" />
-                <span className="text-xs font-semibold text-success">Changes applied</span>
+              <div className="d-flex align-items-center gap-2 mb-2">
+                <Check size={14} style={{ color: 'var(--bs-success, #198754)' }} />
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--bs-success, #198754)' }}>Changes applied</span>
               </div>
-              <ul className="space-y-1">
+              <ul className="list-unstyled mb-0" style={{ gap: '0.25rem' }}>
                 {changes.map((c, i) => (
-                  <li key={i} className="text-xs text-slate-600 flex items-start gap-1.5">
-                    <span className="text-success mt-0.5">-</span>
+                  <li key={i} className="d-flex align-items-start gap-1" style={{ fontSize: '0.75rem', color: '#475569' }}>
+                    <span style={{ color: 'var(--bs-success, #198754)', marginTop: '0.125rem' }}>-</span>
                     {c}
                   </li>
                 ))}
               </ul>
               <button
                 onClick={() => setShowResult(false)}
-                className="mt-2 flex items-center gap-1 text-[10px] text-slate-400 hover:text-slate-600"
+                className="d-flex align-items-center gap-1 btn p-0 mt-2"
+                style={{ fontSize: '10px', color: '#94a3b8' }}
               >
-                <X className="w-3 h-3" /> Dismiss
+                <X size={12} /> Dismiss
               </button>
             </motion.div>
           )}
 
-          {/* Edit examples */}
           <div>
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+            <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Try these edits
             </label>
-            <div className="space-y-1.5">
+            <div className="d-flex flex-column" style={{ gap: '0.375rem' }}>
               {EDIT_EXAMPLES.map((ex, i) => (
                 <button
                   key={i}
                   onClick={() => {
                     setCommand(ex);
                   }}
-                  className="w-full text-left px-3 py-2 bg-slate-50 hover:bg-accent/5 text-xs text-slate-600 rounded-lg border border-slate-200 hover:border-accent/30 transition-all"
+                  className="w-100 text-start btn"
+                  style={{
+                    padding: '0.5rem 0.75rem',
+                    backgroundColor: '#f8fafc',
+                    fontSize: '0.75rem',
+                    color: '#475569',
+                    borderRadius: '0.5rem',
+                    border: '1px solid #e2e8f0',
+                    transition: 'all 0.15s',
+                  }}
                 >
                   {ex}
                 </button>

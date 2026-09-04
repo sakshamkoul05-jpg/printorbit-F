@@ -18,7 +18,7 @@ const templates = [
 
 export default function Templates() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
         <SectionHeader
           badge="Templates"
@@ -26,31 +26,31 @@ export default function Templates() {
           description="Start with a template and customize it to match your brand"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        <div className="row g-4 mt-3">
           {templates.map((template, i) => (
             <motion.div
               key={template.name}
+              className="col-12 col-sm-6 col-lg-4"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group"
             >
-              <div className="bg-slate-50 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-400 border border-transparent hover:border-primary/30">
-                <div className="aspect-[4/3] bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center relative">
-                  <span className="text-6xl group-hover:scale-110 transition-transform duration-500">{template.emoji}</span>
+              <div className="bg-slate-50 rounded-4 overflow-hidden border border-transparent">
+                <div className="d-flex align-items-center justify-content-center position-relative" style={{ aspectRatio: '4/3', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-accent-rgb), 0.05))' }}>
+                  <span className="display-6">{template.emoji}</span>
                   {template.premium && (
-                    <div className="absolute top-4 right-4 flex items-center gap-1 px-2 py-1 bg-accent rounded-full">
-                      <Star className="w-3 h-3 text-white fill-white" />
-                      <span className="text-[10px] font-bold text-white">PRO</span>
+                    <div className="position-absolute top-0 end-0 m-3 d-flex align-items-center gap-1 px-2 py-1 bg-accent rounded-pill">
+                      <Star size={12} className="text-white" style={{ fill: 'white' }} />
+                      <span className="fw-bold text-white" style={{ fontSize: '10px' }}>PRO</span>
                     </div>
                   )}
                 </div>
-                <div className="p-5">
-                  <span className="text-xs text-primary font-medium">{template.category}</span>
-                  <h3 className="font-semibold font-heading text-dark mt-1 group-hover:text-primary transition-colors">{template.name}</h3>
-                  <button className="flex items-center gap-1 mt-3 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    Use Template <ArrowRight className="w-4 h-4" />
+                <div className="p-4">
+                  <span className="fw-medium text-primary" style={{ fontSize: '12px' }}>{template.category}</span>
+                  <h3 className="fw-semibold font-heading text-dark mt-1 mb-2">{template.name}</h3>
+                  <button className="d-flex align-items-center gap-1 mt-2 text-primary fw-medium border-0 bg-transparent p-0" style={{ fontSize: '14px' }}>
+                    Use Template <ArrowRight size={16} />
                   </button>
                 </div>
               </div>
@@ -62,10 +62,10 @@ export default function Templates() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-4"
         >
           <Link href="/design-studio">
-            <Button variant="primary" size="lg" icon={<ArrowRight className="w-5 h-5" />} iconPosition="right">
+            <Button variant="primary" size="lg" icon={<ArrowRight size={20} />} iconPosition="right">
               Browse All Templates
             </Button>
           </Link>

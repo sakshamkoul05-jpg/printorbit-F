@@ -99,21 +99,21 @@ export default function MockupGenerator() {
   }, [designImage, scene, brightness, contrast, saturation, opacity]);
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-vh-100" style={{ backgroundColor: '#0f172a' }}>
       {/* Header */}
-      <div className="bg-slate-800 border-b border-slate-700">
+      <div style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
         <Container>
-          <div className="py-4 flex items-center justify-between flex-wrap gap-3">
+          <div className="py-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
-              <Link href="/utilities" className="text-xs text-blue-400 hover:underline mb-1 inline-block">← Back to Utilities</Link>
-              <h1 className="text-xl md:text-2xl font-bold text-white font-heading">Mockup Scene Generator</h1>
-              <p className="text-xs text-slate-400 mt-0.5">Place your design on professional product scenes</p>
+              <Link href="/utilities" className="text-xs text-primary hover-underline mb-1 d-inline-block">← Back to Utilities</Link>
+              <h1 className="text-xl text-md-2xl fw-bold text-white font-heading">Mockup Scene Generator</h1>
+              <p className="text-xs mt-1" style={{ color: '#94a3b8' }}>Place your design on professional product scenes</p>
             </div>
             {designImage && (
-              <div className="flex gap-2">
+              <div className="d-flex gap-2">
                 {[1, 2, 3].map(s => (
                   <button key={s} onClick={() => handleExport(s)} disabled={exporting}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white text-xs font-medium rounded-lg transition-colors">
+                    className="px-4 py-2 bg-primary text-white text-xs fw-medium rounded-lg">
                     {exporting ? '...' : `Export ${s}×`}
                   </button>
                 ))}
@@ -124,44 +124,46 @@ export default function MockupGenerator() {
       </div>
 
       <Container>
-        <div className="py-6 flex flex-col xl:flex-row gap-6">
+        <div className="py-6 d-flex flex-column flex-xl-row gap-4">
           {/* ── LEFT SIDEBAR ── */}
-          <div className="w-full xl:w-64 shrink-0 space-y-4">
+          <div className="w-100 d-flex flex-column gap-4" style={{ maxWidth: '256px' }}>
             {/* Upload */}
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Your Design</p>
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <p className="text-xs fw-bold text-uppercase tracking-wider mb-3" style={{ color: '#cbd5e1' }}>Your Design</p>
               {designImage ? (
-                <div className="space-y-3">
-                  <div className="relative w-full aspect-[3/2] bg-slate-700 rounded-lg overflow-hidden">
-                    <img src={designImage} alt="design" className="w-full h-full object-contain" />
+                <div className="d-flex flex-column gap-3">
+                  <div className="w-100 position-relative rounded-lg overflow-hidden" style={{ aspectRatio: '3/2', backgroundColor: '#334155' }}>
+                    <img src={designImage} alt="design" className="w-100 h-100" style={{ objectFit: 'contain' }} />
                   </div>
-                  <p className="text-[10px] text-slate-400 truncate">{designFileName}</p>
-                  <div className="flex gap-2">
-                    <button onClick={() => fileInputRef.current?.click()} className="flex-1 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg">Replace</button>
-                    <button onClick={() => { setDesignImage(null); setDesignFileName(''); }} className="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/50 text-red-300 text-xs rounded-lg">Remove</button>
+                  <p className="truncate" style={{ fontSize: '10px', color: '#94a3b8' }}>{designFileName}</p>
+                  <div className="d-flex gap-2">
+                    <button onClick={() => fileInputRef.current?.click()} className="flex-grow-1 px-3 py-2 bg-secondary text-white text-xs rounded-lg">Replace</button>
+                    <button onClick={() => { setDesignImage(null); setDesignFileName(''); }} className="px-3 py-2 text-xs rounded-lg" style={{ backgroundColor: 'rgba(239, 68, 68, 0.5)', color: '#fca5a5' }}>Remove</button>
                   </div>
                 </div>
               ) : (
                 <div onDragOver={e => e.preventDefault()} onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
-                  className="w-full aspect-[3/2] border-2 border-dashed border-slate-600 hover:border-blue-500 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-colors">
-                  <svg className="w-8 h-8 text-slate-500 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  className="w-100 border-2 border-dashed rounded-lg d-flex flex-column align-items-center justify-content-center cursor-pointer"
+                  style={{ aspectRatio: '3/2', borderColor: '#475569' }}>
+                  <svg style={{ width: '32px', height: '32px', color: '#64748b', marginBottom: '8px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6v12m6-6H6" />
                   </svg>
-                  <p className="text-xs text-slate-400">Drop your design</p>
-                  <p className="text-[10px] text-slate-500 mt-1">PNG, JPG</p>
+                  <p className="text-xs" style={{ color: '#94a3b8' }}>Drop your design</p>
+                  <p className="mt-1" style={{ fontSize: '10px', color: '#64748b' }}>PNG, JPG</p>
                 </div>
               )}
-              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleUpload} className="hidden" />
+              <input ref={fileInputRef} type="file" accept="image/*" onChange={handleUpload} className="d-none" />
             </div>
 
             {/* Categories */}
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Product Type</p>
-              <div className="space-y-1 max-h-60 overflow-y-auto">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <p className="text-xs fw-bold text-uppercase tracking-wider mb-3" style={{ color: '#cbd5e1' }}>Product Type</p>
+              <div className="d-flex flex-column gap-1" style={{ maxHeight: '240px', overflowY: 'auto' }}>
                 {categories.map(cat => (
                   <button key={cat} onClick={() => { setActiveCategory(cat); setScene(SCENES.find(s => s.product === cat) || SCENES[0]); }}
-                    className={`w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-colors ${activeCategory === cat ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-700'}`}>
+                    className={`w-100 text-start px-3 py-2 rounded-lg text-xs fw-medium ${activeCategory === cat ? 'bg-primary text-white' : ''}`}
+                    style={{ color: activeCategory === cat ? undefined : '#cbd5e1' }}>
                     {cat}
                   </button>
                 ))}
@@ -169,28 +171,29 @@ export default function MockupGenerator() {
             </div>
 
             {/* Scenes */}
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Scenes</p>
-              <div className="space-y-2 max-h-80 overflow-y-auto">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <p className="text-xs fw-bold text-uppercase tracking-wider mb-3" style={{ color: '#cbd5e1' }}>Scenes</p>
+              <div className="d-flex flex-column gap-2" style={{ maxHeight: '320px', overflowY: 'auto' }}>
                 {filteredScenes.map(s => (
                   <button key={s.id} onClick={() => setScene(s)}
-                    className={`w-full text-left p-2.5 rounded-lg border transition-all ${scene.id === s.id ? 'border-blue-500 bg-blue-500/10' : 'border-slate-700 hover:border-slate-500 bg-slate-700/50'}`}>
-                    <div className="w-full h-14 rounded-md overflow-hidden mb-1" style={{ background: s.background }}>
+                    className={`w-100 text-start p-2 rounded-lg border ${scene.id === s.id ? 'border-primary' : 'border-secondary'}`}
+                    style={{ backgroundColor: scene.id === s.id ? 'rgba(59, 130, 246, 0.1)' : 'rgba(51, 65, 85, 0.5)' }}>
+                    <div className="w-100 rounded-md overflow-hidden mb-1" style={{ height: '56px', background: s.background }}>
                       {designImage && scene.id === s.id && (
-                        <img src={designImage} alt="" className="w-full h-full object-cover opacity-50" />
+                        <img src={designImage} alt="" className="w-100 h-100" style={{ objectFit: 'cover', opacity: 0.5 }} />
                       )}
                     </div>
-                    <p className="text-[11px] text-slate-200 font-medium">{s.name}</p>
-                    <p className="text-[9px] text-slate-500">{s.description}</p>
+                    <p className="fw-medium" style={{ fontSize: '11px', color: '#e2e8f0' }}>{s.name}</p>
+                    <p style={{ fontSize: '9px', color: '#64748b' }}>{s.description}</p>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Adjustments */}
-            <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Adjustments</p>
-              <div className="space-y-3">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <p className="text-xs fw-bold text-uppercase tracking-wider mb-3" style={{ color: '#cbd5e1' }}>Adjustments</p>
+              <div className="d-flex flex-column gap-3">
                 {[
                   { label: 'Brightness', v: brightness, s: setBrightness },
                   { label: 'Contrast', v: contrast, s: setContrast },
@@ -198,43 +201,43 @@ export default function MockupGenerator() {
                   { label: 'Opacity', v: opacity, s: setOpacity },
                 ].map(({ label, v, s }) => (
                   <div key={label}>
-                    <div className="flex justify-between mb-1">
-                      <span className="text-[10px] text-slate-400">{label}</span>
-                      <span className="text-[10px] text-slate-500">{v}{label === 'Opacity' ? '%' : ''}</span>
+                    <div className="d-flex justify-content-between mb-1">
+                      <span style={{ fontSize: '10px', color: '#94a3b8' }}>{label}</span>
+                      <span style={{ fontSize: '10px', color: '#64748b' }}>{v}{label === 'Opacity' ? '%' : ''}</span>
                     </div>
                     <input type="range" min={label === 'Opacity' ? 10 : -50} max={label === 'Opacity' ? 100 : 50} value={v}
                       onChange={e => s(Number(e.target.value))}
-                      className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                      className="w-100" style={{ height: '4px', backgroundColor: '#334155', borderRadius: '8px', accentColor: '#3b82f6' }} />
                   </div>
                 ))}
                 <button onClick={() => { setBrightness(0); setContrast(0); setSaturation(0); setOpacity(100); }}
-                  className="w-full px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs rounded-lg">Reset</button>
+                  className="w-100 px-3 py-2 bg-secondary text-xs rounded-lg" style={{ color: '#cbd5e1' }}>Reset</button>
               </div>
             </div>
           </div>
 
           {/* ── MAIN PREVIEW ── */}
-          <div className="flex-1 min-w-0">
-            <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-              <div className="px-4 py-2.5 bg-slate-750 border-b border-slate-700 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-white">{scene.name}</span>
-                  <span className="text-[10px] text-slate-400">{scene.product}</span>
+          <div className="flex-grow-1" style={{ minWidth: 0 }}>
+            <div className="rounded-xl overflow-hidden" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <div className="px-4 py-2 d-flex align-items-center justify-content-between" style={{ backgroundColor: '#334155', borderBottom: '1px solid #334155' }}>
+                <div className="d-flex align-items-center gap-2">
+                  <span className="text-xs fw-bold text-white">{scene.name}</span>
+                  <span style={{ fontSize: '10px', color: '#94a3b8' }}>{scene.product}</span>
                 </div>
-                <span className="text-[10px] text-slate-500">1200 × 800</span>
+                <span style={{ fontSize: '10px', color: '#64748b' }}>1200 × 800</span>
               </div>
 
               {/* ── THE MOCKUP ── */}
-              <div ref={previewRef} className="relative overflow-hidden" style={{ aspectRatio: '3/2', background: scene.background }}>
+              <div ref={previewRef} className="position-relative overflow-hidden" style={{ aspectRatio: '3/2', background: scene.background }}>
                 {/* Ambient lighting */}
-                <div className="absolute inset-0" style={{
+                <div className="position-absolute top-0 start-0 w-100 h-100" style={{
                   background: 'radial-gradient(ellipse at 70% 20%, rgba(255,240,200,0.12) 0%, transparent 60%)',
                   pointerEvents: 'none', zIndex: 2,
                 }} />
 
                 {/* Design on product with CSS 3D transform */}
                 {designImage && (
-                  <div className="absolute" style={{
+                  <div className="position-absolute" style={{
                     left: scene.designLeft,
                     top: scene.designTop,
                     width: scene.designWidth,
@@ -262,32 +265,33 @@ export default function MockupGenerator() {
                 )}
 
                 {/* Vignette */}
-                <div className="absolute inset-0 pointer-events-none" style={{
+                <div className="position-absolute top-0 start-0 w-100 h-100" style={{
                   background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.3) 100%)',
+                  pointerEvents: 'none',
                   zIndex: 3,
                 }} />
 
                 {/* No-design placeholder */}
                 {!designImage && (
-                  <div className="absolute inset-0 flex items-center justify-center z-10">
-                    <p className="text-white/40 text-sm">Upload your design to preview</p>
+                  <div className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style={{ zIndex: 10 }}>
+                    <p style={{ color: 'rgba(255,255,255,0.4)' }} className="text-sm">Upload your design to preview</p>
                   </div>
                 )}
               </div>
             </div>
 
             {/* Tips */}
-            <div className="mt-4 bg-slate-800 rounded-xl border border-slate-700 p-4">
-              <p className="text-xs font-bold text-slate-300 mb-2">Tips</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div className="mt-4 rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+              <p className="text-xs fw-bold mb-2" style={{ color: '#cbd5e1' }}>Tips</p>
+              <div className="row g-2">
                 {[
                   'Use high resolution images (1200px+ wide) for sharp results',
                   'PNG with transparent background works best for clean compositing',
                   'Adjust brightness/contrast to match the scene lighting',
                 ].map((t, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className="text-blue-400 text-xs mt-0.5">→</span>
-                    <p className="text-[10px] text-slate-400">{t}</p>
+                  <div key={i} className="col-12 col-sm-4 d-flex align-items-start gap-2">
+                    <span className="text-primary text-xs mt-1">→</span>
+                    <p style={{ fontSize: '10px', color: '#94a3b8' }}>{t}</p>
                   </div>
                 ))}
               </div>

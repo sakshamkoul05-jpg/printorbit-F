@@ -25,34 +25,32 @@ export default function MockupCanvas({ scene, designFile, editorState }: MockupC
   }, [scene.color]);
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-      {/* Toolbar */}
-      <div className="px-4 py-2.5 border-b border-slate-700 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-white">{scene.name}</span>
-          <span className="text-[10px] text-slate-400">{scene.product}</span>
+    <div className="rounded-3 overflow-hidden" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <div className="d-flex align-items-center justify-content-between px-3 py-2" style={{ borderBottom: '1px solid #334155' }}>
+        <div className="d-flex align-items-center gap-2">
+          <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--bs-white)' }}>{scene.name}</span>
+          <span style={{ fontSize: '10px', color: '#94a3b8' }}>{scene.product}</span>
         </div>
-        <span className="text-[10px] text-slate-500">Live Preview</span>
+        <span style={{ fontSize: '10px', color: '#64748b' }}>Live Preview</span>
       </div>
 
-      {/* Canvas */}
       <div
-        className="relative overflow-hidden"
+        className="position-relative overflow-hidden"
         style={{ aspectRatio: `${scene.width}/${scene.height}`, background: bgGradient }}
       >
-        {/* Ambient highlight */}
         <div
-          className="absolute inset-0 pointer-events-none"
+          className="position-absolute"
           style={{
+            inset: 0,
+            pointerEvents: 'none',
             background: 'radial-gradient(ellipse at 70% 20%, rgba(255,240,200,0.12) 0%, transparent 60%)',
             zIndex: 2,
           }}
         />
 
-        {/* Design on product */}
         {designFile && (
           <div
-            className="absolute"
+            className="position-absolute"
             style={{
               left: scene.renderOptions.designLeft,
               top: scene.renderOptions.designTop,
@@ -83,21 +81,21 @@ export default function MockupCanvas({ scene, designFile, editorState }: MockupC
           </div>
         )}
 
-        {/* Vignette overlay */}
         {editorState.vignette > 0 && (
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="position-absolute"
             style={{
+              inset: 0,
+              pointerEvents: 'none',
               background: `radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,${editorState.vignette}) 100%)`,
               zIndex: 3,
             }}
           />
         )}
 
-        {/* Empty state */}
         {!designFile && (
-          <div className="absolute inset-0 flex items-center justify-center z-10">
-            <p className="text-white/40 text-sm">Upload your design to preview</p>
+          <div className="position-absolute d-flex align-items-center justify-content-center" style={{ inset: 0, zIndex: 10 }}>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>Upload your design to preview</p>
           </div>
         )}
       </div>

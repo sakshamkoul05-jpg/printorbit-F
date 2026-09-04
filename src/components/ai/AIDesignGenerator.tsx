@@ -51,10 +51,7 @@ export default function AIDesignGenerator({
     setLoading(true);
     setError('');
     try {
-      // AI generates content + layout/style choices
       const result = await aiAPI.generateContent(finalPrompt, canvasWidth, canvasHeight, productType);
-
-      // Design engine calculates all positions using template system
       const design = generateLayout(
         result.layout || 'centered',
         result.style || 'modern',
@@ -63,7 +60,6 @@ export default function AIDesignGenerator({
         canvasHeight,
         productType,
       );
-
       onDesignGenerated(design);
     } catch (err: any) {
       setError(err.message || 'Generation failed. Please try again.');
@@ -72,23 +68,29 @@ export default function AIDesignGenerator({
   };
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="d-flex flex-column gap-3 p-3">
       <div>
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+        <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Product Type
         </label>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="d-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem' }}>
           {PRODUCT_TYPES.map((pt) => (
             <button
               key={pt.id}
               onClick={() => setProductType(pt.id)}
-              className={`flex flex-col items-center gap-1 p-2 rounded-lg text-[10px] font-medium transition-all ${
-                productType === pt.id
-                  ? 'bg-primary text-white shadow-sm shadow-primary/30'
-                  : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-              }`}
+              className={`d-flex flex-column align-items-center gap-1 btn`}
+              style={{
+                padding: '0.5rem',
+                fontSize: '10px',
+                fontWeight: 500,
+                borderRadius: '0.5rem',
+                transition: 'all 0.15s',
+                backgroundColor: productType === pt.id ? 'var(--bs-primary, #0d6efd)' : '#f8fafc',
+                color: productType === pt.id ? 'var(--bs-white)' : '#64748b',
+                border: 'none',
+              }}
             >
-              <pt.icon className="w-3.5 h-3.5" />
+              <pt.icon size={14} />
               {pt.label}
             </button>
           ))}
@@ -96,7 +98,7 @@ export default function AIDesignGenerator({
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">
+        <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Describe your design
         </label>
         <textarea
@@ -104,19 +106,40 @@ export default function AIDesignGenerator({
           onChange={(e) => setPrompt(e.target.value)}
           placeholder="e.g., A modern business card for a tech startup, dark theme with blue accent..."
           rows={3}
-          className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 resize-none transition-all"
+          className="w-100"
+          style={{
+            padding: '0.625rem 0.75rem',
+            backgroundColor: '#f8fafc',
+            border: '1px solid #e2e8f0',
+            borderRadius: '0.75rem',
+            fontSize: '0.875rem',
+            outline: 'none',
+            resize: 'none',
+            transition: 'all 0.15s',
+          }}
         />
       </div>
 
       <button
         onClick={() => handleGenerate()}
         disabled={loading || !prompt.trim()}
-        className="w-full flex items-center justify-center gap-2 py-2.5 bg-primary text-white text-sm font-semibold rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-50 shadow-sm"
+        className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+        style={{
+          padding: '0.625rem',
+          backgroundColor: 'var(--bs-primary, #0d6efd)',
+          color: 'var(--bs-white)',
+          fontSize: '0.875rem',
+          fontWeight: 600,
+          borderRadius: '0.75rem',
+          transition: 'background-color 0.15s',
+          opacity: loading || !prompt.trim() ? 0.5 : 1,
+          border: 'none',
+        }}
       >
         {loading ? (
-          <Loader2 className="w-4 h-4 animate-spin" />
+          <Loader2 size={16} className="animate-spin" />
         ) : (
-          <Sparkles className="w-4 h-4" />
+          <Sparkles size={16} />
         )}
         {loading ? 'Generating...' : 'Generate Design'}
       </button>
@@ -125,27 +148,28 @@ export default function AIDesignGenerator({
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-xs text-red bg-red/5 px-3 py-2 rounded-lg"
+          className="mb-0"
+          style={{ fontSize: '0.75rem', color: 'var(--bs-red, #dc3545)', backgroundColor: 'rgba(220,53,69,0.05)', padding: '0.5rem 0.75rem', borderRadius: '0.5rem' }}
         >
           {error}
         </motion.p>
       )}
 
-      {/* Suggested prompts */}
       {showSuggestions && (
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+          <div className="d-flex align-items-center justify-content-between mb-2">
+            <label className="m-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Try these
             </label>
             <button
               onClick={() => setShowSuggestions(false)}
-              className="text-[10px] text-slate-400 hover:text-slate-600"
+              className="btn p-0"
+              style={{ fontSize: '10px', color: '#94a3b8' }}
             >
               Hide
             </button>
           </div>
-          <div className="space-y-1.5">
+          <div className="d-flex flex-column" style={{ gap: '0.375rem' }}>
             {SUGGESTED_PROMPTS.map((sp, i) => (
               <button
                 key={i}
@@ -154,7 +178,16 @@ export default function AIDesignGenerator({
                   handleGenerate(sp);
                 }}
                 disabled={loading}
-                className="w-full text-left px-3 py-2 bg-slate-50 hover:bg-primary/5 text-xs text-slate-600 rounded-lg border border-slate-200 hover:border-primary/30 transition-all"
+                className="w-100 text-start btn"
+                style={{
+                  padding: '0.5rem 0.75rem',
+                  backgroundColor: '#f8fafc',
+                  fontSize: '0.75rem',
+                  color: '#475569',
+                  borderRadius: '0.5rem',
+                  border: '1px solid #e2e8f0',
+                  transition: 'all 0.15s',
+                }}
               >
                 {sp}
               </button>

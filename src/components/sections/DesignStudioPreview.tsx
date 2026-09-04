@@ -16,56 +16,59 @@ const features = [
 
 export default function DesignStudioPreview() {
   return (
-    <section className="py-20 bg-dark relative overflow-hidden">
+    <section className="py-5 bg-dark position-relative overflow-hidden">
       {/* Background Effects */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-3xl" />
+      <div className="position-absolute inset-0">
+        <div className="position-absolute top-0 end-0" style={{ width: '500px', height: '500px', background: 'rgba(var(--bs-primary-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
+        <div className="position-absolute bottom-0 start-0" style={{ width: '500px', height: '500px', background: 'rgba(var(--bs-accent-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
       </div>
 
-      <Container className="relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+      <Container className="position-relative" style={{ zIndex: 10 }}>
+        <div className="row align-items-center g-4">
           {/* Left Content */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 mb-6">
-              <Sparkles className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium text-white">AI-Powered Design Studio</span>
+            <div className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-4" style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}>
+              <Sparkles size={16} className="text-accent" />
+              <span className="fw-medium text-white" style={{ fontSize: '14px' }}>AI-Powered Design Studio</span>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-bold font-heading text-white mb-4">
+            <h2 className="fs-2 fw-bold font-heading text-white mb-3">
               Design Like a Pro, <span className="gradient-text">Even If You&apos;re Not</span>
             </h2>
-            <p className="text-lg text-white/60 mb-8">
+            <p className="fs-5 text-white mb-4" style={{ opacity: 0.6 }}>
               Our AI-powered design studio helps you create stunning prints in minutes. No design skills needed.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div className="row g-3 mb-4">
               {features.map((feature, i) => (
                 <motion.div
                   key={feature.title}
+                  className="col-12 col-sm-6"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-3"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
-                    <feature.icon className="w-5 h-5 text-primary-light" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-white text-sm">{feature.title}</h4>
-                    <p className="text-xs text-white/50">{feature.description}</p>
+                  <div className="d-flex align-items-start gap-3">
+                    <div className="rounded-4 d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '40px', height: '40px', backgroundColor: 'rgba(255,255,255,0.1)' }}>
+                      <feature.icon size={20} className="text-primary-light" />
+                    </div>
+                    <div>
+                      <h4 className="fw-semibold text-white mb-0" style={{ fontSize: '14px' }}>{feature.title}</h4>
+                      <p className="text-white mb-0" style={{ fontSize: '12px', opacity: 0.5 }}>{feature.description}</p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
             </div>
 
             <Link href="/design-studio">
-              <Button variant="accent" size="lg" icon={<ArrowRight className="w-5 h-5" />} iconPosition="right">
+              <Button variant="accent" size="lg" icon={<ArrowRight size={20} />} iconPosition="right">
                 Try Design Studio Free
               </Button>
             </Link>
@@ -73,32 +76,32 @@ export default function DesignStudioPreview() {
 
           {/* Right - Preview */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="relative"
           >
-            <div className="glass-dark rounded-2xl p-4 shadow-2xl">
+            <div className="glass-dark rounded-4 p-3" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
               {/* Mock Editor UI */}
-              <div className="bg-slate-800 rounded-xl overflow-hidden">
+              <div className="bg-slate-800 rounded-4 overflow-hidden">
                 {/* Toolbar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-slate-700">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                <div className="d-flex align-items-center gap-2 px-3 py-2 border-bottom border-slate-700">
+                  <div className="d-flex gap-1">
+                    <div className="bg-danger rounded-circle" style={{ width: '12px', height: '12px' }} />
+                    <div className="bg-warning rounded-circle" style={{ width: '12px', height: '12px' }} />
+                    <div className="bg-success rounded-circle" style={{ width: '12px', height: '12px' }} />
                   </div>
-                  <div className="flex-1 mx-4">
-                    <div className="bg-slate-700 rounded px-3 py-1 text-xs text-white/50">Design Studio</div>
+                  <div className="flex-fill mx-3">
+                    <div className="bg-slate-700 rounded px-3 py-1 text-white" style={{ fontSize: '12px', opacity: 0.5 }}>Design Studio</div>
                   </div>
                 </div>
 
                 {/* Canvas */}
-                <div className="aspect-video bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center relative">
-                  <div className="absolute inset-4 border-2 border-dashed border-white/20 rounded-lg flex items-center justify-center">
+                <div className="d-flex align-items-center justify-content-center position-relative" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.2), rgba(var(--bs-accent-rgb), 0.2))' }}>
+                  <div className="position-absolute border border-2 border-dashed rounded-3 d-flex align-items-center justify-content-center" style={{ inset: '16px', borderColor: 'rgba(255,255,255,0.2)' }}>
                     <div className="text-center">
-                      <Palette className="w-12 h-12 text-white/30 mx-auto mb-2" />
-                      <p className="text-sm text-white/50">Your design here</p>
+                      <Palette size={48} className="text-white mx-auto mb-2" style={{ opacity: 0.3 }} />
+                      <p className="text-white" style={{ fontSize: '14px', opacity: 0.5 }}>Your design here</p>
                     </div>
                   </div>
                 </div>
@@ -107,18 +110,20 @@ export default function DesignStudioPreview() {
 
             {/* Floating Elements */}
             <motion.div
-              className="absolute -top-4 -right-4 glass rounded-xl p-3 shadow-lg"
+              className="position-absolute glass rounded-4 p-3 shadow-lg"
+              style={{ top: '-16px', right: '-16px' }}
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              <span className="text-2xl">🎨</span>
+              <span className="fs-4">🎨</span>
             </motion.div>
             <motion.div
-              className="absolute -bottom-4 -left-4 glass rounded-xl p-3 shadow-lg"
+              className="position-absolute glass rounded-4 p-3 shadow-lg"
+              style={{ bottom: '-16px', left: '-16px' }}
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 4, repeat: Infinity }}
             >
-              <span className="text-2xl">✨</span>
+              <span className="fs-4">✨</span>
             </motion.div>
           </motion.div>
         </div>

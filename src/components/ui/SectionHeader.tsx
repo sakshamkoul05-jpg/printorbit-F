@@ -22,15 +22,15 @@ export default function SectionHeader({ badge, title, titleGradient = false, des
       className={`${align === 'center' ? 'text-center' : ''} ${className}`}
     >
       {badge && (
-        <Badge variant="primary" size="md" className="mb-4">
+        <Badge variant="primary" size="md" className="mb-3">
           {badge}
         </Badge>
       )}
-      <h2 className={`text-3xl md:text-4xl font-bold font-heading text-dark mb-4 ${titleGradient ? 'gradient-text' : ''}`}>
+      <h2 className={`fs-2 fs-md-1 fw-bold font-heading text-dark mb-3 ${titleGradient ? 'gradient-text' : ''}`}>
         {title}
       </h2>
       {description && (
-        <p className="text-muted max-w-2xl mx-auto text-lg">
+        <p className="text-muted mx-auto fs-5" style={{ maxWidth: '640px' }}>
           {description}
         </p>
       )}

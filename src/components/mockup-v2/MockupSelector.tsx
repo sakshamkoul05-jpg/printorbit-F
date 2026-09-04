@@ -39,57 +39,75 @@ export default function MockupSelector({ selectedId, onSelect }: MockupSelectorP
 
   if (loading) {
     return (
-      <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-        <p className="text-xs text-slate-400 text-center py-8">Scanning for mockups...</p>
+      <div className="rounded-3 p-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+        <p className="text-center mb-0" style={{ fontSize: '0.75rem', color: '#94a3b8', padding: '2rem 0' }}>Scanning for mockups...</p>
       </div>
     );
   }
 
   if (mockups.length === 0) {
     return (
-      <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-        <p className="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">Mockups</p>
-        <div className="text-center py-6">
-          <Package className="w-8 h-8 mx-auto mb-2 text-slate-600" />
-          <p className="text-[11px] text-slate-500">No mockups found</p>
-          <p className="text-[10px] text-slate-600 mt-1">Add assets to <code className="text-blue-400">public/mockups/{'{product}'}/</code></p>
+      <div className="rounded-3 p-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+        <p className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mockups</p>
+        <div className="text-center py-3">
+          <Package size={32} className="mx-auto mb-2" style={{ color: '#475569' }} />
+          <p className="mb-0" style={{ fontSize: '0.6875rem', color: '#64748b' }}>No mockups found</p>
+          <p className="mb-0 mt-1" style={{ fontSize: '10px', color: '#475569' }}>Add assets to <code style={{ color: '#60a5fa' }}>public/mockups/{'{product}'}/</code></p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-      <p className="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">Mockups</p>
+    <div className="rounded-3 p-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <p className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mockups</p>
 
-      {/* Category filter */}
-      <div className="flex flex-wrap gap-1 mb-3">
+      <div className="d-flex flex-wrap mb-2" style={{ gap: '0.25rem' }}>
         {categories.map(c => (
           <button key={c} onClick={() => setCategory(c)}
-            className={`px-2 py-1 rounded-md text-[10px] font-medium transition-colors ${category === c ? 'bg-blue-600 text-white' : 'bg-slate-700 text-slate-400 hover:text-slate-200'}`}>
+            className="btn"
+            style={{
+              padding: '0.25rem 0.5rem',
+              borderRadius: '0.375rem',
+              fontSize: '10px',
+              fontWeight: 500,
+              transition: 'all 0.15s',
+              backgroundColor: category === c ? '#2563eb' : '#334155',
+              color: category === c ? 'var(--bs-white)' : '#94a3b8',
+              border: 'none',
+            }}>
             {c === 'all' ? 'All' : c}
           </button>
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
         {filtered.map(m => {
           const Icon = CATEGORY_ICONS[m.category] || MoreHorizontal;
           return (
             <button key={m.id} onClick={() => onSelect(m.id)}
-              className={`p-3 rounded-xl border text-left transition-all ${selectedId === m.id
-                ? 'bg-blue-600/10 border-blue-500 ring-1 ring-blue-500'
-                : 'bg-slate-700/50 border-slate-600 hover:border-slate-500 hover:bg-slate-700'}`}>
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className={`p-1.5 rounded-lg ${selectedId === m.id ? 'bg-blue-500/20' : 'bg-slate-600'}`}>
-                  <Icon className={`w-3.5 h-3.5 ${selectedId === m.id ? 'text-blue-400' : 'text-slate-400'}`} />
+              className="text-start btn"
+              style={{
+                padding: '0.75rem',
+                borderRadius: '0.75rem',
+                transition: 'all 0.15s',
+                backgroundColor: selectedId === m.id ? 'rgba(37,99,235,0.1)' : 'rgba(51,65,85,0.5)',
+                border: `1px solid ${selectedId === m.id ? '#3b82f6' : '#475569'}`,
+                outline: selectedId === m.id ? '1px solid #3b82f6' : 'none',
+              }}>
+              <div className="d-flex align-items-center gap-2 mb-1">
+                <div style={{
+                  padding: '0.375rem',
+                  borderRadius: '0.5rem',
+                  backgroundColor: selectedId === m.id ? 'rgba(59,130,246,0.2)' : '#475569',
+                }}>
+                  <Icon size={14} style={{ color: selectedId === m.id ? '#60a5fa' : '#94a3b8' }} />
                 </div>
-                <span className={`text-xs font-medium truncate ${selectedId === m.id ? 'text-blue-300' : 'text-slate-200'}`}>
+                <span className="text-truncate" style={{ fontSize: '0.75rem', fontWeight: 500, color: selectedId === m.id ? '#93c5fd' : '#e2e8f0' }}>
                   {m.name}
                 </span>
               </div>
-              <p className="text-[9px] text-slate-500 truncate">{m.description || m.id}</p>
+              <p className="text-truncate mb-0" style={{ fontSize: '9px', color: '#64748b' }}>{m.description || m.id}</p>
             </button>
           );
         })}

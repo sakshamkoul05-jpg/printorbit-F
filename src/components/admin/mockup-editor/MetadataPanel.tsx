@@ -63,107 +63,114 @@ export default function MetadataPanel({
     label: string; value: number; min: number; max: number; step?: number; onChange: (v: number) => void;
   }) => (
     <div>
-      <div className="flex justify-between mb-1">
-        <span className="text-[10px] text-slate-400">{label}</span>
-        <span className="text-[10px] text-slate-500 font-mono">{value.toFixed(step && step < 1 ? 2 : 0)}</span>
+      <div className="d-flex justify-content-between mb-1">
+        <span style={{ fontSize: '10px', color: '#94a3b8' }}>{label}</span>
+        <span style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace' }}>{value.toFixed(step && step < 1 ? 2 : 0)}</span>
       </div>
       <input type="range" min={min} max={max} step={step || 1} value={value}
         onChange={e => set(Number(e.target.value))}
-        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+        className="w-100"
+        style={{ height: '0.25rem', backgroundColor: '#334155', borderRadius: '0.5rem', accentColor: '#3b82f6', cursor: 'pointer' }} />
     </div>
   );
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-4 space-y-4">
-      <p className="text-xs font-bold text-slate-300 uppercase tracking-wider">Metadata</p>
+    <div className="rounded-3 p-3 d-flex flex-column gap-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <p className="mb-0" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Metadata</p>
 
-      {/* Identity */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">ID</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>ID</label>
           <input type="text" value={metadata.id}
             onChange={e => update('id', e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }} />
         </div>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">Name</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Name</label>
           <input type="text" value={metadata.name}
             onChange={e => update('name', e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }} />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">Product</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Product</label>
           <select value={metadata.product} onChange={e => update('product', e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }}>
             {PRODUCT_IDS.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">Category</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Category</label>
           <select value={metadata.category} onChange={e => update('category', e.target.value)}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }}>
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
       </div>
 
       <div>
-        <label className="text-[10px] text-slate-400 block mb-1">Description</label>
+        <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Description</label>
         <input type="text" value={metadata.description}
           onChange={e => update('description', e.target.value)}
-          className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+          className="w-100"
+          style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }} />
       </div>
 
-      {/* Dimensions */}
-      <div className="grid grid-cols-2 gap-2">
+      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">Width (px)</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Width (px)</label>
           <input type="number" value={metadata.width}
             onChange={e => update('width', Number(e.target.value))}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }} />
         </div>
         <div>
-          <label className="text-[10px] text-slate-400 block mb-1">Height (px)</label>
+          <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Height (px)</label>
           <input type="number" value={metadata.height}
             onChange={e => update('height', Number(e.target.value))}
-            className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500" />
+            className="w-100"
+            style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }} />
         </div>
       </div>
 
-      {/* Printable Area */}
-      <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
-        <p className="text-[10px] text-slate-400 mb-2 font-medium">Printable Area</p>
-        <div className="grid grid-cols-2 gap-2">
+      <div className="rounded p-2" style={{ backgroundColor: 'rgba(15,23,42,0.5)', border: '1px solid #334155' }}>
+        <p className="mb-2" style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 500 }}>Printable Area</p>
+        <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
           {(['x', 'y', 'width', 'height'] as const).map(k => (
             <div key={k}>
-              <label className="text-[9px] text-slate-500 block mb-0.5">{k}</label>
+              <label className="d-block mb-0" style={{ fontSize: '9px', color: '#64748b' }}>{k}</label>
               <input type="number" value={metadata.printArea[k]}
                 onChange={e => update('printArea', { ...metadata.printArea, [k]: Number(e.target.value) })}
-                className="w-full bg-slate-700 border border-slate-600 rounded-md px-2 py-1 text-[10px] text-slate-200 focus:outline-none focus:border-blue-500" />
+                className="w-100"
+                style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.375rem', padding: '0.25rem 0.5rem', fontSize: '10px', color: '#e2e8f0', outline: 'none' }} />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Render Settings */}
-      <div className="space-y-3">
-        <p className="text-[10px] text-slate-400 font-medium">Render Settings</p>
+      <div className="d-flex flex-column gap-2">
+        <p style={{ fontSize: '10px', color: '#94a3b8', fontWeight: 500 }}>Render Settings</p>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
           <div>
-            <label className="text-[10px] text-slate-400 block mb-1">Blend Mode</label>
+            <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Blend Mode</label>
             <select value={metadata.blend} onChange={e => update('blend', e.target.value as BlendMode)}
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+              className="w-100"
+              style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }}>
               {BLEND_MODES.map(b => <option key={b} value={b}>{b}</option>)}
             </select>
           </div>
           <div>
-            <label className="text-[10px] text-slate-400 block mb-1">Surface Texture</label>
+            <label className="d-block mb-1" style={{ fontSize: '10px', color: '#94a3b8' }}>Surface Texture</label>
             <select value={metadata.surfaceTexture} onChange={e => update('surfaceTexture', e.target.value as SurfaceTexture)}
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-blue-500">
+              className="w-100"
+              style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none' }}>
               {TEXTURE_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
             </select>
           </div>
@@ -177,17 +184,18 @@ export default function MetadataPanel({
         <Slider label="DPI" value={metadata.dpi} min={72} max={600} step={1} onChange={v => update('dpi', v)} />
       </div>
 
-      {/* Actions */}
-      <div className="space-y-2 pt-2 border-t border-slate-700">
+      <div className="d-flex flex-column gap-2 pt-2" style={{ borderTop: '1px solid #334155' }}>
         <button onClick={onPreview} disabled={isPreviewing}
-          className="w-full py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 text-white text-xs font-medium rounded-xl transition-colors flex items-center justify-center gap-2">
-          {isPreviewing ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Eye className="w-3.5 h-3.5" />}
+          className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+          style={{ padding: '0.5rem', backgroundColor: '#2563eb', color: 'var(--bs-white)', fontSize: '0.75rem', fontWeight: 500, borderRadius: '0.75rem', transition: 'background-color 0.15s', border: 'none', opacity: isPreviewing ? 0.7 : 1 }}>
+          {isPreviewing ? <RefreshCw size={14} className="animate-spin" /> : <Eye size={14} />}
           {isPreviewing ? 'Rendering...' : 'Preview Render'}
         </button>
 
         <button onClick={onExport}
-          className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium rounded-xl transition-colors flex items-center justify-center gap-2">
-          <Download className="w-3.5 h-3.5" />
+          className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+          style={{ padding: '0.5rem', backgroundColor: '#059669', color: 'var(--bs-white)', fontSize: '0.75rem', fontWeight: 500, borderRadius: '0.75rem', transition: 'background-color 0.15s', border: 'none' }}>
+          <Download size={14} />
           Export Mockup Package
         </button>
       </div>

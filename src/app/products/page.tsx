@@ -11,9 +11,9 @@ import {
 import { PRODUCT_CATEGORIES } from '@/lib/constants';
 import type { Product } from '@/types';
 
-function GiftIcon({ className }: { className?: string }) {
+function GiftIcon({ className, size, style }: { className?: string; size?: number; style?: React.CSSProperties }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg className={className} style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width={size} height={size}>
       <polyline points="20 12 20 22 4 22 4 12" />
       <rect x="2" y="7" width="20" height="5" />
       <line x1="12" y1="22" x2="12" y2="7" />
@@ -23,7 +23,7 @@ function GiftIcon({ className }: { className?: string }) {
   );
 }
 
-const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string; size?: number; style?: React.CSSProperties }>> = {
   'gift-hampers': GiftIcon,
   'visiting-cards': CreditCard,
   'id-cards': CreditCard,
@@ -122,31 +122,31 @@ function getProductCategorySlug(product: Product): string {
 }
 
 const categoryImageMap: Record<string, string> = {
-  'gift-hampers': 'bg-gradient-to-br from-rose-100 to-amber-50',
-  'visiting-cards': 'bg-gradient-to-br from-blue-50 to-indigo-100',
-  'id-cards': 'bg-gradient-to-br from-blue-50 to-indigo-100',
-  'pens': 'bg-gradient-to-br from-green-50 to-emerald-100',
-  'letterheads': 'bg-gradient-to-br from-slate-50 to-gray-100',
-  'envelopes': 'bg-gradient-to-br from-slate-50 to-gray-100',
-  'diaries-notebooks': 'bg-gradient-to-br from-amber-50 to-yellow-100',
-  'calendars': 'bg-gradient-to-br from-amber-50 to-yellow-100',
-  't-shirts': 'bg-gradient-to-br from-red-50 to-pink-100',
-  'polo-t-shirts': 'bg-gradient-to-br from-red-50 to-pink-100',
-  'jackets-hoodies': 'bg-gradient-to-br from-red-50 to-pink-100',
-  'flyers': 'bg-gradient-to-br from-purple-50 to-violet-100',
-  'brochures': 'bg-gradient-to-br from-purple-50 to-violet-100',
-  'posters': 'bg-gradient-to-br from-orange-50 to-amber-100',
-  'banners': 'bg-gradient-to-br from-orange-50 to-amber-100',
-  'stickers': 'bg-gradient-to-br from-teal-50 to-cyan-100',
-  'labels': 'bg-gradient-to-br from-teal-50 to-cyan-100',
-  'custom-boxes': 'bg-gradient-to-br from-orange-50 to-amber-100',
-  'mugs': 'bg-gradient-to-br from-sky-50 to-blue-100',
-  'water-bottles': 'bg-gradient-to-br from-sky-50 to-blue-100',
-  'tote-bags': 'bg-gradient-to-br from-lime-50 to-green-100',
-  'trophies': 'bg-gradient-to-br from-yellow-50 to-amber-100',
-  'keychains': 'bg-gradient-to-br from-pink-50 to-rose-100',
-  'coasters': 'bg-gradient-to-br from-stone-50 to-gray-100',
-  'photo-albums': 'bg-gradient-to-br from-violet-50 to-purple-100',
+  'gift-hampers': 'linear-gradient(to bottom right, #fff1f2, #fef3c7)',
+  'visiting-cards': 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
+  'id-cards': 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
+  'pens': 'linear-gradient(to bottom right, #f0fdf4, #d1fae5)',
+  'letterheads': 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
+  'envelopes': 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
+  'diaries-notebooks': 'linear-gradient(to bottom right, #fffbeb, #fef9c3)',
+  'calendars': 'linear-gradient(to bottom right, #fffbeb, #fef9c3)',
+  't-shirts': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
+  'polo-t-shirts': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
+  'jackets-hoodies': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
+  'flyers': 'linear-gradient(to bottom right, #faf5ff, #ede9fe)',
+  'brochures': 'linear-gradient(to bottom right, #faf5ff, #ede9fe)',
+  'posters': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
+  'banners': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
+  'stickers': 'linear-gradient(to bottom right, #f0fdfa, #cffafe)',
+  'labels': 'linear-gradient(to bottom right, #f0fdfa, #cffafe)',
+  'custom-boxes': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
+  'mugs': 'linear-gradient(to bottom right, #f0f9ff, #dbeafe)',
+  'water-bottles': 'linear-gradient(to bottom right, #f0f9ff, #dbeafe)',
+  'tote-bags': 'linear-gradient(to bottom right, #f7fee7, #dcfce7)',
+  'trophies': 'linear-gradient(to bottom right, #fefce8, #fef3c7)',
+  'keychains': 'linear-gradient(to bottom right, #fdf2f8, #fff1f2)',
+  'coasters': 'linear-gradient(to bottom right, #fafaf9, #f5f5f4)',
+  'photo-albums': 'linear-gradient(to bottom right, #f5f3ff, #ede9fe)',
 };
 
 const SIDEBAR_CATEGORIES = [
@@ -238,23 +238,23 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
 
   return (
     <div style={{ background: '#F4F2EF', minHeight: '100vh' }}>
-      <div className="max-w-[1280px] mx-auto px-4 md:px-6">
+      <div className="max-w-[1280px] mx-auto px-4 px-md-6">
         {/* Header Section */}
         <div className="pt-8 pb-6">
-          <h1 className="text-3xl md:text-4xl font-light" style={{ color: '#ED1C24' }}>
+          <h1 className="display-2 fw-light" style={{ color: '#ED1C24' }}>
             Explore the Best
           </h1>
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mt-1">
+          <h2 className="fs-2 fw-bold" style={{ color: '#0F0F0F', marginTop: '0.25rem' }}>
             T-Shirts and Corporate Gifts
           </h2>
-          <p className="text-gray-600 mt-2 text-sm md:text-base">
+          <p className="text-muted mt-2 text-sm">
             The one-stop shop for your corporate gifting needs
           </p>
         </div>
 
         {/* Subcategory Tabs */}
-        <div className="bg-white rounded-lg border border-gray-200 mb-6 overflow-x-auto">
-          <div className="flex items-center gap-0 min-w-max">
+        <div className="bg-white rounded-3 border border-gray-200 mb-6 overflow-x-auto">
+          <div className="d-flex align-items-center gap-0 min-w-max">
             {SUBCATEGORY_TABS.map((tab) => {
               const isActive = activeTabName === tab;
               return (
@@ -264,11 +264,11 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
                     const match = SIDEBAR_CATEGORIES.find((c) => c.name === tab);
                     setActiveCategory(match ? match.slug : '');
                   }}
-                  className={`px-4 py-3 text-xs font-medium whitespace-nowrap border-b-2 transition-colors ${
-                    isActive
-                      ? 'border-[#ED1C24] text-[#ED1C24]'
-                      : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
-                  }`}
+                  className="px-4 py-3 text-xs fw-medium flex-shrink-0 border-0 bg-transparent"
+                  style={{
+                    borderBottom: `2px solid ${isActive ? '#ED1C24' : 'transparent'}`,
+                    color: isActive ? '#ED1C24' : '#6B7280',
+                  }}
                 >
                   {tab}
                 </button>
@@ -277,24 +277,27 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
           </div>
         </div>
 
-        <div className="flex gap-6 pb-12">
+        <div className="d-flex gap-6 pb-12">
           {/* Filter Sidebar */}
-          <aside className="hidden lg:block w-[250px] shrink-0">
-            <div className="bg-white rounded-lg border border-gray-200 p-4">
+          <aside className="d-none d-lg-block" style={{ width: '250px', flexShrink: 0 }}>
+            <div className="bg-white rounded-3 border border-gray-200 p-4">
               <button
                 onClick={() => setExpandedSidebar(!expandedSidebar)}
-                className="flex items-center justify-between w-full mb-3"
+                className="d-flex align-items-center justify-content-between w-100 mb-3 border-0 bg-transparent p-0"
               >
-                <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Category</span>
-                <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${expandedSidebar ? 'rotate-180' : ''}`} />
+                <span className="text-sm fw-bold uppercase" style={{ color: '#0F0F0F', letterSpacing: '0.05em' }}>Category</span>
+                <ChevronDown size={16} className="text-gray-500 transition-transform" style={{ transform: expandedSidebar ? 'rotate(180deg)' : 'rotate(0deg)' }} />
               </button>
               {expandedSidebar && (
-                <div className="space-y-0.5">
+                <div className="d-flex flex-column gap-1">
                   <button
                     onClick={() => setActiveCategory('')}
-                    className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                      !activeCategory ? 'bg-[#ED1C24]/10 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
-                    }`}
+                    className="w-100 text-start px-3 py-2 rounded text-sm border-0 bg-transparent"
+                    style={{
+                      backgroundColor: !activeCategory ? 'rgba(237, 28, 36, 0.1)' : 'transparent',
+                      color: !activeCategory ? '#ED1C24' : '#6B7280',
+                      fontWeight: !activeCategory ? 500 : 400,
+                    }}
                   >
                     All Products
                   </button>
@@ -302,9 +305,12 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
                     <div key={cat.slug}>
                       <button
                         onClick={() => setActiveCategory(cat.slug)}
-                        className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                          activeCategory === cat.slug ? 'bg-[#ED1C24]/10 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
-                        }`}
+                        className="w-100 text-start px-3 py-2 rounded text-sm border-0 bg-transparent"
+                        style={{
+                          backgroundColor: activeCategory === cat.slug ? 'rgba(237, 28, 36, 0.1)' : 'transparent',
+                          color: activeCategory === cat.slug ? '#ED1C24' : '#6B7280',
+                          fontWeight: activeCategory === cat.slug ? 500 : 400,
+                        }}
                       >
                         {cat.name}
                       </button>
@@ -316,34 +322,37 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
           </aside>
 
           {/* Main Content */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-fill min-w-0">
             {/* Sort Bar */}
-            <div className="flex items-center justify-between mb-4">
-              <p className="text-sm text-gray-500">
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <p className="text-sm text-muted">
                 {sortedProducts.length} product{sortedProducts.length !== 1 ? 's' : ''}
                 {activeCategory && (
-                  <> in <span className="font-medium text-gray-700">{activeCat?.name || activeCategory}</span></>
+                  <> in <span className="fw-medium" style={{ color: '#374151' }}>{activeCat?.name || activeCategory}</span></>
                 )}
               </p>
-              <div className="relative">
+              <div className="position-relative">
                 <button
                   onClick={() => setShowSort(!showSort)}
-                  className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 rounded-lg text-xs font-medium text-gray-600 hover:border-gray-300"
+                  className="d-flex align-items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-3 text-xs fw-medium text-gray-600"
                 >
                   <span className="text-gray-400">SORT BY:</span> {SORT_OPTIONS.find((o) => o.value === sortBy)?.label}
-                  <ChevronDown className="w-3.5 h-3.5" />
+                  <ChevronDown size={14} />
                 </button>
                 {showSort && (
                   <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowSort(false)} />
-                    <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 min-w-[180px]">
+                    <div className="position-fixed top-0 start-0 w-100 h-100" style={{ zIndex: 40 }} onClick={() => setShowSort(false)} />
+                    <div className="position-absolute end-0 mt-1 bg-white border border-gray-200 rounded-3 shadow-lg py-1" style={{ zIndex: 50, minWidth: '180px' }}>
                       {SORT_OPTIONS.map((opt) => (
                         <button
                           key={opt.value}
                           onClick={() => { setSortBy(opt.value as typeof sortBy); setShowSort(false); }}
-                          className={`w-full text-left px-4 py-2 text-xs transition-colors ${
-                            sortBy === opt.value ? 'bg-[#ED1C24]/5 text-[#ED1C24] font-medium' : 'text-gray-600 hover:bg-gray-50'
-                          }`}
+                          className="w-100 text-start px-4 py-2 text-xs border-0 bg-transparent"
+                          style={{
+                            backgroundColor: sortBy === opt.value ? 'rgba(237, 28, 36, 0.05)' : 'transparent',
+                            color: sortBy === opt.value ? '#ED1C24' : '#6B7280',
+                            fontWeight: sortBy === opt.value ? 500 : 400,
+                          }}
                         >
                           {opt.label}
                         </button>
@@ -356,10 +365,10 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
 
             {/* Product Grid */}
             {sortedProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="row g-4">
                 {sortedProducts.map((product) => {
                   const catSlug = getProductCategorySlug(product);
-                  const bgClass = categoryImageMap[catSlug] || 'bg-gradient-to-br from-gray-50 to-gray-100';
+                  const bgStyle = { background: categoryImageMap[catSlug] || 'linear-gradient(to bottom right, #f9fafb, #f3f4f6)' };
                   const Icon = CATEGORY_ICONS[catSlug] || Package;
                   const mrp = Math.round(product.base_price * 1.4);
                   const discount = Math.round(((mrp - product.base_price) / mrp) * 100);
@@ -367,69 +376,73 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
                   const isLiked = likedProducts.has(product.id);
 
                   return (
-                    <Link
-                      key={product.id}
-                      href={`/products/${product.slug}`}
-                      className="bg-white rounded-lg border border-gray-200 overflow-hidden group"
-                      onMouseEnter={() => setHoveredProduct(product.id)}
-                      onMouseLeave={() => setHoveredProduct(null)}
-                    >
-                      {/* Product Image */}
-                      <div className={`relative aspect-[4/3] ${bgClass} flex items-center justify-center`}>
-                        <Icon className="w-16 h-16 text-gray-300" />
-                        {/* Quick Actions */}
-                        <div className={`absolute top-3 right-3 flex flex-col gap-2 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-                          <button
-                            onClick={(e) => { e.preventDefault(); }}
-                            className="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:bg-gray-50"
-                          >
-                            <Share2 className="w-3.5 h-3.5 text-gray-600" />
-                          </button>
-                          <button
-                            onClick={(e) => { e.preventDefault(); toggleLike(product.id); }}
-                            className="w-8 h-8 bg-white rounded-full shadow flex items-center justify-center hover:bg-gray-50"
-                          >
-                            <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} />
-                          </button>
+                    <div key={product.id} className="col-12 col-sm-6 col-lg-4">
+                      <Link
+                        href={`/products/${product.slug}`}
+                        className="bg-white rounded-3 border border-gray-200 overflow-hidden d-block text-decoration-none h-100"
+                        onMouseEnter={() => setHoveredProduct(product.id)}
+                        onMouseLeave={() => setHoveredProduct(null)}
+                      >
+                        {/* Product Image */}
+                        <div className="position-relative" style={{ aspectRatio: '4/3' }}>
+                          <div className="w-100 h-100 d-flex align-items-center justify-content-center" style={bgStyle}>
+                            <Icon size={64} style={{ color: '#d1d5db' }} />
+                          </div>
+                          {/* Quick Actions */}
+                          <div className="position-absolute top-3 end-3 d-flex flex-column gap-2" style={{ opacity: isHovered ? 1 : 0, transition: 'opacity 0.2s' }}>
+                            <button
+                              onClick={(e) => { e.preventDefault(); }}
+                              className="w-8 h-8 bg-white rounded-circle d-flex align-items-center justify-content-center border-0 shadow-sm"
+                            >
+                              <Share2 size={14} style={{ color: '#4B5563' }} />
+                            </button>
+                            <button
+                              onClick={(e) => { e.preventDefault(); toggleLike(product.id); }}
+                              className="w-8 h-8 bg-white rounded-circle d-flex align-items-center justify-content-center border-0 shadow-sm"
+                            >
+                              <Heart size={14} style={{ color: isLiked ? '#ef4444' : '#4B5563', fill: isLiked ? '#ef4444' : 'none' }} />
+                            </button>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* Product Info */}
-                      <div className="p-3">
-                        <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-0.5">
-                          PrintStop
-                        </p>
-                        <h3 className="text-sm font-semibold text-gray-900 leading-snug mb-1.5 line-clamp-2 group-hover:text-[#ED1C24] transition-colors">
-                          {product.name}
-                        </h3>
-                        <div className="flex items-center gap-1.5 mb-1.5">
-                          <span className="text-sm font-bold text-gray-900">₹{product.base_price}</span>
-                          <span className="text-[10px] text-gray-400">MRP</span>
-                          <span className="text-[10px] text-gray-400 line-through">₹{mrp}</span>
-                          <span className="text-[10px] font-semibold text-green-600">{discount}% off</span>
+                        {/* Product Info */}
+                        <div className="p-3">
+                          <p className="fw-semibold text-uppercase mb-1" style={{ fontSize: '0.65rem', color: '#9CA3AF', letterSpacing: '0.05em' }}>
+                            PrintStop
+                          </p>
+                          <h3 className="text-sm fw-semibold leading-snug mb-2 text-truncate" style={{ color: '#0F0F0F', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {product.name}
+                          </h3>
+                          <div className="d-flex align-items-center gap-2 mb-2">
+                            <span className="text-sm fw-bold" style={{ color: '#0F0F0F' }}>₹{product.base_price}</span>
+                            <span style={{ fontSize: '0.65rem', color: '#9CA3AF' }}>MRP</span>
+                            <span style={{ fontSize: '0.65rem', color: '#9CA3AF', textDecoration: 'line-through' }}>₹{mrp}</span>
+                            <span className="fw-semibold" style={{ fontSize: '0.65rem', color: '#16a34a' }}>{discount}% off</span>
+                          </div>
+                          <p style={{ fontSize: '0.7rem', color: '#6B7280' }} className="mb-2">
+                            ₹{product.base_price} for {product.min_quantity.toLocaleString()}+ units
+                          </p>
+                          <div className="d-flex align-items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star key={star} size={12} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                            ))}
+                            <span style={{ fontSize: '0.65rem', color: '#9CA3AF' }} className="ms-1">(120)</span>
+                          </div>
                         </div>
-                        <p className="text-[11px] text-gray-500 mb-2">
-                          ₹{product.base_price} for {product.min_quantity.toLocaleString()}+ units
-                        </p>
-                        <div className="flex items-center gap-0.5">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <Star key={star} className="w-3 h-3 fill-amber-400 text-amber-400" />
-                          ))}
-                          <span className="text-[10px] text-gray-400 ml-1">(120)</span>
-                        </div>
-                      </div>
-                    </Link>
+                      </Link>
+                    </div>
                   );
                 })}
               </div>
             ) : (
-              <div className="text-center py-20 bg-white rounded-lg border border-gray-200">
-                <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
-                <p className="text-sm text-gray-500 mb-6">Try adjusting your filter criteria</p>
+              <div className="text-center py-20 bg-white rounded-3 border border-gray-200">
+                <Search size={48} style={{ color: '#d1d5db' }} className="mx-auto mb-4" />
+                <h3 className="fs-5 fw-semibold mb-2" style={{ color: '#0F0F0F' }}>No products found</h3>
+                <p className="text-sm text-muted mb-6">Try adjusting your filter criteria</p>
                 <button
                   onClick={() => setActiveCategory('')}
-                  className="px-6 py-2.5 bg-[#ED1C24] text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-colors"
+                  className="px-6 py-2 text-sm fw-semibold text-white border-0 rounded-3"
+                  style={{ backgroundColor: '#ED1C24' }}
                 >
                   View All Products
                 </button>
@@ -437,41 +450,42 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
             )}
 
             {/* You Might Also Like */}
-            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">You might also like</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            <div className="mt-8 bg-white rounded-3 border border-gray-200 p-6">
+              <h2 className="fs-5 fw-bold mb-4" style={{ color: '#0F0F0F' }}>You might also like</h2>
+              <div className="row g-3">
                 {PRODUCT_CATEGORIES.slice(0, 6).map((cat) => {
                   const Icon = CATEGORY_ICONS[cat.slug] || Package;
                   return (
-                    <Link
-                      key={cat.slug}
-                      href={`/products?category=${cat.slug}`}
-                      className="p-3 rounded-lg border border-gray-100 text-center hover:border-[#ED1C24]/30 hover:bg-red-50/30 transition-colors"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-[#ED1C24]/5 flex items-center justify-center mx-auto mb-2">
-                        <Icon className="w-5 h-5 text-[#ED1C24]" />
-                      </div>
-                      <h3 className="text-xs font-semibold text-gray-900 mb-0.5">{cat.name}</h3>
-                      <p className="text-[10px] text-gray-500">{cat.count}</p>
-                    </Link>
+                    <div key={cat.slug} className="col-6 col-sm-4 col-lg-2">
+                      <Link
+                        href={`/products?category=${cat.slug}`}
+                        className="p-3 rounded-3 border border-gray-100 text-center d-block text-decoration-none transition-colors h-100"
+                      >
+                        <div className="w-10 h-10 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-2" style={{ backgroundColor: 'rgba(237, 28, 36, 0.05)' }}>
+                          <Icon size={20} style={{ color: '#ED1C24' }} />
+                        </div>
+                        <h3 className="text-xs fw-semibold mb-1" style={{ color: '#0F0F0F' }}>{cat.name}</h3>
+                        <p style={{ fontSize: '0.65rem' }} className="text-muted mb-0">{cat.count}</p>
+                      </Link>
+                    </div>
                   );
                 })}
               </div>
             </div>
 
             {/* How It Works */}
-            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-6">How It Works</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="mt-8 bg-white rounded-3 border border-gray-200 p-6">
+              <h2 className="fs-5 fw-bold mb-6" style={{ color: '#0F0F0F' }}>How It Works</h2>
+              <div className="row g-4">
                 {HOW_IT_WORKS_STEPS.map((step, i) => {
                   const Icon = step.icon;
                   return (
-                    <div key={i} className="text-center">
-                      <div className="w-14 h-14 rounded-full bg-[#ED1C24]/10 flex items-center justify-center mx-auto mb-3">
-                        <Icon className="w-6 h-6 text-[#ED1C24]" />
+                    <div key={i} className="col-12 col-md-4 text-center">
+                      <div className="w-14 h-14 rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style={{ backgroundColor: 'rgba(237, 28, 36, 0.1)' }}>
+                        <Icon size={24} style={{ color: '#ED1C24' }} />
                       </div>
-                      <h3 className="text-sm font-bold text-gray-900 mb-1">{step.title}</h3>
-                      <p className="text-xs text-gray-500 leading-relaxed">{step.description}</p>
+                      <h3 className="text-sm fw-bold mb-1" style={{ color: '#0F0F0F' }}>{step.title}</h3>
+                      <p className="text-xs text-muted leading-relaxed">{step.description}</p>
                     </div>
                   );
                 })}
@@ -479,20 +493,22 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
             </div>
 
             {/* Most Helpful Reviews */}
-            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Most Helpful Reviews</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-8 bg-white rounded-3 border border-gray-200 p-6">
+              <h2 className="fs-5 fw-bold mb-4" style={{ color: '#0F0F0F' }}>Most Helpful Reviews</h2>
+              <div className="row g-3">
                 {REVIEWS.map((review, i) => (
-                  <div key={i} className="border border-gray-100 rounded-lg p-4">
-                    <div className="flex items-center gap-0.5 mb-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <Star key={star} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      ))}
-                    </div>
-                    <p className="text-xs text-gray-600 leading-relaxed mb-3">&ldquo;{review.content}&rdquo;</p>
-                    <div>
-                      <p className="text-xs font-semibold text-gray-900">{review.name}</p>
-                      <p className="text-[10px] text-gray-500">{review.company}</p>
+                  <div key={i} className="col-12 col-md-4">
+                    <div className="border border-gray-100 rounded-3 p-4 h-100">
+                      <div className="d-flex align-items-center gap-1 mb-2">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <Star key={star} size={14} style={{ color: '#f59e0b', fill: '#f59e0b' }} />
+                        ))}
+                      </div>
+                      <p className="text-xs leading-relaxed mb-3" style={{ color: '#4B5563' }}>&ldquo;{review.content}&rdquo;</p>
+                      <div>
+                        <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>{review.name}</p>
+                        <p style={{ fontSize: '0.65rem' }} className="text-muted">{review.company}</p>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -500,32 +516,35 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
             </div>
 
             {/* Related Articles */}
-            <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Related Articles</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="mt-8 bg-white rounded-3 border border-gray-200 p-6">
+              <h2 className="fs-5 fw-bold mb-4" style={{ color: '#0F0F0F' }}>Related Articles</h2>
+              <div className="row g-3">
                 {ARTICLES.map((article, i) => (
-                  <Link key={i} href="#" className="group">
-                    <div className="aspect-[16/9] bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                      <FileText className="w-8 h-8 text-gray-300" />
-                    </div>
-                    <p className="text-[10px] font-semibold text-[#ED1C24] uppercase tracking-wider mb-1">{article.category}</p>
-                    <h3 className="text-sm font-semibold text-gray-900 leading-snug mb-1 group-hover:text-[#ED1C24] transition-colors">{article.title}</h3>
-                    <p className="text-xs text-gray-500 line-clamp-2">{article.excerpt}</p>
-                  </Link>
+                  <div key={i} className="col-12 col-md-4">
+                    <Link href="#" className="group text-decoration-none">
+                      <div className="rounded-3 mb-3 d-flex align-items-center justify-content-center" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, #f3f4f6, #e5e7eb)' }}>
+                        <FileText size={32} style={{ color: '#d1d5db' }} />
+                      </div>
+                      <p className="fw-semibold text-uppercase mb-1" style={{ fontSize: '0.65rem', color: '#ED1C24', letterSpacing: '0.05em' }}>{article.category}</p>
+                      <h3 className="text-sm fw-semibold leading-snug mb-1" style={{ color: '#0F0F0F' }}>{article.title}</h3>
+                      <p className="text-xs text-muted text-truncate">{article.excerpt}</p>
+                    </Link>
+                  </div>
                 ))}
               </div>
             </div>
 
             {/* Let's Talk Business Banner */}
-            <div className="mt-8 bg-[#ED1C24] rounded-lg p-8 text-center">
-              <h2 className="text-xl md:text-2xl font-bold text-white mb-2">Let&apos;s Talk Business</h2>
+            <div className="mt-8 rounded-3 p-8 text-center" style={{ backgroundColor: '#ED1C24' }}>
+              <h2 className="fs-3 fw-bold text-white mb-2">Let&apos;s Talk Business</h2>
               <p className="text-white/80 text-sm mb-4">Get custom quotes for bulk orders. Our team is ready to help you.</p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-[#ED1C24] rounded-lg text-sm font-semibold hover:bg-gray-50 transition-colors"
+                className="d-inline-flex align-items-center gap-2 px-6 py-2 text-sm fw-semibold text-decoration-none rounded-3"
+                style={{ backgroundColor: '#ffffff', color: '#ED1C24' }}
               >
                 Contact Us
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight size={16} />
               </Link>
             </div>
           </div>

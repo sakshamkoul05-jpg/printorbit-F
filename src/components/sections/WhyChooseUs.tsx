@@ -23,11 +23,12 @@ const features = [
 
 export default function WhyChooseUs() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="row align-items-center g-4">
           {/* Left Content */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -39,18 +40,20 @@ export default function WhyChooseUs() {
               align="left"
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+            <div className="row g-3 mt-3">
               {features.map((feature, i) => (
                 <motion.div
                   key={feature}
+                  className="col-12 col-sm-6"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-center gap-3"
                 >
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm text-slate-600">{feature}</span>
+                  <div className="d-flex align-items-center gap-2">
+                    <CheckCircle size={20} className="text-primary flex-shrink-0" />
+                    <span className="text-muted">{feature}</span>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -58,23 +61,26 @@ export default function WhyChooseUs() {
 
           {/* Right - Stats */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="grid grid-cols-2 gap-4">
+            <div className="row g-3">
               {stats.map((stat, i) => (
                 <motion.div
                   key={stat.label}
+                  className="col-6"
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="bg-slate-50 rounded-2xl p-6 text-center hover:bg-primary/5 transition-colors group"
                 >
-                  <stat.icon className="w-8 h-8 text-primary mx-auto mb-3 group-hover:scale-110 transition-transform" />
-                  <div className="text-3xl font-bold font-heading text-dark">{stat.value}</div>
-                  <div className="text-sm text-muted mt-1">{stat.label}</div>
+                  <div className="bg-slate-50 rounded-4 p-4 text-center">
+                    <stat.icon size={32} className="text-primary mx-auto mb-2" />
+                    <div className="fs-2 fw-bold font-heading text-dark">{stat.value}</div>
+                    <div className="text-muted mt-1">{stat.label}</div>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -85,13 +91,14 @@ export default function WhyChooseUs() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="mt-6 bg-primary/5 rounded-2xl p-6"
+              className="mt-4 rounded-4 p-4"
+              style={{ backgroundColor: 'rgba(var(--bs-primary-rgb), 0.05)' }}
             >
-              <div className="flex items-center gap-3">
-                <Shield className="w-8 h-8 text-primary" />
+              <div className="d-flex align-items-center gap-3">
+                <Shield size={32} className="text-primary" />
                 <div>
-                  <h4 className="font-semibold font-heading text-dark">100% Quality Guarantee</h4>
-                  <p className="text-sm text-muted">If you&apos;re not satisfied, we&apos;ll reprint for free</p>
+                  <h4 className="fw-semibold font-heading text-dark mb-0">100% Quality Guarantee</h4>
+                  <p className="text-muted mb-0">If you&apos;re not satisfied, we&apos;ll reprint for free</p>
                 </div>
               </div>
             </motion.div>

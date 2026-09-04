@@ -113,22 +113,23 @@ export default function MockupGeneratorPage() {
   const canExport = selectedMockup && artworkDataUrl && artworkState && metadata && !isExporting;
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-vh-100" style={{ backgroundColor: '#0f172a' }}>
       {/* Header */}
-      <div className="bg-slate-800 border-b border-slate-700">
+      <div style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
         <Container>
-          <div className="py-4 flex items-center justify-between flex-wrap gap-3">
+          <div className="py-4 d-flex align-items-center justify-content-between flex-wrap gap-3">
             <div>
-              <Link href="/" className="text-xs text-blue-400 hover:underline mb-1 inline-block">
+              <Link href="/" className="text-xs text-primary hover-underline mb-1 d-inline-block">
                 ← Back to Home
               </Link>
-              <h1 className="text-xl md:text-2xl font-bold text-white font-heading">Mockup Generator</h1>
-              <p className="text-xs text-slate-400 mt-0.5">Place your design on photorealistic product mockups</p>
+              <h1 className="text-xl text-md-2xl fw-bold text-white font-heading">Mockup Generator</h1>
+              <p className="text-xs mt-1" style={{ color: '#94a3b8' }}>Place your design on photorealistic product mockups</p>
             </div>
             {canExport && (
               <button onClick={handleExport}
-                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-xl transition-colors shadow-lg shadow-blue-600/20 flex items-center gap-2">
-                <Download className="w-4 h-4" />
+                className="px-5 py-2 bg-primary text-white text-xs fw-medium rounded-xl shadow-lg d-flex align-items-center gap-2"
+                style={{ boxShadow: '0 10px 15px -3px rgba(59, 130, 246, 0.2)' }}>
+                <Download size={16} />
                 {isExporting ? 'Exporting...' : 'Export Mockup'}
               </button>
             )}
@@ -137,36 +138,36 @@ export default function MockupGeneratorPage() {
       </div>
 
       <Container>
-        <div className="py-6 flex flex-col xl:flex-row gap-6">
+        <div className="py-6 d-flex flex-column flex-xl-row gap-4">
           {/* Left sidebar */}
-          <div className="w-full xl:w-64 shrink-0 space-y-4">
+          <div className="w-100 d-flex flex-column gap-4" style={{ maxWidth: '256px' }}>
             <MockupSelector
               selectedId={selectedMockup}
               onSelect={setSelectedMockup}
             />
 
             {selectedMockup && (
-              <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-                <p className="text-xs font-bold text-slate-300 mb-3 uppercase tracking-wider">Artwork</p>
+              <div className="rounded-xl p-4" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+                <p className="text-xs fw-bold text-uppercase tracking-wider mb-3" style={{ color: '#cbd5e1' }}>Artwork</p>
                 {artworkDataUrl ? (
                   <div>
-                    <div className="bg-slate-700 rounded-lg p-2 mb-2">
-                      <img src={artworkDataUrl} alt="Artwork preview" className="w-full h-20 object-contain rounded" />
+                    <div className="rounded-lg p-2 mb-2" style={{ backgroundColor: '#334155' }}>
+                      <img src={artworkDataUrl} alt="Artwork preview" className="w-100 rounded" style={{ height: '80px', objectFit: 'contain' }} />
                     </div>
-                    <div className="flex items-center gap-1 text-[10px] text-slate-500">
+                    <div className="d-flex align-items-center gap-1" style={{ fontSize: '10px', color: '#64748b' }}>
                       {artworkFile && <span>{artworkFile.name}</span>}
                     </div>
                     <button onClick={() => { setArtworkDataUrl(null); setArtworkFile(null); setArtworkState(null); }}
-                      className="mt-2 text-[10px] text-red-400 hover:text-red-300">Remove</button>
+                      className="mt-2 text-danger" style={{ fontSize: '10px' }}>Remove</button>
                   </div>
                 ) : (
-                  <label className="block">
-                    <div className="border-2 border-dashed border-slate-600 rounded-xl p-4 text-center cursor-pointer hover:border-slate-500 transition-colors">
-                      <ImageIcon className="w-6 h-6 mx-auto mb-1.5 text-slate-500" />
-                      <p className="text-[11px] text-slate-400">Upload your design</p>
-                      <p className="text-[9px] text-slate-600 mt-0.5">PNG, JPG, WebP</p>
+                  <label className="d-block">
+                    <div className="border-2 border-dashed rounded-xl p-4 text-center cursor-pointer" style={{ borderColor: '#475569' }}>
+                      <ImageIcon size={24} className="mx-auto mb-2" style={{ color: '#64748b' }} />
+                      <p style={{ fontSize: '11px', color: '#94a3b8' }}>Upload your design</p>
+                      <p className="mt-1" style={{ fontSize: '9px', color: '#475569' }}>PNG, JPG, WebP</p>
                     </div>
-                    <input id="artwork-upload" type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFileUpload} className="hidden" />
+                    <input id="artwork-upload" type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFileUpload} className="d-none" />
                   </label>
                 )}
               </div>
@@ -182,7 +183,7 @@ export default function MockupGeneratorPage() {
           </div>
 
           {/* Main canvas */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-grow-1" style={{ minWidth: 0 }}>
             {selectedMockup && metadata && (
               <CustomerEditor
                 mockupId={selectedMockup}
@@ -194,29 +195,29 @@ export default function MockupGeneratorPage() {
             )}
 
             {selectedMockup && metadataLoading && (
-              <div className="bg-slate-800 rounded-xl border border-slate-700 p-12 text-center">
-                <p className="text-xs text-slate-400">Loading mockup data...</p>
+              <div className="rounded-xl p-12 text-center" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+                <p className="text-xs" style={{ color: '#94a3b8' }}>Loading mockup data...</p>
               </div>
             )}
 
             {selectedMockup && metadataError && (
-              <div className="bg-slate-800 rounded-xl border border-red-800/50 p-12 text-center">
-                <AlertTriangle className="w-8 h-8 mx-auto mb-2 text-red-400" />
-                <p className="text-xs text-red-400 mb-1">Failed to load mockup</p>
-                <p className="text-[10px] text-slate-500">No metadata.json found at <code className="text-blue-400">/mockups/{selectedMockup}/</code></p>
-                <p className="text-[10px] text-slate-600 mt-1">Create one with the <Link href="/admin/mockup-editor" className="text-blue-400 hover:underline">Admin Editor</Link></p>
+              <div className="rounded-xl p-12 text-center" style={{ backgroundColor: '#1e293b', border: '1px solid rgba(239, 68, 68, 0.5)' }}>
+                <AlertTriangle size={32} className="mx-auto mb-2 text-danger" />
+                <p className="text-xs text-danger mb-1">Failed to load mockup</p>
+                <p style={{ fontSize: '10px', color: '#64748b' }}>No metadata.json found at <code className="text-primary">/mockups/{selectedMockup}/</code></p>
+                <p className="mt-1" style={{ fontSize: '10px', color: '#475569' }}>Create one with the <Link href="/admin/mockup-editor" className="text-primary hover-underline">Admin Editor</Link></p>
               </div>
             )}
 
             {!selectedMockup && (
-              <div className="bg-slate-800 rounded-xl border border-slate-700 p-12 flex flex-col items-center justify-center text-center">
-                <div className="w-16 h-16 bg-slate-700 rounded-2xl flex items-center justify-center mb-4">
-                  <svg className="w-8 h-8 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="rounded-xl p-12 d-flex flex-column align-items-center justify-content-center text-center" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+                <div className="rounded-2xl d-flex align-items-center justify-content-center mb-4" style={{ width: '64px', height: '64px', backgroundColor: '#334155' }}>
+                  <svg style={{ width: '32px', height: '32px', color: '#64748b' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
                 </div>
-                <h3 className="text-sm font-bold text-white mb-1">Select a Mockup</h3>
-                <p className="text-xs text-slate-400 max-w-xs">Pick a product from the sidebar, upload your design, and position it on the mockup canvas.</p>
+                <h3 className="text-sm fw-bold text-white mb-1">Select a Mockup</h3>
+                <p className="text-xs" style={{ color: '#94a3b8', maxWidth: '400px' }}>Pick a product from the sidebar, upload your design, and position it on the mockup canvas.</p>
               </div>
             )}
           </div>

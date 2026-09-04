@@ -16,7 +16,6 @@ import type { MegaMenuTab } from '@/lib/constants';
 import Logo from '@/components/ui/Logo';
 import { useCartStore } from '@/store/cart';
 import { useAuthStore } from '@/store/auth';
-import Container from '@/components/ui/Container';
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -61,99 +60,94 @@ export default function Header() {
 
   return (
     <>
-      {/* Top Header Bar */}
-      <header className="sticky top-0 z-50 bg-white border-b border-gray-200">
-        <Container>
-          <div className="flex items-center gap-3 h-16">
-            {/* Mobile hamburger */}
+      <header className="sticky-top bg-color border-bottom" style={{ zIndex: 50 }}>
+        <div className="container">
+          <div className="d-flex align-items-center gap-3" style={{ height: '64px' }}>
             <button
-              className="xl:hidden p-2 -ml-2 text-gray-600 hover:text-[#ED1C24] transition-colors"
+              className="d-xl-none btn p-2"
+              style={{ marginLeft: '-0.5rem', color: '#6c757d' }}
               onClick={() => setMobileOpen(!mobileOpen)}
               aria-label="Toggle menu"
             >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
 
-            {/* Logo */}
-            <Link href="/" className="shrink-0">
+            <Link href="/" className="flex-shrink-0 text-decoration-none">
               <Logo size="md" />
             </Link>
 
-            {/* Search Bar - Desktop */}
-            <div className="hidden lg:flex flex-1 max-w-2xl mx-auto">
-              <form onSubmit={handleSearch} className="w-full">
-                <div className="flex items-center border border-gray-300 rounded-sm hover:border-gray-400 transition-colors">
+            <div className="d-none d-lg-flex flex-fill mx-auto" style={{ maxWidth: '42rem' }}>
+              <form onSubmit={handleSearch} className="w-100">
+                <div className="d-flex align-items-center border rounded-sm" style={{ borderColor: '#dee2e6' }}>
                   <input
                     type="text"
                     placeholder="Product and something awesome..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400 w-full py-2.5 px-4"
+                    className="form-control border-0 bg-transparent"
+                    style={{ boxShadow: 'none', fontSize: '0.875rem' }}
                   />
-                  <button
-                    type="submit"
-                    className="px-4 py-2.5 text-gray-500 hover:text-[#ED1C24] transition-colors"
-                    aria-label="Search"
-                  >
-                    <Search className="w-5 h-5" />
+                  <button type="submit" className="btn px-3" style={{ color: '#6c757d' }} aria-label="Search">
+                    <Search size={20} />
                   </button>
                 </div>
               </form>
             </div>
 
-            {/* Right Actions */}
-            <div className="flex items-center gap-1 shrink-0">
-              {/* Mobile search */}
-              <Link
-                href="/products"
-                className="lg:hidden p-2 text-gray-500 hover:text-[#ED1C24] transition-colors"
-              >
-                <Search className="w-5 h-5" />
+            <div className="d-flex align-items-center gap-1 flex-shrink-0">
+              <Link href="/products" className="d-lg-none btn p-2" style={{ color: '#6c757d' }}>
+                <Search size={20} />
               </Link>
 
-              {/* Support */}
               <Link
                 href="/contact"
-                className="hidden md:flex items-center gap-1.5 px-3 py-2 text-sm text-gray-600 hover:text-[#ED1C24] transition-colors rounded hover:bg-gray-50"
+                className="d-none d-md-flex align-items-center gap-1 btn btn-sm"
+                style={{ color: '#6c757d', textDecoration: 'none' }}
               >
-                <Headphones className="w-4 h-4" />
-                <span className="hidden lg:inline">Support</span>
+                <Headphones size={16} />
+                <span className="d-none d-lg-inline">Support</span>
               </Link>
 
-              {/* Cart */}
               <Link
                 href="/cart"
-                className="flex items-center gap-1.5 px-3 py-2 text-sm text-gray-600 hover:text-[#ED1C24] transition-colors rounded hover:bg-gray-50 relative"
+                className="d-flex align-items-center gap-1 btn btn-sm position-relative"
+                style={{ color: '#6c757d', textDecoration: 'none' }}
               >
-                <ShoppingCart className="w-5 h-5" />
-                <span className="hidden sm:inline">Cart</span>
+                <ShoppingCart size={20} />
+                <span className="d-none d-sm-inline">Cart</span>
                 {itemCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-[#ED1C24] text-white text-[10px] font-bold rounded-full flex items-center justify-center px-1">
+                  <span
+                    className="position-absolute text-white rounded-circle d-flex align-items-center justify-content-center"
+                    style={{
+                      top: '-2px', right: '-2px', minWidth: '18px', height: '18px',
+                      fontSize: '10px', fontWeight: 700, backgroundColor: '#ED1C24', padding: '0 4px'
+                    }}
+                  >
                     {itemCount > 99 ? '99+' : itemCount}
                   </span>
                 )}
               </Link>
 
-              {/* Login */}
               <Link
                 href={user ? '/account' : '/auth/login'}
-                className="hidden sm:flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-600 hover:text-[#ED1C24] transition-colors rounded hover:bg-gray-50"
+                className="d-none d-sm-flex align-items-center gap-1 btn btn-sm"
+                style={{ color: '#6c757d', fontWeight: 500, textDecoration: 'none' }}
               >
-                <User className="w-4 h-4" />
+                <User size={16} />
                 <span>Login</span>
               </Link>
             </div>
           </div>
-        </Container>
+        </div>
 
-        {/* Navigation Bar - Desktop */}
         <div
           ref={navRef}
-          className="hidden xl:block border-t border-gray-100 bg-white"
+          className="d-none d-xl-block border-top"
+          style={{ borderColor: '#f8f9fa', backgroundColor: '#fff' }}
           onMouseLeave={handleNavLeave}
         >
-          <Container>
-            <nav className="flex items-center gap-0 overflow-x-auto scrollbar-hide">
+          <div className="container">
+            <nav className="d-flex align-items-center overflow-auto scrollbar-hide">
               {MEGA_MENU_DATA.map((tab) => {
                 const isActive = activeDropdown === tab.id;
                 return (
@@ -161,161 +155,169 @@ export default function Header() {
                     key={tab.id}
                     onMouseEnter={() => handleNavEnter(tab.id)}
                     onClick={() => setActiveDropdown(isActive ? null : tab.id)}
-                    className={`px-4 py-3 text-sm font-medium whitespace-nowrap transition-colors border-b-2 ${
-                      isActive
-                        ? 'text-[#ED1C24] border-[#ED1C24]'
-                        : 'text-gray-600 hover:text-[#ED1C24] border-transparent hover:border-[#ED1C24]'
-                    }`}
+                    className="btn btn-sm text-nowrap"
+                    style={{
+                      padding: '12px 16px', fontSize: '0.875rem', fontWeight: 500,
+                      color: isActive ? '#ED1C24' : '#6c757d',
+                      borderBottom: `2px solid ${isActive ? '#ED1C24' : 'transparent'}`,
+                      background: 'none', border: 'none',
+                      borderBottomWidth: '2px', borderBottomStyle: 'solid',
+                      borderBottomColor: isActive ? '#ED1C24' : 'transparent',
+                    }}
                   >
                     {tab.label}
                     <ChevronDown
-                      className={`inline-block w-3.5 h-3.5 ml-1 transition-transform ${
-                        isActive ? 'rotate-180' : ''
-                      }`}
+                      size={14}
+                      className="ms-1"
+                      style={{
+                        display: 'inline-block',
+                        transition: 'transform 0.2s',
+                        transform: isActive ? 'rotate(180deg)' : 'rotate(0deg)',
+                      }}
                     />
                   </button>
                 );
               })}
             </nav>
-          </Container>
+          </div>
         </div>
 
-        {/* Mega Menu Dropdown */}
         {activeTab && (
           <div
-            className="hidden xl:block border-t border-gray-200 bg-white shadow-lg"
+            className="d-none d-xl-block border-top shadow-lg"
+            style={{ borderColor: '#dee2e6', backgroundColor: '#fff' }}
             onMouseEnter={() => handleNavEnter(activeTab.id)}
             onMouseLeave={handleNavLeave}
           >
-            <Container>
-              <div className="py-6">
-                <div className="grid grid-cols-4 gap-8">
-                  {activeTab.categories.map((cat) => (
-                    <div key={cat.slug}>
-                      <Link
-                        href={`/products/${cat.slug}`}
-                        className="text-sm font-bold text-gray-900 hover:text-[#ED1C24] transition-colors block mb-3"
-                      >
-                        {cat.name}
-                      </Link>
-                      <ul className="space-y-1.5">
-                        {cat.items.map((item) => (
-                          <li key={item.slug}>
-                            <Link
-                              href={`/products/${item.slug}`}
-                              className="text-sm text-gray-500 hover:text-[#ED1C24] transition-colors block"
-                            >
-                              {item.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
-                </div>
+            <div className="container py-4">
+              <div className="row g-4" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+                {activeTab.categories.map((cat) => (
+                  <div key={cat.slug}>
+                    <Link
+                      href={`/products/${cat.slug}`}
+                      className="d-block mb-2 text-decoration-none"
+                      style={{ fontSize: '0.875rem', fontWeight: 700, color: '#212529' }}
+                    >
+                      {cat.name}
+                    </Link>
+                    <ul className="list-unstyled">
+                      {cat.items.map((item) => (
+                        <li key={item.slug} className="mb-1">
+                          <Link
+                            href={`/products/${item.slug}`}
+                            className="text-decoration-none d-block"
+                            style={{ fontSize: '0.875rem', color: '#6c757d' }}
+                          >
+                            {item.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            </Container>
+            </div>
           </div>
         )}
       </header>
 
-      {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="xl:hidden bg-white border-b border-gray-200 fixed inset-x-0 top-16 z-40 max-h-[calc(100vh-4rem)] overflow-y-auto">
-          <Container>
-            <div className="py-4 space-y-1">
-              {/* Mobile search */}
-              <form onSubmit={handleSearch} className="mb-4">
-                <div className="flex items-center border border-gray-300 rounded-sm">
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-transparent outline-none text-sm text-gray-800 placeholder:text-gray-400 w-full py-2.5 px-4"
-                  />
-                  <button
-                    type="submit"
-                    className="px-4 py-2.5 text-gray-500"
-                    aria-label="Search"
-                  >
-                    <Search className="w-5 h-5" />
-                  </button>
-                </div>
-              </form>
-
-              {/* Mobile categories accordion */}
-              {MEGA_MENU_DATA.map((tab) => (
-                <div key={tab.id}>
-                  <button
-                    className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded transition-colors"
-                    onClick={() =>
-                      setMobileAccordion(mobileAccordion === tab.id ? null : tab.id)
-                    }
-                  >
-                    <span>{tab.label}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 text-gray-400 transition-transform ${
-                        mobileAccordion === tab.id ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-                  {mobileAccordion === tab.id && (
-                    <div className="pl-4 pb-2 space-y-3">
-                      {tab.categories.map((cat) => (
-                        <div key={cat.slug}>
-                          <Link
-                            href={`/products/${cat.slug}`}
-                            className="block px-3 py-1.5 text-xs font-semibold text-gray-500 uppercase tracking-wider"
-                            onClick={() => setMobileOpen(false)}
-                          >
-                            {cat.name}
-                          </Link>
-                          <div className="space-y-0.5">
-                            {cat.items.map((item) => (
-                              <Link
-                                key={item.slug}
-                                href={`/products/${item.slug}`}
-                                className="block px-3 py-1.5 text-sm text-gray-600 hover:text-[#ED1C24]"
-                                onClick={() => setMobileOpen(false)}
-                              >
-                                {item.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-
-              <hr className="border-gray-100 my-3" />
-
-              {/* Quick links */}
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block px-3 py-2.5 text-sm font-medium text-gray-600 hover:text-[#ED1C24] hover:bg-gray-50 rounded transition-colors"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
-
-              <div className="pt-4 pb-6 space-y-2">
-                <Link
-                  href={user ? '/account' : '/auth/login'}
-                  onClick={() => setMobileOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium border border-gray-300 text-gray-700 hover:bg-gray-50 rounded transition-colors"
-                >
-                  <User className="w-4 h-4" />
-                  {user ? 'My Account' : 'Login'}
-                </Link>
+        <div
+          className="d-xl-none bg-white border-bottom position-fixed start-0 end-0 overflow-auto"
+          style={{ top: '64px', zIndex: 40, maxHeight: 'calc(100vh - 64px)' }}
+        >
+          <div className="container py-3">
+            <form onSubmit={handleSearch} className="mb-3">
+              <div className="d-flex align-items-center border rounded-sm" style={{ borderColor: '#dee2e6' }}>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="form-control border-0 bg-transparent"
+                  style={{ boxShadow: 'none', fontSize: '0.875rem' }}
+                />
+                <button type="submit" className="btn px-3" style={{ color: '#6c757d' }} aria-label="Search">
+                  <Search size={20} />
+                </button>
               </div>
+            </form>
+
+            {MEGA_MENU_DATA.map((tab) => (
+              <div key={tab.id}>
+                <button
+                  className="btn w-100 d-flex align-items-center justify-content-between py-2"
+                  style={{ fontSize: '0.875rem', fontWeight: 500, color: '#495057' }}
+                  onClick={() => setMobileAccordion(mobileAccordion === tab.id ? null : tab.id)}
+                >
+                  <span>{tab.label}</span>
+                  <ChevronDown
+                    size={16}
+                    style={{
+                      color: '#adb5bd',
+                      transition: 'transform 0.2s',
+                      transform: mobileAccordion === tab.id ? 'rotate(180deg)' : 'rotate(0deg)',
+                    }}
+                  />
+                </button>
+                {mobileAccordion === tab.id && (
+                  <div className="ps-3 pb-2">
+                    {tab.categories.map((cat) => (
+                      <div key={cat.slug}>
+                        <Link
+                          href={`/products/${cat.slug}`}
+                          className="d-block px-3 py-1 text-decoration-none"
+                          style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                          onClick={() => setMobileOpen(false)}
+                        >
+                          {cat.name}
+                        </Link>
+                        <div>
+                          {cat.items.map((item) => (
+                            <Link
+                              key={item.slug}
+                              href={`/products/${item.slug}`}
+                              className="d-block px-3 py-1 text-decoration-none"
+                              style={{ fontSize: '0.875rem', color: '#6c757d' }}
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+
+            <hr className="my-3" />
+
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="d-block px-3 py-2 text-decoration-none"
+                style={{ fontSize: '0.875rem', fontWeight: 500, color: '#6c757d' }}
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
+
+            <div className="pt-3 pb-4">
+              <Link
+                href={user ? '/account' : '/auth/login'}
+                onClick={() => setMobileOpen(false)}
+                className="d-flex align-items-center justify-content-center gap-2 w-100 btn btn-outline-secondary"
+                style={{ fontSize: '0.875rem', fontWeight: 500 }}
+              >
+                <User size={16} />
+                {user ? 'My Account' : 'Login'}
+              </Link>
             </div>
-          </Container>
+          </div>
         </div>
       )}
     </>

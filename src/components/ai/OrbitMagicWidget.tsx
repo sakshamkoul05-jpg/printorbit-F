@@ -85,26 +85,22 @@ export default function OrbitMagicWidget() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  // Listen for navbar toggle
   useEffect(() => {
     const handleToggle = () => setIsOpen((prev) => !prev);
     window.addEventListener('toggle-orbit-magic', handleToggle);
     return () => window.removeEventListener('toggle-orbit-magic', handleToggle);
   }, []);
 
-  // Notification bubble
   useEffect(() => {
     if (hasNotified) return;
     const t = setTimeout(() => setHasNotified(true), 3000);
     return () => clearTimeout(t);
   }, [hasNotified]);
 
-  // Auto-scroll chat
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  // Draw preview on canvas
   const drawPreview = useCallback((design: { backgroundColor: string; elements: CanvasElement[] }) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -116,11 +112,9 @@ export default function OrbitMagicWidget() {
     canvas.width = w;
     canvas.height = h;
 
-    // Background
     ctx.fillStyle = design.backgroundColor;
     ctx.fillRect(0, 0, w, h);
 
-    // Elements
     design.elements.forEach((el) => {
       ctx.save();
       ctx.globalAlpha = el.opacity;
@@ -163,7 +157,6 @@ export default function OrbitMagicWidget() {
         const fw = el.fontWeight === 'bold' ? 'bold' : 'normal';
         ctx.font = `${fw} ${fs}px ${el.fontFamily || 'Inter'}, sans-serif`;
         ctx.textBaseline = 'top';
-        // Word wrap for longer text
         const maxWidth = el.width || 600;
         const words = el.text.split(' ');
         let line = '';
@@ -202,10 +195,7 @@ export default function OrbitMagicWidget() {
     setView('preview');
 
     try {
-      // AI generates content + layout/style choices
       const result = await aiAPI.generateContent(prompt, selectedProduct.width, selectedProduct.height, selectedProduct.id);
-
-      // Design engine calculates ALL positions using template system
       const design = generateLayout(
         result.layout || 'centered',
         result.style || selectedStyle.id,
@@ -214,17 +204,13 @@ export default function OrbitMagicWidget() {
         selectedProduct.height,
         selectedProduct.id,
       );
-
       setGeneratedDesign(design);
-
-      // Update selected style to match AI choice
       const aiStyle = STYLE_TO_PALETTE[result.style || selectedStyle.id];
       if (aiStyle) {
         const preset = STYLE_PRESETS.find(s => s.id === result.style);
         if (preset) setSelectedStyle(preset);
       }
     } catch {
-      // Fallback: generate with current selections
       const fallbackContent = {
         title: 'YOUR DESIGN',
         subtitle: prompt.slice(0, 60),
@@ -255,29 +241,28 @@ export default function OrbitMagicWidget() {
 
   return (
     <>
-      {/* Floating Mascot Button */}
       {!isOpen && (
         <motion.button
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 1, type: 'spring', stiffness: 200 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-50 group"
+          className="position-fixed border-0 p-0"
+          style={{ bottom: '1.5rem', right: '1.5rem', zIndex: 50, background: 'transparent' }}
           aria-label="Open Orbit Magic"
         >
-          <span className="absolute inset-0 rounded-full bg-gradient-to-r from-primary to-accent opacity-20 animate-ping" />
-          <span className="relative flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-primary via-primary-dark to-accent shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 transition-all duration-300 hover:scale-110">
-            <Image src="/mascot-orbit.svg" alt="Orbit Magic" width={44} height={44} className="drop-shadow-lg" />
+          <span className="position-absolute rounded-circle" style={{ inset: 0, background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), #6f42c1)', opacity: 0.2, animation: 'ping 1s cubic-bezier(0,0,0.2,1) infinite' }} />
+          <span className="position-relative d-flex align-items-center justify-content-center rounded-circle" style={{ width: '4rem', height: '4rem', background: 'linear-gradient(to bottom right, var(--bs-primary, #0d6efd), #6f42c1)', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', transition: 'all 0.3s', transform: 'scale(1)' }}>
+            <Image src="/mascot-orbit.svg" alt="Orbit Magic" width={44} height={44} style={{ filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.1))' }} />
           </span>
           {!isOpen && hasNotified && (
-            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute -top-1 -right-1 flex items-center justify-center w-6 h-6 bg-accent text-white text-[10px] font-bold rounded-full shadow-lg">
-              <Sparkles className="w-3 h-3" />
+            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} className="position-absolute d-flex align-items-center justify-content-center rounded-circle" style={{ top: '-0.25rem', right: '-0.25rem', width: '1.5rem', height: '1.5rem', backgroundColor: '#6f42c1', color: 'var(--bs-white)', fontSize: '10px', fontWeight: 700, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}>
+              <Sparkles size={12} />
             </motion.span>
           )}
         </motion.button>
       )}
 
-      {/* Main Widget Panel */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -285,67 +270,65 @@ export default function OrbitMagicWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-6 right-6 z-50 w-[420px] max-w-[calc(100vw-2rem)] h-[640px] max-h-[calc(100vh-3rem)] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden"
+            className="position-fixed d-flex flex-column overflow-hidden"
+            style={{ bottom: '1.5rem', right: '1.5rem', zIndex: 50, width: '420px', maxWidth: 'calc(100vw - 2rem)', height: '640px', maxHeight: 'calc(100vh - 3rem)', backgroundColor: 'var(--bs-white)', borderRadius: '1rem', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '1px solid rgba(226,232,240,0.8)' }}
           >
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-primary via-primary-dark to-accent px-5 py-4 flex items-center justify-between shrink-0 overflow-hidden">
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-2 right-8 w-20 h-20 rounded-full border border-white/30" />
-                <div className="absolute -bottom-4 right-20 w-16 h-16 rounded-full border border-white/20" />
-                <div className="absolute top-1 right-32 w-8 h-8 rounded-full border border-white/20" />
+            <div className="position-relative d-flex align-items-center justify-content-between px-4 py-3" style={{ background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), var(--bs-primary, #0d6efd), #6f42c1)', flexShrink: 0, overflow: 'hidden' }}>
+              <div className="position-absolute" style={{ inset: 0, opacity: 0.1 }}>
+                <div className="position-absolute rounded-circle" style={{ top: '0.5rem', right: '2rem', width: '5rem', height: '5rem', border: '1px solid rgba(255,255,255,0.3)' }} />
+                <div className="position-absolute rounded-circle" style={{ bottom: '-1rem', right: '5rem', width: '4rem', height: '4rem', border: '1px solid rgba(255,255,255,0.2)' }} />
+                <div className="position-absolute rounded-circle" style={{ top: '0.25rem', right: '8rem', width: '2rem', height: '2rem', border: '1px solid rgba(255,255,255,0.2)' }} />
               </div>
-              <div className="flex items-center gap-3 relative z-10">
-                <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center border border-white/20">
+              <div className="d-flex align-items-center gap-2 position-relative" style={{ zIndex: 10 }}>
+                <div className="d-flex align-items-center justify-content-center rounded-3" style={{ width: '2.75rem', height: '2.75rem', backgroundColor: 'rgba(255,255,255,0.2)', backdropFilter: 'blur(4px)', border: '1px solid rgba(255,255,255,0.2)' }}>
                   <Image src="/mascot-orbit.svg" alt="Orbit Magic" width={32} height={32} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
+                  <h3 className="d-flex align-items-center gap-1 mb-0" style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--bs-white)' }}>
                     Orbit Magic
-                    <span className="px-1.5 py-0.5 bg-accent/80 text-[9px] font-bold rounded-full text-white">AI</span>
+                    <span className="d-inline-block text-center" style={{ padding: '0.125rem 0.375rem', backgroundColor: 'rgba(111,66,193,0.8)', fontSize: '9px', fontWeight: 700, borderRadius: '9999px', color: 'var(--bs-white)' }}>AI</span>
                   </h3>
-                  <p className="text-[11px] text-white/70">Design Studio Assistant</p>
+                  <p className="mb-0" style={{ fontSize: '0.6875rem', color: 'rgba(255,255,255,0.7)' }}>Design Studio Assistant</p>
                 </div>
               </div>
-              <div className="flex items-center gap-1 relative z-10">
+              <div className="d-flex align-items-center gap-1 position-relative" style={{ zIndex: 10 }}>
                 {view !== 'home' && (
-                  <button onClick={() => setView('home')} className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-colors" title="Back to home">
-                    <RefreshCw className="w-4 h-4" />
+                  <button onClick={() => setView('home')} className="btn p-2" style={{ color: 'rgba(255,255,255,0.7)', borderRadius: '0.75rem', transition: 'color 0.15s' }} title="Back to home">
+                    <RefreshCw size={16} />
                   </button>
                 )}
-                <button onClick={() => setIsOpen(false)} className="p-2 text-white/70 hover:text-white hover:bg-white/10 rounded-xl transition-colors">
-                  <X className="w-4 h-4" />
+                <button onClick={() => setIsOpen(false)} className="btn p-2" style={{ color: 'rgba(255,255,255,0.7)', borderRadius: '0.75rem', transition: 'color 0.15s' }}>
+                  <X size={16} />
                 </button>
               </div>
             </div>
 
             {/* Content Area */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-fill overflow-y-auto">
               <AnimatePresence mode="wait">
-                {/* HOME VIEW */}
                 {view === 'home' && (
-                  <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-5 space-y-5">
-                    {/* Hero CTA */}
-                    <div className="relative bg-gradient-to-br from-primary/5 via-accent/5 to-primary/5 rounded-2xl p-4 border border-primary/10">
-                      <div className="flex items-start gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 shadow-lg shadow-primary/20">
-                          <Wand2 className="w-5 h-5 text-white" />
+                  <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="d-flex flex-column gap-4 p-4">
+                    <div className="position-relative rounded-3 p-3" style={{ background: 'linear-gradient(to bottom right, rgba(13,110,253,0.05), rgba(111,66,193,0.05), rgba(13,110,253,0.05))', border: '1px solid rgba(13,110,253,0.1)' }}>
+                      <div className="d-flex align-items-start gap-2">
+                        <div className="d-flex align-items-center justify-content-center rounded-3 shrink-0" style={{ width: '2.5rem', height: '2.5rem', background: 'linear-gradient(to bottom right, var(--bs-primary, #0d6efd), #6f42c1)', boxShadow: '0 10px 15px -3px rgba(13,110,253,0.2)' }}>
+                          <Wand2 size={20} style={{ color: 'var(--bs-white)' }} />
                         </div>
-                        <div className="flex-1">
-                          <h4 className="text-sm font-bold text-slate-800">AI Design Generator</h4>
-                          <p className="text-xs text-slate-500 mt-0.5">Describe your vision, get a print-ready design in seconds</p>
+                        <div className="flex-fill">
+                          <h4 className="mb-0" style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1e293b' }}>AI Design Generator</h4>
+                          <p className="mb-0 mt-1" style={{ fontSize: '0.75rem', color: '#64748b' }}>Describe your vision, get a print-ready design in seconds</p>
                         </div>
                       </div>
-                      <button onClick={() => setView('generate')} className="mt-3 w-full py-2.5 bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-primary/20 transition-all flex items-center justify-center gap-2">
-                        <Sparkles className="w-4 h-4" />
+                      <button onClick={() => setView('generate')} className="mt-2 w-100 d-flex align-items-center justify-content-center gap-2 btn" style={{ padding: '0.625rem', background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), var(--bs-primary, #0d6efd))', color: 'var(--bs-white)', fontSize: '0.875rem', fontWeight: 600, borderRadius: '0.75rem', border: 'none', transition: 'box-shadow 0.15s' }}>
+                        <Sparkles size={16} />
                         Start Designing
-                        <ArrowRight className="w-4 h-4" />
+                        <ArrowRight size={16} />
                       </button>
                     </div>
 
-                    {/* Quick Design Actions */}
                     <div>
-                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Quick Designs</h4>
-                      <div className="grid grid-cols-2 gap-2">
+                      <h4 className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quick Designs</h4>
+                      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
                         {QUICK_DESIGNS.map((qd) => (
                           <button
                             key={qd.label}
@@ -355,84 +338,88 @@ export default function OrbitMagicWidget() {
                               setPrompt(qd.prompt);
                               setView('generate');
                             }}
-                            className="group p-3 bg-slate-50 hover:bg-primary/5 rounded-xl border border-slate-100 hover:border-primary/20 transition-all text-left"
+                            className="group text-start btn"
+                            style={{ padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '0.75rem', border: '1px solid #f1f5f9', transition: 'all 0.15s' }}
                           >
-                            <span className="text-lg">{PRODUCT_TEMPLATES.find((p) => p.id === qd.product)?.icon}</span>
-                            <p className="text-xs font-semibold text-slate-700 mt-1 group-hover:text-primary transition-colors">{qd.label}</p>
+                            <span style={{ fontSize: '1.125rem' }}>{PRODUCT_TEMPLATES.find((p) => p.id === qd.product)?.icon}</span>
+                            <p className="mb-0 mt-1" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155', transition: 'color 0.15s' }}>{qd.label}</p>
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Product Templates */}
                     <div>
-                      <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Product Templates</h4>
-                      <div className="space-y-1.5">
+                      <h4 className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Product Templates</h4>
+                      <div className="d-flex flex-column" style={{ gap: '0.375rem' }}>
                         {PRODUCT_TEMPLATES.slice(0, 6).map((pt) => (
                           <button
                             key={pt.id}
                             onClick={() => { setSelectedProduct(pt); setView('generate'); }}
-                            className="w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-slate-50 transition-all group"
+                            className="w-100 d-flex align-items-center gap-2 btn"
+                            style={{ padding: '0.625rem', borderRadius: '0.75rem', transition: 'all 0.15s' }}
                           >
-                            <span className="text-xl w-8 text-center">{pt.icon}</span>
-                            <div className="flex-1 text-left">
-                              <p className="text-xs font-semibold text-slate-700 group-hover:text-primary transition-colors">{pt.name}</p>
-                              <p className="text-[10px] text-slate-400">{pt.description}</p>
+                            <span className="d-inline-block text-center" style={{ fontSize: '1.25rem', width: '2rem' }}>{pt.icon}</span>
+                            <div className="flex-fill text-start">
+                              <p className="mb-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155' }}>{pt.name}</p>
+                              <p className="mb-0" style={{ fontSize: '10px', color: '#94a3b8' }}>{pt.description}</p>
                             </div>
-                            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-primary transition-colors" />
+                            <ChevronRight size={14} style={{ color: '#cbd5e1' }} />
                           </button>
                         ))}
                       </div>
                     </div>
 
-                    {/* Ask Orbit Magic */}
-                    <button onClick={() => setView('chat')} className="w-full flex items-center gap-3 p-3 bg-gradient-to-r from-accent/5 to-primary/5 rounded-xl border border-accent/10 hover:border-accent/30 transition-all">
-                      <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
-                        <Sparkles className="w-4 h-4 text-accent" />
+                    <button onClick={() => setView('chat')} className="w-100 d-flex align-items-center gap-2 btn" style={{ padding: '0.75rem', background: 'linear-gradient(to right, rgba(111,66,193,0.05), rgba(13,110,253,0.05))', borderRadius: '0.75rem', border: '1px solid rgba(111,66,193,0.1)', transition: 'all 0.15s' }}>
+                      <div className="d-flex align-items-center justify-content-center rounded-3" style={{ width: '2.25rem', height: '2.25rem', backgroundColor: 'rgba(111,66,193,0.1)' }}>
+                        <Sparkles size={16} style={{ color: '#6f42c1' }} />
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-xs font-semibold text-slate-700">Ask Orbit Magic</p>
-                        <p className="text-[10px] text-slate-400">Get design advice & recommendations</p>
+                      <div className="flex-fill text-start">
+                        <p className="mb-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155' }}>Ask Orbit Magic</p>
+                        <p className="mb-0" style={{ fontSize: '10px', color: '#94a3b8' }}>Get design advice & recommendations</p>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-slate-300" />
+                      <ChevronRight size={16} style={{ color: '#cbd5e1' }} />
                     </button>
                   </motion.div>
                 )}
 
-                {/* GENERATE VIEW */}
                 {view === 'generate' && (
-                  <motion.div key="generate" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 space-y-4">
-                    {/* Selected Product */}
+                  <motion.div key="generate" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="d-flex flex-column gap-3 p-4">
                     {selectedProduct && (
-                      <div className="flex items-center gap-3 p-3 bg-primary/5 rounded-xl border border-primary/10">
-                        <span className="text-2xl">{selectedProduct.icon}</span>
-                        <div className="flex-1">
-                          <p className="text-sm font-bold text-slate-800">{selectedProduct.name}</p>
-                          <p className="text-[10px] text-slate-400">{selectedProduct.width} x {selectedProduct.height}px</p>
+                      <div className="d-flex align-items-center gap-2 p-2 rounded-3" style={{ backgroundColor: 'rgba(13,110,253,0.05)', border: '1px solid rgba(13,110,253,0.1)' }}>
+                        <span style={{ fontSize: '1.5rem' }}>{selectedProduct.icon}</span>
+                        <div className="flex-fill">
+                          <p className="mb-0" style={{ fontSize: '0.875rem', fontWeight: 700, color: '#1e293b' }}>{selectedProduct.name}</p>
+                          <p className="mb-0" style={{ fontSize: '10px', color: '#94a3b8' }}>{selectedProduct.width} x {selectedProduct.height}px</p>
                         </div>
-                        <button onClick={() => setView('home')} className="text-xs text-primary hover:underline">Change</button>
+                        <button onClick={() => setView('home')} className="btn p-0" style={{ fontSize: '0.75rem', color: 'var(--bs-primary, #0d6efd)' }}>Change</button>
                       </div>
                     )}
 
-                    {/* Style Presets */}
                     <div>
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1.5">
-                        <Paintbrush className="w-3 h-3" /> Style
+                      <label className="d-flex align-items-center gap-1 mb-2" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <Paintbrush size={12} /> Style
                       </label>
-                      <div className="grid grid-cols-4 gap-1.5">
+                      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem' }}>
                         {STYLE_PRESETS.map((sp) => (
                           <button
                             key={sp.id}
                             onClick={() => setSelectedStyle(sp)}
-                            className={`flex flex-col items-center gap-1 p-2 rounded-xl text-[10px] font-medium transition-all ${
-                              selectedStyle.id === sp.id
-                                ? 'bg-primary text-white shadow-md shadow-primary/20 ring-2 ring-primary/30'
-                                : 'bg-slate-50 text-slate-500 hover:bg-slate-100'
-                            }`}
+                            className="d-flex flex-column align-items-center gap-1 btn"
+                            style={{
+                              padding: '0.5rem',
+                              fontSize: '10px',
+                              fontWeight: 500,
+                              borderRadius: '0.75rem',
+                              transition: 'all 0.15s',
+                              backgroundColor: selectedStyle.id === sp.id ? 'var(--bs-primary, #0d6efd)' : '#f8fafc',
+                              color: selectedStyle.id === sp.id ? 'var(--bs-white)' : '#64748b',
+                              border: 'none',
+                              outline: selectedStyle.id === sp.id ? '2px solid rgba(13,110,253,0.3)' : 'none',
+                            }}
                           >
-                            <div className="flex gap-0.5">
+                            <div className="d-flex" style={{ gap: '0.125rem' }}>
                               {sp.colors.map((c, i) => (
-                                <span key={i} className="w-3 h-3 rounded-full border border-white/50" style={{ backgroundColor: c }} />
+                                <span key={i} className="rounded-circle" style={{ width: '0.75rem', height: '0.75rem', backgroundColor: c, border: '1px solid rgba(255,255,255,0.5)' }} />
                               ))}
                             </div>
                             {sp.name}
@@ -441,48 +428,66 @@ export default function OrbitMagicWidget() {
                       </div>
                     </div>
 
-                    {/* Prompt */}
                     <div>
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block flex items-center gap-1.5">
-                        <Type className="w-3 h-3" /> Describe your design
+                      <label className="d-flex align-items-center gap-1 mb-2" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <Type size={12} /> Describe your design
                       </label>
                       <textarea
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         placeholder="e.g., A premium business card for a luxury real estate agency with marble texture, gold foil accents, and elegant serif typography..."
                         rows={4}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 resize-none transition-all placeholder:text-slate-300"
+                        className="w-100"
+                        style={{
+                          padding: '0.75rem 1rem',
+                          backgroundColor: '#f8fafc',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '0.75rem',
+                          fontSize: '0.875rem',
+                          outline: 'none',
+                          resize: 'none',
+                          transition: 'all 0.15s',
+                        }}
                       />
-                      <div className="flex items-center justify-between mt-1.5">
-                        <p className="text-[10px] text-slate-400">Tip: Be specific about colors, mood, and layout</p>
-                        <span className="text-[10px] text-slate-300">{prompt.length}/500</span>
+                      <div className="d-flex align-items-center justify-content-between mt-1">
+                        <p className="mb-0" style={{ fontSize: '10px', color: '#94a3b8' }}>Tip: Be specific about colors, mood, and layout</p>
+                        <span style={{ fontSize: '10px', color: '#cbd5e1' }}>{prompt.length}/500</span>
                       </div>
                     </div>
 
-                    {/* Generate Button */}
                     <button
                       onClick={handleGenerate}
                       disabled={isGenerating || !prompt.trim()}
-                      className="w-full py-3.5 bg-gradient-to-r from-primary via-primary-dark to-accent text-white text-sm font-bold rounded-xl hover:shadow-xl hover:shadow-primary/20 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-100 d-flex align-items-center justify-content-center gap-2 btn"
+                      style={{
+                        padding: '0.875rem',
+                        background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), var(--bs-primary, #0d6efd), #6f42c1)',
+                        color: 'var(--bs-white)',
+                        fontSize: '0.875rem',
+                        fontWeight: 700,
+                        borderRadius: '0.75rem',
+                        transition: 'box-shadow 0.15s',
+                        opacity: isGenerating || !prompt.trim() ? 0.5 : 1,
+                        border: 'none',
+                      }}
                     >
                       {isGenerating ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <Loader2 size={16} className="animate-spin" />
                           Generating Design...
                         </>
                       ) : (
                         <>
-                          <Zap className="w-4 h-4" />
+                          <Zap size={16} />
                           Generate Design
-                          <Sparkles className="w-4 h-4" />
+                          <Sparkles size={16} />
                         </>
                       )}
                     </button>
 
-                    {/* Suggested Prompts */}
                     <div>
-                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Try these prompts</label>
-                      <div className="space-y-1.5">
+                      <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Try these prompts</label>
+                      <div className="d-flex flex-column" style={{ gap: '0.375rem' }}>
                         {[
                           'Modern minimalist with clean lines and subtle gradients',
                           'Bold geometric shapes with vibrant accent colors',
@@ -494,7 +499,8 @@ export default function OrbitMagicWidget() {
                           <button
                             key={i}
                             onClick={() => setPrompt(sp)}
-                            className="w-full text-left px-3 py-2 bg-slate-50 hover:bg-primary/5 text-xs text-slate-500 rounded-lg border border-slate-100 hover:border-primary/20 transition-all"
+                            className="w-100 text-start btn"
+                            style={{ padding: '0.5rem 0.75rem', backgroundColor: '#f8fafc', fontSize: '0.75rem', color: '#64748b', borderRadius: '0.5rem', border: '1px solid #f1f5f9', transition: 'all 0.15s' }}
                           >
                             {sp}
                           </button>
@@ -504,67 +510,63 @@ export default function OrbitMagicWidget() {
                   </motion.div>
                 )}
 
-                {/* PREVIEW VIEW */}
                 {view === 'preview' && (
-                  <motion.div key="preview" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 space-y-4">
-                    {/* Canvas Preview */}
-                    <div className="relative bg-gradient-to-br from-slate-100 to-slate-200 rounded-2xl p-4 flex items-center justify-center min-h-[200px]">
+                  <motion.div key="preview" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="d-flex flex-column gap-3 p-4">
+                    <div className="position-relative d-flex align-items-center justify-content-center rounded-3 p-3" style={{ background: 'linear-gradient(to bottom right, #f1f5f9, #e2e8f0)', minHeight: '200px' }}>
                       {isGenerating ? (
-                        <div className="text-center py-8">
-                          <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-3 animate-pulse">
-                            <Sparkles className="w-8 h-8 text-white" />
+                        <div className="text-center py-4">
+                          <div className="mx-auto d-flex align-items-center justify-content-center rounded-3 mb-2" style={{ width: '4rem', height: '4rem', background: 'linear-gradient(to bottom right, var(--bs-primary, #0d6efd), #6f42c1)', animation: 'pulse 2s cubic-bezier(0.4,0,0.6,1) infinite' }}>
+                            <Sparkles size={32} style={{ color: 'var(--bs-white)' }} />
                           </div>
-                          <p className="text-sm font-semibold text-slate-600">Generating your design...</p>
-                          <p className="text-xs text-slate-400 mt-1">AI is crafting something beautiful</p>
-                          <div className="mt-3 w-48 mx-auto h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                            <motion.div className="h-full bg-gradient-to-r from-primary to-accent rounded-full" animate={{ width: ['0%', '100%'] }} transition={{ duration: 3, ease: 'easeInOut' }} />
+                          <p className="mb-0" style={{ fontSize: '0.875rem', fontWeight: 600, color: '#475569' }}>Generating your design...</p>
+                          <p className="mb-0 mt-1" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>AI is crafting something beautiful</p>
+                          <div className="mx-auto mt-2 rounded-pill overflow-hidden" style={{ width: '12rem', height: '0.375rem', backgroundColor: '#e2e8f0' }}>
+                            <motion.div className="h-100 rounded-pill" style={{ background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), #6f42c1)' }} animate={{ width: ['0%', '100%'] }} transition={{ duration: 3, ease: 'easeInOut' }} />
                           </div>
                         </div>
                       ) : generatedDesign ? (
                         <canvas
                           ref={canvasRef}
-                          className="max-w-full max-h-[300px] rounded-lg shadow-lg"
-                          style={{ objectFit: 'contain' }}
+                          className="rounded shadow"
+                          style={{ maxWidth: '100%', maxHeight: '300px', objectFit: 'contain' }}
                         />
                       ) : null}
                     </div>
 
                     {generatedDesign && !isGenerating && (
                       <>
-                        {/* Action Buttons */}
-                        <div className="grid grid-cols-2 gap-2">
+                        <div className="d-grid" style={{ gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem' }}>
                           <Link
                             href={`/design-studio?product=${selectedProduct?.id || 'standard-business-cards'}`}
                             onClick={() => {
-                              // Store design in sessionStorage for design studio to pick up
                               if (generatedDesign) {
                                 sessionStorage.setItem('orbit-magic-design', JSON.stringify(generatedDesign));
                               }
                             }}
-                            className="flex items-center justify-center gap-2 py-3 bg-gradient-to-r from-primary to-primary-dark text-white text-sm font-semibold rounded-xl hover:shadow-lg transition-all"
+                            className="d-flex align-items-center justify-content-center gap-2 text-decoration-none"
+                            style={{ padding: '0.75rem', background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), var(--bs-primary, #0d6efd))', color: 'var(--bs-white)', fontSize: '0.875rem', fontWeight: 600, borderRadius: '0.75rem', transition: 'box-shadow 0.15s' }}
                           >
-                            <Layers className="w-4 h-4" />
+                            <Layers size={16} />
                             Open in Studio
                           </Link>
-                        <button
+                          <button
                             onClick={handleGenerate}
-                            className="flex items-center justify-center gap-2 py-3 bg-slate-100 text-slate-700 text-sm font-semibold rounded-xl hover:bg-slate-200 transition-all"
+                            className="d-flex align-items-center justify-content-center gap-2 btn"
+                            style={{ padding: '0.75rem', backgroundColor: '#f1f5f9', color: '#334155', fontSize: '0.875rem', fontWeight: 600, borderRadius: '0.75rem', transition: 'all 0.15s', border: 'none' }}
                           >
-                            <RefreshCw className="w-4 h-4" />
+                            <RefreshCw size={16} />
                             Regenerate
                           </button>
                         </div>
 
-                        {/* Style Variants */}
                         <div>
-                          <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 block">Try different styles</label>
-                          <div className="grid grid-cols-4 gap-1.5">
+                          <label className="d-block mb-2" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Try different styles</label>
+                          <div className="d-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.375rem' }}>
                             {STYLE_PRESETS.filter((sp) => sp.id !== selectedStyle.id).slice(0, 4).map((sp) => (
                               <button
                                 key={sp.id}
                                 onClick={() => {
                                   setSelectedStyle(sp);
-                                  // Regenerate with new style
                                   if (generatedDesign && selectedProduct) {
                                     const newDesign = generateLayout(
                                       'centered',
@@ -577,11 +579,12 @@ export default function OrbitMagicWidget() {
                                     setGeneratedDesign(newDesign);
                                   }
                                 }}
-                                className="flex flex-col items-center gap-1 p-2 rounded-xl bg-slate-50 text-[10px] font-medium text-slate-500 hover:bg-slate-100 transition-all"
+                                className="d-flex flex-column align-items-center gap-1 btn"
+                                style={{ padding: '0.5rem', borderRadius: '0.75rem', backgroundColor: '#f8fafc', fontSize: '10px', fontWeight: 500, color: '#64748b', transition: 'all 0.15s', border: 'none' }}
                               >
-                                <div className="flex gap-0.5">
+                                <div className="d-flex" style={{ gap: '0.125rem' }}>
                                   {sp.colors.map((c, i) => (
-                                    <span key={i} className="w-2.5 h-2.5 rounded-full border border-white/50" style={{ backgroundColor: c }} />
+                                    <span key={i} className="rounded-circle" style={{ width: '0.625rem', height: '0.625rem', backgroundColor: c, border: '1px solid rgba(255,255,255,0.5)' }} />
                                   ))}
                                 </div>
                                 {sp.name}
@@ -590,15 +593,14 @@ export default function OrbitMagicWidget() {
                           </div>
                         </div>
 
-                        {/* Product Info */}
-                        <div className="p-3 bg-accent/5 rounded-xl border border-accent/10">
-                          <div className="flex items-center gap-2">
-                            <Star className="w-4 h-4 text-accent" />
-                            <p className="text-xs font-semibold text-slate-700">Ready to print?</p>
+                        <div className="p-2 rounded-3" style={{ backgroundColor: 'rgba(111,66,193,0.05)', border: '1px solid rgba(111,66,193,0.1)' }}>
+                          <div className="d-flex align-items-center gap-2">
+                            <Star size={16} style={{ color: '#6f42c1' }} />
+                            <p className="mb-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#334155' }}>Ready to print?</p>
                           </div>
-                          <p className="text-[11px] text-slate-500 mt-1">Send this design to production with premium quality printing and fast delivery across India.</p>
-                          <Link href={`/products/${selectedProduct?.id || 'standard-business-cards'}`} className="mt-2 flex items-center gap-1 text-xs font-semibold text-accent hover:underline">
-                            Order {selectedProduct?.name || 'This Product'} <ArrowRight className="w-3 h-3" />
+                          <p className="mb-0 mt-1" style={{ fontSize: '0.6875rem', color: '#64748b' }}>Send this design to production with premium quality printing and fast delivery across India.</p>
+                          <Link href={`/products/${selectedProduct?.id || 'standard-business-cards'}`} className="d-inline-flex align-items-center gap-1 mt-1 text-decoration-none" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6f42c1' }}>
+                            Order {selectedProduct?.name || 'This Product'} <ArrowRight size={12} />
                           </Link>
                         </div>
                       </>
@@ -606,62 +608,66 @@ export default function OrbitMagicWidget() {
                   </motion.div>
                 )}
 
-                {/* CHAT VIEW */}
                 {view === 'chat' && (
-                  <motion.div key="chat" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="flex flex-col h-full">
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                  <motion.div key="chat" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="d-flex flex-column h-100">
+                    <div className="flex-fill overflow-y-auto p-3 d-flex flex-column" style={{ gap: '0.75rem' }}>
                       {chatMessages.map((msg, i) => (
-                        <motion.div key={i} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <motion.div key={i} initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className={`d-flex ${msg.role === 'user' ? 'justify-content-end' : 'justify-content-start'}`}>
                           {msg.role === 'assistant' && (
-                            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0 mr-2 mt-0.5">
-                              <Sparkles className="w-3.5 h-3.5 text-white" />
+                            <div className="d-flex align-items-center justify-content-center rounded-3 shrink-0 me-2" style={{ width: '1.75rem', height: '1.75rem', background: 'linear-gradient(to bottom right, var(--bs-primary, #0d6efd), #6f42c1)', marginTop: '0.125rem' }}>
+                              <Sparkles size={14} style={{ color: 'var(--bs-white)' }} />
                             </div>
                           )}
-                          <div className={`max-w-[82%] px-3.5 py-2.5 rounded-2xl text-[13px] leading-relaxed ${
-                            msg.role === 'user'
-                              ? 'bg-primary text-white rounded-br-md'
-                              : 'bg-slate-100 text-slate-700 rounded-bl-md'
-                          }`}>
+                          <div
+                            className="px-3 py-2"
+                            style={{
+                              maxWidth: '82%',
+                              fontSize: '0.8125rem',
+                              lineHeight: 1.6,
+                              borderRadius: msg.role === 'user' ? '1rem 1rem 0.25rem 1rem' : '1rem 1rem 1rem 0.25rem',
+                              backgroundColor: msg.role === 'user' ? 'var(--bs-primary, #0d6efd)' : '#f1f5f9',
+                              color: msg.role === 'user' ? 'var(--bs-white)' : '#334155',
+                            }}
+                          >
                             {msg.text}
                           </div>
                         </motion.div>
                       ))}
                       {chatLoading && (
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                            <Sparkles className="w-3.5 h-3.5 text-white" />
+                        <div className="d-flex align-items-center gap-2">
+                          <div className="d-flex align-items-center justify-content-center rounded-3" style={{ width: '1.75rem', height: '1.75rem', background: 'linear-gradient(to bottom right, var(--bs-primary, #0d6efd), #6f42c1)' }}>
+                            <Sparkles size={14} style={{ color: 'var(--bs-white)' }} />
                           </div>
-                          <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3 flex gap-1.5">
-                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                            <span className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                          <div className="d-flex align-items-center rounded-3" style={{ backgroundColor: '#f1f5f9', padding: '0.75rem 1rem', gap: '0.375rem', borderRadius: '1rem 1rem 1rem 0.25rem' }}>
+                            <span className="rounded-circle" style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#94a3b8', animation: 'bounce 1s infinite', animationDelay: '0ms' }} />
+                            <span className="rounded-circle" style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#94a3b8', animation: 'bounce 1s infinite', animationDelay: '150ms' }} />
+                            <span className="rounded-circle" style={{ width: '0.5rem', height: '0.5rem', backgroundColor: '#94a3b8', animation: 'bounce 1s infinite', animationDelay: '300ms' }} />
                           </div>
                         </div>
                       )}
                       <div ref={chatEndRef} />
                     </div>
 
-                    {/* Quick Chips */}
-                    <div className="px-4 pb-2 flex flex-wrap gap-1.5">
+                    <div className="px-3 pb-2 d-flex flex-wrap" style={{ gap: '0.375rem' }}>
                       {['Design tips', 'Color advice', 'Material help', 'Pricing'].map((chip) => (
-                        <button key={chip} onClick={() => sendChat(chip)} disabled={chatLoading} className="px-3 py-1 text-[11px] font-medium text-primary bg-primary/5 hover:bg-primary/10 rounded-full transition-colors border border-primary/10">
+                        <button key={chip} onClick={() => sendChat(chip)} disabled={chatLoading} className="btn" style={{ padding: '0.25rem 0.75rem', fontSize: '0.6875rem', fontWeight: 500, color: 'var(--bs-primary, #0d6efd)', backgroundColor: 'rgba(13,110,253,0.05)', borderRadius: '9999px', border: '1px solid rgba(13,110,253,0.1)', transition: 'color 0.15s' }}>
                           {chip}
                         </button>
                       ))}
                     </div>
 
-                    {/* Chat Input */}
-                    <form onSubmit={(e) => { e.preventDefault(); sendChat(chatInput); }} className="p-3 border-t border-slate-100 flex items-center gap-2">
+                    <form onSubmit={(e) => { e.preventDefault(); sendChat(chatInput); }} className="d-flex align-items-center gap-2 p-3" style={{ borderTop: '1px solid #f1f5f9' }}>
                       <input
                         type="text"
                         value={chatInput}
                         onChange={(e) => setChatInput(e.target.value)}
                         placeholder="Ask Orbit Magic..."
                         disabled={chatLoading}
-                        className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-full text-sm placeholder:text-slate-300 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all disabled:opacity-50"
+                        className="flex-fill"
+                        style={{ padding: '0.625rem 1rem', backgroundColor: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '9999px', fontSize: '0.875rem', outline: 'none', transition: 'all 0.15s', opacity: chatLoading ? 0.5 : 1 }}
                       />
-                      <button type="submit" disabled={!chatInput.trim() || chatLoading} className="w-10 h-10 flex items-center justify-center rounded-full bg-gradient-to-r from-primary to-accent text-white disabled:opacity-40 shrink-0 shadow-md shadow-primary/20">
-                        <Send className="w-4 h-4" />
+                      <button type="submit" disabled={!chatInput.trim() || chatLoading} className="d-flex align-items-center justify-content-center rounded-circle shrink-0" style={{ width: '2.5rem', height: '2.5rem', background: 'linear-gradient(to right, var(--bs-primary, #0d6efd), #6f42c1)', color: 'var(--bs-white)', opacity: !chatInput.trim() || chatLoading ? 0.4 : 1, border: 'none', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}>
+                        <Send size={16} />
                       </button>
                     </form>
                   </motion.div>

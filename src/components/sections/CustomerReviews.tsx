@@ -38,7 +38,7 @@ const testimonials = [
 
 export default function CustomerReviews() {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-5 bg-slate-50">
       <Container>
         <SectionHeader
           badge="Testimonials"
@@ -46,32 +46,34 @@ export default function CustomerReviews() {
           description="Join thousands of satisfied businesses who trust PrintOrbit"
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className="row g-4 mt-3">
           {testimonials.map((testimonial, i) => (
             <motion.div
               key={testimonial.name}
+              className="col-12 col-md-6 col-lg-3"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="bg-white rounded-2xl p-6 border border-slate-100 hover:border-primary/30 hover:shadow-xl transition-all duration-400"
             >
-              <Quote className="w-8 h-8 text-primary/20 mb-4" />
-              <p className="text-sm text-slate-600 leading-relaxed mb-4">
-                &ldquo;{testimonial.content}&rdquo;
-              </p>
-              <div className="flex items-center gap-1 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="w-4 h-4 text-accent fill-accent" />
-                ))}
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-                  {testimonial.avatar}
+              <div className="bg-white rounded-4 p-4 border border-light h-100">
+                <Quote size={32} className="mb-3" style={{ color: 'rgba(var(--bs-primary-rgb), 0.2)' }} />
+                <p className="text-muted mb-3" style={{ fontSize: '14px', lineHeight: 1.6 }}>
+                  &ldquo;{testimonial.content}&rdquo;
+                </p>
+                <div className="d-flex align-items-center gap-1 mb-3">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star key={star} size={16} className="text-accent" style={{ fill: 'var(--bs-accent)' }} />
+                  ))}
                 </div>
-                <div>
-                  <p className="font-semibold font-heading text-dark text-sm">{testimonial.name}</p>
-                  <p className="text-xs text-muted">{testimonial.company}</p>
+                <div className="d-flex align-items-center gap-3">
+                  <div className="bg-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px', backgroundColor: 'rgba(var(--bs-primary-rgb), 0.1)' }}>
+                    <span className="fs-5">{testimonial.avatar}</span>
+                  </div>
+                  <div>
+                    <p className="fw-semibold font-heading text-dark mb-0" style={{ fontSize: '14px' }}>{testimonial.name}</p>
+                    <p className="text-muted mb-0" style={{ fontSize: '12px' }}>{testimonial.company}</p>
+                  </div>
                 </div>
               </div>
             </motion.div>

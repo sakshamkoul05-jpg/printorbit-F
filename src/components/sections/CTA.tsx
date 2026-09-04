@@ -8,46 +8,48 @@ import Button from '@/components/ui/Button';
 
 export default function CTA() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-br from-primary via-primary-dark to-dark rounded-3xl p-12 md:p-16 text-center overflow-hidden"
+          className="position-relative rounded-4 p-5 p-md-5 text-center overflow-hidden"
+          style={{ background: 'linear-gradient(to bottom right, var(--bs-primary), #1a1a2e, var(--bs-dark))' }}
         >
           {/* Background Effects */}
-          <div className="absolute inset-0">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-light/20 rounded-full blur-3xl" />
+          <div className="position-absolute inset-0">
+            <div className="position-absolute top-0 end-0" style={{ width: '384px', height: '384px', background: 'rgba(var(--bs-accent-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
+            <div className="position-absolute bottom-0 start-0" style={{ width: '384px', height: '384px', background: 'rgba(var(--bs-primary-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
           </div>
 
-          <div className="relative z-10">
+          <div className="position-relative" style={{ zIndex: 10 }}>
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 mb-6"
+              className="d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill mb-4"
+              style={{ backgroundColor: 'rgba(255,255,255,0.1)' }}
             >
-              <Sparkles className="w-4 h-4 text-accent" />
-              <span className="text-sm font-medium text-white">Start your project today</span>
+              <Sparkles size={16} className="text-accent" />
+              <span className="fw-medium text-white" style={{ fontSize: '14px' }}>Start your project today</span>
             </motion.div>
 
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-white mb-4">
+            <h2 className="fs-2 fs-md-1 fw-bold font-heading text-white mb-3">
               Ready to Elevate Your Brand?
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8">
+            <p className="fs-5 text-white mx-auto mb-4" style={{ maxWidth: '640px', opacity: 0.7 }}>
               Get a free quote for your printing requirements. Competitive prices, premium quality, fast delivery.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center">
               <Link href="/quote/request">
-                <Button variant="accent" size="lg" icon={<ArrowRight className="w-5 h-5" />} iconPosition="right">
+                <Button variant="accent" size="lg" icon={<ArrowRight size={20} />} iconPosition="right">
                   Request Free Quote
                 </Button>
               </Link>
               <a href="tel:+919876543210">
-                <Button variant="ghost" size="lg" className="text-white hover:bg-white/10" icon={<Phone className="w-5 h-5" />}>
+                <Button variant="ghost" size="lg" className="text-white" icon={<Phone size={20} />}>
                   Call Us Now
                 </Button>
               </a>

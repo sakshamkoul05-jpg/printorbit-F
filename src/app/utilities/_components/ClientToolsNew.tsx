@@ -123,38 +123,38 @@ export function FileProofingTool() {
   }, [image, annotations, showBleed])
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <ImageIcon className="w-5 h-5" /> File Upload & Proofing Tool
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <ImageIcon size={20} /> File Upload & Proofing Tool
       </h3>
 
       {!image && (
-        <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-400 transition-colors">
-          <Upload className="w-10 h-10 text-gray-400 mb-2" />
-          <span className="text-sm text-gray-500">Upload design image</span>
-          <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
+        <label className="d-flex flex-column align-items-center justify-content-center w-100 border border-2 border-dashed rounded-lg p-4" style={{ height: '192px', borderColor: '#dee2e6', cursor: 'pointer' }}>
+          <Upload size={40} className="text-muted mb-2" />
+          <span className="text-sm text-muted">Upload design image</span>
+          <input type="file" accept="image/*" className="d-none" onChange={handleUpload} />
         </label>
       )}
 
       {image && (
         <>
-          <div className="flex flex-wrap gap-2 items-center">
-            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.25))} className="p-2 rounded bg-gray-100 hover:bg-gray-200"><ZoomOut className="w-4 h-4" /></button>
-            <span className="text-sm text-gray-600 min-w-[60px] text-center">{Math.round(zoom * 100)}%</span>
-            <button onClick={() => setZoom(z => Math.min(4, z + 0.25))} className="p-2 rounded bg-gray-100 hover:bg-gray-200"><ZoomIn className="w-4 h-4" /></button>
-            <div className="h-5 w-px bg-gray-300 mx-1" />
-            <button onClick={() => setShowTrim(v => !v)} className={`px-3 py-1.5 rounded text-sm flex items-center gap-1 ${showTrim ? 'bg-blue-100 text-blue-700' : 'bg-gray-100'}`}><Scissors className="w-3.5 h-3.5" /> Trim</button>
-            <button onClick={() => setShowBleed(v => !v)} className={`px-3 py-1.5 rounded text-sm flex items-center gap-1 ${showBleed ? 'bg-orange-100 text-orange-700' : 'bg-gray-100'}`}><Layers className="w-3.5 h-3.5" /> Bleed</button>
-            <button onClick={() => setShowSafe(v => !v)} className={`px-3 py-1.5 rounded text-sm flex items-center gap-1 ${showSafe ? 'bg-green-100 text-green-700' : 'bg-gray-100'}`}><Eye className="w-3.5 h-3.5" /> Safe Zone</button>
-            <div className="h-5 w-px bg-gray-300 mx-1" />
-            <button onClick={() => setAnnotationMode(v => !v)} className={`px-3 py-1.5 rounded text-sm flex items-center gap-1 ${annotationMode ? 'bg-red-100 text-red-700' : 'bg-gray-100'}`}><Pen className="w-3.5 h-3.5" /> Annotate</button>
-            <button onClick={() => { setAnnotations([]); setImage(null); setZoom(1); setPan({ x: 0, y: 0 }) }} className="px-3 py-1.5 rounded text-sm bg-gray-100 hover:bg-red-50 text-red-600"><Trash2 className="w-3.5 h-3.5" /></button>
+          <div className="d-flex flex-wrap gap-2 align-items-center">
+            <button onClick={() => setZoom(z => Math.max(0.25, z - 0.25))} className="btn btn-sm p-1" style={{ backgroundColor: '#f3f4f6' }}><ZoomOut size={16} /></button>
+            <span className="text-sm text-muted" style={{ minWidth: '60px', textAlign: 'center' }}>{Math.round(zoom * 100)}%</span>
+            <button onClick={() => setZoom(z => Math.min(4, z + 0.25))} className="btn btn-sm p-1" style={{ backgroundColor: '#f3f4f6' }}><ZoomIn size={16} /></button>
+            <div className="vr mx-1" style={{ height: '20px' }} />
+            <button onClick={() => setShowTrim(v => !v)} className={`btn btn-sm d-flex align-items-center gap-1 ${showTrim ? 'text-primary' : ''}`} style={showTrim ? { backgroundColor: '#dbeafe', borderColor: '#93c5fd' } : { backgroundColor: '#f3f4f6' }}><Scissors size={14} /> Trim</button>
+            <button onClick={() => setShowBleed(v => !v)} className={`btn btn-sm d-flex align-items-center gap-1 ${showBleed ? 'text-warning' : ''}`} style={showBleed ? { backgroundColor: '#ffedd5', borderColor: '#fed7aa' } : { backgroundColor: '#f3f4f6' }}><Layers size={14} /> Bleed</button>
+            <button onClick={() => setShowSafe(v => !v)} className={`btn btn-sm d-flex align-items-center gap-1 ${showSafe ? 'text-success' : ''}`} style={showSafe ? { backgroundColor: '#dcfce7', borderColor: '#bbf7d0' } : { backgroundColor: '#f3f4f6' }}><Eye size={14} /> Safe Zone</button>
+            <div className="vr mx-1" style={{ height: '20px' }} />
+            <button onClick={() => setAnnotationMode(v => !v)} className={`btn btn-sm d-flex align-items-center gap-1 ${annotationMode ? 'text-danger' : ''}`} style={annotationMode ? { backgroundColor: '#fee2e2', borderColor: '#fecaca' } : { backgroundColor: '#f3f4f6' }}><Pen size={14} /> Annotate</button>
+            <button onClick={() => { setAnnotations([]); setImage(null); setZoom(1); setPan({ x: 0, y: 0 }) }} className="btn btn-sm d-flex align-items-center gap-1 text-danger" style={{ backgroundColor: '#f3f4f6' }}><Trash2 size={14} /></button>
           </div>
 
           <div
             ref={containerRef}
-            className="relative overflow-hidden border rounded-lg bg-gray-50 cursor-crosshair"
-            style={{ height: 400 }}
+            className="position-relative overflow-hidden border rounded-lg"
+            style={{ height: 400, backgroundColor: '#f9fafb', cursor: annotationMode ? 'crosshair' : 'grab' }}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -162,52 +162,52 @@ export function FileProofingTool() {
             onClick={handleImageClick}
           >
             <div style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})`, transformOrigin: '0 0', position: 'absolute', top: 0, left: 0 }}>
-              <img src={image} alt="Proof" className="max-w-none" style={{ display: 'block' }} />
-              {showBleed && <div className="absolute inset-0 border-4 border-orange-400 border-dashed pointer-events-none" />}
+              <img src={image} alt="Proof" style={{ display: 'block', maxWidth: 'none' }} />
+              {showBleed && <div className="position-absolute top-0 start-0 w-100 h-100" style={{ border: '4px dashed #fb923c', pointerEvents: 'none' }} />}
               {showTrim && (
                 <>
-                  <div className="absolute top-2 left-2 right-2 h-px bg-red-500 pointer-events-none" />
-                  <div className="absolute bottom-2 left-2 right-2 h-px bg-red-500 pointer-events-none" />
-                  <div className="absolute top-2 left-2 w-full h-px bg-red-500 pointer-events-none" style={{ transform: 'rotate(90deg)', transformOrigin: '0 0' }} />
-                  <div className="absolute top-2 right-2 w-full h-px bg-red-500 pointer-events-none" style={{ transform: 'rotate(90deg)', transformOrigin: '100% 0' }} />
+                  <div className="position-absolute" style={{ top: '8px', left: '8px', right: '8px', height: '1px', backgroundColor: '#ef4444', pointerEvents: 'none' }} />
+                  <div className="position-absolute" style={{ bottom: '8px', left: '8px', right: '8px', height: '1px', backgroundColor: '#ef4444', pointerEvents: 'none' }} />
+                  <div className="position-absolute" style={{ top: '8px', left: '8px', width: '1px', height: '100%', backgroundColor: '#ef4444', pointerEvents: 'none' }} />
+                  <div className="position-absolute" style={{ top: '8px', right: '8px', width: '1px', height: '100%', backgroundColor: '#ef4444', pointerEvents: 'none' }} />
                 </>
               )}
-              {showSafe && <div className="absolute inset-8 border-2 border-green-400 border-dashed pointer-events-none" />}
+              {showSafe && <div className="position-absolute" style={{ top: '32px', left: '32px', right: '32px', bottom: '32px', border: '2px dashed #4ade80', pointerEvents: 'none' }} />}
               {annotations.map(a => (
-                <div key={a.id} className="absolute group" style={{ left: a.x - 8, top: a.y - 8 }}>
-                  <div className="w-4 h-4 bg-red-500 rounded-full border-2 border-white shadow-lg cursor-pointer" />
-                  <div className="absolute left-6 top-0 bg-white px-2 py-1 rounded shadow text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                <div key={a.id} className="position-relative" style={{ left: a.x - 8, top: a.y - 8 }}>
+                  <div style={{ width: '16px', height: '16px', backgroundColor: '#ef4444', borderRadius: '50%', border: '2px solid #fff', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', cursor: 'pointer' }} />
+                  <div className="position-absolute bg-white px-2 py-1 rounded shadow-sm text-xs text-nowrap d-flex align-items-center gap-1" style={{ left: '24px', top: 0, opacity: 0, transition: 'opacity 0.2s' }}>
                     {a.comment}
-                    <button onClick={(e) => { e.stopPropagation(); removeAnnotation(a.id) }} className="text-red-400 hover:text-red-600"><X className="w-3 h-3" /></button>
+                    <button onClick={(e) => { e.stopPropagation(); removeAnnotation(a.id) }} className="btn btn-sm p-0 text-danger"><X size={12} /></button>
                   </div>
                 </div>
               ))}
               {pendingPos && (
-                <div className="absolute z-10 bg-white p-2 rounded shadow-lg border" style={{ left: pendingPos.x + 16, top: pendingPos.y - 8 }}>
-                  <input autoFocus className="border rounded px-2 py-1 text-sm w-48" placeholder="Add comment..." value={newComment} onChange={e => setNewComment(e.target.value)} onKeyDown={e => e.key === 'Enter' && confirmAnnotation()} />
-                  <div className="flex gap-1 mt-1">
-                    <button onClick={confirmAnnotation} className="px-2 py-0.5 bg-blue-500 text-white rounded text-xs">Add</button>
-                    <button onClick={() => { setPendingPos(null); setNewComment('') }} className="px-2 py-0.5 bg-gray-200 rounded text-xs">Cancel</button>
+                <div className="position-absolute bg-white p-2 rounded shadow border" style={{ left: pendingPos.x + 16, top: pendingPos.y - 8, zIndex: 10 }}>
+                  <input autoFocus className="form-control form-control-sm" placeholder="Add comment..." value={newComment} onChange={e => setNewComment(e.target.value)} onKeyDown={e => e.key === 'Enter' && confirmAnnotation()} style={{ width: '192px' }} />
+                  <div className="d-flex gap-1 mt-1">
+                    <button onClick={confirmAnnotation} className="btn btn-sm btn-primary text-white" style={{ padding: '2px 8px' }}>Add</button>
+                    <button onClick={() => { setPendingPos(null); setNewComment('') }} className="btn btn-sm" style={{ backgroundColor: '#e5e7eb' }}>Cancel</button>
                   </div>
                 </div>
               )}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h4 className="font-medium text-sm">Approval Checklist</h4>
+          <div className="d-flex flex-column gap-2">
+            <h4 className="fw-medium text-sm">Approval Checklist</h4>
             {checklist.map((item, i) => (
-              <label key={i} className="flex items-center gap-2 cursor-pointer text-sm">
-                <button onClick={() => toggleChecklist(i)} className="flex-shrink-0">
-                  {item.checked ? <CheckCircle className="w-5 h-5 text-green-500" /> : <Circle className="w-5 h-5 text-gray-300" />}
+              <label key={i} className="d-flex align-items-center gap-2 cursor-pointer text-sm">
+                <button onClick={() => toggleChecklist(i)} className="btn btn-sm p-0 flex-shrink-0">
+                  {item.checked ? <CheckCircle size={20} className="text-success" /> : <Circle size={20} className="text-muted" />}
                 </button>
-                <span className={item.checked ? 'line-through text-gray-400' : ''}>{item.label}</span>
+                <span className={item.checked ? 'text-decoration-line-through text-muted' : ''}>{item.label}</span>
               </label>
             ))}
           </div>
 
-          <button onClick={exportProof} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm">
-            <Download className="w-4 h-4" /> Export Proof Sheet
+          <button onClick={exportProof} className="btn btn-primary d-flex align-items-center gap-2" style={{ padding: '8px 16px' }}>
+            <Download size={16} /> Export Proof Sheet
           </button>
         </>
       )}
@@ -266,58 +266,66 @@ export function PrintQuantityCalculator() {
   const maxCost = Math.max(...barData.map(d => d.cost))
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <Calculator className="w-5 h-5" /> Print Quantity Calculator
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <Calculator size={20} /> Print Quantity Calculator
       </h3>
 
       <div>
-        <label className="text-sm font-medium text-gray-600 mb-1 block">Product Type</label>
-        <div className="grid grid-cols-4 gap-2">
+        <label className="form-label text-sm fw-medium text-muted">Product Type</label>
+        <div className="row g-2">
           {PRODUCTS.map((p, i) => (
-            <button key={i} onClick={() => setSelectedProduct(i)} className={`px-3 py-2 rounded-lg text-sm border transition-colors ${i === selectedProduct ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-gray-200 hover:border-blue-300'}`}>
-              {p.name}
-            </button>
+            <div key={i} className="col-6 col-md-3">
+              <button onClick={() => setSelectedProduct(i)} className={`btn w-100 text-sm ${i === selectedProduct ? 'btn-primary' : 'btn-outline-secondary'}`}>
+                {p.name}
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-600 mb-1 block">Quantity</label>
-        <div className="flex flex-wrap gap-2 mb-2">
+        <label className="form-label text-sm fw-medium text-muted">Quantity</label>
+        <div className="d-flex flex-wrap gap-2 mb-2">
           {QUICK_QTYS.map(q => (
-            <button key={q} onClick={() => { setQuantity(q); setCustomQty('') }} className={`px-3 py-1.5 rounded text-sm border transition-colors ${quantity === q && !customQty ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-gray-200 hover:border-blue-300'}`}>
+            <button key={q} onClick={() => { setQuantity(q); setCustomQty('') }} className={`btn btn-sm ${quantity === q && !customQty ? 'btn-primary' : 'btn-outline-secondary'}`}>
               {q.toLocaleString()}
             </button>
           ))}
         </div>
-        <input type="number" placeholder="Custom quantity" value={customQty} onChange={e => { setCustomQty(e.target.value); const v = parseInt(e.target.value); if (v > 0) setQuantity(v) }} className="w-full border rounded-lg px-3 py-2 text-sm" />
+        <input type="number" placeholder="Custom quantity" value={customQty} onChange={e => { setCustomQty(e.target.value); const v = parseInt(e.target.value); if (v > 0) setQuantity(v) }} className="form-control form-control-sm" />
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-blue-50 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-blue-600">${unitCost.toFixed(4)}</div>
-          <div className="text-xs text-gray-500 mt-1">Per Unit</div>
+      <div className="row g-3">
+        <div className="col-4">
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#eff6ff' }}>
+            <div className="h4 fw-bold text-primary">${unitCost.toFixed(4)}</div>
+            <div className="text-xs text-muted">Per Unit</div>
+          </div>
         </div>
-        <div className="bg-green-50 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-green-600">${totalCost.toFixed(2)}</div>
-          <div className="text-xs text-gray-500 mt-1">Total Cost</div>
+        <div className="col-4">
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#f0fdf4' }}>
+            <div className="h4 fw-bold text-success">${totalCost.toFixed(2)}</div>
+            <div className="text-xs text-muted">Total Cost</div>
+          </div>
         </div>
-        <div className="bg-purple-50 rounded-lg p-4 text-center">
-          <div className="text-2xl font-bold text-purple-600">{savingsPercent > 0 ? savingsPercent.toFixed(1) : 0}%</div>
-          <div className="text-xs text-gray-500 mt-1">Savings vs 100</div>
+        <div className="col-4">
+          <div className="text-center p-3 rounded-lg" style={{ backgroundColor: '#faf5ff' }}>
+            <div className="h4 fw-bold" style={{ color: '#9333ea' }}>{savingsPercent > 0 ? savingsPercent.toFixed(1) : 0}%</div>
+            <div className="text-xs text-muted">Savings vs 100</div>
+          </div>
         </div>
       </div>
 
       <div>
-        <h4 className="text-sm font-medium text-gray-600 mb-2 flex items-center gap-1"><BarChart3 className="w-4 h-4" /> Price Per Unit Across Quantities</h4>
-        <div className="space-y-1.5">
+        <h4 className="text-sm fw-medium text-muted mb-2 d-flex align-items-center gap-1"><BarChart3 size={16} /> Price Per Unit Across Quantities</h4>
+        <div className="d-flex flex-column gap-2">
           {barData.map(d => (
-            <div key={d.qty} className="flex items-center gap-2">
-              <span className="text-xs w-12 text-right text-gray-500">{d.qty >= 1000 ? `${d.qty / 1000}k` : d.qty}</span>
-              <div className="flex-1 bg-gray-100 rounded-full h-5 overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full flex items-center justify-end pr-2 transition-all" style={{ width: `${(d.cost / maxCost) * 100}%`, minWidth: d.cost > 0 ? '2rem' : 0 }}>
-                  <span className="text-[10px] text-white font-medium">${d.cost.toFixed(4)}</span>
+            <div key={d.qty} className="d-flex align-items-center gap-2">
+              <span className="text-xs" style={{ width: '48px', textAlign: 'right', color: '#6c757d' }}>{d.qty >= 1000 ? `${d.qty / 1000}k` : d.qty}</span>
+              <div className="flex-grow-1 rounded-pill overflow-hidden" style={{ height: '20px', backgroundColor: '#f3f4f6' }}>
+                <div className="h-100 rounded-pill d-flex align-items-center justify-content-end px-2" style={{ width: `${(d.cost / maxCost) * 100}%`, minWidth: d.cost > 0 ? '2rem' : 0, background: 'linear-gradient(to right, #60a5fa, #2563eb)' }}>
+                  <span className="text-white fw-medium" style={{ fontSize: '10px' }}>${d.cost.toFixed(4)}</span>
                 </div>
               </div>
             </div>
@@ -363,8 +371,8 @@ const FINISH_OPTIONS = [...new Set(PAPER_STOCKS.map(p => p.finish))]
 
 function CostLevel({ level }: { level: number }) {
   return (
-    <span className="text-green-600 font-medium">
-      {'$'.repeat(level)}<span className="text-gray-300">{'$'.repeat(4 - level)}</span>
+    <span className="fw-medium text-success">
+      {'$'.repeat(level)}<span className="text-muted">{'$'.repeat(4 - level)}</span>
     </span>
   )
 }
@@ -398,62 +406,62 @@ export function PaperStockComparison() {
   }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <FileText className="w-5 h-5" /> Paper Stock Comparison
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <FileText size={20} /> Paper Stock Comparison
       </h3>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">Category</label>
-          <div className="flex flex-wrap gap-1.5">
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Category</label>
+          <div className="d-flex flex-wrap gap-1">
             {CATEGORIES.map(cat => (
-              <button key={cat} onClick={() => toggleCategory(cat)} className={`px-2.5 py-1 rounded text-xs border transition-colors ${selectedCategories.includes(cat) ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-gray-200'}`}>
+              <button key={cat} onClick={() => toggleCategory(cat)} className={`btn btn-sm ${selectedCategories.includes(cat) ? 'btn-primary' : 'btn-outline-secondary'}`}>
                 {cat}
               </button>
             ))}
           </div>
         </div>
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">Finish</label>
-          <select value={selectedFinish} onChange={e => setSelectedFinish(e.target.value)} className="w-full border rounded px-2 py-1.5 text-sm">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Finish</label>
+          <select value={selectedFinish} onChange={e => setSelectedFinish(e.target.value)} className="form-select form-select-sm">
             <option value="">All finishes</option>
             {FINISH_OPTIONS.map(f => <option key={f} value={f}>{f}</option>)}
           </select>
         </div>
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">GSM Range: {gsmRange[0]} - {gsmRange[1]}</label>
-          <div className="flex gap-2 items-center">
-            <input type="range" min={60} max={300} value={gsmRange[0]} onChange={e => setGsmRange([Number(e.target.value), gsmRange[1]])} className="flex-1" />
-            <input type="range" min={60} max={300} value={gsmRange[1]} onChange={e => setGsmRange([gsmRange[0], Number(e.target.value)])} className="flex-1" />
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">GSM Range: {gsmRange[0]} - {gsmRange[1]}</label>
+          <div className="d-flex gap-2 align-items-center">
+            <input type="range" min={60} max={300} value={gsmRange[0]} onChange={e => setGsmRange([Number(e.target.value), gsmRange[1]])} className="form-range flex-grow-1" />
+            <input type="range" min={60} max={300} value={gsmRange[1]} onChange={e => setGsmRange([gsmRange[0], Number(e.target.value)])} className="form-range flex-grow-1" />
           </div>
         </div>
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">Max Cost: {'$'.repeat(maxCost)}</label>
-          <input type="range" min={1} max={4} value={maxCost} onChange={e => setMaxCost(Number(e.target.value))} className="w-full" />
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Max Cost: {'$'.repeat(maxCost)}</label>
+          <input type="range" min={1} max={4} value={maxCost} onChange={e => setMaxCost(Number(e.target.value))} className="form-range w-100" />
         </div>
       </div>
 
       {compareList.length >= 2 && (
-        <div className="bg-gray-50 rounded-lg p-4">
-          <div className="flex justify-between items-center mb-3">
-            <h4 className="font-medium text-sm">Comparison ({compareList.length}/3)</h4>
-            <button onClick={() => setCompareList([])} className="text-xs text-red-500 hover:text-red-700">Clear</button>
+        <div className="p-3 rounded-lg" style={{ backgroundColor: '#f9fafb' }}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="fw-medium text-sm">Comparison ({compareList.length}/3)</h4>
+            <button onClick={() => setCompareList([])} className="btn btn-sm text-danger p-0">Clear</button>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-xs">
+          <div className="table-responsive">
+            <table className="table table-sm text-xs">
               <thead>
-                <tr className="border-b">
-                  <th className="text-left py-1 pr-3">Property</th>
-                  {compareList.map(s => <th key={s.name} className="text-left py-1 px-2">{s.name}</th>)}
+                <tr>
+                  <th>Property</th>
+                  {compareList.map(s => <th key={s.name}>{s.name}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {['GSM', 'Finish', 'Opacity', 'Brightness', 'Whiteness', 'Cost'].map(prop => (
-                  <tr key={prop} className="border-b border-gray-100">
-                    <td className="py-1 pr-3 text-gray-500">{prop}</td>
+                  <tr key={prop}>
+                    <td className="text-muted">{prop}</td>
                     {compareList.map(s => (
-                      <td key={s.name} className="py-1 px-2">
+                      <td key={s.name}>
                         {prop === 'GSM' ? s.gsm : prop === 'Finish' ? s.finish : prop === 'Opacity' ? `${s.opacity}%` : prop === 'Brightness' ? `${s.brightness}%` : prop === 'Whiteness' ? `${s.whiteness}%` : <CostLevel level={s.costLevel} />}
                       </td>
                     ))}
@@ -465,44 +473,46 @@ export function PaperStockComparison() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+      <div className="row g-3">
         {filteredStocks.map(stock => (
-          <div key={stock.name} className="border rounded-lg p-3 hover:shadow-md transition-shadow bg-white">
-            <div className="flex justify-between items-start mb-2">
-              <div>
-                <h5 className="font-medium text-sm">{stock.name}</h5>
-                <span className="text-xs text-gray-500">{stock.category} · {stock.finish}</span>
-              </div>
-              <CostLevel level={stock.costLevel} />
-            </div>
-            <div className="grid grid-cols-2 gap-1 text-xs text-gray-600 mb-2">
-              <span>{stock.gsm} GSM</span>
-              <span>{stock.opacity}% opacity</span>
-              <span>{stock.brightness}% bright</span>
-              <span>{stock.whiteness}% white</span>
-            </div>
-            <div className="flex gap-1.5">
-              <button onClick={() => setExpandedStock(expandedStock === stock.name ? null : stock.name)} className="text-xs text-blue-600 hover:underline flex items-center gap-0.5">
-                {expandedStock === stock.name ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />} Details
-              </button>
-              <button onClick={() => toggleCompare(stock)} className={`text-xs px-2 py-0.5 rounded border transition-colors ${compareList.find(s => s.name === stock.name) ? 'bg-blue-100 text-blue-700 border-blue-300' : 'border-gray-200 hover:border-blue-300'}`}>
-                {compareList.find(s => s.name === stock.name) ? '✓ Comparing' : 'Compare'}
-              </button>
-            </div>
-            {expandedStock === stock.name && (
-              <div className="mt-3 pt-3 border-t text-xs">
-                <p className="font-medium text-gray-700 mb-1">Best for:</p>
-                <div className="flex flex-wrap gap-1">
-                  {stock.useCases.map(uc => (
-                    <span key={uc} className="bg-gray-100 px-2 py-0.5 rounded">{uc}</span>
-                  ))}
+          <div key={stock.name} className="col-12 col-md-6 col-lg-4">
+            <div className="border rounded-lg p-3 h-100" style={{ backgroundColor: '#fff' }}>
+              <div className="d-flex justify-content-between align-items-start mb-2">
+                <div>
+                  <h5 className="fw-medium text-sm mb-0">{stock.name}</h5>
+                  <span className="text-xs text-muted">{stock.category} · {stock.finish}</span>
                 </div>
+                <CostLevel level={stock.costLevel} />
               </div>
-            )}
+              <div className="row g-1 text-xs text-muted mb-2">
+                <div className="col-6">{stock.gsm} GSM</div>
+                <div className="col-6">{stock.opacity}% opacity</div>
+                <div className="col-6">{stock.brightness}% bright</div>
+                <div className="col-6">{stock.whiteness}% white</div>
+              </div>
+              <div className="d-flex gap-2">
+                <button onClick={() => setExpandedStock(expandedStock === stock.name ? null : stock.name)} className="btn btn-sm p-0 text-primary d-flex align-items-center gap-1">
+                  {expandedStock === stock.name ? <ChevronUp size={12} /> : <ChevronDown size={12} />} Details
+                </button>
+                <button onClick={() => toggleCompare(stock)} className={`btn btn-sm ${compareList.find(s => s.name === stock.name) ? 'btn-primary' : 'btn-outline-secondary'}`}>
+                  {compareList.find(s => s.name === stock.name) ? '✓ Comparing' : 'Compare'}
+                </button>
+              </div>
+              {expandedStock === stock.name && (
+                <div className="mt-3 pt-3 border-top text-xs">
+                  <p className="fw-medium mb-1">Best for:</p>
+                  <div className="d-flex flex-wrap gap-1">
+                    {stock.useCases.map(uc => (
+                      <span key={uc} className="badge bg-light text-dark">{uc}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         ))}
       </div>
-      {filteredStocks.length === 0 && <p className="text-center text-gray-400 text-sm py-8">No paper stocks match your filters</p>}
+      {filteredStocks.length === 0 && <p className="text-center text-muted text-sm py-5">No paper stocks match your filters</p>}
     </div>
   )
 }
@@ -537,73 +547,77 @@ export function ShippingCalculator() {
   const estimatedCost = rates[selectedTier].baseCost + billableWeight * rates[selectedTier].perKg
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <Truck className="w-5 h-5" /> Shipping Cost Calculator
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <Truck size={20} /> Shipping Cost Calculator
       </h3>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block flex items-center gap-1"><Ruler className="w-3.5 h-3.5" /> Package Dimensions (cm)</label>
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <span className="text-xs text-gray-400">L</span>
-              <input type="number" value={length} onChange={e => setLength(Number(e.target.value))} className="w-full border rounded px-2 py-1.5 text-sm" />
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted d-flex align-items-center gap-1"><Ruler size={14} /> Package Dimensions (cm)</label>
+          <div className="row g-2">
+            <div className="col-4">
+              <span className="text-xs text-muted">L</span>
+              <input type="number" value={length} onChange={e => setLength(Number(e.target.value))} className="form-control form-control-sm" />
             </div>
-            <div>
-              <span className="text-xs text-gray-400">W</span>
-              <input type="number" value={width} onChange={e => setWidth(Number(e.target.value))} className="w-full border rounded px-2 py-1.5 text-sm" />
+            <div className="col-4">
+              <span className="text-xs text-muted">W</span>
+              <input type="number" value={width} onChange={e => setWidth(Number(e.target.value))} className="form-control form-control-sm" />
             </div>
-            <div>
-              <span className="text-xs text-gray-400">H</span>
-              <input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} className="w-full border rounded px-2 py-1.5 text-sm" />
+            <div className="col-4">
+              <span className="text-xs text-muted">H</span>
+              <input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} className="form-control form-control-sm" />
             </div>
           </div>
         </div>
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block flex items-center gap-1"><Weight className="w-3.5 h-3.5" /> Actual Weight (kg)</label>
-          <input type="number" step="0.1" value={weight} onChange={e => setWeight(Number(e.target.value))} className="w-full border rounded px-2 py-1.5 text-sm" />
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted d-flex align-items-center gap-1"><Weight size={14} /> Actual Weight (kg)</label>
+          <input type="number" step="0.1" value={weight} onChange={e => setWeight(Number(e.target.value))} className="form-control form-control-sm" />
         </div>
       </div>
 
-      <div className="flex gap-4 items-center">
-        <label className="flex items-center gap-2 cursor-pointer text-sm">
-          <input type="checkbox" checked={isInternational} onChange={e => setIsInternational(e.target.checked)} className="rounded" />
+      <div className="d-flex gap-4 align-items-center">
+        <label className="d-flex align-items-center gap-2 cursor-pointer text-sm">
+          <input type="checkbox" checked={isInternational} onChange={e => setIsInternational(e.target.checked)} className="form-check-input" />
           International
         </label>
       </div>
 
-      <div className="bg-gray-50 rounded-lg p-3 grid grid-cols-3 gap-3 text-center text-sm">
-        <div>
-          <div className="text-gray-400 text-xs">Volumetric Weight</div>
-          <div className="font-semibold">{volumetricWeight.toFixed(2)} kg</div>
-        </div>
-        <div>
-          <div className="text-gray-400 text-xs">Actual Weight</div>
-          <div className="font-semibold">{weight.toFixed(2)} kg</div>
-        </div>
-        <div>
-          <div className="text-gray-400 text-xs">Billable Weight</div>
-          <div className="font-bold text-blue-600">{billableWeight.toFixed(2)} kg</div>
+      <div className="p-3 rounded-lg text-center text-sm" style={{ backgroundColor: '#f9fafb' }}>
+        <div className="row g-3">
+          <div className="col-4">
+            <div className="text-muted text-xs">Volumetric Weight</div>
+            <div className="fw-semibold">{volumetricWeight.toFixed(2)} kg</div>
+          </div>
+          <div className="col-4">
+            <div className="text-muted text-xs">Actual Weight</div>
+            <div className="fw-semibold">{weight.toFixed(2)} kg</div>
+          </div>
+          <div className="col-4">
+            <div className="text-muted text-xs">Billable Weight</div>
+            <div className="fw-bold text-primary">{billableWeight.toFixed(2)} kg</div>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-3">
+      <div className="row g-3">
         {(Object.keys(rates) as CarrierTier[]).map(tier => (
-          <button key={tier} onClick={() => setSelectedTier(tier)} className={`p-3 rounded-lg border text-center transition-colors ${selectedTier === tier ? 'bg-blue-600 text-white border-blue-600' : 'bg-white border-gray-200 hover:border-blue-300'}`}>
-            <div className="font-medium text-sm">{tier}</div>
-            <div className="text-xs mt-1 opacity-80">{rates[tier].days} days</div>
-            <div className="text-lg font-bold mt-1">${(rates[tier].baseCost + billableWeight * rates[tier].perKg).toFixed(2)}</div>
-          </button>
+          <div key={tier} className="col-4">
+            <button onClick={() => setSelectedTier(tier)} className={`btn w-100 p-3 text-center ${selectedTier === tier ? 'btn-primary' : 'btn-outline-secondary'}`}>
+              <div className="fw-medium text-sm">{tier}</div>
+              <div className="text-xs mt-1 opacity-75">{rates[tier].days} days</div>
+              <div className="h5 fw-bold mt-1 mb-0">${(rates[tier].baseCost + billableWeight * rates[tier].perKg).toFixed(2)}</div>
+            </button>
+          </div>
         ))}
       </div>
 
-      <div className="bg-green-50 rounded-lg p-3 text-sm">
-        <div className="flex justify-between">
+      <div className="p-3 rounded-lg text-sm" style={{ backgroundColor: '#f0fdf4' }}>
+        <div className="d-flex justify-content-between">
           <span>Estimated shipping cost ({selectedTier}):</span>
-          <span className="font-bold text-green-700">${estimatedCost.toFixed(2)}</span>
+          <span className="fw-bold text-success">${estimatedCost.toFixed(2)}</span>
         </div>
-        <div className="text-xs text-gray-500 mt-1">Estimated delivery: {rates[selectedTier].days} business days</div>
+        <div className="text-xs text-muted mt-1">Estimated delivery: {rates[selectedTier].days} business days</div>
       </div>
     </div>
   )
@@ -647,11 +661,11 @@ export function OrderTimelineEstimator() {
   const totalDays = 1 + printDays + finishingDays + qcDays + shipDays
 
   const stages: TimelineStage[] = [
-    { name: 'Prepress', days: 1, color: 'bg-blue-500' },
-    { name: 'Printing', days: printDays, color: 'bg-purple-500' },
-    { name: 'Finishing', days: finishingDays || 0, color: 'bg-orange-500' },
-    { name: 'QC', days: qcDays, color: 'bg-yellow-500' },
-    { name: 'Shipping', days: shipDays, color: 'bg-green-500' },
+    { name: 'Prepress', days: 1, color: 'bg-primary' },
+    { name: 'Printing', days: printDays, color: 'bg-purple' },
+    { name: 'Finishing', days: finishingDays || 0, color: 'bg-warning' },
+    { name: 'QC', days: qcDays, color: 'bg-info' },
+    { name: 'Shipping', days: shipDays, color: 'bg-success' },
   ].filter(s => s.days > 0)
 
   const maxDays = Math.max(...stages.map(s => s.days), 1)
@@ -660,31 +674,31 @@ export function OrderTimelineEstimator() {
   deliveryDate.setDate(deliveryDate.getDate() + Math.ceil(totalDays))
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <Clock className="w-5 h-5" /> Order Timeline Estimator
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <Clock size={20} /> Order Timeline Estimator
       </h3>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">Product Type</label>
-          <select value={productType} onChange={e => setProductType(e.target.value)} className="w-full border rounded px-2 py-1.5 text-sm">
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Product Type</label>
+          <select value={productType} onChange={e => setProductType(e.target.value)} className="form-select form-select-sm">
             {PRODUCTS.map(p => <option key={p.name} value={p.name}>{p.name}</option>)}
           </select>
         </div>
-        <div>
-          <label className="text-sm font-medium text-gray-600 mb-1 block">Quantity</label>
-          <select value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="w-full border rounded px-2 py-1.5 text-sm">
+        <div className="col-6">
+          <label className="form-label text-sm fw-medium text-muted">Quantity</label>
+          <select value={quantity} onChange={e => setQuantity(Number(e.target.value))} className="form-select form-select-sm">
             {QUICK_QTYS.map(q => <option key={q} value={q}>{q.toLocaleString()}</option>)}
           </select>
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-600 mb-1 block">Finishing Options</label>
-        <div className="flex flex-wrap gap-1.5">
+        <label className="form-label text-sm fw-medium text-muted">Finishing Options</label>
+        <div className="d-flex flex-wrap gap-1">
           {(Object.keys(FINISHING_DAYS) as FinishingOption[]).map(opt => (
-            <button key={opt} onClick={() => toggleFinishing(opt)} className={`px-2.5 py-1 rounded text-xs border transition-colors ${finishing.includes(opt) ? 'bg-orange-100 text-orange-700 border-orange-300' : 'bg-white border-gray-200'}`}>
+            <button key={opt} onClick={() => toggleFinishing(opt)} className={`btn btn-sm ${finishing.includes(opt) ? 'btn-warning' : 'btn-outline-secondary'}`}>
               {opt} (+{FINISHING_DAYS[opt]}d)
             </button>
           ))}
@@ -692,41 +706,41 @@ export function OrderTimelineEstimator() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-gray-600 mb-1 block">Shipping Method</label>
-        <div className="flex gap-2">
+        <label className="form-label text-sm fw-medium text-muted">Shipping Method</label>
+        <div className="d-flex gap-2">
           {Object.keys(SHIPPING_DAYS).map(method => (
-            <button key={method} onClick={() => setShipping(method)} className={`px-3 py-1.5 rounded text-sm border transition-colors ${shipping === method ? 'bg-green-600 text-white border-green-600' : 'bg-white border-gray-200'}`}>
+            <button key={method} onClick={() => setShipping(method)} className={`btn btn-sm ${shipping === method ? 'btn-success' : 'btn-outline-secondary'}`}>
               {method}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-gray-600">Production Timeline</h4>
-        <div className="space-y-1.5">
+      <div className="d-flex flex-column gap-2">
+        <h4 className="text-sm fw-medium text-muted">Production Timeline</h4>
+        <div className="d-flex flex-column gap-2">
           {stages.map(stage => (
-            <div key={stage.name} className="flex items-center gap-3">
-              <span className="text-xs text-gray-600 w-20 text-right">{stage.name}</span>
-              <div className="flex-1 bg-gray-100 rounded-full h-6 overflow-hidden relative">
-                <div className={`h-full ${stage.color} rounded-full flex items-center justify-end pr-2 transition-all`} style={{ width: `${(stage.days / maxDays) * 100}%`, minWidth: stage.days > 0 ? '2rem' : 0 }}>
-                  <span className="text-[10px] text-white font-medium">{stage.days}d</span>
+            <div key={stage.name} className="d-flex align-items-center gap-3">
+              <span className="text-xs text-muted" style={{ width: '80px', textAlign: 'right' }}>{stage.name}</span>
+              <div className="flex-grow-1 rounded-pill overflow-hidden position-relative" style={{ height: '24px', backgroundColor: '#f3f4f6' }}>
+                <div className={`h-100 ${stage.color} rounded-pill d-flex align-items-center justify-content-end px-2`} style={{ width: `${(stage.days / maxDays) * 100}%`, minWidth: stage.days > 0 ? '2rem' : 0 }}>
+                  <span className="text-white fw-medium" style={{ fontSize: '10px' }}>{stage.days}d</span>
                 </div>
               </div>
-              <span className="text-xs text-gray-400 w-12">{stage.days} day{stage.days !== 1 ? 's' : ''}</span>
+              <span className="text-xs text-muted" style={{ width: '48px' }}>{stage.days} day{stage.days !== 1 ? 's' : ''}</span>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-blue-50 rounded-lg p-4 flex justify-between items-center">
+      <div className="p-4 rounded-lg d-flex justify-content-between align-items-center" style={{ backgroundColor: '#eff6ff' }}>
         <div>
-          <div className="text-sm text-gray-600">Total Estimated Time</div>
-          <div className="text-2xl font-bold text-blue-600">{Math.ceil(totalDays)} days</div>
+          <div className="text-sm text-muted">Total Estimated Time</div>
+          <div className="h4 fw-bold text-primary mb-0">{Math.ceil(totalDays)} days</div>
         </div>
-        <div className="text-right">
-          <div className="text-sm text-gray-600">Estimated Delivery</div>
-          <div className="text-lg font-bold text-green-600">{deliveryDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
+        <div className="text-end">
+          <div className="text-sm text-muted">Estimated Delivery</div>
+          <div className="h5 fw-bold text-success mb-0">{deliveryDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
         </div>
       </div>
     </div>
@@ -814,25 +828,25 @@ export function DesignBriefGenerator() {
   }, [form])
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold flex items-center gap-2">
-        <ClipboardList className="w-5 h-5" /> Design Brief Template Generator
+    <div className="d-flex flex-column gap-4">
+      <h3 className="h5 fw-semibold d-flex align-items-center gap-2">
+        <ClipboardList size={20} /> Design Brief Template Generator
       </h3>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="row g-3">
         {BRIEF_FIELDS.map(field => (
-          <div key={field.key} className={field.type === 'textarea' ? 'md:col-span-2' : ''}>
-            <label className="text-sm font-medium text-gray-600 mb-1 block">
-              {field.label} {field.required && <span className="text-red-400">*</span>}
+          <div key={field.key} className={field.type === 'textarea' ? 'col-12' : 'col-12 col-md-6'}>
+            <label className="form-label text-sm fw-medium text-muted">
+              {field.label} {field.required && <span className="text-danger">*</span>}
             </label>
             {field.type === 'text' && (
-              <input type="text" value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm" />
+              <input type="text" value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} className="form-control form-control-sm" />
             )}
             {field.type === 'textarea' && (
-              <textarea value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} rows={3} className="w-full border rounded-lg px-3 py-2 text-sm resize-none" />
+              <textarea value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} rows={3} className="form-control form-control-sm" style={{ resize: 'none' }} />
             )}
             {field.type === 'select' && (
-              <select value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} className="w-full border rounded-lg px-3 py-2 text-sm">
+              <select value={form[field.key]} onChange={e => updateField(field.key, e.target.value)} className="form-select form-select-sm">
                 <option value="">Select...</option>
                 {field.options?.map(opt => <option key={opt} value={opt}>{opt}</option>)}
               </select>
@@ -841,25 +855,25 @@ export function DesignBriefGenerator() {
         ))}
       </div>
 
-      <div className="flex gap-2">
-        <button onClick={() => setShowPreview(!showPreview)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-          {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+      <div className="d-flex gap-2">
+        <button onClick={() => setShowPreview(!showPreview)} className="btn btn-primary d-flex align-items-center gap-2">
+          {showPreview ? <EyeOff size={16} /> : <Eye size={16} />}
           {showPreview ? 'Hide Preview' : 'Show Preview'}
         </button>
-        <button onClick={() => downloadBrief('txt')} className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
-          <FileDown className="w-4 h-4" /> Download TXT
+        <button onClick={() => downloadBrief('txt')} className="btn btn-success d-flex align-items-center gap-2">
+          <FileDown size={16} /> Download TXT
         </button>
-        <button onClick={() => downloadBrief('json')} className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 text-sm">
-          <FileDown className="w-4 h-4" /> Download JSON
+        <button onClick={() => downloadBrief('json')} className="btn d-flex align-items-center gap-2" style={{ backgroundColor: '#9333ea', color: '#fff' }}>
+          <FileDown size={16} /> Download JSON
         </button>
-        <button onClick={copyToClipboard} className="flex items-center gap-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm">
-          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        <button onClick={copyToClipboard} className="btn btn-secondary d-flex align-items-center gap-2">
+          {copied ? <Check size={16} /> : <Copy size={16} />}
           {copied ? 'Copied!' : 'Copy'}
         </button>
       </div>
 
       {showPreview && (
-        <div className="bg-gray-900 text-green-400 rounded-lg p-4 font-mono text-xs whitespace-pre-wrap overflow-auto max-h-96">
+        <div className="rounded-lg p-4 font-monospace text-xs" style={{ backgroundColor: '#1a1a2e', color: '#4ade80', whiteSpace: 'pre-wrap', overflow: 'auto', maxHeight: '384px' }}>
           {generateBrief()}
         </div>
       )}

@@ -56,35 +56,37 @@ export default function AssetUploadPanel({
   }, []);
 
   return (
-    <div className="space-y-2">
-      <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Mockup Assets</p>
+    <div className="d-flex flex-column gap-2">
+      <p className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Mockup Assets</p>
 
       {ASSET_SLOTS.map(slot => {
         const uploaded = uploads[slot.key];
         return (
           <div key={slot.key}
-            className="bg-slate-800 rounded-lg border border-slate-700 p-3 transition-colors hover:border-slate-600"
+            className="rounded p-2"
+            style={{ backgroundColor: '#1e293b', border: '1px solid #334155', transition: 'border-color 0.15s' }}
           >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full" style={{ backgroundColor: slot.color }} />
+            <div className="d-flex align-items-center justify-content-between mb-2">
+              <div className="d-flex align-items-center gap-2">
+                <div className="rounded-circle" style={{ width: '0.5rem', height: '0.5rem', backgroundColor: slot.color }} />
                 <div>
-                  <span className="text-xs font-medium text-slate-200">{slot.label}</span>
-                  <span className="text-[9px] text-slate-500 ml-2">{slot.description}</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#e2e8f0' }}>{slot.label}</span>
+                  <span style={{ fontSize: '9px', color: '#64748b', marginLeft: '0.5rem' }}>{slot.description}</span>
                 </div>
               </div>
-              {slot.required && <span className="text-[9px] text-red-400">*required</span>}
+              {slot.required && <span style={{ fontSize: '9px', color: '#f87171' }}>*required</span>}
             </div>
 
             {uploaded ? (
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded bg-slate-700 overflow-hidden shrink-0">
-                  <img src={uploaded.dataUrl} alt="" className="w-full h-full object-cover" />
+              <div className="d-flex align-items-center gap-2">
+                <div className="rounded overflow-hidden shrink-0" style={{ width: '2.5rem', height: '2.5rem', backgroundColor: '#334155' }}>
+                  <img src={uploaded.dataUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
-                <span className="text-[10px] text-slate-400 truncate flex-1">{uploaded.name}</span>
+                <span className="text-truncate flex-fill" style={{ fontSize: '10px', color: '#94a3b8' }}>{uploaded.name}</span>
                 <button onClick={() => removeAsset(slot.key)}
-                  className="p-1 text-slate-500 hover:text-red-400 transition-colors">
-                  <Trash2 className="w-3 h-3" />
+                  className="btn p-1"
+                  style={{ color: '#64748b', transition: 'color 0.15s', border: 'none', backgroundColor: 'transparent' }}>
+                  <Trash2 size={12} />
                 </button>
               </div>
             ) : (
@@ -112,12 +114,13 @@ function UploadSlot({ slot, onUpload }: { slot: AssetSlot; onUpload: (slot: Asse
         onDragOver={e => e.preventDefault()}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className="flex items-center gap-2 p-2 border border-dashed border-slate-600 rounded-lg cursor-pointer hover:border-blue-500 transition-colors"
+        className="d-flex align-items-center gap-2 rounded"
+        style={{ padding: '0.5rem', border: '1px dashed #475569', cursor: 'pointer', transition: 'border-color 0.15s' }}
       >
-        <Upload className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-        <span className="text-[10px] text-slate-500">Drop or click to upload</span>
+        <Upload size={14} style={{ color: '#64748b', flexShrink: 0 }} />
+        <span style={{ fontSize: '10px', color: '#64748b' }}>Drop or click to upload</span>
       </div>
-      <input ref={inputRef} type="file" accept="image/png,image/jpeg" className="hidden"
+      <input ref={inputRef} type="file" accept="image/png,image/jpeg" className="d-none"
         onChange={e => { if (e.target.files?.[0]) onUpload(slot, e.target.files[0]); }} />
     </>
   );

@@ -139,11 +139,11 @@ export function ImageDPIScaler() {
   const upscaleFactor = origWidth > 0 && targetPxW > 0 ? targetPxW / origWidth : 0;
 
   const qualityRating = (() => {
-    if (upscaleFactor <= 1) return { label: 'No upscale needed', color: 'text-blue-600', icon: CheckCircle };
-    if (upscaleFactor <= 1.5) return { label: 'Excellent quality', color: 'text-green-600', icon: CheckCircle };
-    if (upscaleFactor <= 2.5) return { label: 'Good quality', color: 'text-green-500', icon: CheckCircle };
-    if (upscaleFactor <= 4) return { label: 'Moderate quality', color: 'text-yellow-600', icon: AlertTriangle };
-    return { label: 'Low quality — heavy upscaling', color: 'text-red-600', icon: AlertTriangle };
+    if (upscaleFactor <= 1) return { label: 'No upscale needed', color: 'text-primary', icon: CheckCircle };
+    if (upscaleFactor <= 1.5) return { label: 'Excellent quality', color: 'text-success', icon: CheckCircle };
+    if (upscaleFactor <= 2.5) return { label: 'Good quality', color: 'text-success', icon: CheckCircle };
+    if (upscaleFactor <= 4) return { label: 'Moderate quality', color: 'text-warning', icon: AlertTriangle };
+    return { label: 'Low quality — heavy upscaling', color: 'text-danger', icon: AlertTriangle };
   })();
 
   const loadImage = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -217,84 +217,83 @@ export function ImageDPIScaler() {
   }, [upscaledUrl, imageFile]);
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div
         onClick={() => fileRef.current?.click()}
-        className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
+        className="border border-2 border-dashed rounded-xl p-4 text-center"
+        style={{ cursor: 'pointer', borderColor: '#dee2e6' }}
       >
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{imageFile ? imageFile.name : 'Click to upload low-res image'}</p>
+        <Upload size={32} className="mx-auto mb-2 text-muted" />
+        <p className="text-sm text-muted">{imageFile ? imageFile.name : 'Click to upload low-res image'}</p>
       </div>
-      <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+      <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="d-none" />
 
       {imagePreview && (
         <>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Target DPI</label>
-              <div className="flex gap-1">
+          <div className="row g-3">
+            <div className="col-6">
+              <label className="form-label text-xs fw-semibold text-muted">Target DPI</label>
+              <div className="d-flex gap-1">
                 {[150, 300, 600].map((d) => (
                   <button
                     key={d}
                     onClick={() => setTargetDpi(d)}
-                    className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${
-                      targetDpi === d ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-                    }`}
+                    className={`flex-fill btn btn-sm ${targetDpi === d ? 'btn-primary' : 'btn-outline-secondary'}`}
                   >
                     {d}
                   </button>
                 ))}
               </div>
             </div>
-            <div />
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Width (mm)</label>
+            <div className="col-6" />
+            <div className="col-6">
+              <label className="form-label text-xs fw-semibold text-muted">Width (mm)</label>
               <input
                 type="number"
                 step="any"
                 value={targetWmm}
                 onChange={(e) => setTargetWmm(e.target.value)}
                 placeholder="e.g. 210"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
+                className="form-control form-control-sm"
               />
             </div>
-            <div>
-              <label className="text-xs font-semibold text-slate-400 mb-1 block">Height (mm)</label>
+            <div className="col-6">
+              <label className="form-label text-xs fw-semibold text-muted">Height (mm)</label>
               <input
                 type="number"
                 step="any"
                 value={targetHmm}
                 onChange={(e) => setTargetHmm(e.target.value)}
                 placeholder="e.g. 297"
-                className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
+                className="form-control form-control-sm"
               />
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-            <div className="flex justify-between">
+          <div className="border rounded-xl p-3" style={{ backgroundColor: '#f8f9fa' }}>
+            <div className="d-flex justify-content-between mb-2">
               <span className="text-sm text-muted">Original</span>
-              <span className="text-sm font-bold text-dark">{origWidth} x {origHeight} px</span>
+              <span className="text-sm fw-bold text-dark">{origWidth} x {origHeight} px</span>
             </div>
-            <div className="flex justify-between">
+            <div className="d-flex justify-content-between mb-2">
               <span className="text-sm text-muted">Target</span>
-              <span className="text-sm font-bold text-dark">{targetPxW} x {targetPxH} px</span>
+              <span className="text-sm fw-bold text-dark">{targetPxW} x {targetPxH} px</span>
             </div>
             {currentDpi > 0 && (
-              <div className="flex justify-between">
+              <div className="d-flex justify-content-between mb-2">
                 <span className="text-sm text-muted">Current DPI at target size</span>
-                <span className="text-sm font-bold text-dark">{currentDpi.toFixed(1)}</span>
+                <span className="text-sm fw-bold text-dark">{currentDpi.toFixed(1)}</span>
               </div>
             )}
             {upscaleFactor > 0 && (
-              <div className="border-t border-slate-200 pt-2 flex justify-between items-center">
-                <span className="text-sm font-semibold text-dark">Scale Factor</span>
-                <span className="text-lg font-bold text-dark">{upscaleFactor.toFixed(2)}x</span>
+              <div className="border-top pt-2 mt-2 d-flex justify-content-between align-items-center">
+                <span className="text-sm fw-semibold text-dark">Scale Factor</span>
+                <span className="h5 fw-bold text-dark mb-0">{upscaleFactor.toFixed(2)}x</span>
               </div>
             )}
             {upscaleFactor > 1 && (
-              <div className={`flex items-center gap-2 text-sm font-medium ${qualityRating.color}`}>
-                {qualityRating.icon && <qualityRating.icon className="w-4 h-4" />}
+              <div className={`d-flex align-items-center gap-2 text-sm fw-medium ${qualityRating.color}`}>
+                {qualityRating.icon && <qualityRating.icon size={16} />}
                 {qualityRating.label}
               </div>
             )}
@@ -303,57 +302,54 @@ export function ImageDPIScaler() {
           <button
             onClick={handleUpscale}
             disabled={processing || targetPxW <= 0 || targetPxH <= 0}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
           >
-            <Wand2 className="w-4 h-4" />
+            <Wand2 size={16} />
             {processing ? 'Processing...' : 'Upscale Image'}
           </button>
 
           {upscaledUrl && (
             <>
-              <div className="flex gap-2">
+              <div className="d-flex gap-2">
                 <button
                   onClick={() => setZoom('before')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${
-                    zoom === 'before' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-                  }`}
+                  className={`flex-fill btn btn-sm d-flex align-items-center justify-content-center gap-2 fw-bold ${zoom === 'before' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 >
-                  <Eye className="w-3.5 h-3.5" /> Before
+                  <Eye size={14} /> Before
                 </button>
                 <button
                   onClick={() => setZoom('after')}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${
-                    zoom === 'after' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-                  }`}
+                  className={`flex-fill btn btn-sm d-flex align-items-center justify-content-center gap-2 fw-bold ${zoom === 'after' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 >
-                  <ZoomIn className="w-3.5 h-3.5" /> After
+                  <ZoomIn size={14} /> After
                 </button>
               </div>
-              <div className="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-100">
+              <div className="position-relative rounded-xl overflow-hidden border" style={{ backgroundColor: '#f3f4f6' }}>
                 <img
                   src={zoom === 'before' ? imagePreview : upscaledUrl}
                   alt={zoom}
-                  className="w-full max-h-64 object-contain"
+                  className="w-100"
+                  style={{ maxHeight: '256px', objectFit: 'contain' }}
                 />
-                <div className="absolute top-2 left-2 px-2 py-1 bg-black/60 text-white text-[10px] font-bold rounded">
+                <div className="position-absolute top-0 start-0 px-2 py-1 text-white fw-bold" style={{ backgroundColor: 'rgba(0,0,0,0.6)', fontSize: '10px', borderRadius: '0 0 4px 0' }}>
                   {zoom === 'before' ? `${origWidth}x${origHeight}` : `${targetPxW}x${targetPxH}`}
                 </div>
               </div>
-              <div className="flex gap-3 text-xs">
-                <div className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+              <div className="d-flex gap-3 text-xs">
+                <div className="flex-fill p-3 border rounded-xl text-center" style={{ backgroundColor: '#f8f9fa' }}>
                   <p className="text-muted mb-1">Original</p>
-                  <p className="font-bold text-dark">{formatBytes(imageFile?.size || 0)}</p>
+                  <p className="fw-bold text-dark">{formatBytes(imageFile?.size || 0)}</p>
                 </div>
-                <div className="flex-1 p-3 bg-slate-50 border border-slate-200 rounded-xl text-center">
+                <div className="flex-fill p-3 border rounded-xl text-center" style={{ backgroundColor: '#f8f9fa' }}>
                   <p className="text-muted mb-1">Upscaled</p>
-                  <p className="font-bold text-dark">{formatBytes(upscaledSize)}</p>
+                  <p className="fw-bold text-dark">{formatBytes(upscaledSize)}</p>
                 </div>
               </div>
               <button
                 onClick={handleDownload}
-                className="w-full flex items-center justify-center gap-2 py-3 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 transition-colors"
+                className="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
               >
-                <Download className="w-4 h-4" /> Download Upscaled Image
+                <Download size={16} /> Download Upscaled Image
               </button>
             </>
           )}
@@ -411,7 +407,6 @@ export function StencilGenerator() {
     } else {
       const img = new Image();
       img.src = imagePreview;
-      // Use sync draw since image is already loaded via preview
       canvas.width = img.width || 400;
       canvas.height = img.height || 300;
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
@@ -420,7 +415,6 @@ export function StencilGenerator() {
     const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const data = imgData.data;
 
-    // Convert to grayscale and threshold
     const gray = new Uint8Array(canvas.width * canvas.height);
     for (let i = 0; i < data.length; i += 4) {
       const g = Math.round(0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
@@ -436,13 +430,11 @@ export function StencilGenerator() {
       for (let i = 0; i < mask.length; i++) mask[i] = 1 - mask[i];
     }
 
-    // Bridge: dilate then erode to connect nearby pieces
     if (bridgeWidth > 0) {
       const w = canvas.width;
       const h = canvas.height;
       const temp = new Uint8Array(mask);
 
-      // Dilate
       for (let iter = 0; iter < bridgeWidth; iter++) {
         const next = new Uint8Array(temp);
         for (let y = 1; y < h - 1; y++) {
@@ -458,7 +450,6 @@ export function StencilGenerator() {
         temp.set(next);
       }
 
-      // Erode
       for (let iter = 0; iter < bridgeWidth; iter++) {
         const next = new Uint8Array(temp);
         for (let y = 1; y < h - 1; y++) {
@@ -476,7 +467,6 @@ export function StencilGenerator() {
       mask = temp;
     }
 
-    // Render stencil: white = cut out, black = material
     for (let i = 0; i < data.length; i += 4) {
       const val = mask[i / 4] ? 255 : 0;
       data[i] = val;
@@ -486,7 +476,6 @@ export function StencilGenerator() {
     }
     ctx.putImageData(imgData, 0, 0);
 
-    // Count edge pixels (approximate cut paths)
     let edges = 0;
     const w = canvas.width;
     const h = canvas.height;
@@ -502,12 +491,10 @@ export function StencilGenerator() {
 
     setStencilUrl(canvas.toDataURL('image/png'));
 
-    // Generate simple SVG trace of contours
     const svgParts: string[] = [];
     svgParts.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`);
     svgParts.push(`<rect width="${w}" height="${h}" fill="white"/>`);
 
-    // Simple contour tracing: find boundary pixels
     const visited = new Uint8Array(w * h);
     let pathCount = 0;
     const maxPaths = 2000;
@@ -516,19 +503,16 @@ export function StencilGenerator() {
       for (let x = 1; x < w - 1 && pathCount < maxPaths; x++) {
         const idx = y * w + x;
         if (mask[idx] && !visited[idx]) {
-          // Check if this is a boundary pixel (has a non-mask neighbor)
           const isBoundary =
             !mask[(y - 1) * w + x] || !mask[(y + 1) * w + x] ||
             !mask[y * w + (x - 1)] || !mask[y * w + (x + 1)];
           if (isBoundary) {
-            // Trace a simple path along boundary
             const points: string[] = [];
             let cx = x, cy = y;
             let safety = 0;
             while (safety < 500) {
               visited[cy * w + cx] = 1;
               points.push(`${cx},${cy}`);
-              // Simple: move to unvisited mask neighbor that is boundary
               let found = false;
               for (const [dx, dy] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
                 const nx = cx + dx;
@@ -573,21 +557,17 @@ export function StencilGenerator() {
   }, [stencilSvg, imageFile]);
 
   return (
-    <div className="space-y-5">
-      <div className="flex gap-2">
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex gap-2">
         <button
           onClick={() => setMode('image')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${
-            mode === 'image' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-          }`}
+          className={`flex-fill btn btn-sm fw-bold ${mode === 'image' ? 'btn-primary' : 'btn-outline-secondary'}`}
         >
           From Image
         </button>
         <button
           onClick={() => setMode('text')}
-          className={`flex-1 py-2 text-xs font-bold rounded-lg transition-colors ${
-            mode === 'text' ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-          }`}
+          className={`flex-fill btn btn-sm fw-bold ${mode === 'text' ? 'btn-primary' : 'btn-outline-secondary'}`}
         >
           From Text
         </button>
@@ -597,78 +577,80 @@ export function StencilGenerator() {
         <>
           <div
             onClick={() => fileRef.current?.click()}
-            className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
+            className="border border-2 border-dashed rounded-xl p-4 text-center"
+            style={{ cursor: 'pointer', borderColor: '#dee2e6' }}
           >
-            <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-            <p className="text-sm text-slate-600">{imageFile ? imageFile.name : 'Click to upload image for stencil'}</p>
+            <Upload size={32} className="mx-auto mb-2 text-muted" />
+            <p className="text-sm text-muted">{imageFile ? imageFile.name : 'Click to upload image for stencil'}</p>
           </div>
-          <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+          <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="d-none" />
           {imagePreview && (
-            <div className="relative rounded-xl overflow-hidden border border-slate-200">
-              <img src={imagePreview} alt="Source" className="w-full max-h-48 object-contain bg-slate-100" />
+            <div className="position-relative rounded-xl overflow-hidden border">
+              <img src={imagePreview} alt="Source" className="w-100" style={{ maxHeight: '192px', objectFit: 'contain', backgroundColor: '#f3f4f6' }} />
             </div>
           )}
         </>
       ) : (
-        <div className="space-y-3">
+        <div className="d-flex flex-column gap-3">
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Text</label>
+            <label className="form-label text-xs fw-semibold text-muted">Text</label>
             <input
               type="text"
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
-              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
+              className="form-control form-control-sm"
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Font Size: {fontSize}px</label>
+            <label className="form-label text-xs fw-semibold text-muted">Font Size: {fontSize}px</label>
             <input
               type="range"
               min={24}
               max={300}
               value={fontSize}
               onChange={(e) => setFontSize(Number(e.target.value))}
-              className="w-full accent-primary"
+              className="form-range"
+              style={{ accentColor: '#0d6efd' }}
             />
           </div>
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="d-flex flex-column gap-3">
         <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Threshold: {threshold}</label>
+          <label className="form-label text-xs fw-semibold text-muted">Threshold: {threshold}</label>
           <input
             type="range"
             min={0}
             max={255}
             value={threshold}
             onChange={(e) => setThreshold(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="form-range"
+            style={{ accentColor: '#0d6efd' }}
           />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1">
+          <div className="d-flex justify-content-between" style={{ fontSize: '10px', color: '#6c757d' }}>
             <span>More black</span>
             <span>More white</span>
           </div>
         </div>
         <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Bridge Width: {bridgeWidth}px</label>
+          <label className="form-label text-xs fw-semibold text-muted">Bridge Width: {bridgeWidth}px</label>
           <input
             type="range"
             min={0}
             max={10}
             value={bridgeWidth}
             onChange={(e) => setBridgeWidth(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="form-range"
+            style={{ accentColor: '#0d6efd' }}
           />
-          <p className="text-[10px] text-slate-400 mt-1">Connects isolated stencil pieces</p>
+          <p style={{ fontSize: '10px', color: '#6c757d' }}>Connects isolated stencil pieces</p>
         </div>
         <button
           onClick={() => setInvert(!invert)}
-          className={`w-full flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${
-            invert ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-          }`}
+          className={`btn btn-sm d-flex align-items-center justify-content-center gap-2 fw-bold ${invert ? 'btn-primary' : 'btn-outline-secondary'}`}
         >
-          <RotateCcw className="w-3.5 h-3.5" />
+          <RotateCcw size={14} />
           {invert ? 'Inverted' : 'Invert Colors'}
         </button>
       </div>
@@ -676,53 +658,54 @@ export function StencilGenerator() {
       <button
         onClick={generateStencil}
         disabled={mode === 'image' && !imagePreview}
-        className="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white text-sm font-bold rounded-xl hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className="btn btn-primary w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
       >
-        <Scissors className="w-4 h-4" /> Generate Stencil
+        <Scissors size={16} /> Generate Stencil
       </button>
 
       {stencilUrl && (
         <>
-          <div className="flex items-center gap-2 text-xs text-muted">
+          <div className="d-flex align-items-center gap-2 text-xs text-muted">
             <button
               onClick={() => setShowGuides(!showGuides)}
-              className="flex items-center gap-1 px-2 py-1 bg-slate-100 rounded-lg"
+              className="btn btn-sm d-flex align-items-center gap-1"
+              style={{ backgroundColor: '#f3f4f6' }}
             >
-              {showGuides ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+              {showGuides ? <Eye size={12} /> : <EyeOff size={12} />}
               {showGuides ? 'Guides On' : 'Guides Off'}
             </button>
           </div>
-          <div className="relative rounded-xl overflow-hidden border border-slate-200">
-            <img src={stencilUrl} alt="Stencil" className="w-full max-h-64 object-contain" />
+          <div className="position-relative rounded-xl overflow-hidden border">
+            <img src={stencilUrl} alt="Stencil" className="w-100" style={{ maxHeight: '256px', objectFit: 'contain' }} />
             {showGuides && (
-              <div className="absolute bottom-2 left-2 right-2 flex gap-2">
-                <div className="flex items-center gap-1 px-2 py-1 bg-black/60 text-white text-[10px] rounded">
-                  <div className="w-2 h-2 bg-white rounded-sm" /> Cut area
+              <div className="position-absolute bottom-0 start-0 end-0 d-flex gap-2 p-2">
+                <div className="d-flex align-items-center gap-1 px-2 py-1 text-white" style={{ backgroundColor: 'rgba(0,0,0,0.6)', fontSize: '10px', borderRadius: '4px' }}>
+                  <div className="rounded-sm" style={{ width: '8px', height: '8px', backgroundColor: '#fff' }} /> Cut area
                 </div>
-                <div className="flex items-center gap-1 px-2 py-1 bg-black/60 text-white text-[10px] rounded">
-                  <div className="w-2 h-2 bg-black rounded-sm border border-white/50" /> Material
+                <div className="d-flex align-items-center gap-1 px-2 py-1 text-white" style={{ backgroundColor: 'rgba(0,0,0,0.6)', fontSize: '10px', borderRadius: '4px' }}>
+                  <div className="rounded-sm border" style={{ width: '8px', height: '8px', backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.5)' }} /> Material
                 </div>
               </div>
             )}
           </div>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
-            <div className="flex justify-between">
+          <div className="border rounded-xl p-3" style={{ backgroundColor: '#f8f9fa' }}>
+            <div className="d-flex justify-content-between">
               <span className="text-sm text-muted">Estimated cut paths</span>
-              <span className="text-sm font-bold text-dark">{cutPaths.toLocaleString()} px</span>
+              <span className="text-sm fw-bold text-dark">{cutPaths.toLocaleString()} px</span>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="d-flex gap-2">
             <button
               onClick={handleDownloadPng}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 transition-colors"
+              className="flex-fill btn btn-success d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
             >
-              <Download className="w-4 h-4" /> PNG
+              <Download size={16} /> PNG
             </button>
             <button
               onClick={handleDownloadSvg}
-              className="flex-1 flex items-center justify-center gap-2 py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors"
+              className="flex-fill btn btn-primary d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
             >
-              <FileDown className="w-4 h-4" /> SVG
+              <FileDown size={16} /> SVG
             </button>
           </div>
         </>
@@ -778,7 +761,6 @@ export function BleedPreviewOverlay() {
       const img = new Image();
       img.src = imagePreview;
 
-      // Scale image to fit within total print area (bleed to bleed)
       const imgAspect = origWidth / origHeight;
       const totalAspect = totalW / totalH;
 
@@ -802,14 +784,12 @@ export function BleedPreviewOverlay() {
       const printWPx = printW * scale;
       const printHPx = printH * scale;
 
-      // Draw image (centered, covering full bleed area)
       ctx.drawImage(img, 0, 0, origWidth, origHeight, 0, 0, canvasW, canvasH);
 
       if (showGuides || exportMode) {
         const cx = canvasW / 2;
         const cy = canvasH / 2;
 
-        // Bleed zone fill (green dashed outer)
         ctx.save();
         ctx.strokeStyle = '#22c55e';
         ctx.lineWidth = 2;
@@ -823,7 +803,6 @@ export function BleedPreviewOverlay() {
         ctx.setLineDash([]);
         ctx.restore();
 
-        // Trim line (red solid)
         ctx.save();
         ctx.strokeStyle = '#ef4444';
         ctx.lineWidth = 2;
@@ -835,7 +814,6 @@ export function BleedPreviewOverlay() {
         );
         ctx.restore();
 
-        // Safe zone (blue dashed inner)
         if (safeMm > 0) {
           const safeWPx = Math.max(0, printW - safeMm * 2) * scale;
           const safeHPx = Math.max(0, printH - safeMm * 2) * scale;
@@ -853,8 +831,6 @@ export function BleedPreviewOverlay() {
           ctx.restore();
         }
 
-        // Semi-transparent fills
-        // Bleed zone (between trim and bleed line) - green tint
         ctx.save();
         ctx.fillStyle = 'rgba(34, 197, 94, 0.12)';
         ctx.fillRect(0, 0, canvasW, cy - printHPx / 2 - bleedPx);
@@ -863,7 +839,6 @@ export function BleedPreviewOverlay() {
         ctx.fillRect(cx + printWPx / 2 + bleedPx, cy - printHPx / 2 - bleedPx, canvasW, printHPx + bleedPx * 2);
         ctx.restore();
 
-        // Safe zone - blue tint
         if (safeMm > 0) {
           const safeWPx = Math.max(0, printW - safeMm * 2) * scale;
           const safeHPx = Math.max(0, printH - safeMm * 2) * scale;
@@ -873,7 +848,6 @@ export function BleedPreviewOverlay() {
           ctx.restore();
         }
 
-        // Corner crop marks
         ctx.save();
         ctx.strokeStyle = '#ef4444';
         ctx.lineWidth = 1;
@@ -885,12 +859,10 @@ export function BleedPreviewOverlay() {
           [cx + printWPx / 2, cy + printHPx / 2],
         ];
         for (const [mx, my] of corners) {
-          // Horizontal
           ctx.beginPath();
           ctx.moveTo(mx - markLen, my);
           ctx.lineTo(mx + markLen, my);
           ctx.stroke();
-          // Vertical
           ctx.beginPath();
           ctx.moveTo(mx, my - markLen);
           ctx.lineTo(mx, my + markLen);
@@ -898,20 +870,16 @@ export function BleedPreviewOverlay() {
         }
         ctx.restore();
 
-        // Labels
         ctx.save();
         ctx.font = 'bold 10px Arial, sans-serif';
         ctx.textAlign = 'center';
 
-        // Bleed label
         ctx.fillStyle = '#22c55e';
         ctx.fillText(`Bleed: ${bleedMm}mm`, cx, cy - printHPx / 2 - bleedPx - 6);
 
-        // Trim label
         ctx.fillStyle = '#ef4444';
         ctx.fillText(`Trim: ${printW}x${printH}mm`, cx, cy - printHPx / 2 - 4);
 
-        // Safe label
         if (safeMm > 0) {
           ctx.fillStyle = '#3b82f6';
           ctx.fillText(`Safe: ${safeMm}mm`, cx, cy - (printH - safeMm * 2) * scale / 2 - 4);
@@ -939,7 +907,6 @@ export function BleedPreviewOverlay() {
     a.click();
   }, [imagePreview, drawOverlay, imageFile]);
 
-  // Auto-generate when inputs change
   useEffect(() => {
     if (imagePreview) {
       generatePreview();
@@ -947,59 +914,60 @@ export function BleedPreviewOverlay() {
   }, [imagePreview, paperIdx, customW, customH, bleedMm, safeMm, showGuides, generatePreview]);
 
   return (
-    <div className="space-y-5">
+    <div className="d-flex flex-column gap-4">
       <div
         onClick={() => fileRef.current?.click()}
-        className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-all"
+        className="border border-2 border-dashed rounded-xl p-4 text-center"
+        style={{ cursor: 'pointer', borderColor: '#dee2e6' }}
       >
-        <Upload className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-        <p className="text-sm text-slate-600">{imageFile ? imageFile.name : 'Click to upload design'}</p>
+        <Upload size={32} className="mx-auto mb-2 text-muted" />
+        <p className="text-sm text-muted">{imageFile ? imageFile.name : 'Click to upload design'}</p>
       </div>
-      <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="hidden" />
+      <input ref={fileRef} type="file" accept="image/*" onChange={loadImage} className="d-none" />
 
       <div>
-        <label className="text-xs font-semibold text-slate-400 mb-2 block">Target Print Size</label>
-        <div className="grid grid-cols-4 gap-2">
+        <label className="form-label text-xs fw-semibold text-muted mb-2">Target Print Size</label>
+        <div className="row g-2">
           {PAPER_SIZES.map((p, i) => (
-            <button
-              key={p.name}
-              onClick={() => setPaperIdx(i)}
-              className={`px-2 py-2 text-[10px] font-medium rounded-lg transition-colors ${
-                paperIdx === i ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-              }`}
-            >
-              {p.name}
-            </button>
+            <div key={p.name} className="col-6 col-md-3">
+              <button
+                onClick={() => setPaperIdx(i)}
+                className={`btn btn-sm w-100 ${paperIdx === i ? 'btn-primary' : 'btn-outline-secondary'}`}
+                style={{ fontSize: '10px' }}
+              >
+                {p.name}
+              </button>
+            </div>
           ))}
         </div>
       </div>
 
       {paperIdx === PAPER_SIZES.length - 1 && (
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Width (mm)</label>
+        <div className="row g-3">
+          <div className="col-6">
+            <label className="form-label text-xs fw-semibold text-muted">Width (mm)</label>
             <input
               type="number"
               value={customW}
               onChange={(e) => setCustomW(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
+              className="form-control form-control-sm"
             />
           </div>
-          <div>
-            <label className="text-xs font-semibold text-slate-400 mb-1 block">Height (mm)</label>
+          <div className="col-6">
+            <label className="form-label text-xs fw-semibold text-muted">Height (mm)</label>
             <input
               type="number"
               value={customH}
               onChange={(e) => setCustomH(Number(e.target.value))}
-              className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary"
+              className="form-control form-control-sm"
             />
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Bleed: {bleedMm}mm</label>
+      <div className="row g-3">
+        <div className="col-6">
+          <label className="form-label text-xs fw-semibold text-muted">Bleed: {bleedMm}mm</label>
           <input
             type="range"
             min={0}
@@ -1007,11 +975,12 @@ export function BleedPreviewOverlay() {
             step={0.5}
             value={bleedMm}
             onChange={(e) => setBleedMm(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="form-range"
+            style={{ accentColor: '#0d6efd' }}
           />
         </div>
-        <div>
-          <label className="text-xs font-semibold text-slate-400 mb-1 block">Safe Zone: {safeMm}mm</label>
+        <div className="col-6">
+          <label className="form-label text-xs fw-semibold text-muted">Safe Zone: {safeMm}mm</label>
           <input
             type="range"
             min={0}
@@ -1019,68 +988,67 @@ export function BleedPreviewOverlay() {
             step={0.5}
             value={safeMm}
             onChange={(e) => setSafeMm(Number(e.target.value))}
-            className="w-full accent-primary"
+            className="form-range"
+            style={{ accentColor: '#0d6efd' }}
           />
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="d-flex gap-2">
         <button
           onClick={() => setShowGuides(!showGuides)}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs font-bold rounded-lg transition-colors ${
-            showGuides ? 'bg-primary text-white' : 'bg-slate-100 text-slate-600'
-          }`}
+          className={`flex-fill btn btn-sm d-flex align-items-center justify-content-center gap-2 fw-bold ${showGuides ? 'btn-primary' : 'btn-outline-secondary'}`}
         >
-          {showGuides ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />}
+          {showGuides ? <Eye size={14} /> : <EyeOff size={14} />}
           Guides {showGuides ? 'On' : 'Off'}
         </button>
       </div>
 
       {annotatedUrl && (
         <>
-          <div className="relative rounded-xl overflow-hidden border border-slate-200">
-            <img src={annotatedUrl} alt="Bleed Preview" className="w-full object-contain" />
+          <div className="position-relative rounded-xl overflow-hidden border">
+            <img src={annotatedUrl} alt="Bleed Preview" className="w-100" style={{ objectFit: 'contain' }} />
           </div>
 
-          <div className="flex gap-4 text-[10px] justify-center flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-red-500" />
+          <div className="d-flex gap-3 justify-content-center flex-wrap" style={{ fontSize: '10px' }}>
+            <div className="d-flex align-items-center gap-1">
+              <div style={{ width: '12px', height: '2px', backgroundColor: '#ef4444' }} />
               <span className="text-muted">Trim Line</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-green-500 border-t border-dashed border-green-500" />
+            <div className="d-flex align-items-center gap-1">
+              <div style={{ width: '12px', height: '2px', backgroundColor: '#22c55e', borderTop: '2px dashed #22c55e' }} />
               <span className="text-muted">Bleed Line ({bleedMm}mm)</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <div className="w-3 h-0.5 bg-blue-500 border-t border-dashed border-blue-500" />
+            <div className="d-flex align-items-center gap-1">
+              <div style={{ width: '12px', height: '2px', backgroundColor: '#3b82f6', borderTop: '2px dashed #3b82f6' }} />
               <span className="text-muted">Safe Zone ({safeMm}mm)</span>
             </div>
           </div>
 
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
-            <div className="flex justify-between">
+          <div className="border rounded-xl p-3" style={{ backgroundColor: '#f8f9fa' }}>
+            <div className="d-flex justify-content-between mb-2">
               <span className="text-sm text-muted">Print Size</span>
-              <span className="text-sm font-bold text-dark">{printW} x {printH} mm</span>
+              <span className="text-sm fw-bold text-dark">{printW} x {printH} mm</span>
             </div>
-            <div className="flex justify-between">
+            <div className="d-flex justify-content-between mb-2">
               <span className="text-sm text-muted">Total with Bleed</span>
-              <span className="text-sm font-bold text-dark">{totalW} x {totalH} mm</span>
+              <span className="text-sm fw-bold text-dark">{totalW} x {totalH} mm</span>
             </div>
-            <div className="flex justify-between">
+            <div className="d-flex justify-content-between mb-2">
               <span className="text-sm text-muted">Safe Area</span>
-              <span className="text-sm font-bold text-dark">{Math.max(0, printW - safeMm * 2)} x {Math.max(0, printH - safeMm * 2)} mm</span>
+              <span className="text-sm fw-bold text-dark">{Math.max(0, printW - safeMm * 2)} x {Math.max(0, printH - safeMm * 2)} mm</span>
             </div>
-            <div className="flex justify-between">
+            <div className="d-flex justify-content-between">
               <span className="text-sm text-muted">Original Image</span>
-              <span className="text-sm font-bold text-dark">{origWidth} x {origHeight} px</span>
+              <span className="text-sm fw-bold text-dark">{origWidth} x {origHeight} px</span>
             </div>
           </div>
 
           <button
             onClick={handleDownload}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-green-600 text-white text-sm font-bold rounded-xl hover:bg-green-700 transition-colors"
+            className="btn btn-success w-100 d-flex align-items-center justify-content-center gap-2 py-2 fw-bold"
           >
-            <Download className="w-4 h-4" /> Download Annotated Image
+            <Download size={16} /> Download Annotated Image
           </button>
         </>
       )}

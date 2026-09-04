@@ -21,56 +21,63 @@ export default function SceneSelector({
   onCategoryChange, onSceneSelect, searchQuery, onSearchChange,
 }: SceneSelectorProps) {
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-      {/* Search */}
-      <div className="relative mb-3">
-        <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" />
+    <div className="rounded-3 p-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <div className="position-relative mb-2">
+        <Search className="position-absolute" style={{ left: '0.625rem', top: '50%', transform: 'translateY(-50%)', width: '0.875rem', height: '0.875rem', color: '#64748b', pointerEvents: 'none' }} />
         <input
           type="text" value={searchQuery} onChange={e => onSearchChange(e.target.value)}
           placeholder="Search scenes..."
-          className="w-full bg-slate-700 border border-slate-600 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+          className="w-100"
+          style={{ backgroundColor: '#334155', border: '1px solid #475569', borderRadius: '0.5rem', paddingLeft: '2rem', paddingRight: '0.75rem', paddingBlock: '0.375rem', fontSize: '0.75rem', color: '#e2e8f0', outline: 'none', transition: 'border-color 0.15s' }}
         />
       </div>
 
-      {/* Categories */}
-      <div className="flex flex-wrap gap-1.5 mb-3">
+      <div className="d-flex flex-wrap" style={{ gap: '0.375rem', marginBottom: '0.75rem' }}>
         {categories.map(cat => (
           <button key={cat.id} onClick={() => onCategoryChange(cat)}
-            className={`px-2.5 py-1 rounded-lg text-[10px] font-medium transition-colors ${
-              selectedCategory.id === cat.id
-                ? 'bg-blue-600 text-white'
-                : 'bg-slate-700 text-slate-400 hover:bg-slate-600 hover:text-slate-200'
-            }`}
+            className="btn"
+            style={{
+              padding: '0.25rem 0.625rem',
+              borderRadius: '0.5rem',
+              fontSize: '10px',
+              fontWeight: 500,
+              transition: 'all 0.15s',
+              backgroundColor: selectedCategory.id === cat.id ? '#2563eb' : '#334155',
+              color: selectedCategory.id === cat.id ? 'var(--bs-white)' : '#94a3b8',
+              border: 'none',
+            }}
           >
             {cat.label}
           </button>
         ))}
       </div>
 
-      {/* Scenes */}
-      <div className="space-y-2 max-h-[500px] overflow-y-auto pr-1">
+      <div className="d-flex flex-column overflow-y-auto" style={{ gap: '0.5rem', maxHeight: '500px', paddingRight: '0.25rem' }}>
         {scenes.length === 0 && (
-          <p className="text-xs text-slate-500 text-center py-4">No scenes found</p>
+          <p className="text-center mb-0" style={{ fontSize: '0.75rem', color: '#64748b', padding: '1rem 0' }}>No scenes found</p>
         )}
         {scenes.map(s => {
           const isSelected = selectedScene?.id === s.id;
           return (
             <button key={s.id} onClick={() => onSceneSelect(s)}
-              className={`w-full text-left p-2.5 rounded-lg border transition-all ${
-                isSelected
-                  ? 'border-blue-500 bg-blue-500/10'
-                  : 'border-slate-700 hover:border-slate-500 bg-slate-700/50'
-              }`}
+              className="w-100 text-start btn"
+              style={{
+                padding: '0.625rem',
+                borderRadius: '0.5rem',
+                transition: 'all 0.15s',
+                backgroundColor: isSelected ? 'rgba(59,130,246,0.1)' : 'rgba(51,65,85,0.5)',
+                border: `1px solid ${isSelected ? '#3b82f6' : '#334155'}`,
+              }}
             >
-              <div className="w-full h-14 rounded-md overflow-hidden mb-1.5"
-                style={{ background: `linear-gradient(135deg, ${s.color.join(', ')})` }}
+              <div className="w-100 rounded overflow-hidden mb-1"
+                style={{ height: '3.5rem', background: `linear-gradient(135deg, ${s.color.join(', ')})` }}
               >
                 {designImage && isSelected && (
-                  <img src={designImage} alt="" className="w-full h-full object-cover opacity-40" />
+                  <img src={designImage} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.4 }} />
                 )}
               </div>
-              <p className="text-[11px] text-slate-200 font-medium leading-tight">{s.name}</p>
-              <p className="text-[9px] text-slate-500 mt-0.5 line-clamp-1">{s.description}</p>
+              <p className="mb-0" style={{ fontSize: '0.6875rem', color: '#e2e8f0', fontWeight: 500, lineHeight: 1.3 }}>{s.name}</p>
+              <p className="mb-0" style={{ fontSize: '9px', color: '#64748b', marginTop: '0.125rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.description}</p>
             </button>
           );
         })}

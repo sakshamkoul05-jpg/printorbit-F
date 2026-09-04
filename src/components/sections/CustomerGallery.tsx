@@ -17,7 +17,7 @@ const gallery = [
 
 export default function CustomerGallery() {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-5 bg-slate-50">
       <Container>
         <SectionHeader
           badge="Gallery"
@@ -25,19 +25,19 @@ export default function CustomerGallery() {
           description="See what our customers have created with PrintOrbit"
         />
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-4 gap-4 mt-12">
+        <div className="row g-3 mt-3">
           {gallery.map((item, i) => (
             <motion.div
               key={item.label}
+              className="col-6 col-sm-3"
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
-              className="group"
             >
-              <div className="bg-white rounded-2xl p-6 text-center border border-slate-100 hover:border-primary/30 hover:shadow-xl transition-all duration-400 cursor-pointer">
-                <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform duration-300">{item.emoji}</span>
-                <span className="text-xs font-medium text-muted group-hover:text-primary transition-colors">{item.label}</span>
+              <div className="bg-white rounded-4 p-4 text-center border border-light cursor-pointer">
+                <span className="fs-2 mb-2 d-block">{item.emoji}</span>
+                <span className="fw-medium text-muted" style={{ fontSize: '12px' }}>{item.label}</span>
               </div>
             </motion.div>
           ))}

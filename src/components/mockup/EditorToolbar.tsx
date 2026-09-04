@@ -31,58 +31,81 @@ interface SliderControlProps {
 function SliderControl({ label, icon, value, min, max, step = 0.01, action, onAction }: SliderControlProps) {
   return (
     <div>
-      <div className="flex items-center justify-between mb-1">
-        <div className="flex items-center gap-1.5">
-          <span className="text-slate-400">{icon}</span>
-          <span className="text-[10px] text-slate-400">{label}</span>
+      <div className="d-flex align-items-center justify-content-between mb-1">
+        <div className="d-flex align-items-center gap-1">
+          <span style={{ color: '#94a3b8' }}>{icon}</span>
+          <span style={{ fontSize: '10px', color: '#94a3b8' }}>{label}</span>
         </div>
-        <span className="text-[10px] text-slate-500 font-mono">{value.toFixed(2)}</span>
+        <span style={{ fontSize: '10px', color: '#64748b', fontFamily: 'monospace' }}>{value.toFixed(2)}</span>
       </div>
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onAction({ ...action, value: Number(e.target.value) })}
-        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+        className="w-100"
+        style={{ height: '0.25rem', backgroundColor: '#334155', borderRadius: '0.5rem', accentColor: '#3b82f6', cursor: 'pointer' }}
       />
     </div>
   );
 }
 
 export default function EditorToolbar({ editorState, onAction, onUndo, onRedo, canUndo, canRedo, onReset }: EditorToolbarProps) {
-  const btnBase = 'p-1.5 rounded-lg transition-colors';
+  const btnBase = 'btn p-1';
 
   const tb = (on: boolean, action: EditorAction) =>
     <button onClick={() => onAction(action)}
-      className={`${btnBase} ${on ? 'bg-blue-600/30 text-blue-400 border border-blue-600/40' : 'bg-slate-700 text-slate-400 hover:bg-slate-600'}`}
+      className={btnBase}
+      style={{
+        padding: '0.375rem',
+        borderRadius: '0.5rem',
+        transition: 'color 0.15s',
+        backgroundColor: on ? 'rgba(37,99,235,0.3)' : '#334155',
+        color: on ? '#60a5fa' : '#94a3b8',
+        border: on ? '1px solid rgba(37,99,235,0.4)' : 'none',
+      }}
     >
-      {action.type === 'flipHorizontal' ? <FlipHorizontal className="w-3.5 h-3.5" /> :
-       action.type === 'flipVertical' ? <FlipVertical className="w-3.5 h-3.5" /> :
-       action.type === 'setDropShadow' ? <Eye className="w-3.5 h-3.5" /> :
-       action.type === 'setTexture' ? <Rotate3D className="w-3.5 h-3.5" /> :
-       action.type === 'setReflection' ? <Droplets className="w-3.5 h-3.5" /> : null}
+      {action.type === 'flipHorizontal' ? <FlipHorizontal size={14} /> :
+       action.type === 'flipVertical' ? <FlipVertical size={14} /> :
+       action.type === 'setDropShadow' ? <Eye size={14} /> :
+       action.type === 'setTexture' ? <Rotate3D size={14} /> :
+       action.type === 'setReflection' ? <Droplets size={14} /> : null}
     </button>;
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-4 space-y-4">
-      {/* Undo/Redo */}
-      <div className="flex items-center gap-2">
+    <div className="d-flex flex-column gap-3 p-3 rounded-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <div className="d-flex align-items-center gap-2">
         <button onClick={onUndo} disabled={!canUndo}
-          className={`${btnBase} ${canUndo ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-800/50 text-slate-600 cursor-not-allowed'}`}>
-          <Undo2 className="w-3.5 h-3.5" />
+          className={btnBase}
+          style={{
+            padding: '0.375rem',
+            borderRadius: '0.5rem',
+            backgroundColor: canUndo ? '#334155' : 'rgba(30,41,59,0.5)',
+            color: canUndo ? '#cbd5e1' : '#475569',
+            cursor: canUndo ? 'pointer' : 'not-allowed',
+            border: 'none',
+          }}>
+          <Undo2 size={14} />
         </button>
         <button onClick={onRedo} disabled={!canRedo}
-          className={`${btnBase} ${canRedo ? 'bg-slate-700 text-slate-300 hover:bg-slate-600' : 'bg-slate-800/50 text-slate-600 cursor-not-allowed'}`}>
-          <Redo2 className="w-3.5 h-3.5" />
+          className={btnBase}
+          style={{
+            padding: '0.375rem',
+            borderRadius: '0.5rem',
+            backgroundColor: canRedo ? '#334155' : 'rgba(30,41,59,0.5)',
+            color: canRedo ? '#cbd5e1' : '#475569',
+            cursor: canRedo ? 'pointer' : 'not-allowed',
+            border: 'none',
+          }}>
+          <Redo2 size={14} />
         </button>
-        <div className="flex-1" />
-        <button onClick={onReset} className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-300 text-[10px] rounded-lg transition-colors">
-          <Eraser className="w-3 h-3 inline mr-1" />Reset
+        <div className="flex-fill" />
+        <button onClick={onReset} className="btn" style={{ padding: '0.375rem 0.625rem', backgroundColor: '#334155', color: '#cbd5e1', fontSize: '10px', borderRadius: '0.5rem', transition: 'background-color 0.15s', border: 'none' }}>
+          <Eraser size={12} className="d-inline me-1" />Reset
         </button>
       </div>
 
-      <hr className="border-slate-700" />
+      <hr className="m-0" style={{ borderColor: '#334155' }} />
 
-      {/* Toggles */}
-      <div className="grid grid-cols-3 gap-1.5">
+      <div className="d-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.375rem' }}>
         {tb(editorState.dropShadow, { type: 'setDropShadow', value: !editorState.dropShadow })}
         {tb(editorState.texture, { type: 'setTexture', value: !editorState.texture })}
         {tb(editorState.reflection, { type: 'setReflection', value: !editorState.reflection })}
@@ -90,15 +113,14 @@ export default function EditorToolbar({ editorState, onAction, onUndo, onRedo, c
         {tb(editorState.flipVertical, { type: 'flipVertical', value: false })}
       </div>
 
-      <hr className="border-slate-700" />
+      <hr className="m-0" style={{ borderColor: '#334155' }} />
 
-      {/* Sliders */}
-      <SliderControl label="Brightness" icon={<Sun className="w-3 h-3" />} value={editorState.brightness} min={0} max={2} action={{ type: 'setBrightness', value: editorState.brightness }} onAction={onAction} />
-      <SliderControl label="Contrast" icon={<Contrast className="w-3 h-3" />} value={editorState.contrast} min={0} max={2} action={{ type: 'setContrast', value: editorState.contrast }} onAction={onAction} />
-      <SliderControl label="Saturation" icon={<Droplets className="w-3 h-3" />} value={editorState.saturation} min={0} max={2} action={{ type: 'setSaturation', value: editorState.saturation }} onAction={onAction} />
-      <SliderControl label="Opacity" icon={<Eye className="w-3 h-3" />} value={editorState.designOpacity} min={0.1} max={1} step={0.05} action={{ type: 'setOpacity', value: editorState.designOpacity }} onAction={onAction} />
-      <SliderControl label="Scale" icon={<Type className="w-3 h-3" />} value={editorState.designScale} min={0.5} max={2} step={0.05} action={{ type: 'setScale', value: editorState.designScale }} onAction={onAction} />
-      <SliderControl label="Vignette" icon={<Rotate3D className="w-3 h-3" />} value={editorState.vignette} min={0} max={0.6} step={0.05} action={{ type: 'setVignette', value: editorState.vignette }} onAction={onAction} />
+      <SliderControl label="Brightness" icon={<Sun size={12} />} value={editorState.brightness} min={0} max={2} action={{ type: 'setBrightness', value: editorState.brightness }} onAction={onAction} />
+      <SliderControl label="Contrast" icon={<Contrast size={12} />} value={editorState.contrast} min={0} max={2} action={{ type: 'setContrast', value: editorState.contrast }} onAction={onAction} />
+      <SliderControl label="Saturation" icon={<Droplets size={12} />} value={editorState.saturation} min={0} max={2} action={{ type: 'setSaturation', value: editorState.saturation }} onAction={onAction} />
+      <SliderControl label="Opacity" icon={<Eye size={12} />} value={editorState.designOpacity} min={0.1} max={1} step={0.05} action={{ type: 'setOpacity', value: editorState.designOpacity }} onAction={onAction} />
+      <SliderControl label="Scale" icon={<Type size={12} />} value={editorState.designScale} min={0.5} max={2} step={0.05} action={{ type: 'setScale', value: editorState.designScale }} onAction={onAction} />
+      <SliderControl label="Vignette" icon={<Rotate3D size={12} />} value={editorState.vignette} min={0} max={0.6} step={0.05} action={{ type: 'setVignette', value: editorState.vignette }} onAction={onAction} />
     </div>
   );
 }

@@ -15,7 +15,7 @@ const solutions = [
 
 export default function BusinessSolutions() {
   return (
-    <section className="py-20 bg-white">
+    <section className="py-5 bg-white">
       <Container>
         <SectionHeader
           badge="Solutions"
@@ -23,30 +23,30 @@ export default function BusinessSolutions() {
           description="Tailored printing solutions for every business need"
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+        <div className="row g-4 mt-3">
           {solutions.map((solution, i) => (
             <motion.div
               key={solution.title}
+              className="col-12 col-sm-6 col-lg-3"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group"
             >
-              <div className="bg-slate-50 rounded-2xl p-6 h-full hover:bg-white hover:border-primary/30 hover:shadow-xl border border-transparent transition-all duration-400">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${
-                  solution.color === 'primary' ? 'bg-primary/10 group-hover:bg-primary' :
-                  solution.color === 'accent' ? 'bg-accent/10 group-hover:bg-accent' : 'bg-success/10 group-hover:bg-success'
-                } transition-colors`}>
-                  <solution.icon className={`w-6 h-6 ${
-                    solution.color === 'primary' ? 'text-primary group-hover:text-white' :
-                    solution.color === 'accent' ? 'text-accent group-hover:text-white' : 'text-success group-hover:text-white'
-                  } transition-colors`} />
+              <div className="bg-slate-50 rounded-4 p-4 h-100 border border-transparent">
+                <div className={`rounded-4 d-flex align-items-center justify-content-center mb-3 ${
+                  solution.color === 'primary' ? 'bg-primary' :
+                  solution.color === 'accent' ? 'bg-accent' : 'bg-success'
+                }`} style={{ width: '48px', height: '48px', backgroundColor: solution.color === 'primary' ? 'rgba(var(--bs-primary-rgb), 0.1)' : solution.color === 'accent' ? 'rgba(var(--bs-accent-rgb), 0.1)' : 'rgba(var(--bs-success-rgb), 0.1)' }}>
+                  <solution.icon size={24} className={
+                    solution.color === 'primary' ? 'text-primary' :
+                    solution.color === 'accent' ? 'text-accent' : 'text-success'
+                  } />
                 </div>
-                <h3 className="font-semibold font-heading text-dark mb-2 group-hover:text-primary transition-colors">{solution.title}</h3>
-                <p className="text-sm text-muted leading-relaxed">{solution.description}</p>
-                <div className="flex items-center gap-1 mt-4 text-sm font-medium text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  Learn more <ArrowRight className="w-4 h-4" />
+                <h3 className="fw-semibold font-heading text-dark mb-2">{solution.title}</h3>
+                <p className="text-muted" style={{ fontSize: '14px', lineHeight: 1.6 }}>{solution.description}</p>
+                <div className="d-flex align-items-center gap-1 mt-3 text-primary fw-medium" style={{ fontSize: '14px' }}>
+                  Learn more <ArrowRight size={16} />
                 </div>
               </div>
             </motion.div>
@@ -57,10 +57,10 @@ export default function BusinessSolutions() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-12"
+          className="text-center mt-4"
         >
-          <Link href="/quote/request" className="text-primary font-medium hover:text-primary-dark transition-colors inline-flex items-center gap-2">
-            Get Custom Solution <ArrowRight className="w-4 h-4" />
+          <Link href="/quote/request" className="text-primary fw-medium d-inline-flex align-items-center gap-2 text-decoration-none">
+            Get Custom Solution <ArrowRight size={16} />
           </Link>
         </motion.div>
       </Container>

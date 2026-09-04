@@ -20,28 +20,30 @@ export default function PortfolioPage() {
     <>
       <section className="bg-navy py-14">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Our Portfolio</h1>
-          <p className="text-white/50 max-w-xl mx-auto">See our work across industries and product categories.</p>
+          <h1 className="display-5 fw-bold text-white mb-3">Our Portfolio</h1>
+          <p className="text-white/50 mx-auto" style={{ maxWidth: '36rem' }}>See our work across industries and product categories.</p>
         </div>
       </section>
 
       <section className="py-14">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="row g-4">
             {projects.map((project) => (
-              <div key={project.id} className="bg-white rounded-lg border border-slate-200 overflow-hidden group hover:border-navy/30 transition-colors">
-                <div className="aspect-video bg-slate-50 flex items-center justify-center">
-                  <span className="text-3xl text-slate-200">📄</span>
-                </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-[10px] uppercase tracking-wider bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-medium">{project.industry}</span>
-                    <span className="text-[10px] uppercase tracking-wider bg-slate-50 text-slate-400 px-2 py-0.5 rounded">{project.type}</span>
+              <div key={project.id} className="col-12 col-sm-6 col-lg-4">
+                <div className="bg-white rounded-3 border border-slate-200 overflow-hidden group transition-colors h-100">
+                  <div className="aspect-video bg-slate-50 d-flex align-items-center justify-content-center">
+                    <span className="display-6 text-slate-200">📄</span>
                   </div>
-                  <h3 className="text-sm font-bold text-navy group-hover:text-navy-light transition-colors">{project.title}</h3>
-                  <button className="flex items-center gap-1 text-xs text-slate-500 hover:text-navy mt-2 transition-colors">
-                    View Details <ExternalLink className="w-3 h-3" />
-                  </button>
+                  <div className="p-5">
+                    <div className="d-flex align-items-center gap-2 mb-3">
+                      <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }} className="bg-slate-100 text-slate-600 px-2 py-0.5 rounded fw-medium">{project.industry}</span>
+                      <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }} className="bg-slate-50 text-slate-400 px-2 py-0.5 rounded">{project.type}</span>
+                    </div>
+                    <h3 className="text-sm fw-bold text-navy">{project.title}</h3>
+                    <button className="d-flex align-items-center gap-1 text-xs text-slate-500 hover:text-navy mt-2 transition-colors">
+                      View Details <ExternalLink size={12} />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

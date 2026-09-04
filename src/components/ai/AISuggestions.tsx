@@ -64,10 +64,10 @@ export default function AISuggestions({
 
   if (elements.length === 0) {
     return (
-      <div className="text-center py-10">
-        <Lightbulb className="w-10 h-10 text-slate-300 mx-auto mb-3" />
-        <p className="text-sm text-slate-500 font-medium">No design to analyze</p>
-        <p className="text-xs text-slate-400 mt-1">
+      <div className="text-center py-5">
+        <Lightbulb size={40} className="mx-auto mb-3" style={{ color: '#cbd5e1' }} />
+        <p className="mb-0" style={{ fontSize: '0.875rem', color: '#64748b', fontWeight: 500 }}>No design to analyze</p>
+        <p className="mt-1 mb-0" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
           Generate a design first to see AI suggestions.
         </p>
       </div>
@@ -75,45 +75,41 @@ export default function AISuggestions({
   }
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex items-center justify-between">
-        <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+    <div className="d-flex flex-column gap-3 p-3">
+      <div className="d-flex align-items-center justify-content-between">
+        <label className="m-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           AI Analysis
         </label>
         <button
           onClick={fetchSuggestions}
           disabled={loading}
-          className="flex items-center gap-1 text-[10px] text-primary hover:text-primary-dark transition-colors"
+          className="d-flex align-items-center gap-1 btn p-0"
+          style={{ fontSize: '10px', color: 'var(--bs-primary, #0d6efd)' }}
         >
-          <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin' : ''}`} />
+          <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
           Refresh
         </button>
       </div>
 
       {loading && (
-        <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-5 h-5 text-primary animate-spin" />
+        <div className="d-flex align-items-center justify-content-center py-4">
+          <Loader2 size={20} className="animate-spin" style={{ color: 'var(--bs-primary, #0d6efd)' }} />
         </div>
       )}
 
       {error && (
-        <p className="text-xs text-red bg-red/5 px-3 py-2 rounded-lg">{error}</p>
+        <p className="mb-0" style={{ fontSize: '0.75rem', color: 'var(--bs-red, #dc3545)', backgroundColor: 'rgba(220,53,69,0.05)', padding: '0.5rem 0.75rem', borderRadius: '0.5rem' }}>{error}</p>
       )}
 
       {!loading && suggestions.length === 0 && !error && (
-        <p className="text-xs text-slate-400 text-center py-4">
+        <p className="text-center py-3 mb-0" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
           No suggestions available. Try refining your design.
         </p>
       )}
 
-      <div className="space-y-2.5">
+      <div className="d-flex flex-column" style={{ gap: '0.625rem' }}>
         {suggestions.map((s, i) => {
           const Icon = TYPE_ICONS[s.type] || Lightbulb;
-          const priorityColors = {
-            high: 'border-l-red',
-            medium: 'border-l-amber',
-            low: 'border-l-slate',
-          };
 
           return (
             <motion.div
@@ -121,34 +117,44 @@ export default function AISuggestions({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`bg-white border border-slate-200 rounded-xl p-3 border-l-4 ${
-                s.priority === 'high' ? 'border-l-red' : s.priority === 'medium' ? 'border-l-amber' : 'border-l-slate-300'
-              }`}
+              className="bg-white"
+              style={{
+                border: '1px solid #e2e8f0',
+                borderRadius: '0.75rem',
+                padding: '0.75rem',
+                borderLeftWidth: '4px',
+                borderLeftColor: s.priority === 'high' ? 'var(--bs-red, #dc3545)' : s.priority === 'medium' ? '#ffc107' : '#cbd5e1',
+              }}
             >
-              <div className="flex items-start gap-2.5">
-                <div className={`p-1.5 rounded-lg ${
-                  s.type === 'color' ? 'bg-purple/10 text-purple' :
-                  s.type === 'typography' ? 'bg-blue/10 text-blue' :
-                  s.type === 'layout' ? 'bg-green/10 text-green' :
-                  s.type === 'contrast' ? 'bg-orange/10 text-orange' :
-                  'bg-slate/10 text-slate'
-                }`}>
-                  <Icon className="w-3.5 h-3.5" />
+              <div className="d-flex align-items-start gap-2">
+                <div
+                  style={{
+                    padding: '0.375rem',
+                    borderRadius: '0.5rem',
+                    backgroundColor: s.type === 'color' ? 'rgba(124,58,237,0.1)' : s.type === 'typography' ? 'rgba(59,130,246,0.1)' : s.type === 'layout' ? 'rgba(34,197,94,0.1)' : s.type === 'contrast' ? 'rgba(249,115,22,0.1)' : 'rgba(100,116,139,0.1)',
+                    color: s.type === 'color' ? '#7c3aed' : s.type === 'typography' ? '#3b82f6' : s.type === 'layout' ? '#22c55e' : s.type === 'contrast' ? '#f97316' : '#64748b',
+                  }}
+                >
+                  <Icon size={14} />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-semibold text-dark">{s.title}</p>
-                  <p className="text-[11px] text-slate-500 mt-0.5">{s.description}</p>
+                <div className="flex-fill" style={{ minWidth: 0 }}>
+                  <p className="mb-0" style={{ fontSize: '0.75rem', fontWeight: 600, color: '#1e293b' }}>{s.title}</p>
+                  <p className="mb-0 mt-1" style={{ fontSize: '0.6875rem', color: '#64748b' }}>{s.description}</p>
                 </div>
                 <button
                   onClick={() => handleApply(i)}
                   disabled={appliedIndex === i}
-                  className="shrink-0 p-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors disabled:opacity-50"
+                  className="btn p-1"
+                  style={{
+                    flexShrink: 0,
+                    backgroundColor: 'rgba(13,110,253,0.1)',
+                    color: 'var(--bs-primary, #0d6efd)',
+                    borderRadius: '0.5rem',
+                    opacity: appliedIndex === i ? 0.5 : 1,
+                    transition: 'background-color 0.15s',
+                  }}
                 >
-                  {appliedIndex === i ? (
-                    <Check className="w-3.5 h-3.5" />
-                  ) : (
-                    <Check className="w-3.5 h-3.5" />
-                  )}
+                  <Check size={14} />
                 </button>
               </div>
             </motion.div>

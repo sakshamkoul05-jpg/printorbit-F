@@ -15,20 +15,26 @@ export default function GlassCard({ children, className, variant = 'light', hove
   return (
     <div
       className={cn(
-        'rounded-2xl transition-all duration-400',
+        'rounded-4 transition-all',
         {
           'glass': variant === 'light',
           'glass-dark': variant === 'dark',
-          'bg-primary/10 backdrop-blur-xl border border-primary/20': variant === 'primary',
+          'bg-primary border border-primary': variant === 'primary',
         },
         {
-          'p-4': padding === 'sm',
-          'p-6': padding === 'md',
-          'p-8': padding === 'lg',
+          'p-3': padding === 'sm',
+          'p-4': padding === 'md',
+          'p-5': padding === 'lg',
         },
-        hover && 'hover:scale-[1.02] hover:shadow-xl cursor-pointer',
+        hover && 'cursor-pointer',
         className
       )}
+      style={{
+        backdropFilter: variant === 'primary' ? 'blur(24px)' : undefined,
+        backgroundColor: variant === 'primary' ? 'rgba(var(--bs-primary-rgb), 0.1)' : undefined,
+        borderColor: variant === 'primary' ? 'rgba(var(--bs-primary-rgb), 0.2)' : undefined,
+        transitionDuration: '400ms',
+      }}
     >
       {children}
     </div>

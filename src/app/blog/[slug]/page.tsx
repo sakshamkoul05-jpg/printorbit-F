@@ -90,11 +90,11 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
   if (!post) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-vh-100 d-flex align-items-center justify-content-center">
         <Container>
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-dark mb-2">Post Not Found</h1>
-            <Link href="/blog" className="text-primary hover:underline">Back to Blog</Link>
+            <h1 className="fs-3 fw-bold text-dark mb-2">Post Not Found</h1>
+            <Link href="/blog" className="text-primary text-decoration-underline">Back to Blog</Link>
           </div>
         </Container>
       </div>
@@ -102,30 +102,30 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-vh-100 bg-white">
       {/* Hero */}
       <div className={`bg-gradient-to-br ${post.coverGradient} text-white`}>
         <Container>
-          <div className="py-16 max-w-3xl">
-            <nav className="flex items-center gap-2 text-xs text-white/60 mb-6">
-              <Link href="/" className="hover:text-white">Home</Link>
-              <ChevronRight className="w-3 h-3" />
-              <Link href="/blog" className="hover:text-white">Blog</Link>
-              <ChevronRight className="w-3 h-3" />
+          <div className="py-16" style={{ maxWidth: '48rem' }}>
+            <nav className="d-flex align-items-center gap-2 text-xs text-white/60 mb-6">
+              <Link href="/" className="hover text-decoration-none" style={{ color: 'inherit' }}>Home</Link>
+              <ChevronRight size={12} />
+              <Link href="/blog" className="hover text-decoration-none" style={{ color: 'inherit' }}>Blog</Link>
+              <ChevronRight size={12} />
               <span className="text-white">{post.title}</span>
             </nav>
-            <div className="flex flex-wrap gap-2 mb-4">
+            <div className="d-flex flex-wrap gap-2 mb-4">
               {post.tags.map((tag) => (
-                <span key={tag} className="px-3 py-1 bg-white/20 text-white text-xs font-medium rounded-full">
+                <span key={tag} className="px-3 py-1 bg-white/20 text-white text-xs fw-medium rounded-pill">
                   {tag}
                 </span>
               ))}
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold font-heading mb-4">{post.title}</h1>
-            <div className="flex items-center gap-4 text-sm text-white/70">
-              <span className="flex items-center gap-1.5"><User className="w-4 h-4" />{post.author}</span>
-              <span className="flex items-center gap-1.5"><Calendar className="w-4 h-4" />{post.date}</span>
-              <span className="flex items-center gap-1.5"><Clock className="w-4 h-4" />{post.readTime}</span>
+            <h1 className="display-5 fw-bold mb-4">{post.title}</h1>
+            <div className="d-flex align-items-center gap-4 text-sm text-white/70">
+              <span className="d-flex align-items-center gap-2"><User size={16} />{post.author}</span>
+              <span className="d-flex align-items-center gap-2"><Calendar size={16} />{post.date}</span>
+              <span className="d-flex align-items-center gap-2"><Clock size={16} />{post.readTime}</span>
             </div>
           </div>
         </Container>
@@ -134,28 +134,28 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
       {/* Content */}
       <Container>
         <div className="py-12">
-          <div className="max-w-3xl mx-auto">
-            <article className="prose prose-lg max-w-none">
+          <div className="mx-auto" style={{ maxWidth: '48rem' }}>
+            <article>
               {post.content.split('\n\n').map((paragraph, i) => {
                 if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
-                  return <h2 key={i} className="text-xl font-bold text-dark font-heading mt-8 mb-3">{paragraph.replace(/\*\*/g, '')}</h2>;
+                  return <h2 key={i} className="fs-4 fw-bold text-dark mt-8 mb-3">{paragraph.replace(/\*\*/g, '')}</h2>;
                 }
                 return <p key={i} className="text-slate-600 leading-relaxed mb-4">{paragraph}</p>;
               })}
             </article>
 
             {/* Actions */}
-            <div className="flex items-center justify-between mt-10 pt-6 border-t border-slate-100">
-              <div className="flex gap-2">
-                <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-200 transition-colors">
-                  <Share2 className="w-4 h-4" /> Share
+            <div className="d-flex align-items-center justify-content-between mt-10 pt-6 border-top border-slate-100">
+              <div className="d-flex gap-2">
+                <button className="d-flex align-items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 text-sm fw-medium rounded-4 transition-colors">
+                  <Share2 size={16} /> Share
                 </button>
-                <button className="flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-200 transition-colors">
-                  <Bookmark className="w-4 h-4" /> Save
+                <button className="d-flex align-items-center gap-2 px-4 py-2 bg-slate-100 text-slate-600 text-sm fw-medium rounded-4 transition-colors">
+                  <Bookmark size={16} /> Save
                 </button>
               </div>
-              <Link href="/blog" className="text-sm font-semibold text-primary hover:text-primary-dark flex items-center gap-1">
-                All Articles <ArrowRight className="w-4 h-4" />
+              <Link href="/blog" className="text-sm fw-semibold text-primary d-flex align-items-center gap-1 text-decoration-none">
+                All Articles <ArrowRight size={16} />
               </Link>
             </div>
           </div>

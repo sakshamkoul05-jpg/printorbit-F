@@ -94,32 +94,33 @@ function EnvelopeSizeReference() {
   });
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-indigo-100 rounded-lg">
-          <Ruler className="w-6 h-6 text-indigo-600" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#e0e7ff' }}>
+          <Ruler size={24} style={{ color: '#4f46e5' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Envelope Size Reference</h2>
-          <p className="text-sm text-gray-500">Complete guide to standard envelope sizes</p>
+          <h2 className="fs-4 fw-bold" style={{ color: '#111827' }}>Envelope Size Reference</h2>
+          <p className="text-sm text-secondary">Complete guide to standard envelope sizes</p>
         </div>
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+      <div className="d-flex flex-column flex-sm-row gap-3">
+        <div className="position-relative flex-fill">
+          <Search size={16} className="position-absolute" style={{ left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
           <input
             type="text"
             placeholder="Search envelopes..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm"
+            className="form-control text-sm"
+            style={{ paddingLeft: '2.5rem' }}
           />
         </div>
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-indigo-500"
+          className="form-select text-sm"
         >
           {categories.map((cat) => (
             <option key={cat} value={cat}>
@@ -129,53 +130,59 @@ function EnvelopeSizeReference() {
         </select>
       </div>
 
-      <div className="overflow-x-auto border border-gray-200 rounded-lg">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50">
+      <div className="table-responsive border rounded-lg">
+        <table className="table text-sm mb-0">
+          <thead style={{ backgroundColor: '#f9fafb' }}>
             <tr>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Name</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Category</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Dimensions (mm)</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Dimensions (in)</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Fits</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Common Uses</th>
-              <th className="px-4 py-3 text-left font-medium text-gray-600">Compare</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Name</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Category</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Dimensions (mm)</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Dimensions (in)</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Fits</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Common Uses</th>
+              <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Compare</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="border-top">
             {filtered.map((env) => (
               <tr
                 key={env.name}
-                className={`hover:bg-gray-50 cursor-pointer transition-colors ${expandedEnvelope === env.name ? 'bg-indigo-50' : ''}`}
+                className={`cursor-pointer ${expandedEnvelope === env.name ? '' : ''}`}
+                style={{
+                  transition: 'background-color 0.15s',
+                  ...(expandedEnvelope === env.name ? { backgroundColor: '#eef2ff' } : {}),
+                }}
                 onClick={() =>
                   setExpandedEnvelope(expandedEnvelope === env.name ? null : env.name)
                 }
               >
-                <td className="px-4 py-3 font-semibold text-gray-900">{env.name}</td>
+                <td className="px-4 py-3 fw-semibold" style={{ color: '#111827' }}>{env.name}</td>
                 <td className="px-4 py-3">
-                  <span className="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-full">
+                  <span className="badge rounded-pill text-bg-secondary" style={{ backgroundColor: '#f3f4f6', color: '#374151', fontWeight: 500, fontSize: '0.75rem' }}>
                     {env.category}
                   </span>
                 </td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-4 py-3" style={{ color: '#374151' }}>
                   {env.mm.w} × {env.mm.h}
                 </td>
-                <td className="px-4 py-3 text-gray-700">
+                <td className="px-4 py-3" style={{ color: '#374151' }}>
                   {env.inches.w} × {env.inches.h}
                 </td>
-                <td className="px-4 py-3 text-gray-600 text-xs">{env.fits}</td>
-                <td className="px-4 py-3 text-gray-600 text-xs">{env.uses}</td>
+                <td className="px-4 py-3" style={{ color: '#4b5563', fontSize: '0.75rem' }}>{env.fits}</td>
+                <td className="px-4 py-3" style={{ color: '#4b5563', fontSize: '0.75rem' }}>{env.uses}</td>
                 <td className="px-4 py-3">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       setCompareEnvelope(compareEnvelope?.name === env.name ? null : env);
                     }}
-                    className={`px-2 py-1 text-xs rounded-md transition-colors ${
-                      compareEnvelope?.name === env.name
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
+                    className="btn btn-sm"
+                    style={{
+                      fontSize: '0.75rem',
+                      ...(compareEnvelope?.name === env.name
+                        ? { backgroundColor: '#4f46e5', color: '#fff' }
+                        : { backgroundColor: '#f3f4f6', color: '#4b5563' }),
+                    }}
                   >
                     {compareEnvelope?.name === env.name ? 'Hide' : 'View vs A4'}
                   </button>
@@ -187,48 +194,50 @@ function EnvelopeSizeReference() {
       </div>
 
       {compareEnvelope && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
-          <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <Info className="w-4 h-4 text-indigo-500" />
+        <div className="border rounded-lg p-4 bg-white">
+          <h3 className="fw-semibold mb-3 d-flex align-items-center gap-2" style={{ color: '#111827' }}>
+            <Info size={16} style={{ color: '#6366f1' }} />
             Visual Comparison: {compareEnvelope.name} vs A4 Paper
           </h3>
-          <div className="flex items-end justify-center gap-8">
+          <div className="d-flex align-items-end justify-content-center gap-4">
             <div className="text-center">
               <div
-                className="border-2 border-indigo-400 border-dashed rounded mb-2 mx-auto"
+                className="border-2 border-dashed rounded mb-2 mx-auto"
                 style={{
+                  borderColor: '#818cf8',
                   width: `${compareEnvelope.mm.w * 0.8}px`,
                   height: `${compareEnvelope.mm.h * 0.8}px`,
                   minHeight: '40px',
                 }}
               />
-              <p className="text-sm font-medium text-indigo-600">{compareEnvelope.name}</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm fw-medium" style={{ color: '#4f46e5' }}>{compareEnvelope.name}</p>
+              <p className="text-xs text-secondary">
                 {compareEnvelope.mm.w} × {compareEnvelope.mm.h} mm
               </p>
             </div>
             <div className="text-center">
               <div
-                className="border-2 border-gray-300 rounded mb-2 mx-auto"
+                className="border rounded mb-2 mx-auto"
                 style={{
+                  borderColor: '#d1d5db',
                   width: `${a4WidthMm * 0.8}px`,
                   height: `${a4HeightMm * 0.8}px`,
                 }}
               />
-              <p className="text-sm font-medium text-gray-600">A4</p>
-              <p className="text-xs text-gray-500">
+              <p className="text-sm fw-medium text-secondary">A4</p>
+              <p className="text-xs text-secondary">
                 {a4WidthMm} × {a4HeightMm} mm
               </p>
             </div>
           </div>
-          <div className="mt-4 text-center text-sm text-gray-500">
+          <div className="mt-4 text-center text-sm text-secondary">
             Area: {compareEnvelope.mm.w * compareEnvelope.mm.h} mm² (
             {((compareEnvelope.mm.w * compareEnvelope.mm.h) / (a4WidthMm * a4HeightMm) * 100).toFixed(1)}% of A4)
           </div>
         </div>
       )}
 
-      <p className="text-xs text-gray-400">
+      <p className="text-xs" style={{ color: '#9ca3af' }}>
         Showing {filtered.length} of {envelopeData.length} envelope sizes
       </p>
     </div>
@@ -296,115 +305,122 @@ function PrintResolutionReference() {
   }, []);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-emerald-100 rounded-lg">
-          <FileText className="w-6 h-6 text-emerald-600" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#d1fae5' }}>
+          <FileText size={24} style={{ color: '#059669' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Print Resolution Reference</h2>
-          <p className="text-sm text-gray-500">DPI requirements by product type</p>
+          <h2 className="fs-4 fw-bold" style={{ color: '#111827' }}>Print Resolution Reference</h2>
+          <p className="text-sm text-secondary">DPI requirements by product type</p>
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="d-flex gap-2">
         <button
           onClick={() => setViewMode('grid')}
-          className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-            viewMode === 'grid'
-              ? 'bg-emerald-600 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
+          className="btn btn-sm"
+          style={{
+            ...(viewMode === 'grid'
+              ? { backgroundColor: '#059669', color: '#fff' }
+              : { backgroundColor: '#f3f4f6', color: '#4b5563' }),
+          }}
         >
           Grid View
         </button>
         <button
           onClick={() => setViewMode('table')}
-          className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-            viewMode === 'table'
-              ? 'bg-emerald-600 text-white'
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
+          className="btn btn-sm"
+          style={{
+            ...(viewMode === 'table'
+              ? { backgroundColor: '#059669', color: '#fff' }
+              : { backgroundColor: '#f3f4f6', color: '#4b5563' }),
+          }}
         >
           Table View
         </button>
       </div>
 
       {viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="row g-3">
           {productDPIs.map((p) => (
-            <button
-              key={p.product}
-              onClick={() => {
-                setSelectedProduct(selectedProduct?.product === p.product ? null : p);
-                setTimeout(() => simulateDPI(p.recommendedDPI), 50);
-              }}
-              className={`text-left p-4 border rounded-lg transition-all ${
-                selectedProduct?.product === p.product
-                  ? 'border-emerald-500 bg-emerald-50 ring-2 ring-emerald-200'
-                  : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
-              }`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-semibold text-gray-900 text-sm">{p.product}</span>
-                <span
-                  className={`px-2 py-0.5 text-xs font-medium rounded-full ${
-                    p.colorMode === 'CMYK'
-                      ? 'bg-blue-100 text-blue-700'
-                      : p.colorMode === 'RGB'
-                        ? 'bg-purple-100 text-purple-700'
-                        : 'bg-orange-100 text-orange-700'
-                  }`}
-                >
-                  {p.colorMode}
-                </span>
-              </div>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-emerald-600">{p.recommendedDPI}</span>
-                <span className="text-sm text-gray-500">DPI rec.</span>
-                <span className="text-lg font-semibold text-gray-400">/</span>
-                <span className="text-lg font-semibold text-gray-500">{p.minimumDPI}</span>
-                <span className="text-xs text-gray-400">min</span>
-              </div>
-              <div className="mt-1 text-xs text-gray-400">{p.fileFormat} • ~{p.typicalFileSize}</div>
-            </button>
+            <div key={p.product} className="col-12 col-sm-6 col-lg-4">
+              <button
+                onClick={() => {
+                  setSelectedProduct(selectedProduct?.product === p.product ? null : p);
+                  setTimeout(() => simulateDPI(p.recommendedDPI), 50);
+                }}
+                className="text-start p-4 border rounded-lg w-100"
+                style={{
+                  transition: 'all 0.15s',
+                  ...(selectedProduct?.product === p.product
+                    ? { borderColor: '#10b981', backgroundColor: '#ecfdf5', boxShadow: '0 0 0 2px #a7f3d0' }
+                    : { backgroundColor: '#fff', borderColor: '#e5e7eb' }),
+                }}
+              >
+                <div className="d-flex align-items-center justify-content-between mb-2">
+                  <span className="fw-semibold text-sm" style={{ color: '#111827' }}>{p.product}</span>
+                  <span
+                    className="badge rounded-pill"
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 500,
+                      ...(p.colorMode === 'CMYK'
+                        ? { backgroundColor: '#dbeafe', color: '#1d4ed8' }
+                        : p.colorMode === 'RGB'
+                          ? { backgroundColor: '#f3e8ff', color: '#7c3aed' }
+                          : { backgroundColor: '#ffedd5', color: '#c2410c' }),
+                    }}
+                  >
+                    {p.colorMode}
+                  </span>
+                </div>
+                <div className="d-flex align-items-baseline gap-2">
+                  <span className="fs-3 fw-bold" style={{ color: '#059669' }}>{p.recommendedDPI}</span>
+                  <span className="text-sm text-secondary">DPI rec.</span>
+                  <span className="fs-5 fw-semibold" style={{ color: '#9ca3af' }}>/</span>
+                  <span className="fs-5 fw-semibold text-secondary">{p.minimumDPI}</span>
+                  <span className="text-xs" style={{ color: '#9ca3af' }}>min</span>
+                </div>
+                <div className="mt-1 text-xs" style={{ color: '#9ca3af' }}>{p.fileFormat} • ~{p.typicalFileSize}</div>
+              </button>
+            </div>
           ))}
         </div>
       ) : (
-        <div className="overflow-x-auto border border-gray-200 rounded-lg">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+        <div className="table-responsive border rounded-lg">
+          <table className="table text-sm mb-0">
+            <thead style={{ backgroundColor: '#f9fafb' }}>
               <tr>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Product</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Rec. DPI</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Min DPI</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Color</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">Format</th>
-                <th className="px-4 py-3 text-left font-medium text-gray-600">File Size</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Product</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Rec. DPI</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Min DPI</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Color</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>Format</th>
+                <th className="px-4 py-3 text-start fw-medium" style={{ color: '#4b5563' }}>File Size</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="border-top">
               {productDPIs.map((p) => (
                 <tr
                   key={p.product}
-                  className={`hover:bg-gray-50 cursor-pointer ${
-                    selectedProduct?.product === p.product ? 'bg-emerald-50' : ''
-                  }`}
+                  className={`cursor-pointer ${selectedProduct?.product === p.product ? '' : ''}`}
+                  style={selectedProduct?.product === p.product ? { backgroundColor: '#ecfdf5' } : {}}
                   onClick={() => {
                     setSelectedProduct(selectedProduct?.product === p.product ? null : p);
                     setTimeout(() => simulateDPI(p.recommendedDPI), 50);
                   }}
                 >
-                  <td className="px-4 py-3 font-medium text-gray-900">{p.product}</td>
-                  <td className="px-4 py-3 font-bold text-emerald-600">{p.recommendedDPI}</td>
-                  <td className="px-4 py-3 text-gray-500">{p.minimumDPI}</td>
+                  <td className="px-4 py-3 fw-medium" style={{ color: '#111827' }}>{p.product}</td>
+                  <td className="px-4 py-3 fw-bold" style={{ color: '#059669' }}>{p.recommendedDPI}</td>
+                  <td className="px-4 py-3 text-secondary">{p.minimumDPI}</td>
                   <td className="px-4 py-3">
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">
+                    <span className="badge rounded-pill" style={{ fontSize: '0.75rem', backgroundColor: '#f3f4f6', color: '#4b5563' }}>
                       {p.colorMode}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-600 text-xs">{p.fileFormat}</td>
-                  <td className="px-4 py-3 text-gray-500 text-xs">{p.typicalFileSize}</td>
+                  <td className="px-4 py-3" style={{ color: '#4b5563', fontSize: '0.75rem' }}>{p.fileFormat}</td>
+                  <td className="px-4 py-3 text-secondary" style={{ fontSize: '0.75rem' }}>{p.typicalFileSize}</td>
                 </tr>
               ))}
             </tbody>
@@ -413,39 +429,47 @@ function PrintResolutionReference() {
       )}
 
       {selectedProduct && (
-        <div className="border border-gray-200 rounded-lg p-6 bg-white">
-          <div className="flex flex-col lg:flex-row gap-6">
-            <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 mb-2">{selectedProduct.product}</h3>
-              <p className="text-sm text-gray-600 mb-4">{selectedProduct.details}</p>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Recommended DPI</p>
-                  <p className="text-2xl font-bold text-emerald-600">{selectedProduct.recommendedDPI}</p>
+        <div className="border rounded-lg p-4 bg-white">
+          <div className="d-flex flex-column flex-lg-row gap-4">
+            <div className="flex-fill">
+              <h3 className="fw-semibold mb-2" style={{ color: '#111827' }}>{selectedProduct.product}</h3>
+              <p className="text-sm mb-4" style={{ color: '#4b5563' }}>{selectedProduct.details}</p>
+              <div className="row g-3">
+                <div className="col-6">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#f9fafb' }}>
+                    <p className="text-xs text-secondary mb-1">Recommended DPI</p>
+                    <p className="fs-3 fw-bold" style={{ color: '#059669' }}>{selectedProduct.recommendedDPI}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Minimum DPI</p>
-                  <p className="text-2xl font-bold text-amber-600">{selectedProduct.minimumDPI}</p>
+                <div className="col-6">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#f9fafb' }}>
+                    <p className="text-xs text-secondary mb-1">Minimum DPI</p>
+                    <p className="fs-3 fw-bold" style={{ color: '#d97706' }}>{selectedProduct.minimumDPI}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">Color Mode</p>
-                  <p className="text-lg font-semibold text-gray-900">{selectedProduct.colorMode}</p>
+                <div className="col-6">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#f9fafb' }}>
+                    <p className="text-xs text-secondary mb-1">Color Mode</p>
+                    <p className="fs-5 fw-semibold" style={{ color: '#111827' }}>{selectedProduct.colorMode}</p>
+                  </div>
                 </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-xs text-gray-500 mb-1">File Format</p>
-                  <p className="text-lg font-semibold text-gray-900">{selectedProduct.fileFormat}</p>
+                <div className="col-6">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: '#f9fafb' }}>
+                    <p className="text-xs text-secondary mb-1">File Format</p>
+                    <p className="fs-5 fw-semibold" style={{ color: '#111827' }}>{selectedProduct.fileFormat}</p>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="lg:w-64">
-              <p className="text-xs text-gray-500 mb-2 text-center">Quality simulation at {selectedProduct.recommendedDPI} DPI</p>
+            <div style={{ width: '16rem' }}>
+              <p className="text-xs text-secondary mb-2 text-center">Quality simulation at {selectedProduct.recommendedDPI} DPI</p>
               <canvas
                 ref={canvasRef}
                 width={200}
                 height={200}
-                className="w-full border border-gray-200 rounded-lg"
+                className="w-100 border rounded-lg"
               />
-              <p className="text-xs text-gray-400 mt-1 text-center">Zoom in to see pixel-level detail</p>
+              <p className="text-xs mt-1 text-center" style={{ color: '#9ca3af' }}>Zoom in to see pixel-level detail</p>
             </div>
           </div>
         </div>
@@ -514,28 +538,28 @@ function SubstrateWeightCalculator() {
   );
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-amber-100 rounded-lg">
-          <Scale className="w-6 h-6 text-amber-600" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#fef3c7' }}>
+          <Scale size={24} style={{ color: '#d97706' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Substrate Weight Calculator</h2>
-          <p className="text-sm text-gray-500">Paper weight conversions and references</p>
+          <h2 className="fs-4 fw-bold" style={{ color: '#111827' }}>Substrate Weight Calculator</h2>
+          <p className="text-sm text-secondary">Paper weight conversions and references</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-4">
+      <div className="row g-4">
+        <div className="col-12 col-md-6 d-flex flex-column gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>
               Paper Weight (GSM)
             </label>
             <input
               type="number"
               value={gsm}
               onChange={(e) => setGsm(Math.max(1, parseInt(e.target.value) || 1))}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm"
+              className="form-control text-sm"
               min={1}
               max={2000}
             />
@@ -545,17 +569,17 @@ function SubstrateWeightCalculator() {
               max={1000}
               value={Math.min(gsm, 1000)}
               onChange={(e) => setGsm(parseInt(e.target.value))}
-              className="w-full mt-2 accent-amber-500"
+              className="form-range mt-2"
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
+            <div className="d-flex justify-content-between text-xs mt-1" style={{ color: '#9ca3af' }}>
               <span>10 GSM</span>
               <span>1000 GSM</span>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Paper Size</label>
-            <div className="flex items-center gap-2 mb-2">
+            <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Paper Size</label>
+            <div className="d-flex align-items-center gap-2 mb-2">
               <select
                 value={isCustom ? 'custom' : selectedSize}
                 onChange={(e) => {
@@ -566,7 +590,7 @@ function SubstrateWeightCalculator() {
                     setSelectedSize(e.target.value);
                   }
                 }}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-amber-500"
+                className="form-select flex-fill text-sm"
               >
                 {paperSizes.map((s) => (
                   <option key={s.name} value={s.name}>
@@ -577,113 +601,120 @@ function SubstrateWeightCalculator() {
               </select>
             </div>
             {isCustom && (
-              <div className="flex gap-2">
+              <div className="d-flex gap-2">
                 <input
                   type="number"
                   value={customW}
                   onChange={(e) => setCustomW(parseInt(e.target.value) || 1)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="form-control flex-fill text-sm"
                   placeholder="Width mm"
                 />
-                <span className="self-center text-gray-400">×</span>
+                <span className="align-self-center" style={{ color: '#9ca3af' }}>×</span>
                 <input
                   type="number"
                   value={customH}
                   onChange={(e) => setCustomH(parseInt(e.target.value) || 1)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                  className="form-control flex-fill text-sm"
                   placeholder="Height mm"
                 />
               </div>
             )}
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-            <h3 className="font-medium text-gray-900">Calculation Results</h3>
-            <div className="grid grid-cols-3 gap-3 text-center">
-              <div className="bg-white p-3 rounded-lg border border-gray-200">
-                <p className="text-xs text-gray-500 mb-1">Per Sheet</p>
-                <p className="text-lg font-bold text-amber-600">
-                  {weightPerSheet < 1
-                    ? `${(weightPerSheet * 1000).toFixed(1)} mg`
-                    : `${weightPerSheet.toFixed(3)} g`}
-                </p>
+          <div className="rounded-lg p-3 d-flex flex-column gap-2" style={{ backgroundColor: '#f9fafb' }}>
+            <h3 className="fw-medium" style={{ color: '#111827' }}>Calculation Results</h3>
+            <div className="row g-3 text-center">
+              <div className="col-4">
+                <div className="p-3 rounded-lg border" style={{ backgroundColor: '#fff', borderColor: '#e5e7eb' }}>
+                  <p className="text-xs text-secondary mb-1">Per Sheet</p>
+                  <p className="fs-5 fw-bold" style={{ color: '#d97706' }}>
+                    {weightPerSheet < 1
+                      ? `${(weightPerSheet * 1000).toFixed(1)} mg`
+                      : `${weightPerSheet.toFixed(3)} g`}
+                  </p>
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-gray-200">
-                <p className="text-xs text-gray-500 mb-1">Per Ream (500)</p>
-                <p className="text-lg font-bold text-amber-600">{reamWeight.toFixed(2)} g</p>
-                <p className="text-xs text-gray-400">= {(reamWeight / 1000).toFixed(2)} kg</p>
+              <div className="col-4">
+                <div className="p-3 rounded-lg border" style={{ backgroundColor: '#fff', borderColor: '#e5e7eb' }}>
+                  <p className="text-xs text-secondary mb-1">Per Ream (500)</p>
+                  <p className="fs-5 fw-bold" style={{ color: '#d97706' }}>{reamWeight.toFixed(2)} g</p>
+                  <p className="text-xs" style={{ color: '#9ca3af' }}>= {(reamWeight / 1000).toFixed(2)} kg</p>
+                </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border border-gray-200">
-                <p className="text-xs text-gray-500 mb-1">Sheets/kg</p>
-                <p className="text-lg font-bold text-amber-600">
-                  {sheetsPerKg > 10000
-                    ? `${(sheetsPerKg / 1000).toFixed(1)}k`
-                    : sheetsPerKg.toFixed(0)}
-                </p>
+              <div className="col-4">
+                <div className="p-3 rounded-lg border" style={{ backgroundColor: '#fff', borderColor: '#e5e7eb' }}>
+                  <p className="text-xs text-secondary mb-1">Sheets/kg</p>
+                  <p className="fs-5 fw-bold" style={{ color: '#d97706' }}>
+                    {sheetsPerKg > 10000
+                      ? `${(sheetsPerKg / 1000).toFixed(1)}k`
+                      : sheetsPerKg.toFixed(0)}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-secondary">
               {size.name}: {size.w}×{size.h} mm = {areaM2.toFixed(6)} m²
             </div>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="col-12 col-md-6 d-flex flex-column gap-3">
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">Comparison to Common Items</h3>
-            <div className="space-y-2">
+            <h3 className="fw-medium mb-3" style={{ color: '#111827' }}>Comparison to Common Items</h3>
+            <div className="d-flex flex-column gap-2">
               {comparisons.map((item) => (
-                <div key={item.name} className="flex items-center gap-3">
-                  <span className="w-24 text-sm text-gray-600">{item.name}</span>
-                  <div className="flex-1 relative h-6 bg-gray-100 rounded-full overflow-hidden">
+                <div key={item.name} className="d-flex align-items-center gap-3">
+                  <span className="text-sm" style={{ width: '6rem', color: '#4b5563' }}>{item.name}</span>
+                  <div className="flex-fill position-relative" style={{ height: '1.5rem', backgroundColor: '#f3f4f6', borderRadius: '9999px', overflow: 'hidden' }}>
                     <div
-                      className="absolute left-0 top-0 h-full bg-amber-200 rounded-full"
-                      style={{ width: `${Math.min(100, (item.gsm / 1000) * 100)}%` }}
+                      className="position-absolute top-0 start-0 h-100"
+                      style={{ width: `${Math.min(100, (item.gsm / 1000) * 100)}%`, backgroundColor: '#fcd34d', borderRadius: '9999px' }}
                     />
                     <div
-                      className="absolute top-0 h-full w-0.5 bg-red-500"
-                      style={{ left: `${Math.min(100, (gsm / 1000) * 100)}%` }}
+                      className="position-absolute top-0 h-100"
+                      style={{ width: '2px', backgroundColor: '#ef4444', left: `${Math.min(100, (gsm / 1000) * 100)}%` }}
                     />
                   </div>
-                  <span className="w-16 text-xs text-gray-500 text-right">{item.gsm} g</span>
+                  <span className="text-xs text-end" style={{ width: '4rem', color: '#6b7280' }}>{item.gsm} g</span>
                 </div>
               ))}
-              <div className="flex items-center gap-3 border-t border-gray-200 pt-2">
-                <span className="w-24 text-sm font-medium text-amber-700">Your paper</span>
-                <div className="flex-1 relative h-6">
+              <div className="d-flex align-items-center gap-3 border-top pt-2" style={{ borderColor: '#e5e7eb' }}>
+                <span className="text-sm fw-medium" style={{ width: '6rem', color: '#b45309' }}>Your paper</span>
+                <div className="flex-fill position-relative" style={{ height: '1.5rem' }}>
                   <div
-                    className="absolute top-0 h-full w-1 bg-amber-500 rounded"
-                    style={{ left: `${Math.min(100, (gsm / 1000) * 100)}%` }}
+                    className="position-absolute top-0 h-100 rounded"
+                    style={{ width: '4px', backgroundColor: '#f59e0b', left: `${Math.min(100, (gsm / 1000) * 100)}%` }}
                   />
                 </div>
-                <span className="w-16 text-sm font-medium text-amber-700 text-right">{gsm} g</span>
+                <span className="text-sm fw-medium text-end" style={{ width: '4rem', color: '#b45309' }}>{gsm} g</span>
               </div>
             </div>
           </div>
 
           <div>
-            <h3 className="font-medium text-gray-900 mb-3">Paper Type Match</h3>
-            <div className="space-y-2">
+            <h3 className="fw-medium mb-3" style={{ color: '#111827' }}>Paper Type Match</h3>
+            <div className="d-flex flex-column gap-2">
               {commonPaperTypes.map((type) => {
                 const isMatch = gsm >= type.gsmRange[0] && gsm <= type.gsmRange[1];
                 return (
                   <div
                     key={type.name}
-                    className={`p-2 rounded-lg text-sm ${
-                      isMatch
-                        ? 'bg-amber-50 border border-amber-300 ring-1 ring-amber-200'
-                        : 'bg-gray-50 border border-gray-100'
-                    }`}
+                    className="p-2 rounded-lg text-sm"
+                    style={{
+                      backgroundColor: isMatch ? '#fffbeb' : '#f9fafb',
+                      border: isMatch ? '1px solid #fbbf24' : '1px solid #f3f4f6',
+                      ...(isMatch ? { boxShadow: '0 0 0 1px #fde68a' } : {}),
+                    }}
                   >
-                    <div className="flex justify-between">
-                      <span className={`font-medium ${isMatch ? 'text-amber-900' : 'text-gray-700'}`}>
+                    <div className="d-flex justify-content-between">
+                      <span className="fw-medium" style={{ color: isMatch ? '#92400e' : '#374151' }}>
                         {type.name}
                       </span>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-secondary">
                         {type.gsmRange[0]}-{type.gsmRange[1]} GSM
                       </span>
                     </div>
-                    <p className="text-xs text-gray-500">{type.description}</p>
+                    <p className="text-xs text-secondary mb-0">{type.description}</p>
                   </div>
                 );
               })}
@@ -762,22 +793,22 @@ function FileNamingGenerator() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-violet-100 rounded-lg">
-          <PenTool className="w-6 h-6 text-violet-600" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#ede9fe' }}>
+          <PenTool size={24} style={{ color: '#7c3aed' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Print File Naming Convention Generator</h2>
-          <p className="text-sm text-gray-500">Generate standardized, industry-compliant filenames</p>
+          <h2 className="fs-4 fw-bold" style={{ color: '#111827' }}>Print File Naming Convention Generator</h2>
+          <p className="text-sm text-secondary">Generate standardized, industry-compliant filenames</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-4">
+      <div className="row g-4">
+        <div className="col-12 col-lg-8 d-flex flex-column gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Naming Convention</label>
-            <div className="flex gap-2">
+            <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Naming Convention</label>
+            <div className="d-flex gap-2">
               {([
                 { key: 'iso' as NamingConvention, label: 'ISO Style', desc: 'Structured with delimiters' },
                 { key: 'simple' as NamingConvention, label: 'Simple', desc: 'Short & quick' },
@@ -786,109 +817,111 @@ function FileNamingGenerator() {
                 <button
                   key={c.key}
                   onClick={() => setConvention(c.key)}
-                  className={`flex-1 p-3 rounded-lg text-left transition-all ${
-                    convention === c.key
-                      ? 'bg-violet-50 border-2 border-violet-400 ring-2 ring-violet-100'
-                      : 'bg-gray-50 border-2 border-transparent hover:border-gray-300'
-                  }`}
+                  className="flex-fill p-3 text-start rounded-lg"
+                  style={{
+                    transition: 'all 0.15s',
+                    ...(convention === c.key
+                      ? { backgroundColor: '#f5f3ff', border: '2px solid #a78bfa', boxShadow: '0 0 0 2px #ede9fe' }
+                      : { backgroundColor: '#f9fafb', border: '2px solid transparent' }),
+                  }}
                 >
-                  <span className="text-sm font-medium text-gray-900">{c.label}</span>
-                  <p className="text-xs text-gray-500 mt-0.5">{c.desc}</p>
+                  <span className="text-sm fw-medium" style={{ color: '#111827' }}>{c.label}</span>
+                  <p className="text-xs text-secondary mb-0" style={{ marginTop: '2px' }}>{c.desc}</p>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Client Name *</label>
+          <div className="row g-3">
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Client Name *</label>
               <input
                 type="text"
                 value={fields.client}
                 onChange={(e) => updateField('client', e.target.value)}
                 placeholder="Acme Corp"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Job Number</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Job Number</label>
               <input
                 type="text"
                 value={fields.jobNumber}
                 onChange={(e) => updateField('jobNumber', e.target.value)}
                 placeholder="12345"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Product Type</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Product Type</label>
               <select
                 value={fields.productType}
                 onChange={(e) => updateField('productType', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-violet-500"
+                className="form-select text-sm"
               >
                 {productTypes.map((p) => (
                   <option key={p} value={p}>{p}</option>
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Size</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Size</label>
               <input
                 type="text"
                 value={fields.size}
                 onChange={(e) => updateField('size', e.target.value)}
                 placeholder="90x55mm"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Quantity</label>
               <input
                 type="text"
                 value={fields.quantity}
                 onChange={(e) => updateField('quantity', e.target.value)}
                 placeholder="500"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Due Date</label>
               <input
                 type="date"
                 value={fields.dueDate}
                 onChange={(e) => updateField('dueDate', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Revision</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Revision</label>
               <input
                 type="text"
                 value={fields.revision}
                 onChange={(e) => updateField('revision', e.target.value)}
                 placeholder="01"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-violet-500 focus:border-violet-500"
+                className="form-control text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Color Mode</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Color Mode</label>
               <select
                 value={fields.colorMode}
                 onChange={(e) => updateField('colorMode', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-violet-500"
+                className="form-select text-sm"
               >
                 {colorModes.map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
             </div>
-            <div className="sm:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-1">Special Finish</label>
+            <div className="col-12 col-sm-6">
+              <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Special Finish</label>
               <select
                 value={fields.specialFinish}
                 onChange={(e) => updateField('specialFinish', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-violet-500"
+                className="form-select text-sm"
               >
                 {specialFinishes.map((f) => (
                   <option key={f} value={f}>{f}</option>
@@ -898,42 +931,43 @@ function FileNamingGenerator() {
           </div>
         </div>
 
-        <div className="space-y-4">
-          <div className="bg-gray-900 rounded-lg p-4">
-            <div className="flex items-center justify-between mb-2">
-              <h3 className="text-sm font-medium text-gray-400">Generated Filename</h3>
+        <div className="col-12 col-lg-4 d-flex flex-column gap-3">
+          <div className="rounded-lg p-4" style={{ backgroundColor: '#111827' }}>
+            <div className="d-flex align-items-center justify-content-between mb-2">
+              <h3 className="text-sm fw-medium" style={{ color: '#9ca3af' }}>Generated Filename</h3>
               <button
                 onClick={copyToClipboard}
-                className="flex items-center gap-1 px-2 py-1 text-xs text-gray-400 hover:text-white transition-colors"
+                className="btn btn-sm d-flex align-items-center gap-1"
+                style={{ color: copied ? '#fff' : '#9ca3af' }}
               >
-                {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                {copied ? <Check size={12} /> : <Copy size={12} />}
                 {copied ? 'Copied!' : 'Copy'}
               </button>
             </div>
-            <p className="text-green-400 text-sm font-mono break-all leading-relaxed">{filename}</p>
+            <p className="text-sm font-monospace mb-0" style={{ color: '#4ade80', wordBreak: 'break-all', lineHeight: 1.6 }}>{filename}</p>
           </div>
 
-          <div className="bg-white border border-gray-200 rounded-lg p-4">
-            <h3 className="text-sm font-medium text-gray-700 mb-3">Naming Examples</h3>
-            <div className="space-y-3">
+          <div className="border rounded-lg p-4 bg-white">
+            <h3 className="text-sm fw-medium mb-3" style={{ color: '#374151' }}>Naming Examples</h3>
+            <div className="d-flex flex-column gap-3">
               <div>
-                <span className="text-xs font-medium text-red-600 mb-1 block">❌ Bad Naming</span>
-                <div className="bg-red-50 p-2 rounded border border-red-200">
-                  <p className="text-xs font-mono text-red-700 break-all">{badExample}</p>
+                <span className="text-xs fw-medium mb-1 d-block" style={{ color: '#dc2626' }}>❌ Bad Naming</span>
+                <div className="p-2 rounded border" style={{ backgroundColor: '#fef2f2', borderColor: '#fecaca' }}>
+                  <p className="text-xs font-monospace mb-0" style={{ color: '#b91c1c', wordBreak: 'break-all' }}>{badExample}</p>
                 </div>
               </div>
               <div>
-                <span className="text-xs font-medium text-green-600 mb-1 block">✅ Good Naming</span>
-                <div className="bg-green-50 p-2 rounded border border-green-200">
-                  <p className="text-xs font-mono text-green-700 break-all">{goodExample}</p>
+                <span className="text-xs fw-medium mb-1 d-block" style={{ color: '#16a34a' }}>✅ Good Naming</span>
+                <div className="p-2 rounded border" style={{ backgroundColor: '#f0fdf4', borderColor: '#bbf7d0' }}>
+                  <p className="text-xs font-monospace mb-0" style={{ color: '#15803d', wordBreak: 'break-all' }}>{goodExample}</p>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-violet-50 rounded-lg p-4 text-xs text-violet-700 space-y-1">
-            <p className="font-medium text-violet-900">Tips:</p>
-            <ul className="list-disc list-inside space-y-0.5 text-violet-600">
+          <div className="rounded-lg p-4 text-xs d-flex flex-column gap-1" style={{ backgroundColor: '#f5f3ff', color: '#6d28d9' }}>
+            <p className="fw-medium mb-1" style={{ color: '#5b21b6' }}>Tips:</p>
+            <ul className="mb-0" style={{ paddingLeft: '1.25rem' }}>
               <li>Use underscores, not spaces</li>
               <li>Keep client names consistent</li>
               <li>Always include revision numbers</li>
@@ -1011,37 +1045,39 @@ function MultiPageLayoutArranger() {
   }, [pages]);
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 mb-4">
-        <div className="p-2 bg-cyan-100 rounded-lg">
-          <LayoutGrid className="w-6 h-6 text-cyan-600" />
+    <div className="d-flex flex-column gap-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#cffafe' }}>
+          <LayoutGrid size={24} style={{ color: '#0891b2' }} />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Multi-Page Layout Arranger</h2>
-          <p className="text-sm text-gray-500">Page imposition for booklets and catalogs</p>
+          <h2 className="fs-4 fw-bold" style={{ color: '#111827' }}>Multi-Page Layout Arranger</h2>
+          <p className="text-sm text-secondary">Page imposition for booklets and catalogs</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="space-y-4">
+      <div className="row g-4">
+        <div className="col-12 col-lg-3 d-flex flex-column gap-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Number of Pages</label>
-            <div className="grid grid-cols-4 gap-2 mb-2">
+            <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Number of Pages</label>
+            <div className="row g-2 mb-2">
               {validPages.map((n) => (
-                <button
-                  key={n}
-                  onClick={() => {
-                    setPageCount(n);
-                    setCustomPages('');
-                  }}
-                  className={`py-2 text-sm rounded-lg font-medium transition-colors ${
-                    pageCount === n && !customPages
-                      ? 'bg-cyan-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {n}
-                </button>
+                <div key={n} className="col-6 col-lg-3">
+                  <button
+                    onClick={() => {
+                      setPageCount(n);
+                      setCustomPages('');
+                    }}
+                    className="btn btn-sm w-100 fw-medium"
+                    style={{
+                      ...(pageCount === n && !customPages
+                        ? { backgroundColor: '#0891b2', color: '#fff' }
+                        : { backgroundColor: '#f3f4f6', color: '#374151' }),
+                    }}
+                  >
+                    {n}
+                  </button>
+                </div>
               ))}
             </div>
             <input
@@ -1049,48 +1085,48 @@ function MultiPageLayoutArranger() {
               value={customPages}
               onChange={(e) => setCustomPages(e.target.value)}
               placeholder="Custom page count"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500"
+              className="form-control text-sm"
               min={4}
               max={200}
               step={4}
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Page Size (mm)</label>
-              <div className="flex gap-1">
+          <div className="row g-3">
+            <div className="col-6">
+              <label className="form-label fw-medium text-xs" style={{ color: '#374151' }}>Page Size (mm)</label>
+              <div className="d-flex gap-1">
                 <input
                   type="number"
                   value={pageWidth}
                   onChange={(e) => setPageWidth(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm"
+                  className="form-control form-control-sm text-sm"
                   placeholder="W"
                 />
                 <input
                   type="number"
                   value={pageHeight}
                   onChange={(e) => setPageHeight(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm"
+                  className="form-control form-control-sm text-sm"
                   placeholder="H"
                 />
               </div>
             </div>
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">Paper Size (mm)</label>
-              <div className="flex gap-1">
+            <div className="col-6">
+              <label className="form-label fw-medium text-xs" style={{ color: '#374151' }}>Paper Size (mm)</label>
+              <div className="d-flex gap-1">
                 <input
                   type="number"
                   value={paperWidth}
                   onChange={(e) => setPaperWidth(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm"
+                  className="form-control form-control-sm text-sm"
                   placeholder="W"
                 />
                 <input
                   type="number"
                   value={paperHeight}
                   onChange={(e) => setPaperHeight(e.target.value)}
-                  className="w-full px-2 py-1.5 border border-gray-300 rounded text-sm"
+                  className="form-control form-control-sm text-sm"
                   placeholder="H"
                 />
               </div>
@@ -1098,8 +1134,8 @@ function MultiPageLayoutArranger() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Binding Type</label>
-            <div className="space-y-2">
+            <label className="form-label fw-medium text-sm" style={{ color: '#374151' }}>Binding Type</label>
+            <div className="d-flex flex-column gap-2">
               {([
                 { key: 'saddle-stitch' as BindingType, label: 'Saddle Stitch', desc: 'Stapled at spine' },
                 { key: 'perfect-bound' as BindingType, label: 'Perfect Bound', desc: 'Glued spine' },
@@ -1107,22 +1143,23 @@ function MultiPageLayoutArranger() {
               ]).map((b) => (
                 <label
                   key={b.key}
-                  className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                    binding === b.key
-                      ? 'border-cyan-400 bg-cyan-50'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
+                  className="d-flex align-items-center p-3 rounded-lg cursor-pointer"
+                  style={{
+                    transition: 'all 0.15s',
+                    border: binding === b.key ? '2px solid #22d3ee' : '2px solid #e5e7eb',
+                    backgroundColor: binding === b.key ? '#ecfeff' : '#fff',
+                  }}
                 >
                   <input
                     type="radio"
                     name="binding"
                     checked={binding === b.key}
                     onChange={() => setBinding(b.key)}
-                    className="mr-3 accent-cyan-600"
+                    className="me-2"
                   />
                   <div>
-                    <span className="text-sm font-medium text-gray-900">{b.label}</span>
-                    <p className="text-xs text-gray-500">{b.desc}</p>
+                    <span className="text-sm fw-medium" style={{ color: '#111827' }}>{b.label}</span>
+                    <p className="text-xs text-secondary mb-0">{b.desc}</p>
                   </div>
                 </label>
               ))}
@@ -1131,20 +1168,21 @@ function MultiPageLayoutArranger() {
 
           <button
             onClick={exportSVG}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 transition-colors text-sm font-medium"
+            className="btn d-flex align-items-center justify-content-center gap-2 text-sm fw-medium"
+            style={{ backgroundColor: '#0891b2', color: '#fff' }}
           >
-            <Download className="w-4 h-4" />
+            <Download size={16} />
             Export Layout as SVG
           </button>
         </div>
 
-        <div className="lg:col-span-2">
-          <div className="bg-gray-50 rounded-lg p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-medium text-gray-900">
+        <div className="col-12 col-lg-9">
+          <div className="rounded-lg p-4" style={{ backgroundColor: '#f9fafb' }}>
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <h3 className="fw-medium" style={{ color: '#111827' }}>
                 {sheets.length} Sheet{sheets.length > 1 ? 's' : ''} ({totalPages} pages total, {pages} content)
               </h3>
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-secondary">
                 {binding === 'saddle-stitch'
                   ? 'Folded & stapled at spine'
                   : binding === 'perfect-bound'
@@ -1156,7 +1194,7 @@ function MultiPageLayoutArranger() {
             <svg
               ref={svgRef}
               viewBox={`0 0 ${Math.max(sheets.length * 280, 560)} 420`}
-              className="w-full"
+              className="w-100"
               xmlns="http://www.w3.org/2000/svg"
             >
               <style>
@@ -1284,18 +1322,24 @@ function MultiPageLayoutArranger() {
             </svg>
           </div>
 
-          <div className="mt-4 grid grid-cols-3 gap-3">
-            <div className="bg-blue-50 p-3 rounded-lg text-center">
-              <p className="text-xs text-blue-600 mb-1">Front Pages (Blue)</p>
-              <p className="text-sm font-medium text-blue-900">Printed on front of each sheet</p>
+          <div className="row g-3 mt-4">
+            <div className="col-4">
+              <div className="p-3 rounded-lg text-center" style={{ backgroundColor: '#eff6ff' }}>
+                <p className="text-xs mb-1" style={{ color: '#2563eb' }}>Front Pages (Blue)</p>
+                <p className="text-sm fw-medium" style={{ color: '#1e3a8a' }}>Printed on front of each sheet</p>
+              </div>
             </div>
-            <div className="bg-yellow-50 p-3 rounded-lg text-center">
-              <p className="text-xs text-yellow-600 mb-1">Back Pages (Yellow)</p>
-              <p className="text-sm font-medium text-yellow-900">Printed on back of each sheet</p>
+            <div className="col-4">
+              <div className="p-3 rounded-lg text-center" style={{ backgroundColor: '#fefce8' }}>
+                <p className="text-xs mb-1" style={{ color: '#ca8a04' }}>Back Pages (Yellow)</p>
+                <p className="text-sm fw-medium" style={{ color: '#713f12' }}>Printed on back of each sheet</p>
+              </div>
             </div>
-            <div className="bg-gray-50 p-3 rounded-lg text-center">
-              <p className="text-xs text-gray-600 mb-1">Red Line = Spine</p>
-              <p className="text-sm font-medium text-gray-900">Fold/staple edge</p>
+            <div className="col-4">
+              <div className="p-3 rounded-lg text-center" style={{ backgroundColor: '#f9fafb' }}>
+                <p className="text-xs mb-1" style={{ color: '#4b5563' }}>Red Line = Spine</p>
+                <p className="text-sm fw-medium" style={{ color: '#111827' }}>Fold/staple edge</p>
+              </div>
             </div>
           </div>
         </div>

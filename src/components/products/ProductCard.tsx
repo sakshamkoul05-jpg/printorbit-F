@@ -52,105 +52,109 @@ export default function ProductCard({ product, index = 0 }: ProductCardProps) {
       transition={{ duration: 0.4, delay: index * 0.05 }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative"
+      className="position-relative"
     >
-      <Link href={`/products/${product.slug}`} className="block">
-        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden card-hover">
-          {/* Image */}
-          <div className="relative aspect-[4/3] bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
+      <Link href={`/products/${product.slug}`} className="d-block text-decoration-none">
+        <div className="bg-white rounded-3 overflow-hidden" style={{ border: '1px solid #f1f5f9' }}>
+          <div className="position-relative" style={{ aspectRatio: '4/3', background: 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)', overflow: 'hidden' }}>
             {product.image_urls?.[0] ? (
               <img
                 src={product.image_urls[0]}
                 alt={product.name}
-                className="w-full h-full object-cover img-zoom"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
+              <div className="w-100 h-100 d-flex align-items-center justify-content-center">
                 <div className="text-center">
-                  <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-2">
-                    <span className="text-2xl">📦</span>
+                  <div className="mx-auto mb-2 d-flex align-items-center justify-content-center rounded-3" style={{ width: '4rem', height: '4rem', backgroundColor: 'rgba(13,110,253,0.1)' }}>
+                    <span style={{ fontSize: '1.5rem' }}>📦</span>
                   </div>
-                  <p className="text-xs text-muted">{product.name}</p>
+                  <p className="mb-0" style={{ fontSize: '0.75rem', color: '#6c757d' }}>{product.name}</p>
                 </div>
               </div>
             )}
 
-            {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+            <div className="position-absolute d-flex flex-column" style={{ top: '0.75rem', left: '0.75rem', gap: '0.375rem' }}>
               {product.customizable && (
-                <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-primary text-white rounded-full">
+                <span className="d-inline-block text-center" style={{ padding: '0.25rem 0.625rem', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: 'var(--bs-primary, #0d6efd)', color: 'var(--bs-white)', borderRadius: '9999px' }}>
                   Customizable
                 </span>
               )}
               {product.template_available && (
-                <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider bg-accent text-white rounded-full">
+                <span className="d-inline-block text-center" style={{ padding: '0.25rem 0.625rem', fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', backgroundColor: '#6f42c1', color: 'var(--bs-white)', borderRadius: '9999px' }}>
                   Templates
                 </span>
               )}
             </div>
 
-            {/* Wishlist */}
             <button
               onClick={handleWishlist}
-              className={`absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all ${
-                isWished
-                  ? 'bg-red text-white'
-                  : 'bg-white/90 text-slate-400 hover:text-red hover:bg-white'
-              }`}
+              className="position-absolute d-flex align-items-center justify-content-center rounded-circle"
+              style={{
+                top: '0.75rem',
+                right: '0.75rem',
+                width: '2rem',
+                height: '2rem',
+                backgroundColor: isWished ? 'var(--bs-red, #dc3545)' : 'rgba(255,255,255,0.9)',
+                color: isWished ? 'var(--bs-white)' : '#94a3b8',
+                transition: 'all 0.15s',
+                border: 'none',
+              }}
             >
-              <Heart className="w-4 h-4" fill={isWished ? 'currentColor' : 'none'} />
+              <Heart size={16} fill={isWished ? 'currentColor' : 'none'} />
             </button>
 
-            {/* Hover Actions */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-              className="absolute bottom-3 left-3 right-3 flex gap-2"
+              className="position-absolute d-flex gap-2"
+              style={{ bottom: '0.75rem', left: '0.75rem', right: '0.75rem' }}
             >
               <button
                 onClick={handleAddToCart}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-primary text-white text-xs font-semibold rounded-xl hover:bg-primary-dark transition-colors shadow-lg"
+                className="flex-fill d-flex align-items-center justify-content-center gap-2"
+                style={{ padding: '0.5rem 0.75rem', backgroundColor: 'var(--bs-primary, #0d6efd)', color: 'var(--bs-white)', fontSize: '0.75rem', fontWeight: 600, borderRadius: '0.75rem', transition: 'background-color 0.15s', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', border: 'none' }}
               >
-                <ShoppingCart className="w-3.5 h-3.5" />
+                <ShoppingCart size={14} />
                 Add to Cart
               </button>
               <Link
                 href={`/products/${product.slug}`}
                 onClick={(e) => e.stopPropagation()}
-                className="w-9 h-9 flex items-center justify-center bg-white text-slate-600 rounded-xl hover:bg-slate-50 transition-colors shadow-lg"
+                className="d-flex align-items-center justify-content-center text-decoration-none"
+                style={{ width: '2.25rem', height: '2.25rem', backgroundColor: 'var(--bs-white)', color: '#475569', borderRadius: '0.75rem', transition: 'background-color 0.15s', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
               >
-                <Eye className="w-4 h-4" />
+                <Eye size={16} />
               </Link>
             </motion.div>
           </div>
 
-          {/* Content */}
-          <div className="p-4">
-            <div className="flex items-center gap-1 mb-1.5">
+          <div className="p-3">
+            <div className="d-flex align-items-center mb-1" style={{ gap: '0.25rem' }}>
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-3 h-3 text-yellow-400 fill-yellow-400" />
+                <Star key={i} size={12} className="text-warning" fill="#ffc107" />
               ))}
-              <span className="text-[10px] text-muted ml-1">(4.8)</span>
+              <span style={{ fontSize: '10px', color: '#6c757d', marginLeft: '0.25rem' }}>(4.8)</span>
             </div>
 
-            <h3 className="font-semibold text-dark text-sm mb-1 group-hover:text-primary transition-colors line-clamp-1">
+            <h3 className="mb-1" style={{ fontWeight: 600, color: '#1e293b', fontSize: '0.875rem', transition: 'color 0.15s', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {product.name}
             </h3>
 
-            <p className="text-xs text-muted mb-3 line-clamp-1">
+            <p className="mb-2" style={{ fontSize: '0.75rem', color: '#6c757d', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {product.short_description || product.description}
             </p>
 
-            <div className="flex items-end justify-between">
+            <div className="d-flex align-items-end justify-content-between">
               <div>
-                <span className="text-lg font-bold text-primary">{formatPrice(product.base_price)}</span>
-                <span className="text-[10px] text-muted block">
+                <span style={{ fontSize: '1.125rem', fontWeight: 700, color: 'var(--bs-primary, #0d6efd)' }}>{formatPrice(product.base_price)}</span>
+                <span className="d-block" style={{ fontSize: '10px', color: '#6c757d' }}>
                   Min. {product.min_quantity} pcs
                 </span>
               </div>
-              <span className="text-xs text-slate-400 flex items-center gap-1 group-hover:text-primary transition-colors">
+              <span className="d-inline-flex align-items-center" style={{ fontSize: '0.75rem', color: '#94a3b8', gap: '0.25rem', transition: 'color 0.15s' }}>
                 View Details
-                <ArrowRight className="w-3 h-3" />
+                <ArrowRight size={12} />
               </span>
             </div>
           </div>

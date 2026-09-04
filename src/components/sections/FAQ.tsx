@@ -18,7 +18,7 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-5 bg-slate-50">
       <Container>
         <SectionHeader
           badge="FAQ"
@@ -26,8 +26,8 @@ export default function FAQ() {
           description="Find answers to common questions about our services"
         />
 
-        <div className="max-w-3xl mx-auto mt-12">
-          <div className="space-y-3">
+        <div className="mx-auto mt-4" style={{ maxWidth: '768px' }}>
+          <div className="d-flex flex-column gap-3">
             {faqs.map((faq, i) => (
               <motion.div
                 key={i}
@@ -38,11 +38,11 @@ export default function FAQ() {
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                  className="w-full bg-white rounded-xl p-5 text-left border border-slate-100 hover:border-primary/30 transition-colors"
+                  className="w-100 bg-white rounded-4 p-4 text-start border border-light border-0"
                 >
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-semibold font-heading text-dark pr-4">{faq.question}</h3>
-                    <ChevronDown className={`w-5 h-5 text-primary flex-shrink-0 transition-transform duration-300 ${openIndex === i ? 'rotate-180' : ''}`} />
+                  <div className="d-flex align-items-center justify-content-between">
+                    <h3 className="fw-semibold font-heading text-dark pe-3 mb-0" style={{ fontSize: '16px' }}>{faq.question}</h3>
+                    <ChevronDown size={20} className={`text-primary flex-shrink-0 transition-transform ${openIndex === i ? 'rotate-180' : ''}`} style={{ transition: 'transform 0.3s', transform: openIndex === i ? 'rotate(180deg)' : 'rotate(0deg)' }} />
                   </div>
                   <AnimatePresence>
                     {openIndex === i && (
@@ -53,7 +53,7 @@ export default function FAQ() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <p className="text-sm text-muted mt-4 leading-relaxed">{faq.answer}</p>
+                        <p className="text-muted mt-3 mb-0" style={{ fontSize: '14px', lineHeight: 1.6 }}>{faq.answer}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>

@@ -396,69 +396,67 @@ export default function DesignStudioPage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-slate-900 overflow-hidden">
+    <div className="d-flex flex-column" style={{ height: '100vh', backgroundColor: '#0f172a', overflow: 'hidden' }}>
       {/* Top Toolbar */}
-      <div className="h-12 bg-dark border-b border-white/10 flex items-center justify-between px-4 shrink-0">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="flex items-center gap-2">
+      <div className="d-flex align-items-center justify-content-between px-4 shrink-0" style={{ height: '48px', backgroundColor: '#1e293b', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+        <div className="d-flex align-items-center gap-3">
+          <Link href="/" className="d-flex align-items-center gap-2 text-decoration-none">
             <Logo size="sm" dark={false} showText={false} />
-            <span className="text-white font-semibold text-sm font-heading hidden sm:inline">Design Studio</span>
+            <span className="text-white fw-semibold text-sm font-heading d-none d-sm-inline">Design Studio</span>
           </Link>
 
-          <div className="h-5 w-px bg-white/10" />
+          <div style={{ width: '1px', height: '20px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
 
           {/* File Tools */}
-          <div className="flex items-center gap-1">
-            <button onClick={undo} className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Undo">
-              <Undo2 className="w-4 h-4" />
+          <div className="d-flex align-items-center gap-1">
+            <button onClick={undo} className="btn btn-sm p-1" style={{ color: 'rgba(255,255,255,0.5)' }} title="Undo">
+              <Undo2 size={16} />
             </button>
-            <button onClick={redo} className="p-1.5 text-white/50 hover:text-white hover:bg-white/10 rounded-lg transition-colors" title="Redo">
-              <Redo2 className="w-4 h-4" />
+            <button onClick={redo} className="btn btn-sm p-1" style={{ color: 'rgba(255,255,255,0.5)' }} title="Redo">
+              <Redo2 size={16} />
             </button>
           </div>
 
-          <div className="h-5 w-px bg-white/10" />
+          <div style={{ width: '1px', height: '20px', backgroundColor: 'rgba(255,255,255,0.1)' }} />
 
           {/* Zoom */}
-          <div className="flex items-center gap-2">
-            <button onClick={() => setZoom(Math.max(25, zoom - 25))} className="p-1 text-white/50 hover:text-white rounded">
-              <ZoomOut className="w-4 h-4" />
+          <div className="d-flex align-items-center gap-2">
+            <button onClick={() => setZoom(Math.max(25, zoom - 25))} className="btn btn-sm p-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              <ZoomOut size={16} />
             </button>
-            <span className="text-xs text-white/60 w-10 text-center">{zoom}%</span>
-            <button onClick={() => setZoom(Math.min(400, zoom + 25))} className="p-1 text-white/50 hover:text-white rounded">
-              <ZoomIn className="w-4 h-4" />
+            <span className="text-xs" style={{ color: 'rgba(255,255,255,0.6)', width: '40px', textAlign: 'center' }}>{zoom}%</span>
+            <button onClick={() => setZoom(Math.min(400, zoom + 25))} className="btn btn-sm p-1" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              <ZoomIn size={16} />
             </button>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="d-flex align-items-center gap-2">
           <button
             onClick={() => setShowTemplates(!showTemplates)}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-white/15 transition-colors"
+            className="btn btn-sm d-flex align-items-center gap-1"
+            style={{ backgroundColor: 'rgba(255,255,255,0.1)', color: 'white' }}
           >
-            <FileText className="w-3.5 h-3.5" />
+            <FileText size={14} />
             Templates
           </button>
           <button
             onClick={() => setShowAIAgent(!showAIAgent)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors ${
-              showAIAgent
-                ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                : 'bg-white/10 text-white hover:bg-white/15'
-            }`}
+            className={`btn btn-sm d-flex align-items-center gap-1 ${showAIAgent ? 'btn-primary' : ''}`}
+            style={!showAIAgent ? { backgroundColor: 'rgba(255,255,255,0.1)', color: 'white' } : {}}
           >
-            <Bot className="w-3.5 h-3.5" />
+            <Bot size={14} />
             AI Agent
           </button>
           <button
             onClick={handleDownload}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+            className="btn btn-primary btn-sm d-flex align-items-center gap-1"
           >
-            <Download className="w-3.5 h-3.5" />
+            <Download size={14} />
             Download
           </button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-accent text-white text-xs font-semibold rounded-lg hover:bg-accent-dark transition-colors">
-            <Save className="w-3.5 h-3.5" />
+          <button className="btn btn-sm d-flex align-items-center gap-1" style={{ backgroundColor: '#6c5ce7', color: 'white' }}>
+            <Save size={14} />
             Save
           </button>
         </div>
@@ -466,24 +464,25 @@ export default function DesignStudioPage() {
 
       {/* Product Context Banner */}
       {activeProduct && PRODUCT_CANVAS_MAP[activeProduct] && (
-        <div className="h-9 bg-primary/10 border-b border-primary/20 flex items-center justify-center px-4 shrink-0">
-          <div className="flex items-center gap-2 text-xs">
-            <Sparkles className="w-3.5 h-3.5 text-primary" />
-            <span className="text-primary font-medium">
+        <div className="d-flex align-items-center justify-content-center px-4 shrink-0" style={{ height: '36px', backgroundColor: 'rgba(13, 110, 253, 0.1)', borderBottom: '1px solid rgba(13, 110, 253, 0.2)' }}>
+          <div className="d-flex align-items-center gap-2 text-xs">
+            <Sparkles size={14} className="text-primary" />
+            <span className="text-primary fw-medium">
               Designing for: {PRODUCT_CANVAS_MAP[activeProduct].label}
             </span>
-            <span className="text-slate-400">
+            <span className="text-muted">
               ({canvasWidth} × {canvasHeight} px)
             </span>
             <Link
               href={`/products/${activeProduct}`}
-              className="ml-2 text-primary underline hover:text-primary/80 transition-colors"
+              className="ms-2 text-primary text-decoration-underline"
             >
               View Product
             </Link>
             <button
               onClick={() => { setActiveProduct(null); setCanvasWidth(1050); setCanvasHeight(600); }}
-              className="ml-2 text-slate-400 hover:text-slate-600 transition-colors"
+              className="ms-2 btn btn-sm p-0"
+              style={{ color: '#64748b' }}
             >
               ×
             </button>
@@ -496,34 +495,37 @@ export default function DesignStudioPage() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-12 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-[600px]"
+          className="position-absolute bg-white rounded-2xl shadow-lg border p-4"
+          style={{ top: '60px', left: '50%', transform: 'translateX(-50%)', zIndex: 50, width: '600px', borderColor: '#dee2e6' }}
         >
-          <h3 className="text-lg font-bold text-dark mb-4">Choose a Template</h3>
-          <div className="grid grid-cols-3 gap-3">
+          <h3 className="text-lg fw-bold text-dark mb-3">Choose a Template</h3>
+          <div className="row g-3">
             {TEMPLATES.map((t) => (
-              <button
-                key={t.name}
-                onClick={() => {
-                  setCanvasWidth(t.width);
-                  setCanvasHeight(t.height);
-                  setShowTemplates(false);
-                }}
-                className="p-4 border border-slate-200 rounded-xl hover:border-primary hover:bg-primary/5 transition-all text-left"
-              >
-                <div className="w-full aspect-[3/2] bg-slate-100 rounded-lg mb-2 flex items-center justify-center">
-                  <span className="text-xs text-muted">{t.width}×{t.height}</span>
-                </div>
-                <p className="text-sm font-semibold text-dark">{t.name}</p>
-                <p className="text-[10px] text-muted">{t.category}</p>
-              </button>
+              <div key={t.name} className="col-4">
+                <button
+                  onClick={() => {
+                    setCanvasWidth(t.width);
+                    setCanvasHeight(t.height);
+                    setShowTemplates(false);
+                  }}
+                  className="w-100 p-3 border rounded-xl text-start"
+                  style={{ borderColor: '#dee2e6' }}
+                >
+                  <div className="w-100 bg-light rounded-lg mb-2 d-flex align-items-center justify-content-center" style={{ aspectRatio: '3/2' }}>
+                    <span className="text-xs text-muted">{t.width}×{t.height}</span>
+                  </div>
+                  <p className="text-sm fw-semibold text-dark">{t.name}</p>
+                  <p className="text-muted" style={{ fontSize: '10px' }}>{t.category}</p>
+                </button>
+              </div>
             ))}
           </div>
         </motion.div>
       )}
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="d-flex flex-1 overflow-hidden">
         {/* Left Toolbar */}
-        <div className="w-14 bg-dark-light border-r border-white/10 flex flex-col items-center py-3 gap-1 shrink-0">
+        <div className="d-flex flex-column align-items-center py-3 gap-1 shrink-0" style={{ width: '56px', backgroundColor: '#1e293b', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
           {[
             { id: 'select', icon: Move, label: 'Select' },
             { id: 'text', icon: Type, label: 'Text' },
@@ -537,44 +539,40 @@ export default function DesignStudioPage() {
             <button
               key={tool.id}
               onClick={() => setSelectedTool(tool.id)}
-              className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-                selectedTool === tool.id
-                  ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                  : 'text-white/40 hover:text-white hover:bg-white/10'
-              }`}
+              className={`rounded-xl d-flex align-items-center justify-content-center ${selectedTool === tool.id ? 'bg-primary text-white shadow' : ''}`}
+              style={{ width: '40px', height: '40px', color: selectedTool === tool.id ? undefined : 'rgba(255,255,255,0.4)' }}
               title={tool.label}
             >
-              <tool.icon className="w-4.5 h-4.5" />
+              <tool.icon size={18} />
             </button>
           ))}
 
-          <div className="flex-1" />
+          <div className="flex-grow-1" />
 
-          <div className="w-8 h-px bg-white/10 mb-2" />
+          <div style={{ width: '32px', height: '1px', backgroundColor: 'rgba(255,255,255,0.1)', marginBottom: '8px' }} />
 
           <button
             onClick={() => setShowLayers(!showLayers)}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
-              showLayers ? 'bg-white/15 text-white' : 'text-white/40 hover:text-white hover:bg-white/10'
-            }`}
+            className={`rounded-xl d-flex align-items-center justify-content-center ${showLayers ? 'bg-white bg-opacity-15 text-white' : ''}`}
+            style={{ width: '40px', height: '40px', color: showLayers ? undefined : 'rgba(255,255,255,0.4)' }}
             title="Layers"
           >
-            <Layers className="w-4.5 h-4.5" />
+            <Layers size={18} />
           </button>
         </div>
 
         {/* Canvas Area */}
-        <div className="flex-1 overflow-auto flex items-center justify-center bg-slate-950 p-8">
+        <div className="flex-grow-1 overflow-auto d-flex align-items-center justify-content-center p-4" style={{ backgroundColor: '#020617' }}>
           <div
-            className="relative shadow-2xl"
+            className="position-relative shadow"
             style={{ transform: `scale(${zoom / 100})`, transformOrigin: 'center' }}
           >
             <canvas
               ref={canvasRef}
               width={canvasWidth}
               height={canvasHeight}
-              className="cursor-crosshair rounded-lg"
-              style={{ maxWidth: '100%', maxHeight: 'calc(100vh - 200px)' }}
+              className="rounded-lg"
+              style={{ maxWidth: '100%', maxHeight: 'calc(100vh - 200px)', cursor: 'crosshair' }}
               onMouseDown={handleCanvasMouseDown}
               onMouseMove={handleCanvasMouseMove}
               onMouseUp={handleCanvasMouseUp}
@@ -584,186 +582,191 @@ export default function DesignStudioPage() {
         </div>
 
         {/* Right Panel */}
-        <div className="w-72 bg-white border-l border-slate-200 flex flex-col overflow-hidden shrink-0">
+        <div className="d-flex flex-column overflow-hidden shrink-0" style={{ width: '288px', backgroundColor: 'white', borderLeft: '1px solid #dee2e6' }}>
           {/* Properties Panel */}
           {selectedElement ? (
-            <div className="p-4 border-b border-slate-100 space-y-4 overflow-y-auto max-h-[50vh]">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Properties</h3>
+            <div className="p-3 border-bottom overflow-y-auto" style={{ maxHeight: '50vh', borderColor: '#f8f9fa' }}>
+              <h3 className="text-xs fw-bold text-muted text-uppercase tracking-wider mb-3">Properties</h3>
 
               {selectedElement.type === 'text' && (
                 <>
-                  <div>
-                    <label className="text-xs font-medium text-slate-500 mb-1 block">Text</label>
+                  <div className="mb-3">
+                    <label className="text-xs fw-medium text-secondary mb-1 d-block">Text</label>
                     <input
                       type="text"
                       value={selectedElement.text || ''}
                       onChange={(e) => updateElement(selectedElement.id, { text: e.target.value })}
-                      className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                      className="form-control form-control-sm"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-xs font-medium text-slate-500 mb-1 block">Font</label>
+                  <div className="row g-2 mb-3">
+                    <div className="col-6">
+                      <label className="text-xs fw-medium text-secondary mb-1 d-block">Font</label>
                       <select
                         value={selectedElement.fontFamily || 'Inter'}
                         onChange={(e) => updateElement(selectedElement.id, { fontFamily: e.target.value })}
-                        className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                        className="form-select form-select-sm"
                       >
                         {FONTS.map((f) => <option key={f} value={f}>{f}</option>)}
                       </select>
                     </div>
-                    <div>
-                      <label className="text-xs font-medium text-slate-500 mb-1 block">Size</label>
+                    <div className="col-6">
+                      <label className="text-xs fw-medium text-secondary mb-1 d-block">Size</label>
                       <input
                         type="number"
                         value={selectedElement.fontSize || 24}
                         onChange={(e) => updateElement(selectedElement.id, { fontSize: parseInt(e.target.value) })}
-                        className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                        className="form-control form-control-sm"
                       />
                     </div>
                   </div>
                 </>
               )}
 
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">X</label>
+              <div className="row g-2 mb-3">
+                <div className="col-6">
+                  <label className="text-xs fw-medium text-secondary mb-1 d-block">X</label>
                   <input
                     type="number"
                     value={Math.round(selectedElement.x)}
                     onChange={(e) => updateElement(selectedElement.id, { x: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                    className="form-control form-control-sm"
                   />
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Y</label>
+                <div className="col-6">
+                  <label className="text-xs fw-medium text-secondary mb-1 d-block">Y</label>
                   <input
                     type="number"
                     value={Math.round(selectedElement.y)}
                     onChange={(e) => updateElement(selectedElement.id, { y: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                    className="form-control form-control-sm"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Width</label>
+              <div className="row g-2 mb-3">
+                <div className="col-6">
+                  <label className="text-xs fw-medium text-secondary mb-1 d-block">Width</label>
                   <input
                     type="number"
                     value={Math.round(selectedElement.width)}
                     onChange={(e) => updateElement(selectedElement.id, { width: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                    className="form-control form-control-sm"
                   />
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Height</label>
+                <div className="col-6">
+                  <label className="text-xs fw-medium text-secondary mb-1 d-block">Height</label>
                   <input
                     type="number"
                     value={Math.round(selectedElement.height)}
                     onChange={(e) => updateElement(selectedElement.id, { height: parseInt(e.target.value) })}
-                    className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                    className="form-control form-control-sm"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Color</label>
-                <div className="flex items-center gap-2">
+              <div className="mb-3">
+                <label className="text-xs fw-medium text-secondary mb-1 d-block">Color</label>
+                <div className="d-flex align-items-center gap-2">
                   <input
                     type="color"
                     value={selectedElement.fill}
                     onChange={(e) => updateElement(selectedElement.id, { fill: e.target.value })}
-                    className="w-8 h-8 rounded-lg border border-slate-200 cursor-pointer"
+                    className="form-control form-control-color"
+                    style={{ width: '32px', height: '32px' }}
                   />
                   <input
                     type="text"
                     value={selectedElement.fill}
                     onChange={(e) => updateElement(selectedElement.id, { fill: e.target.value })}
-                    className="flex-1 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-mono outline-none focus:border-primary"
+                    className="form-control form-control-sm font-monospace flex-grow-1"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Opacity: {Math.round(selectedElement.opacity * 100)}%</label>
+              <div className="mb-3">
+                <label className="text-xs fw-medium text-secondary mb-1 d-block">Opacity: {Math.round(selectedElement.opacity * 100)}%</label>
                 <input
                   type="range"
                   min={0}
                   max={100}
                   value={selectedElement.opacity * 100}
                   onChange={(e) => updateElement(selectedElement.id, { opacity: parseInt(e.target.value) / 100 })}
-                  className="w-full accent-primary"
+                  className="form-range"
+                  style={{ accentColor: 'var(--bs-primary)' }}
                 />
               </div>
 
-              <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Rotation: {selectedElement.rotation}°</label>
+              <div className="mb-3">
+                <label className="text-xs fw-medium text-secondary mb-1 d-block">Rotation: {selectedElement.rotation}°</label>
                 <input
                   type="range"
                   min={0}
                   max={360}
                   value={selectedElement.rotation}
                   onChange={(e) => updateElement(selectedElement.id, { rotation: parseInt(e.target.value) })}
-                  className="w-full accent-primary"
+                  className="form-range"
+                  style={{ accentColor: 'var(--bs-primary)' }}
                 />
               </div>
 
-              <div className="flex gap-2">
+              <div className="d-flex gap-2">
                 <button
                   onClick={() => duplicateElement(selectedElement.id)}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 text-slate-600 text-xs font-medium rounded-lg hover:bg-slate-200 transition-colors"
+                  className="flex-grow-1 btn btn-light btn-sm d-flex align-items-center justify-content-center gap-1"
                 >
-                  <Copy className="w-3.5 h-3.5" />
+                  <Copy size={14} />
                   Duplicate
                 </button>
                 <button
                   onClick={() => deleteElement(selectedElement.id)}
-                  className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-red/10 text-red text-xs font-medium rounded-lg hover:bg-red/20 transition-colors"
+                  className="flex-grow-1 btn btn-sm d-flex align-items-center justify-content-center gap-1"
+                  style={{ backgroundColor: 'rgba(220, 53, 69, 0.1)', color: '#dc3545' }}
                 >
-                  <Trash2 className="w-3.5 h-3.5" />
+                  <Trash2 size={14} />
                   Delete
                 </button>
               </div>
             </div>
           ) : (
-            <div className="p-4 border-b border-slate-100">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Canvas</h3>
-              <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="text-xs font-medium text-slate-500 mb-1 block">Width</label>
+            <div className="p-3 border-bottom" style={{ borderColor: '#f8f9fa' }}>
+              <h3 className="text-xs fw-bold text-muted text-uppercase tracking-wider mb-3">Canvas</h3>
+              <div className="d-flex flex-column gap-3">
+                <div className="row g-2">
+                  <div className="col-6">
+                    <label className="text-xs fw-medium text-secondary mb-1 d-block">Width</label>
                     <input
                       type="number"
                       value={canvasWidth}
                       onChange={(e) => setCanvasWidth(parseInt(e.target.value) || 1050)}
-                      className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                      className="form-control form-control-sm"
                     />
                   </div>
-                  <div>
-                    <label className="text-xs font-medium text-slate-500 mb-1 block">Height</label>
+                  <div className="col-6">
+                    <label className="text-xs fw-medium text-secondary mb-1 d-block">Height</label>
                     <input
                       type="number"
                       value={canvasHeight}
                       onChange={(e) => setCanvasHeight(parseInt(e.target.value) || 600)}
-                      className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm outline-none focus:border-primary"
+                      className="form-control form-control-sm"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Background</label>
-                  <div className="flex items-center gap-2">
+                  <label className="text-xs fw-medium text-secondary mb-1 d-block">Background</label>
+                  <div className="d-flex align-items-center gap-2">
                     <input
                       type="color"
                       value={bgColor}
                       onChange={(e) => setBgColor(e.target.value)}
-                      className="w-8 h-8 rounded-lg border border-slate-200 cursor-pointer"
+                      className="form-control form-control-color"
+                      style={{ width: '32px', height: '32px' }}
                     />
                     <input
                       type="text"
                       value={bgColor}
                       onChange={(e) => setBgColor(e.target.value)}
-                      className="flex-1 px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-sm font-mono outline-none focus:border-primary"
+                      className="form-control form-control-sm font-monospace flex-grow-1"
                     />
                   </div>
                 </div>
@@ -772,17 +775,15 @@ export default function DesignStudioPage() {
           )}
 
           {/* Color Palette */}
-          <div className="p-4 border-b border-slate-100">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Colors</h3>
-            <div className="flex flex-wrap gap-2">
+          <div className="p-3 border-bottom" style={{ borderColor: '#f8f9fa' }}>
+            <h3 className="text-xs fw-bold text-muted text-uppercase tracking-wider mb-3">Colors</h3>
+            <div className="d-flex flex-wrap gap-2">
               {COLORS.map((color) => (
                 <button
                   key={color}
                   onClick={() => setSelectedColor(color)}
-                  className={`w-7 h-7 rounded-lg border-2 transition-all ${
-                    selectedColor === color ? 'border-dark scale-110' : 'border-slate-200 hover:scale-105'
-                  }`}
-                  style={{ backgroundColor: color }}
+                  className={`rounded-lg border-2 ${selectedColor === color ? 'border-dark' : ''}`}
+                  style={{ width: '28px', height: '28px', backgroundColor: color, borderColor: selectedColor === color ? '#212529' : '#dee2e6' }}
                 />
               ))}
             </div>
@@ -790,31 +791,30 @@ export default function DesignStudioPage() {
 
           {/* Layers */}
           {showLayers && (
-            <div className="flex-1 overflow-y-auto p-4">
-              <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Layers</h3>
-              <div className="space-y-1">
+            <div className="flex-grow-1 overflow-y-auto p-3">
+              <h3 className="text-xs fw-bold text-muted text-uppercase tracking-wider mb-3">Layers</h3>
+              <div className="d-flex flex-column gap-1">
                 {elements.map((el, i) => (
                   <button
                     key={el.id}
                     onClick={() => setSelectedId(el.id)}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left transition-colors ${
-                      selectedId === el.id ? 'bg-primary/10 text-primary' : 'text-slate-600 hover:bg-slate-50'
-                    }`}
+                    className={`w-100 d-flex align-items-center gap-2 px-3 py-2 rounded-lg text-start ${selectedId === el.id ? 'bg-primary bg-opacity-10 text-primary' : 'text-secondary'}`}
                   >
-                    <div className="w-4 h-4 rounded border border-slate-200" style={{ backgroundColor: el.fill }} />
-                    <span className="text-xs font-medium flex-1 truncate">
+                    <div className="rounded border" style={{ width: '16px', height: '16px', backgroundColor: el.fill, borderColor: '#dee2e6' }} />
+                    <span className="text-xs fw-medium flex-grow-1 text-truncate">
                       {el.type === 'text' ? `"${el.text}"` : el.type}
                     </span>
                     <button
                       onClick={(e) => { e.stopPropagation(); deleteElement(el.id); }}
-                      className="p-0.5 text-slate-400 hover:text-red"
+                      className="btn btn-sm p-0"
+                      style={{ color: '#64748b' }}
                     >
-                      <Trash2 className="w-3 h-3" />
+                      <Trash2 size={12} />
                     </button>
                   </button>
                 ))}
                 {elements.length === 0 && (
-                  <p className="text-xs text-slate-400 text-center py-4">No elements yet</p>
+                  <p className="text-xs text-muted text-center py-3">No elements yet</p>
                 )}
               </div>
             </div>

@@ -133,232 +133,239 @@ export function ImpressionCalculator() {
   const totalCost = inkConsumptionMl * inkInfo.costPerMl;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-indigo-50 rounded-lg">
-          <Calculator className="w-5 h-5 text-indigo-600" />
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#eef2ff' }}>
+          <Calculator size={20} style={{ color: '#4f46e5' }} />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900">Impression Calculator</h3>
-          <p className="text-sm text-gray-500">Calculate total ink coverage and cost</p>
+          <h3 className="fw-semibold text-dark">Impression Calculator</h3>
+          <p className="text-sm text-muted">Calculate total ink coverage and cost</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="row g-4">
         {/* Left: Inputs */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Paper Size</label>
-            <select
-              value={paperSize}
-              onChange={(e) => setPaperSize(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-            >
-              {PAPER_SIZES.map((p) => (
-                <option key={p.name} value={p.name}>
-                  {p.name} {p.w ? `(${p.w} × ${p.h} cm)` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {paperSize === 'Custom' && (
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Width (cm)</label>
-                <input
-                  type="number"
-                  value={printW}
-                  onChange={(e) => setPrintW(Number(e.target.value))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                  min={1}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Height (cm)</label>
-                <input
-                  type="number"
-                  value={printH}
-                  onChange={(e) => setPrintH(Number(e.target.value))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                  min={1}
-                />
-              </div>
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <div>
+              <label className="form-label text-sm fw-medium">Paper Size</label>
+              <select
+                value={paperSize}
+                onChange={(e) => setPaperSize(e.target.value)}
+                className="form-select form-select-sm"
+              >
+                {PAPER_SIZES.map((p) => (
+                  <option key={p.name} value={p.name}>
+                    {p.name} {p.w ? `(${p.w} × ${p.h} cm)` : ''}
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(clamp(Number(e.target.value), 1, 1000000))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              min={1}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Ink Type</label>
-            <select
-              value={inkType}
-              onChange={(e) => setInkType(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-            >
-              {INK_TYPES.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.label} — ${t.costPerMl.toFixed(2)}/ml
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-1">
-              <label className="text-sm font-medium text-gray-700">
-                Ink Coverage: {inkCoverage}%
-                {autoCoverage && <span className="text-indigo-500 ml-1">(auto)</span>}
-              </label>
-            </div>
-            <input
-              type="range"
-              min={5}
-              max={100}
-              value={inkCoverage}
-              onChange={(e) => {
-                setInkCoverage(Number(e.target.value));
-                setAutoCoverage(false);
-              }}
-              className="w-full accent-indigo-600"
-            />
-            <div className="flex justify-between text-xs text-gray-400">
-              <span>5%</span>
-              <span>100%</span>
-            </div>
-          </div>
-
-          <div className="border border-gray-200 rounded-lg p-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">Image Upload (optional)</span>
-              {imageFile && (
-                <button
-                  onClick={resetImage}
-                  className="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1"
-                >
-                  <RotateCcw className="w-3 h-3" /> Clear
-                </button>
-              )}
-            </div>
-            <input
-              ref={fileRef}
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-            />
-            <button
-              onClick={() => fileRef.current?.click()}
-              className="w-full border-2 border-dashed border-gray-200 rounded-lg py-3 text-sm text-gray-500 hover:border-indigo-300 hover:text-indigo-600 transition-colors flex items-center justify-center gap-2"
-            >
-              <Upload className="w-4 h-4" />
-              {imageFile ? imageFile.name : 'Upload image for auto-analysis'}
-            </button>
-            {imagePreview && (
-              <div className="mt-2 relative">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={imagePreview} alt="Preview" className="w-full h-24 object-cover rounded-lg" />
+            {paperSize === 'Custom' && (
+              <div className="row g-2">
+                <div className="col-6">
+                  <label className="form-label text-sm fw-medium">Width (cm)</label>
+                  <input
+                    type="number"
+                    value={printW}
+                    onChange={(e) => setPrintW(Number(e.target.value))}
+                    className="form-control form-control-sm"
+                    min={1}
+                  />
+                </div>
+                <div className="col-6">
+                  <label className="form-label text-sm fw-medium">Height (cm)</label>
+                  <input
+                    type="number"
+                    value={printH}
+                    onChange={(e) => setPrintH(Number(e.target.value))}
+                    className="form-control form-control-sm"
+                    min={1}
+                  />
+                </div>
               </div>
             )}
-          </div>
 
-          {/* Channel breakdown */}
-          <div className="border border-gray-200 rounded-lg p-3">
-            <span className="text-sm font-medium text-gray-700 mb-2 block">Ink Channel Breakdown</span>
-            {(['c', 'm', 'y', 'k'] as const).map((ch) => (
-              <div key={ch} className="flex items-center gap-2 mb-1">
-                <span className="w-4 text-xs font-bold" style={{ color: ch === 'c' ? '#00bcd4' : ch === 'm' ? '#e91e63' : ch === 'y' ? '#ffeb3b' : '#333' }}>
-                  {ch.toUpperCase()}
-                </span>
-                <input
-                  type="range"
-                  min={0}
-                  max={100}
-                  value={channelPct[ch]}
-                  onChange={(e) => setChannelPct({ ...channelPct, [ch]: Number(e.target.value) })}
-                  className="flex-1 accent-current"
-                />
-                <span className="w-10 text-right text-xs text-gray-500">{channelPct[ch]}%</span>
+            <div>
+              <label className="form-label text-sm fw-medium">Quantity</label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={(e) => setQuantity(clamp(Number(e.target.value), 1, 1000000))}
+                className="form-control form-control-sm"
+                min={1}
+              />
+            </div>
+
+            <div>
+              <label className="form-label text-sm fw-medium">Ink Type</label>
+              <select
+                value={inkType}
+                onChange={(e) => setInkType(e.target.value)}
+                className="form-select form-select-sm"
+              >
+                {INK_TYPES.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.label} — ${t.costPerMl.toFixed(2)}/ml
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <div className="d-flex justify-content-between mb-1">
+                <label className="text-sm fw-medium">
+                  Ink Coverage: {inkCoverage}%
+                  {autoCoverage && <span style={{ color: '#6366f1' }} className="ms-1">(auto)</span>}
+                </label>
               </div>
-            ))}
+              <input
+                type="range"
+                min={5}
+                max={100}
+                value={inkCoverage}
+                onChange={(e) => {
+                  setInkCoverage(Number(e.target.value));
+                  setAutoCoverage(false);
+                }}
+                className="form-range"
+                style={{ accentColor: '#4f46e5' }}
+              />
+              <div className="d-flex justify-content-between text-xs text-muted">
+                <span>5%</span>
+                <span>100%</span>
+              </div>
+            </div>
+
+            <div className="border rounded-lg p-3">
+              <div className="d-flex align-items-center justify-content-between mb-2">
+                <span className="text-sm fw-medium">Image Upload (optional)</span>
+                {imageFile && (
+                  <button
+                    onClick={resetImage}
+                    className="btn btn-sm p-0 text-muted"
+                  >
+                    <RotateCcw size={12} /> Clear
+                  </button>
+                )}
+              </div>
+              <input
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="d-none"
+              />
+              <button
+                onClick={() => fileRef.current?.click()}
+                className="w-100 border border-dashed rounded-lg py-3 text-sm text-muted d-flex align-items-center justify-content-center gap-2"
+                style={{ borderColor: '#dee2e6' }}
+              >
+                <Upload size={16} />
+                {imageFile ? imageFile.name : 'Upload image for auto-analysis'}
+              </button>
+              {imagePreview && (
+                <div className="mt-2 position-relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={imagePreview} alt="Preview" className="w-100 rounded-lg" style={{ height: '96px', objectFit: 'cover' }} />
+                </div>
+              )}
+            </div>
+
+            {/* Channel breakdown */}
+            <div className="border rounded-lg p-3">
+              <span className="text-sm fw-medium mb-2 d-block">Ink Channel Breakdown</span>
+              {(['c', 'm', 'y', 'k'] as const).map((ch) => (
+                <div key={ch} className="d-flex align-items-center gap-2 mb-1">
+                  <span className="text-xs fw-bold" style={{ width: '16px', color: ch === 'c' ? '#00bcd4' : ch === 'm' ? '#e91e63' : ch === 'y' ? '#ffeb3b' : '#333' }}>
+                    {ch.toUpperCase()}
+                  </span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    value={channelPct[ch]}
+                    onChange={(e) => setChannelPct({ ...channelPct, [ch]: Number(e.target.value) })}
+                    className="form-range flex-grow-1"
+                    style={{ accentColor: ch === 'c' ? '#00bcd4' : ch === 'm' ? '#e91e63' : ch === 'y' ? '#ffeb3b' : '#333' }}
+                  />
+                  <span className="text-xs text-muted" style={{ width: '40px', textAlign: 'right' }}>{channelPct[ch]}%</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         {/* Right: Results */}
-        <div className="space-y-4">
-          <div className="bg-indigo-50 rounded-xl p-5">
-            <h4 className="text-sm font-semibold text-indigo-900 mb-4">Results</h4>
-            <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Print Area per Unit</span>
-                <span className="font-semibold text-indigo-900">{wCm} × {hCm} cm</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Single Area</span>
-                <span className="font-semibold text-indigo-900">{singleAreaM2.toFixed(4)} m²</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Total Print Area</span>
-                <span className="font-semibold text-indigo-900">{totalAreaM2.toFixed(2)} m²</span>
-              </div>
-              <div className="h-px bg-indigo-200" />
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Ink Coverage Area</span>
-                <span className="font-semibold text-indigo-900">{inkAreaM2.toFixed(2)} m²</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-indigo-700">Est. Ink Consumption</span>
-                <span className="font-semibold text-indigo-900">{inkConsumptionMl.toFixed(0)} ml</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white border border-gray-200 rounded-xl p-5">
-            <h4 className="text-sm font-semibold text-gray-900 mb-4">Cost Breakdown</h4>
-            <div className="space-y-3">
-              {inkType === 'cmyk' && (
-                <>
-                  {(['c', 'm', 'y', 'k'] as const).map((ch) => {
-                    const chMl = inkConsumptionMl * (channelPct[ch] / inkCoverage);
-                    const chCost = chMl * inkInfo.costPerMl;
-                    const colors: Record<string, string> = { c: '#00bcd4', m: '#e91e63', y: '#ffeb3b', k: '#333' };
-                    return (
-                      <div key={ch} className="flex items-center gap-3">
-                        <div className="w-5 h-5 rounded" style={{ backgroundColor: colors[ch] }} />
-                        <span className="text-sm text-gray-600 flex-1">{ch.toUpperCase()} Channel</span>
-                        <span className="text-xs text-gray-400">{chMl.toFixed(0)} ml</span>
-                        <span className="text-sm font-medium text-gray-900 w-16 text-right">${chCost.toFixed(2)}</span>
-                      </div>
-                    );
-                  })}
-                  <div className="h-px bg-gray-200" />
-                </>
-              )}
-              <div className="flex justify-between items-center">
-                <span className="text-sm font-medium text-gray-900">Total Ink Cost</span>
-                <span className="text-lg font-bold text-indigo-600">${totalCost.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm text-gray-500">
-                <span>Cost per Impression</span>
-                <span>${(totalCost / quantity).toFixed(4)}</span>
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#eef2ff' }}>
+              <h4 className="text-sm fw-semibold mb-3" style={{ color: '#312e81' }}>Results</h4>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm" style={{ color: '#4338ca' }}>Print Area per Unit</span>
+                  <span className="fw-semibold" style={{ color: '#312e81' }}>{wCm} × {hCm} cm</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm" style={{ color: '#4338ca' }}>Single Area</span>
+                  <span className="fw-semibold" style={{ color: '#312e81' }}>{singleAreaM2.toFixed(4)} m²</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm" style={{ color: '#4338ca' }}>Total Print Area</span>
+                  <span className="fw-semibold" style={{ color: '#312e81' }}>{totalAreaM2.toFixed(2)} m²</span>
+                </div>
+                <div className="border-top" style={{ borderColor: '#c7d2fe' }} />
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm" style={{ color: '#4338ca' }}>Ink Coverage Area</span>
+                  <span className="fw-semibold" style={{ color: '#312e81' }}>{inkAreaM2.toFixed(2)} m²</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm" style={{ color: '#4338ca' }}>Est. Ink Consumption</span>
+                  <span className="fw-semibold" style={{ color: '#312e81' }}>{inkConsumptionMl.toFixed(0)} ml</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="bg-amber-50 rounded-lg p-3 flex items-start gap-2">
-            <Info className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-            <p className="text-xs text-amber-800">
-              Estimates are based on typical ink consumption of 100 ml/m² at 100% coverage. Actual usage varies by substrate, ink density, and printing method.
-            </p>
+            <div className="bg-white border rounded-xl p-4">
+              <h4 className="text-sm fw-semibold mb-3">Cost Breakdown</h4>
+              <div className="d-flex flex-column gap-2">
+                {inkType === 'cmyk' && (
+                  <>
+                    {(['c', 'm', 'y', 'k'] as const).map((ch) => {
+                      const chMl = inkConsumptionMl * (channelPct[ch] / inkCoverage);
+                      const chCost = chMl * inkInfo.costPerMl;
+                      const colors: Record<string, string> = { c: '#00bcd4', m: '#e91e63', y: '#ffeb3b', k: '#333' };
+                      return (
+                        <div key={ch} className="d-flex align-items-center gap-2">
+                          <div className="rounded" style={{ width: '20px', height: '20px', backgroundColor: colors[ch] }} />
+                          <span className="text-sm text-secondary flex-grow-1">{ch.toUpperCase()} Channel</span>
+                          <span className="text-xs text-muted">{chMl.toFixed(0)} ml</span>
+                          <span className="text-sm fw-medium" style={{ width: '64px', textAlign: 'right' }}>${chCost.toFixed(2)}</span>
+                        </div>
+                      );
+                    })}
+                    <div className="border-top" style={{ borderColor: '#dee2e6' }} />
+                  </>
+                )}
+                <div className="d-flex justify-content-between align-items-center">
+                  <span className="text-sm fw-medium">Total Ink Cost</span>
+                  <span className="text-lg fw-bold" style={{ color: '#4f46e5' }}>${totalCost.toFixed(2)}</span>
+                </div>
+                <div className="d-flex justify-content-between align-items-center text-sm text-muted">
+                  <span>Cost per Impression</span>
+                  <span>${(totalCost / quantity).toFixed(4)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg p-3 d-flex align-items-start gap-2" style={{ backgroundColor: '#fffbeb' }}>
+              <Info size={16} className="mt-1 shrink-0" style={{ color: '#d97706' }} />
+              <p className="text-xs" style={{ color: '#92400e' }}>
+                Estimates are based on typical ink consumption of 100 ml/m² at 100% coverage. Actual usage varies by substrate, ink density, and printing method.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -435,197 +442,202 @@ export function GCRCalculator() {
   const cmkyColor = (val: number) => `rgba(0,0,0,${val / 100})`;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-purple-50 rounded-lg">
-          <Droplets className="w-5 h-5 text-purple-600" />
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#faf5ff' }}>
+          <Droplets size={20} style={{ color: '#9333ea' }} />
         </div>
-        <div className="flex-1">
-          <h3 className="font-semibold text-gray-900">GCR / UCR Calculator</h3>
-          <p className="text-sm text-gray-500">Gray Component Replacement settings</p>
+        <div className="flex-grow-1">
+          <h3 className="fw-semibold text-dark">GCR / UCR Calculator</h3>
+          <p className="text-sm text-muted">Gray Component Replacement settings</p>
         </div>
         <button
           onClick={() => setShowInfo(!showInfo)}
-          className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-50"
+          className="btn btn-sm p-1 text-muted"
         >
-          <Info className="w-5 h-5" />
+          <Info size={20} />
         </button>
       </div>
 
       {showInfo && (
-        <div className="bg-blue-50 rounded-lg p-4 mb-6 text-sm text-blue-800 space-y-2">
+        <div className="rounded-lg p-3 mb-4 text-sm" style={{ backgroundColor: '#eff6ff', color: '#1e40af' }}>
           <p><strong>GCR (Gray Component Replacement)</strong> replaces the neutral gray formed by equal amounts of C, M, and Y with an equivalent amount of black (K) ink. This reduces total ink consumption and improves gray balance.</p>
           <p><strong>UCR (Under Color Removal)</strong> specifically targets the neutral shadow areas and removes cyan, magenta, and yellow from those areas, replacing with black. It is more conservative than GCR and focuses on darkest tones.</p>
-          <p className="text-xs text-blue-600 mt-2">GCR affects the full tonal range while UCR primarily affects shadows and deep neutrals.</p>
+          <p className="text-xs mt-2" style={{ color: '#2563eb' }}>GCR affects the full tonal range while UCR primarily affects shadows and deep neutrals.</p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="row g-4">
         {/* Left: CMYK Inputs */}
-        <div className="space-y-4">
-          <h4 className="text-sm font-semibold text-gray-900">Input CMYK Values</h4>
-          {[
-            { label: 'C', value: c, set: setC, color: '#00bcd4' },
-            { label: 'M', value: m, set: setM, color: '#e91e63' },
-            { label: 'Y', value: y, set: setY, color: '#ffeb3b' },
-            { label: 'K', value: k, set: setK, color: '#333' },
-          ].map(({ label, value, set, color }) => (
-            <div key={label} className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded" style={{ backgroundColor: color }} />
-              <span className="w-6 font-bold text-sm text-gray-700">{label}</span>
-              <input
-                type="range"
-                min={0}
-                max={100}
-                value={value}
-                onChange={(e) => set(Number(e.target.value))}
-                className="flex-1 accent-current"
-              />
-              <input
-                type="number"
-                min={0}
-                max={100}
-                value={value}
-                onChange={(e) => set(clamp(Number(e.target.value), 0, 100))}
-                className="w-16 rounded border border-gray-200 px-2 py-1 text-sm text-center focus:ring-2 focus:ring-purple-500 outline-none"
-              />
-            </div>
-          ))}
-
-          <div className="bg-gray-50 rounded-lg p-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Total Ink Coverage</span>
-              <span className={`font-semibold ${origTotal > 300 ? 'text-red-600' : origTotal > 240 ? 'text-amber-600' : 'text-green-600'}`}>
-                {origTotal}%
-              </span>
-            </div>
-            {origTotal > 300 && (
-              <div className="flex items-center gap-1 mt-1 text-xs text-red-500">
-                <AlertTriangle className="w-3 h-3" /> Exceeds typical 300% maximum
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <h4 className="text-sm fw-semibold">Input CMYK Values</h4>
+            {[
+              { label: 'C', value: c, set: setC, color: '#00bcd4' },
+              { label: 'M', value: m, set: setM, color: '#e91e63' },
+              { label: 'Y', value: y, set: setY, color: '#ffeb3b' },
+              { label: 'K', value: k, set: setK, color: '#333' },
+            ].map(({ label, value, set, color }) => (
+              <div key={label} className="d-flex align-items-center gap-2">
+                <div className="rounded" style={{ width: '24px', height: '24px', backgroundColor: color }} />
+                <span className="fw-bold text-sm" style={{ width: '24px' }}>{label}</span>
+                <input
+                  type="range"
+                  min={0}
+                  max={100}
+                  value={value}
+                  onChange={(e) => set(Number(e.target.value))}
+                  className="form-range flex-grow-1"
+                  style={{ accentColor: color }}
+                />
+                <input
+                  type="number"
+                  min={0}
+                  max={100}
+                  value={value}
+                  onChange={(e) => set(clamp(Number(e.target.value), 0, 100))}
+                  className="form-control form-control-sm text-center"
+                  style={{ width: '64px' }}
+                />
               </div>
-            )}
-          </div>
+            ))}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Printing Method</label>
-            <select
-              value={printMethod}
-              onChange={(e) => setPrintMethod(e.target.value as PrintMethod)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none"
-            >
-              {Object.entries(PRINT_METHODS).map(([id, m]) => (
-                <option key={id} value={id}>{m.label}</option>
-              ))}
-            </select>
-          </div>
+            <div className="rounded-lg p-3" style={{ backgroundColor: '#f8f9fa' }}>
+              <div className="d-flex justify-content-between text-sm">
+                <span className="text-secondary">Total Ink Coverage</span>
+                <span className={`fw-semibold ${origTotal > 300 ? 'text-danger' : origTotal > 240 ? 'text-warning' : 'text-success'}`}>
+                  {origTotal}%
+                </span>
+              </div>
+              {origTotal > 300 && (
+                <div className="d-flex align-items-center gap-1 mt-1 text-xs text-danger">
+                  <AlertTriangle size={12} /> Exceeds typical 300% maximum
+                </div>
+              )}
+            </div>
 
-          <div className="bg-purple-50 rounded-lg p-3 text-sm text-purple-800">
-            <strong>Recommendation for {method.label}:</strong> Use {GCR_PROFILES[method.recGCR].label} with UCR amount {method.recUCR}%.
+            <div>
+              <label className="form-label text-sm fw-medium">Printing Method</label>
+              <select
+                value={printMethod}
+                onChange={(e) => setPrintMethod(e.target.value as PrintMethod)}
+                className="form-select form-select-sm"
+              >
+                {Object.entries(PRINT_METHODS).map(([id, m]) => (
+                  <option key={id} value={id}>{m.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="rounded-lg p-3 text-sm" style={{ backgroundColor: '#faf5ff', color: '#6b21a8' }}>
+              <strong>Recommendation for {method.label}:</strong> Use {GCR_PROFILES[method.recGCR].label} with UCR amount {method.recUCR}%.
+            </div>
           </div>
         </div>
 
         {/* Right: Results */}
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">GCR Strength</label>
-            <div className="grid grid-cols-2 gap-2">
-              {(Object.keys(GCR_PROFILES) as GCRStrength[]).map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setGcrStrength(s)}
-                  className={`rounded-lg border px-3 py-2 text-sm transition-colors ${
-                    gcrStrength === s
-                      ? 'bg-purple-600 text-white border-purple-600'
-                      : 'border-gray-200 text-gray-600 hover:border-purple-300'
-                  }`}
-                >
-                  {GCR_PROFILES[s].label}
-                </button>
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <div>
+              <label className="form-label text-sm fw-medium mb-2">GCR Strength</label>
+              <div className="row g-2">
+                {(Object.keys(GCR_PROFILES) as GCRStrength[]).map((s) => (
+                  <div key={s} className="col-6">
+                    <button
+                      onClick={() => setGcrStrength(s)}
+                      className={`w-100 rounded-lg border px-3 py-2 text-sm ${gcrStrength === s ? 'text-white' : ''}`}
+                      style={gcrStrength === s ? { backgroundColor: '#9333ea', borderColor: '#9333ea' } : { borderColor: '#dee2e6', color: '#6c757d' }}
+                    >
+                      {GCR_PROFILES[s].label}
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-muted mt-2">{GCR_PROFILES[gcrStrength].desc}</p>
+            </div>
+
+            <div>
+              <label className="form-label text-sm fw-medium">UCR Amount: {ucrAmount}%</label>
+              <input
+                type="range"
+                min={0}
+                max={50}
+                value={ucrAmount}
+                onChange={(e) => setUcrAmount(Number(e.target.value))}
+                className="form-range"
+                style={{ accentColor: '#9333ea' }}
+              />
+            </div>
+
+            {/* Color Swatch Comparison */}
+            <div className="border rounded-xl overflow-hidden">
+              <div className="row g-0 text-xs fw-medium text-muted" style={{ backgroundColor: '#f8f9fa' }}>
+                <div className="col-4 p-2 text-center">Original</div>
+                <div className="col-4 p-2 text-center border-start border-end" style={{ borderColor: '#dee2e6' }}>GCR Result</div>
+                <div className="col-4 p-2 text-center">UCR Result</div>
+              </div>
+              <div className="row g-0">
+                <div className="col-4 p-3 text-center">
+                  <div
+                    className="w-100 rounded-lg mb-2"
+                    style={{ height: '64px', backgroundColor: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)` }}
+                  />
+                  <div className="text-xs text-secondary">
+                    C{c} M{m} Y{y} K{k}
+                  </div>
+                </div>
+                <div className="col-4 p-3 text-center border-start border-end" style={{ borderColor: '#dee2e6' }}>
+                  <div
+                    className="w-100 rounded-lg mb-2"
+                    style={{ height: '64px', backgroundColor: `cmyk(${gcrResult.c}%, ${gcrResult.m}%, ${gcrResult.y}%, ${gcrResult.k}%)` }}
+                  />
+                  <div className="text-xs text-secondary">
+                    C{Math.round(gcrResult.c)} M{Math.round(gcrResult.m)} Y{Math.round(gcrResult.y)} K{Math.round(gcrResult.k)}
+                  </div>
+                </div>
+                <div className="col-4 p-3 text-center">
+                  <div
+                    className="w-100 rounded-lg mb-2"
+                    style={{ height: '64px', backgroundColor: `cmyk(${ucrResult.c}%, ${ucrResult.m}%, ${ucrResult.y}%, ${ucrResult.k}%)` }}
+                  />
+                  <div className="text-xs text-secondary">
+                    C{Math.round(ucrResult.c)} M{Math.round(ucrResult.m)} Y{Math.round(ucrResult.y)} K{Math.round(ucrResult.k)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Before / After Coverage */}
+            <div className="d-flex flex-column gap-2">
+              <h4 className="text-sm fw-semibold">Ink Coverage Comparison</h4>
+              {[
+                { label: 'Original', total: origTotal, color: '#6c757d' },
+                { label: 'After GCR', total: gcrTotal, color: '#9333ea' },
+                { label: 'After UCR', total: ucrTotal, color: '#3b82f6' },
+              ].map(({ label, total, color }) => (
+                <div key={label} className="d-flex align-items-center gap-2">
+                  <span className="text-xs text-secondary" style={{ width: '80px' }}>{label}</span>
+                  <div className="flex-grow-1 rounded-full overflow-hidden" style={{ height: '16px', backgroundColor: '#f1f3f5' }}>
+                    <div
+                      className="h-100 rounded-full"
+                      style={{ width: `${Math.min((total / 400) * 100, 100)}%`, backgroundColor: color, transition: 'width 0.3s' }}
+                    />
+                  </div>
+                  <span className={`text-xs fw-medium ${total > 300 ? 'text-danger' : 'text-secondary'}`} style={{ width: '48px', textAlign: 'right' }}>
+                    {total}%
+                  </span>
+                </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 mt-2">{GCR_PROFILES[gcrStrength].desc}</p>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">UCR Amount: {ucrAmount}%</label>
-            <input
-              type="range"
-              min={0}
-              max={50}
-              value={ucrAmount}
-              onChange={(e) => setUcrAmount(Number(e.target.value))}
-              className="w-full accent-purple-600"
-            />
-          </div>
-
-          {/* Color Swatch Comparison */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden">
-            <div className="grid grid-cols-3 text-xs font-medium text-gray-500 bg-gray-50 border-b border-gray-200">
-              <div className="p-2 text-center">Original</div>
-              <div className="p-2 text-center border-x border-gray-200">GCR Result</div>
-              <div className="p-2 text-center">UCR Result</div>
+            <div className="rounded-lg p-3 d-flex align-items-start gap-2" style={{ backgroundColor: '#f0fdf4' }}>
+              <CheckCircle size={16} className="mt-1 shrink-0" style={{ color: '#16a34a' }} />
+              <p className="text-xs" style={{ color: '#166534' }}>
+                {origTotal - gcrTotal > 0
+                  ? `GCR saves approximately ${Math.round(origTotal - gcrTotal)}% total ink coverage compared to the original.`
+                  : 'Current values show minimal gray component to replace.'}
+              </p>
             </div>
-            <div className="grid grid-cols-3">
-              <div className="p-3 text-center">
-                <div
-                  className="w-full h-16 rounded-lg mb-2"
-                  style={{ backgroundColor: `cmyk(${c}%, ${m}%, ${y}%, ${k}%)` }}
-                />
-                <div className="text-xs text-gray-600">
-                  C{c} M{m} Y{y} K{k}
-                </div>
-              </div>
-              <div className="p-3 text-center border-x border-gray-200">
-                <div
-                  className="w-full h-16 rounded-lg mb-2"
-                  style={{ backgroundColor: `cmyk(${gcrResult.c}%, ${gcrResult.m}%, ${gcrResult.y}%, ${gcrResult.k}%)` }}
-                />
-                <div className="text-xs text-gray-600">
-                  C{Math.round(gcrResult.c)} M{Math.round(gcrResult.m)} Y{Math.round(gcrResult.y)} K{Math.round(gcrResult.k)}
-                </div>
-              </div>
-              <div className="p-3 text-center">
-                <div
-                  className="w-full h-16 rounded-lg mb-2"
-                  style={{ backgroundColor: `cmyk(${ucrResult.c}%, ${ucrResult.m}%, ${ucrResult.y}%, ${ucrResult.k}%)` }}
-                />
-                <div className="text-xs text-gray-600">
-                  C{Math.round(ucrResult.c)} M{Math.round(ucrResult.m)} Y{Math.round(ucrResult.y)} K{Math.round(ucrResult.k)}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Before / After Coverage */}
-          <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-gray-900">Ink Coverage Comparison</h4>
-            {[
-              { label: 'Original', total: origTotal, color: 'bg-gray-500' },
-              { label: 'After GCR', total: gcrTotal, color: 'bg-purple-500' },
-              { label: 'After UCR', total: ucrTotal, color: 'bg-blue-500' },
-            ].map(({ label, total, color }) => (
-              <div key={label} className="flex items-center gap-3">
-                <span className="text-xs text-gray-600 w-20">{label}</span>
-                <div className="flex-1 h-4 bg-gray-100 rounded-full overflow-hidden">
-                  <div
-                    className={`h-full ${color} rounded-full transition-all`}
-                    style={{ width: `${Math.min((total / 400) * 100, 100)}%` }}
-                  />
-                </div>
-                <span className={`text-xs font-medium w-12 text-right ${total > 300 ? 'text-red-600' : 'text-gray-700'}`}>
-                  {total}%
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-green-50 rounded-lg p-3 flex items-start gap-2">
-            <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 shrink-0" />
-            <p className="text-xs text-green-800">
-              {origTotal - gcrTotal > 0
-                ? `GCR saves approximately ${Math.round(origTotal - gcrTotal)}% total ink coverage compared to the original.`
-                : 'Current values show minimal gray component to replace.'}
-            </p>
           </div>
         </div>
       </div>
@@ -732,200 +744,198 @@ export function ImpositionCalculator() {
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-emerald-50 rounded-lg">
-          <Grid3X3 className="w-5 h-5 text-emerald-600" />
+    <div className="bg-white rounded-xl shadow-sm border p-4">
+      <div className="d-flex align-items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg" style={{ backgroundColor: '#ecfdf5' }}>
+          <Grid3X3 size={20} style={{ color: '#059669' }} />
         </div>
         <div>
-          <h3 className="font-semibold text-gray-900">Imposition Calculator</h3>
-          <p className="text-sm text-gray-500">Multi-up imposition for commercial printing</p>
+          <h3 className="fw-semibold text-dark">Imposition Calculator</h3>
+          <p className="text-sm text-muted">Multi-up imposition for commercial printing</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="row g-4">
         {/* Left: Inputs */}
-        <div className="space-y-4">
-          <h4 className="text-sm font-semibold text-gray-900">Finished Size (mm)</h4>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Width</label>
-              <input
-                type="number"
-                value={finishedW}
-                onChange={(e) => setFinishedW(clamp(Number(e.target.value), 1, 2000))}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                min={1}
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Height</label>
-              <input
-                type="number"
-                value={finishedH}
-                onChange={(e) => setFinishedH(clamp(Number(e.target.value), 1, 2000))}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                min={1}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Sheet Size</label>
-            <select
-              value={sheetName}
-              onChange={(e) => setSheetName(e.target.value)}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-            >
-              {SHEET_SIZES.map((s) => (
-                <option key={s.name} value={s.name}>
-                  {s.name} {s.w ? `(${s.w} × ${s.h} mm)` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {sheetName === 'Custom' && (
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Sheet Width (mm)</label>
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <h4 className="text-sm fw-semibold">Finished Size (mm)</h4>
+            <div className="row g-2">
+              <div className="col-6">
+                <label className="form-label text-xs text-muted">Width</label>
                 <input
                   type="number"
-                  value={customSheetW}
-                  onChange={(e) => setCustomSheetW(clamp(Number(e.target.value), 1, 3000))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                  value={finishedW}
+                  onChange={(e) => setFinishedW(clamp(Number(e.target.value), 1, 2000))}
+                  className="form-control form-control-sm"
                   min={1}
                 />
               </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Sheet Height (mm)</label>
+              <div className="col-6">
+                <label className="form-label text-xs text-muted">Height</label>
                 <input
                   type="number"
-                  value={customSheetH}
-                  onChange={(e) => setCustomSheetH(clamp(Number(e.target.value), 1, 3000))}
-                  className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                  value={finishedH}
+                  onChange={(e) => setFinishedH(clamp(Number(e.target.value), 1, 2000))}
+                  className="form-control form-control-sm"
                   min={1}
                 />
               </div>
             </div>
-          )}
 
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setOrientation('portrait')}
-              className={`flex-1 rounded-lg border px-3 py-2 text-sm flex items-center justify-center gap-2 transition-colors ${
-                orientation === 'portrait'
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'border-gray-200 text-gray-600 hover:border-emerald-300'
-              }`}
-            >
-              <ArrowUpDown className="w-4 h-4" /> Portrait
-            </button>
-            <button
-              onClick={() => setOrientation('landscape')}
-              className={`flex-1 rounded-lg border px-3 py-2 text-sm flex items-center justify-center gap-2 transition-colors ${
-                orientation === 'landscape'
-                  ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'border-gray-200 text-gray-600 hover:border-emerald-300'
-              }`}
-            >
-              <ArrowUpDown className="w-4 h-4 rotate-90" /> Landscape
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs text-gray-500 mb-1">Gutter H (mm)</label>
+              <label className="form-label text-sm fw-medium">Sheet Size</label>
+              <select
+                value={sheetName}
+                onChange={(e) => setSheetName(e.target.value)}
+                className="form-select form-select-sm"
+              >
+                {SHEET_SIZES.map((s) => (
+                  <option key={s.name} value={s.name}>
+                    {s.name} {s.w ? `(${s.w} × ${s.h} mm)` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {sheetName === 'Custom' && (
+              <div className="row g-2">
+                <div className="col-6">
+                  <label className="form-label text-xs text-muted">Sheet Width (mm)</label>
+                  <input
+                    type="number"
+                    value={customSheetW}
+                    onChange={(e) => setCustomSheetW(clamp(Number(e.target.value), 1, 3000))}
+                    className="form-control form-control-sm"
+                    min={1}
+                  />
+                </div>
+                <div className="col-6">
+                  <label className="form-label text-xs text-muted">Sheet Height (mm)</label>
+                  <input
+                    type="number"
+                    value={customSheetH}
+                    onChange={(e) => setCustomSheetH(clamp(Number(e.target.value), 1, 3000))}
+                    className="form-control form-control-sm"
+                    min={1}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="d-flex gap-2">
+              <button
+                onClick={() => setOrientation('portrait')}
+                className={`flex-grow-1 rounded-lg border px-3 py-2 text-sm d-flex align-items-center justify-content-center gap-2 ${orientation === 'portrait' ? 'text-white' : ''}`}
+                style={orientation === 'portrait' ? { backgroundColor: '#059669', borderColor: '#059669' } : { borderColor: '#dee2e6', color: '#6c757d' }}
+              >
+                <ArrowUpDown size={16} /> Portrait
+              </button>
+              <button
+                onClick={() => setOrientation('landscape')}
+                className={`flex-grow-1 rounded-lg border px-3 py-2 text-sm d-flex align-items-center justify-content-center gap-2 ${orientation === 'landscape' ? 'text-white' : ''}`}
+                style={orientation === 'landscape' ? { backgroundColor: '#059669', borderColor: '#059669' } : { borderColor: '#dee2e6', color: '#6c757d' }}
+              >
+                <ArrowUpDown size={16} style={{ transform: 'rotate(90deg)' }} /> Landscape
+              </button>
+            </div>
+
+            <div className="row g-2">
+              <div className="col-6">
+                <label className="form-label text-xs text-muted">Gutter H (mm)</label>
+                <input
+                  type="number"
+                  value={gutterH}
+                  onChange={(e) => setGutterH(clamp(Number(e.target.value), 0, 50))}
+                  className="form-control form-control-sm"
+                  min={0}
+                />
+              </div>
+              <div className="col-6">
+                <label className="form-label text-xs text-muted">Gutter V (mm)</label>
+                <input
+                  type="number"
+                  value={gutterV}
+                  onChange={(e) => setGutterV(clamp(Number(e.target.value), 0, 50))}
+                  className="form-control form-control-sm"
+                  min={0}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="form-label text-xs text-muted">Sheet Margin (mm)</label>
               <input
                 type="number"
-                value={gutterH}
-                onChange={(e) => setGutterH(clamp(Number(e.target.value), 0, 50))}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
+                value={margin}
+                onChange={(e) => setMargin(clamp(Number(e.target.value), 0, 50))}
+                className="form-control form-control-sm"
                 min={0}
               />
             </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Gutter V (mm)</label>
-              <input
-                type="number"
-                value={gutterV}
-                onChange={(e) => setGutterV(clamp(Number(e.target.value), 0, 50))}
-                className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-                min={0}
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-xs text-gray-500 mb-1">Sheet Margin (mm)</label>
-            <input
-              type="number"
-              value={margin}
-              onChange={(e) => setMargin(clamp(Number(e.target.value), 0, 50))}
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none"
-              min={0}
-            />
           </div>
         </div>
 
         {/* Right: Results + Canvas */}
-        <div className="space-y-4">
-          <div className="bg-emerald-50 rounded-xl p-5">
-            <h4 className="text-sm font-semibold text-emerald-900 mb-4">Imposition Results</h4>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Layout</span>
-                <span className="font-semibold text-emerald-900">{cols} × {rows}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Items per Sheet</span>
-                <span className="font-semibold text-emerald-900">{itemsPerSheet}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Sheet Size</span>
-                <span className="font-semibold text-emerald-900">{sheetWFinal} × {sheetHFinal} mm</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Used Area</span>
-                <span className="font-semibold text-emerald-900">{usedW} × {usedH} mm</span>
-              </div>
-              <div className="h-px bg-emerald-200" />
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Utilization</span>
-                <span className={`font-bold ${utilization > 80 ? 'text-green-700' : utilization > 60 ? 'text-amber-700' : 'text-red-700'}`}>
-                  {utilization.toFixed(1)}%
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-emerald-700">Waste</span>
-                <span className="font-semibold text-emerald-900">
-                  {wasteArea.toFixed(0)} mm² ({wastePct.toFixed(1)}%)
-                </span>
+        <div className="col-12 col-lg-6">
+          <div className="d-flex flex-column gap-3">
+            <div className="rounded-xl p-4" style={{ backgroundColor: '#ecfdf5' }}>
+              <h4 className="text-sm fw-semibold mb-3" style={{ color: '#065f46' }}>Imposition Results</h4>
+              <div className="d-flex flex-column gap-2">
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Layout</span>
+                  <span className="fw-semibold" style={{ color: '#065f46' }}>{cols} × {rows}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Items per Sheet</span>
+                  <span className="fw-semibold" style={{ color: '#065f46' }}>{itemsPerSheet}</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Sheet Size</span>
+                  <span className="fw-semibold" style={{ color: '#065f46' }}>{sheetWFinal} × {sheetHFinal} mm</span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Used Area</span>
+                  <span className="fw-semibold" style={{ color: '#065f46' }}>{usedW} × {usedH} mm</span>
+                </div>
+                <div className="border-top" style={{ borderColor: '#a7f3d0' }} />
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Utilization</span>
+                  <span className={`fw-bold ${utilization > 80 ? 'text-success' : utilization > 60 ? 'text-warning' : 'text-danger'}`}>
+                    {utilization.toFixed(1)}%
+                  </span>
+                </div>
+                <div className="d-flex justify-content-between">
+                  <span className="text-sm" style={{ color: '#047857' }}>Waste</span>
+                  <span className="fw-semibold" style={{ color: '#065f46' }}>
+                    {wasteArea.toFixed(0)} mm² ({wastePct.toFixed(1)}%)
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Canvas visualization */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden">
-            <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-              <span className="text-xs font-medium text-gray-600">Visual Layout</span>
+            {/* Canvas visualization */}
+            <div className="border rounded-xl overflow-hidden">
+              <div className="px-3 py-2 border-bottom" style={{ backgroundColor: '#f8f9fa', borderColor: '#dee2e6' }}>
+                <span className="text-xs fw-medium text-secondary">Visual Layout</span>
+              </div>
+              <canvas
+                ref={(el) => {
+                  (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current = el;
+                  if (el) setTimeout(drawLayout, 0);
+                }}
+                width={400}
+                height={350}
+                className="w-100"
+              />
             </div>
-            <canvas
-              ref={(el) => {
-                (canvasRef as React.MutableRefObject<HTMLCanvasElement | null>).current = el;
-                if (el) setTimeout(drawLayout, 0);
-              }}
-              width={400}
-              height={350}
-              className="w-full"
-            />
-          </div>
 
-          <div className="bg-amber-50 rounded-lg p-3 flex items-start gap-2">
-            <Info className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
-            <p className="text-xs text-amber-800">
-              Utilization above 80% is considered efficient. Gutters account for trim/bleed areas. Add 3mm bleed on each side if required by your print provider.
-            </p>
+            <div className="rounded-lg p-3 d-flex align-items-start gap-2" style={{ backgroundColor: '#fffbeb' }}>
+              <Info size={16} className="mt-1 shrink-0" style={{ color: '#d97706' }} />
+              <p className="text-xs" style={{ color: '#92400e' }}>
+                Utilization above 80% is considered efficient. Gutters account for trim/bleed areas. Add 3mm bleed on each side if required by your print provider.
+              </p>
+            </div>
           </div>
         </div>
       </div>

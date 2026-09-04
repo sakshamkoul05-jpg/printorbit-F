@@ -53,20 +53,20 @@ export default function CorporatePage() {
   });
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-vh-100 bg-white">
       {/* Hero */}
       <div className="bg-gradient-to-br from-dark via-dark-light to-primary/90 text-white">
         <Container>
-          <div className="py-16 md:py-20 max-w-3xl">
+          <div className="py-16 py-md-20" style={{ maxWidth: '48rem' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 text-white/80 text-xs font-medium rounded-full mb-4">
-                <Building className="w-3 h-3" /> Corporate Printing Solutions
+              <span className="d-inline-flex align-items-center gap-2 px-3 py-1 bg-white/10 text-white/80 text-xs fw-medium rounded-pill mb-4">
+                <Building size={12} /> Corporate Printing Solutions
               </span>
-              <h1 className="text-3xl md:text-4xl font-bold font-heading mb-4">
+              <h1 className="display-5 fw-bold mb-4">
                 Enterprise Printing,<br />
                 <span className="gradient-text">Simplified</span>
               </h1>
-              <p className="text-white/60 leading-relaxed max-w-xl">
+              <p className="text-white/60 leading-relaxed" style={{ maxWidth: '36rem' }}>
                 From startups to Fortune 500 companies, we provide end-to-end printing solutions with volume discounts, dedicated support, and pan-India delivery.
               </p>
             </motion.div>
@@ -77,21 +77,23 @@ export default function CorporatePage() {
       <Container>
         {/* Features */}
         <div className="py-16">
-          <h2 className="text-2xl font-bold text-dark font-heading text-center mb-10">Why Corporate Clients Choose PrintOrbit</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <h2 className="fs-3 fw-bold text-dark text-center mb-10">Why Corporate Clients Choose PrintOrbit</h2>
+          <div className="row g-4">
             {FEATURES.map((feature, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
-                className="p-6 bg-white rounded-2xl border border-slate-100 hover:shadow-lg hover:border-primary/10 transition-all"
+                className="col-12 col-md-4"
               >
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-primary" />
+                <div className="p-6 bg-white rounded-4 border border-slate-100 h-100 transition-all">
+                  <div className="w-12 h-12 bg-primary/10 rounded-3 d-flex align-items-center justify-content-center mb-4">
+                    <feature.icon size={24} className="text-primary" />
+                  </div>
+                  <h3 className="text-sm fw-semibold text-dark mb-2">{feature.title}</h3>
+                  <p className="text-xs text-muted leading-relaxed">{feature.description}</p>
                 </div>
-                <h3 className="text-sm font-semibold text-dark mb-2">{feature.title}</h3>
-                <p className="text-xs text-muted leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -99,42 +101,43 @@ export default function CorporatePage() {
 
         {/* Plans */}
         <div className="pb-16">
-          <h2 className="text-2xl font-bold text-dark font-heading text-center mb-3">Corporate Pricing Plans</h2>
+          <h2 className="fs-3 fw-bold text-dark text-center mb-3">Corporate Pricing Plans</h2>
           <p className="text-center text-muted text-sm mb-10">Volume-based pricing that scales with your business</p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="row g-4">
             {PLANS.map((plan) => (
-              <div
-                key={plan.name}
-                className={`relative bg-white rounded-2xl border-2 p-6 ${
-                  plan.popular ? 'border-primary shadow-xl shadow-primary/10' : 'border-slate-200'
-                }`}
-              >
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-accent text-white text-[10px] font-bold rounded-full uppercase">
-                    Most Popular
+              <div key={plan.name} className="col-12 col-md-4">
+                <div
+                  className={`position-relative bg-white rounded-4 border-2 p-6 h-100 ${
+                    plan.popular ? 'border-primary shadow-lg' : 'border-slate-200'
+                  }`}
+                >
+                  {plan.popular && (
+                    <div className="position-absolute top-0 start-50 translate-middle px-3 py-1 bg-accent text-white fw-bold rounded-pill" style={{ fontSize: '0.65rem' }}>
+                      Most Popular
+                    </div>
+                  )}
+
+                  <h3 className="fs-5 fw-bold text-dark">{plan.name}</h3>
+                  <div className="mt-3 mb-1">
+                    <span className="fs-2 fw-bold text-primary">{plan.discount}</span>
+                    <span className="text-sm text-muted ms-1">discount</span>
                   </div>
-                )}
+                  <p className="text-xs text-muted mb-5">Min. order: {plan.minOrder} pcs</p>
 
-                <h3 className="text-lg font-bold text-dark font-heading">{plan.name}</h3>
-                <div className="mt-3 mb-1">
-                  <span className="text-3xl font-bold text-primary">{plan.discount}</span>
-                  <span className="text-sm text-muted ml-1">discount</span>
+                  <ul className="d-flex flex-column gap-2 mb-6 list-unstyled">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="d-flex align-items-start gap-2 text-sm text-slate-600">
+                        <CheckCircle size={16} className="text-success flex-shrink-0 mt-1" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button variant={plan.popular ? 'primary' : 'outline'} className="w-100">
+                    {plan.cta}
+                  </Button>
                 </div>
-                <p className="text-xs text-muted mb-5">Min. order: {plan.minOrder} pcs</p>
-
-                <ul className="space-y-2.5 mb-6">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-slate-600">
-                      <CheckCircle className="w-4 h-4 text-success shrink-0 mt-0.5" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <Button variant={plan.popular ? 'primary' : 'outline'} className="w-full">
-                  {plan.cta}
-                </Button>
               </div>
             ))}
           </div>
@@ -142,34 +145,34 @@ export default function CorporatePage() {
 
         {/* Contact Form */}
         <div className="pb-20">
-          <div className="max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 p-8">
-            <h2 className="text-xl font-bold text-dark font-heading text-center mb-2">Get in Touch</h2>
+          <div className="mx-auto bg-white rounded-4 border border-slate-200 p-8" style={{ maxWidth: '40rem' }}>
+            <h2 className="fs-4 fw-bold text-dark text-center mb-2">Get in Touch</h2>
             <p className="text-sm text-muted text-center mb-6">Tell us about your requirements and we&apos;ll get back to you within 24 hours.</p>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Full Name *</label>
-                  <input type="text" className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+            <div className="d-flex flex-column gap-4">
+              <div className="row g-4">
+                <div className="col-6">
+                  <label className="form-label text-xs fw-medium text-slate-500">Full Name *</label>
+                  <input type="text" className="form-control text-sm" />
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Email *</label>
-                  <input type="email" className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+                <div className="col-6">
+                  <label className="form-label text-xs fw-medium text-slate-500">Email *</label>
+                  <input type="email" className="form-control text-sm" />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Phone *</label>
-                  <input type="tel" className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+              <div className="row g-4">
+                <div className="col-6">
+                  <label className="form-label text-xs fw-medium text-slate-500">Phone *</label>
+                  <input type="tel" className="form-control text-sm" />
                 </div>
-                <div>
-                  <label className="text-xs font-medium text-slate-500 mb-1 block">Company *</label>
-                  <input type="text" className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary" />
+                <div className="col-6">
+                  <label className="form-label text-xs fw-medium text-slate-500">Company *</label>
+                  <input type="text" className="form-control text-sm" />
                 </div>
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Estimated Monthly Order Volume</label>
-                <select className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary">
+                <label className="form-label text-xs fw-medium text-slate-500">Estimated Monthly Order Volume</label>
+                <select className="form-select text-sm">
                   <option>Select volume range</option>
                   <option>1,000 - 5,000 pieces</option>
                   <option>5,000 - 25,000 pieces</option>
@@ -178,11 +181,11 @@ export default function CorporatePage() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium text-slate-500 mb-1 block">Message</label>
-                <textarea rows={4} className="w-full px-4 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-sm outline-none focus:border-primary resize-none" placeholder="Tell us about your printing needs..." />
+                <label className="form-label text-xs fw-medium text-slate-500">Message</label>
+                <textarea rows={4} className="form-control text-sm resize-none" placeholder="Tell us about your printing needs..." />
               </div>
-              <Button variant="primary" size="lg" className="w-full">
-                Submit Inquiry <ArrowRight className="w-4 h-4 ml-2" />
+              <Button variant="primary" size="lg" className="w-100">
+                Submit Inquiry <ArrowRight size={16} className="ms-2" />
               </Button>
             </div>
           </div>

@@ -29,24 +29,9 @@ const categoryImageMap: Record<string, string> = {
 };
 
 const reviews = [
-  {
-    name: 'Priya S.', rating: 5, date: '2 weeks ago',
-    product: 'Standard Business Cards', title: 'Excellent quality!',
-    content: 'The cards came out perfect. The matte finish feels premium and the print quality is sharp. Will definitely order again.',
-    helpful: 24, verified: true,
-  },
-  {
-    name: 'Rahul M.', rating: 5, date: '1 month ago',
-    product: 'Standard Business Cards', title: 'Fast delivery',
-    content: 'Ordered 500 cards, received them in 3 days. Great quality for the price. The team was very helpful with the design.',
-    helpful: 18, verified: true,
-  },
-  {
-    name: 'Anjali P.', rating: 4, date: '3 weeks ago',
-    product: 'Standard Business Cards', title: 'Good but minor issue',
-    content: 'Overall great cards. One minor alignment issue on a few cards but customer service resolved it quickly.',
-    helpful: 12, verified: false,
-  },
+  { name: 'Priya S.', rating: 5, date: '2 weeks ago', product: 'Standard Business Cards', title: 'Excellent quality!', content: 'The cards came out perfect. The matte finish feels premium and the print quality is sharp. Will definitely order again.', helpful: 24, verified: true },
+  { name: 'Rahul M.', rating: 5, date: '1 month ago', product: 'Standard Business Cards', title: 'Fast delivery', content: 'Ordered 500 cards, received them in 3 days. Great quality for the price. The team was very helpful with the design.', helpful: 18, verified: true },
+  { name: 'Anjali P.', rating: 4, date: '3 weeks ago', product: 'Standard Business Cards', title: 'Good but minor issue', content: 'Overall great cards. One minor alignment issue on a few cards but customer service resolved it quickly.', helpful: 12, verified: false },
 ];
 
 const faqs = [
@@ -125,12 +110,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
   if (!product) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F4F2EF' }}>
+      <div className="d-flex align-items-center justify-content-center min-vh-100" style={{ backgroundColor: '#F4F2EF' }}>
         <div className="text-center">
-          <Package className="w-16 h-16 mx-auto mb-4" style={{ color: '#999' }} />
-          <h1 className="text-2xl font-bold mb-2" style={{ color: '#0F0F0F' }}>Product Not Found</h1>
+          <Package size={64} className="mx-auto mb-4" style={{ color: '#999' }} />
+          <h1 className="fs-2 fw-bold mb-2" style={{ color: '#0F0F0F' }}>Product Not Found</h1>
           <p className="mb-6" style={{ color: '#666' }}>The product you are looking for does not exist.</p>
-          <Link href="/products" className="inline-block px-6 py-3 rounded-full font-semibold text-white" style={{ backgroundColor: '#ED1C24' }}>
+          <Link href="/products" className="d-inline-block px-6 py-3 rounded-pill fw-semibold text-white text-decoration-none" style={{ backgroundColor: '#ED1C24' }}>
             Browse Products
           </Link>
         </div>
@@ -146,13 +131,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
       {/* Breadcrumb */}
       <div style={{ backgroundColor: '#fff', borderBottom: '1px solid #e5e5e5' }}>
         <div className="max-w-[1200px] mx-auto px-4 py-3">
-          <nav className="flex items-center gap-1.5 text-xs" style={{ color: '#666' }}>
-            <Link href="/" className="hover:underline" style={{ color: '#ED1C24' }}>Home</Link>
-            <ChevronRight className="w-3 h-3" />
-            <Link href="/products" className="hover:underline" style={{ color: '#ED1C24' }}>{product.category}</Link>
-            <ChevronRight className="w-3 h-3" />
-            <Link href={`/products?category=${product.subcategory}`} className="hover:underline" style={{ color: '#ED1C24' }}>{product.subcategory}</Link>
-            <ChevronRight className="w-3 h-3" />
+          <nav className="d-flex align-items-center gap-2 text-xs" style={{ color: '#666' }}>
+            <Link href="/" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Home</Link>
+            <ChevronRight size={12} />
+            <Link href="/products" className="text-decoration-underline" style={{ color: '#ED1C24' }}>{product.category}</Link>
+            <ChevronRight size={12} />
+            <Link href={`/products?category=${product.subcategory}`} className="text-decoration-underline" style={{ color: '#ED1C24' }}>{product.subcategory}</Link>
+            <ChevronRight size={12} />
             <span style={{ color: '#0F0F0F', fontWeight: 600 }}>{product.name}</span>
           </nav>
         </div>
@@ -160,42 +145,42 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
       {/* Main Product Section */}
       <div className="max-w-[1200px] mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="row g-4">
           {/* LEFT COLUMN - Image Gallery (60%) */}
-          <div className="lg:w-[60%]">
-            <div className="bg-white rounded-lg p-4">
+          <div className="col-12 col-lg-7">
+            <div className="bg-white rounded-3 p-4">
               {/* Desktop: Thumbnail strip on left, main image on right */}
-              <div className="flex gap-4">
+              <div className="d-flex gap-4">
                 {/* Thumbnail strip - vertical on desktop */}
-                <div className="hidden md:flex flex-col gap-2 w-20 shrink-0">
+                <div className="d-none d-md-flex flex-column gap-2" style={{ width: '5rem', flexShrink: 0 }}>
                   {images.map((img, i) => (
                     <button
                       key={i}
                       onClick={() => setSelectedImageIdx(i)}
-                      className="w-20 h-20 rounded overflow-hidden border-2 shrink-0"
-                      style={{ borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
+                      className="rounded overflow-hidden border-2 flex-shrink-0"
+                      style={{ width: '5rem', height: '5rem', borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
                     >
-                      <div className="w-full h-full" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
+                      <div className="w-100 h-100" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
                     </button>
                   ))}
                 </div>
 
                 {/* Main image */}
-                <div className="flex-1 aspect-square rounded-lg overflow-hidden">
-                  <div className="w-full h-full" style={{ background: images[selectedImageIdx] }} />
+                <div className="flex-fill rounded-3 overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                  <div className="w-100 h-100" style={{ background: images[selectedImageIdx] }} />
                 </div>
               </div>
 
               {/* Mobile: Thumbnail strip on bottom */}
-              <div className="flex md:hidden gap-2 mt-3 overflow-x-auto">
+              <div className="d-flex d-md-none gap-2 mt-3 overflow-x-auto">
                 {images.map((img, i) => (
                   <button
                     key={i}
                     onClick={() => setSelectedImageIdx(i)}
-                    className="w-16 h-16 rounded overflow-hidden border-2 shrink-0"
-                    style={{ borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
+                    className="rounded overflow-hidden border-2 flex-shrink-0"
+                    style={{ width: '4rem', height: '4rem', borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
                   >
-                    <div className="w-full h-full" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
+                    <div className="w-100 h-100" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
                   </button>
                 ))}
               </div>
@@ -203,40 +188,40 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
           </div>
 
           {/* RIGHT COLUMN - Product Configurator (40%) */}
-          <div className="lg:w-[40%]">
-            <div className="bg-white rounded-lg p-6">
+          <div className="col-12 col-lg-5">
+            <div className="bg-white rounded-3 p-6">
               {/* Brand */}
-              <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#999' }}>
+              <p className="text-xs fw-semibold text-uppercase mb-1" style={{ color: '#999', letterSpacing: '0.1em' }}>
                 {product.brand}
               </p>
 
               {/* Product Title */}
-              <h1 className="text-2xl font-bold mb-3" style={{ color: '#0F0F0F' }}>
+              <h1 className="fs-3 fw-bold mb-3" style={{ color: '#0F0F0F' }}>
                 {product.name}
               </h1>
 
               {/* Price */}
               <div className="mb-3">
                 <p className="text-xs mb-1" style={{ color: '#666' }}>MRP Starting from</p>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-lg line-through" style={{ color: '#999' }}>₹{product.originalPrice}</span>
-                  <span className="text-2xl font-bold" style={{ color: '#ED1C24' }}>₹{product.basePrice}</span>
+                <div className="d-flex align-items-baseline gap-2">
+                  <span className="fs-5" style={{ color: '#999', textDecoration: 'line-through' }}>₹{product.originalPrice}</span>
+                  <span className="fs-2 fw-bold" style={{ color: '#ED1C24' }}>₹{product.basePrice}</span>
                 </div>
               </div>
 
               {/* Get best price */}
-              <button className="text-xs font-semibold underline mb-3" style={{ color: '#ED1C24' }}>
+              <button className="text-xs fw-semibold text-decoration-underline mb-3 border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
                 Get best price for bulk orders
               </button>
 
               {/* Rating */}
-              <div className="flex items-center gap-2 mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <div className="flex items-center gap-0.5">
+              <div className="d-flex align-items-center gap-2 mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
+                <div className="d-flex align-items-center gap-1">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4" style={{ color: i < Math.floor(product.rating) ? '#f59e0b' : '#ddd', fill: i < Math.floor(product.rating) ? '#f59e0b' : 'none' }} />
+                    <Star key={i} size={16} style={{ color: i < Math.floor(product.rating) ? '#f59e0b' : '#ddd', fill: i < Math.floor(product.rating) ? '#f59e0b' : 'none' }} />
                   ))}
                 </div>
-                <span className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{product.rating}</span>
+                <span className="text-sm fw-semibold" style={{ color: '#0F0F0F' }}>{product.rating}</span>
                 <span className="text-sm" style={{ color: '#666' }}>({product.reviewCount} reviews)</span>
               </div>
 
@@ -248,19 +233,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Size dropdown */}
               {product.sizes.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Size</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Size</label>
+                  <div className="position-relative">
                     <select
                       value={selectedSize}
                       onChange={(e) => setSelectedSize(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.sizes.map(s => (
                         <option key={s.name} value={s.name}>{s.name}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
@@ -268,19 +251,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Paper type dropdown */}
               {product.paperTypes.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Paper Type</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Paper Type</label>
+                  <div className="position-relative">
                     <select
                       value={selectedPaperType}
                       onChange={(e) => setSelectedPaperType(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.paperTypes.map(t => (
                         <option key={t} value={t}>{t}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
@@ -288,19 +269,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Print Area dropdown */}
               {product.printAreas.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Print Area</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Print Area</label>
+                  <div className="position-relative">
                     <select
                       value={selectedPrintArea}
                       onChange={(e) => setSelectedPrintArea(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.printAreas.map(a => (
                         <option key={a} value={a}>{a}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
@@ -308,19 +287,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Print Type dropdown */}
               {product.printTypes.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Print Type</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Print Type</label>
+                  <div className="position-relative">
                     <select
                       value={selectedPrintType}
                       onChange={(e) => setSelectedPrintType(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.printTypes.map(t => (
                         <option key={t} value={t}>{t}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
@@ -328,19 +305,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Lamination dropdown */}
               {product.laminationTypes.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Lamination</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Lamination</label>
+                  <div className="position-relative">
                     <select
                       value={selectedLamination}
                       onChange={(e) => setSelectedLamination(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.laminationTypes.map(l => (
                         <option key={l} value={l}>{l}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
@@ -348,130 +323,128 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Corner dropdown */}
               {product.cornerTypes.length > 0 && (
                 <div className="mb-4">
-                  <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Corner</label>
-                  <div className="relative">
+                  <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Corner</label>
+                  <div className="position-relative">
                     <select
                       value={selectedCorner}
                       onChange={(e) => setSelectedCorner(e.target.value)}
-                      className="w-full px-3 py-2.5 rounded text-sm appearance-none pr-10"
-                      style={{ border: '1px solid #ddd', backgroundColor: '#fff', color: '#0F0F0F' }}
+                      className="form-select text-sm"
                     >
                       {product.cornerTypes.map(c => (
                         <option key={c} value={c}>{c}</option>
                       ))}
                     </select>
-                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none" style={{ color: '#666' }} />
                   </div>
                 </div>
               )}
 
               {/* Quantity */}
               <div className="mb-4">
-                <label className="block text-sm font-semibold mb-2" style={{ color: '#0F0F0F' }}>Quantity</label>
-                <div className="flex items-center gap-3">
+                <label className="form-label text-sm fw-semibold" style={{ color: '#0F0F0F' }}>Quantity</label>
+                <div className="d-flex align-items-center gap-3">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="w-10 h-10 rounded flex items-center justify-center"
-                    style={{ border: '1px solid #ddd' }}
+                    className="w-10 h-10 rounded d-flex align-items-center justify-content-center border bg-transparent"
+                    style={{ borderColor: '#ddd' }}
                   >
-                    <Minus className="w-4 h-4" style={{ color: '#666' }} />
+                    <Minus size={16} style={{ color: '#666' }} />
                   </button>
                   <input
                     type="number"
                     value={quantity}
                     onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-20 h-10 text-center text-sm font-semibold rounded"
-                    style={{ border: '1px solid #ddd', color: '#0F0F0F' }}
+                    className="w-20 h-10 text-center text-sm fw-semibold rounded border"
+                    style={{ borderColor: '#ddd', color: '#0F0F0F' }}
                     min={1}
                   />
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-10 h-10 rounded flex items-center justify-center"
-                    style={{ border: '1px solid #ddd' }}
+                    className="w-10 h-10 rounded d-flex align-items-center justify-content-center border bg-transparent"
+                    style={{ borderColor: '#ddd' }}
                   >
-                    <Plus className="w-4 h-4" style={{ color: '#666' }} />
+                    <Plus size={16} style={{ color: '#666' }} />
                   </button>
                 </div>
               </div>
 
               {/* Total Price */}
               <div className="mb-4 p-3 rounded" style={{ backgroundColor: '#f9f9f9' }}>
-                <div className="flex justify-between items-center">
+                <div className="d-flex justify-content-between align-items-center">
                   <span className="text-sm" style={{ color: '#666' }}>Total Price ({quantity} pcs)</span>
-                  <span className="text-xl font-bold" style={{ color: '#ED1C24' }}>₹{totalPrice.toLocaleString()}</span>
+                  <span className="fs-4 fw-bold" style={{ color: '#ED1C24' }}>₹{totalPrice.toLocaleString()}</span>
                 </div>
                 <p className="text-xs mt-1" style={{ color: '#999' }}>₹{unitPrice} per piece</p>
               </div>
 
               {/* Buttons */}
-              <div className="space-y-3">
+              <div className="d-flex flex-column gap-3">
                 <button
                   onClick={handleAddToCart}
-                  className="w-full py-3 rounded-full font-semibold text-white text-sm"
+                  className="w-100 py-3 rounded-pill fw-semibold text-white text-sm border-0"
                   style={{ backgroundColor: '#ED1C24' }}
                 >
                   Select Options
                 </button>
                 <button
-                  className="w-full py-3 rounded-full font-semibold text-sm"
+                  className="w-100 py-3 rounded-pill fw-semibold text-sm border-0"
                   style={{ border: '2px solid #ED1C24', color: '#ED1C24', backgroundColor: '#fff' }}
                 >
                   Request Sample
                 </button>
                 <Link
                   href={`/design-studio?product=${slug}`}
-                  className="w-full py-3 rounded-full font-semibold text-white text-sm flex items-center justify-center gap-2 hidden md:flex"
+                  className="w-100 py-3 rounded-pill fw-semibold text-white text-sm d-none d-md-flex align-items-center justify-content-center gap-2 text-decoration-none"
                   style={{ backgroundColor: '#ED1C24' }}
                 >
                   Personalise
                 </Link>
                 <button
-                  className="w-full py-3 rounded-full font-semibold text-sm flex items-center justify-center gap-2"
-                  style={{ border: '2px solid #ddd', color: '#0F0F0F', backgroundColor: '#fff' }}
+                  className="w-100 py-3 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2 border bg-transparent"
+                  style={{ borderColor: '#ddd', color: '#0F0F0F' }}
                 >
-                  <Upload className="w-4 h-4" />
+                  <Upload size={16} />
                   Upload Design
                 </button>
                 <button
                   onClick={handleAddToCart}
-                  className="w-full py-3 rounded-full font-semibold text-sm flex items-center justify-center gap-2"
+                  className="w-100 py-3 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2"
                   style={{ border: '2px solid #ED1C24', color: '#ED1C24', backgroundColor: '#fff' }}
                 >
-                  <ShoppingCart className="w-4 h-4" />
+                  <ShoppingCart size={16} />
                   Customise & Buy
                 </button>
               </div>
             </div>
 
             {/* Sticky sidebar below configurator */}
-            <div className="bg-white rounded-lg mt-4 p-6 hidden lg:block" style={{ position: 'sticky', top: '20px' }}>
+            <div className="bg-white rounded-3 mt-4 p-6 d-none d-lg-block" style={{ position: 'sticky', top: '20px' }}>
               {/* HOW TO ORDER */}
-              <button className="w-full py-3 rounded-full font-semibold text-sm text-white mb-4" style={{ backgroundColor: '#ED1C24' }}>
+              <button className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0" style={{ backgroundColor: '#ED1C24' }}>
                 HOW TO ORDER
               </button>
 
               {/* PRINTSTOP ADVANTAGE */}
               <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <Shield className="w-5 h-5 mt-0.5 shrink-0" style={{ color: '#ED1C24' }} />
+                <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
+                <div className="d-flex flex-column gap-3">
+                  <div className="d-flex align-items-start gap-3">
+                    <Shield size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
                     <div>
-                      <p className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>Quality Guarantee</p>
+                      <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>Quality Guarantee</p>
                       <p className="text-xs" style={{ color: '#666' }}>100% quality assured products</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Truck className="w-5 h-5 mt-0.5 shrink-0" style={{ color: '#ED1C24' }} />
+                  <div className="d-flex align-items-start gap-3">
+                    <Truck size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
                     <div>
-                      <p className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>Fast Delivery</p>
+                      <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>Fast Delivery</p>
                       <p className="text-xs" style={{ color: '#666' }}>Express delivery available</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Award className="w-5 h-5 mt-0.5 shrink-0" style={{ color: '#ED1C24' }} />
+                  <div className="d-flex align-items-start gap-3">
+                    <Award size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
                     <div>
-                      <p className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>Best Prices</p>
+                      <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>Best Prices</p>
                       <p className="text-xs" style={{ color: '#666' }}>Competitive bulk pricing</p>
                     </div>
                   </div>
@@ -480,42 +453,42 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
               {/* CANCELLATION & REFUND */}
               <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <button className="text-xs font-semibold underline" style={{ color: '#ED1C24' }}>
+                <button className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
                   CANCELLATION & REFUND
                 </button>
               </div>
 
               {/* Have Doubts? */}
               <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>Have Doubts?</h3>
+                <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>Have Doubts?</h3>
                 <a
                   href="tel:+918097695375"
-                  className="w-full py-2.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2"
+                  className="w-100 py-2 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2 text-decoration-none"
                   style={{ border: '2px solid #ED1C24', color: '#ED1C24', backgroundColor: '#fff' }}
                 >
-                  <Phone className="w-4 h-4" />
+                  <Phone size={16} />
                   Ask Our Experts
                 </a>
               </div>
 
               {/* Share This Product */}
               <div>
-                <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>Share This Product</h3>
-                <div className="flex items-center gap-3">
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b5998' }}>
+                <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>Share This Product</h3>
+                <div className="d-flex align-items-center gap-3">
+                  <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#3b5998' }}>
                     <Facebook className="w-4 h-4 text-white" />
                   </button>
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1da1f2' }}>
+                  <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#1da1f2' }}>
                     <Twitter className="w-4 h-4 text-white" />
                   </button>
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#e1306c' }}>
+                  <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#e1306c' }}>
                     <Instagram className="w-4 h-4 text-white" />
                   </button>
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#0077b5' }}>
+                  <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#0077b5' }}>
                     <Linkedin className="w-4 h-4 text-white" />
                   </button>
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#666' }}>
-                    <Share2 className="w-4 h-4 text-white" />
+                  <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#666' }}>
+                    <Share2 size={16} className="text-white" />
                   </button>
                 </div>
               </div>
@@ -525,9 +498,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
         {/* Tabs Section */}
         <div className="mt-8">
-          <div className="bg-white rounded-lg">
+          <div className="bg-white rounded-3">
             {/* Tab Links */}
-            <div className="flex flex-wrap gap-0 border-b" style={{ borderColor: '#eee' }}>
+            <div className="d-flex flex-wrap gap-0 border-bottom" style={{ borderColor: '#eee' }}>
               {([
                 { id: 'overview' as const, label: 'Product Overview' },
                 { id: 'specifications' as const, label: 'Specifications' },
@@ -538,7 +511,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className="px-6 py-4 text-sm font-semibold transition-colors"
+                  className="px-6 py-4 text-sm fw-semibold border-0 bg-transparent"
                   style={{
                     color: activeTab === tab.id ? '#ED1C24' : '#666',
                     borderBottom: activeTab === tab.id ? '2px solid #ED1C24' : '2px solid transparent',
@@ -555,18 +528,20 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Product Overview */}
               {activeTab === 'overview' && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4" style={{ color: '#0F0F0F' }}>Product Overview</h2>
-                  <button className="px-4 py-2 rounded-full text-sm font-semibold text-white mb-4" style={{ backgroundColor: '#ED1C24' }}>
+                  <h2 className="fs-4 fw-bold mb-4" style={{ color: '#0F0F0F' }}>Product Overview</h2>
+                  <button className="px-4 py-2 rounded-pill text-sm fw-semibold text-white mb-4 border-0" style={{ backgroundColor: '#ED1C24' }}>
                     About Product
                   </button>
                   <p className="text-sm leading-relaxed mb-6" style={{ color: '#444' }}>{product.longDescription}</p>
 
-                  <h3 className="text-lg font-bold mb-4" style={{ color: '#0F0F0F' }}>Product Details</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <h3 className="fs-5 fw-bold mb-4" style={{ color: '#0F0F0F' }}>Product Details</h3>
+                  <div className="row g-4">
                     {Object.entries(product.specs).map(([key, value]) => (
-                      <div key={key} className="flex flex-col py-2" style={{ borderBottom: '1px solid #eee' }}>
-                        <span className="text-xs" style={{ color: '#999' }}>{key}</span>
-                        <span className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{value}</span>
+                      <div key={key} className="col-6">
+                        <div className="d-flex flex-column py-2" style={{ borderBottom: '1px solid #eee' }}>
+                          <span className="text-xs" style={{ color: '#999' }}>{key}</span>
+                          <span className="text-sm fw-semibold" style={{ color: '#0F0F0F' }}>{value}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -576,12 +551,12 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Specifications */}
               {activeTab === 'specifications' && (
                 <div>
-                  <h2 className="text-xl font-bold mb-4" style={{ color: '#0F0F0F' }}>Specifications</h2>
-                  <div className="space-y-0">
+                  <h2 className="fs-4 fw-bold mb-4" style={{ color: '#0F0F0F' }}>Specifications</h2>
+                  <div className="d-flex flex-column">
                     {Object.entries(product.specs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between py-3" style={{ borderBottom: '1px solid #eee' }}>
+                      <div key={key} className="d-flex justify-content-between py-3" style={{ borderBottom: '1px solid #eee' }}>
                         <span className="text-sm" style={{ color: '#666' }}>{key}</span>
-                        <span className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{value}</span>
+                        <span className="text-sm fw-semibold" style={{ color: '#0F0F0F' }}>{value}</span>
                       </div>
                     ))}
                   </div>
@@ -590,17 +565,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
               {/* To Order In Bulk */}
               {activeTab === 'bulk' && (
-                <div className="rounded-lg p-6" style={{ backgroundColor: '#ED1C24' }}>
-                  <h2 className="text-xl font-bold text-white mb-3">To Order In Bulk</h2>
+                <div className="rounded-3 p-6" style={{ backgroundColor: '#ED1C24' }}>
+                  <h2 className="fs-4 fw-bold text-white mb-3">To Order In Bulk</h2>
                   <p className="text-sm text-white mb-4">
                     Need assistance or just want to feel heard? Call us at: <strong>080-6917-9900</strong>
                   </p>
                   <a
                     href="tel:08069179900"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm"
+                    className="d-inline-flex align-items-center gap-2 px-6 py-3 rounded-pill fw-semibold text-sm text-decoration-none"
                     style={{ backgroundColor: '#fff', color: '#ED1C24' }}
                   >
-                    <Phone className="w-4 h-4" />
+                    <Phone size={16} />
                     Call Now
                   </a>
                 </div>
@@ -609,20 +584,20 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* Most Helpful Reviews */}
               {activeTab === 'reviews' && (
                 <div>
-                  <h2 className="text-xl font-bold mb-6" style={{ color: '#0F0F0F' }}>Most Helpful Reviews</h2>
-                  <div className="space-y-4">
+                  <h2 className="fs-4 fw-bold mb-6" style={{ color: '#0F0F0F' }}>Most Helpful Reviews</h2>
+                  <div className="d-flex flex-column gap-4">
                     {reviews.map((review, i) => (
-                      <div key={i} className="p-4 rounded-lg" style={{ border: '1px solid #eee' }}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ backgroundColor: '#f0f0f0' }}>
-                              <span className="text-sm font-bold" style={{ color: '#666' }}>{review.name[0]}</span>
+                      <div key={i} className="p-4 rounded-3" style={{ border: '1px solid #eee' }}>
+                        <div className="d-flex align-items-center justify-content-between mb-2">
+                          <div className="d-flex align-items-center gap-3">
+                            <div className="w-10 h-10 rounded-circle d-flex align-items-center justify-content-center" style={{ backgroundColor: '#f0f0f0' }}>
+                              <span className="text-sm fw-bold" style={{ color: '#666' }}>{review.name[0]}</span>
                             </div>
                             <div>
-                              <div className="flex items-center gap-2">
-                                <p className="text-sm font-semibold" style={{ color: '#0F0F0F' }}>{review.name}</p>
+                              <div className="d-flex align-items-center gap-2">
+                                <p className="text-sm fw-semibold" style={{ color: '#0F0F0F' }}>{review.name}</p>
                                 {review.verified && (
-                                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold" style={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }}>
+                                  <span className="text-xs px-2 py-0 rounded-pill fw-semibold" style={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }}>
                                     Verified
                                   </span>
                                 )}
@@ -632,15 +607,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                           </div>
                           <span className="text-xs" style={{ color: '#999' }}>{review.date}</span>
                         </div>
-                        <div className="flex items-center gap-0.5 mb-2">
+                        <div className="d-flex align-items-center gap-1 mb-2">
                           {[...Array(5)].map((_, j) => (
-                            <Star key={j} className="w-3.5 h-3.5" style={{ color: j < review.rating ? '#f59e0b' : '#ddd', fill: j < review.rating ? '#f59e0b' : 'none' }} />
+                            <Star key={j} size={14} style={{ color: j < review.rating ? '#f59e0b' : '#ddd', fill: j < review.rating ? '#f59e0b' : 'none' }} />
                           ))}
                         </div>
-                        <h4 className="text-sm font-semibold mb-1" style={{ color: '#0F0F0F' }}>{review.title}</h4>
+                        <h4 className="text-sm fw-semibold mb-1" style={{ color: '#0F0F0F' }}>{review.title}</h4>
                         <p className="text-sm mb-3" style={{ color: '#444' }}>{review.content}</p>
-                        <button className="flex items-center gap-1.5 text-xs" style={{ color: '#666' }}>
-                          <ThumbsUp className="w-3.5 h-3.5" />
+                        <button className="d-flex align-items-center gap-2 text-xs border-0 bg-transparent p-0" style={{ color: '#666' }}>
+                          <ThumbsUp size={14} />
                           Helpful ({review.helpful})
                         </button>
                       </div>
@@ -652,19 +627,19 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               {/* FAQs */}
               {activeTab === 'faq' && (
                 <div>
-                  <h2 className="text-xl font-bold mb-6" style={{ color: '#0F0F0F' }}>FAQs</h2>
-                  <div className="space-y-0">
+                  <h2 className="fs-4 fw-bold mb-6" style={{ color: '#0F0F0F' }}>FAQs</h2>
+                  <div className="d-flex flex-column">
                     {faqs.map((faq, i) => (
                       <div key={i} style={{ borderBottom: '1px solid #eee' }}>
                         <button
                           onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                          className="w-full flex items-center justify-between py-4 text-left"
+                          className="w-100 d-flex align-items-center justify-content-between py-4 text-start border-0 bg-transparent p-0"
                         >
-                          <span className="text-sm font-semibold pr-4" style={{ color: '#0F0F0F' }}>{faq.q}</span>
+                          <span className="text-sm fw-semibold pe-4" style={{ color: '#0F0F0F' }}>{faq.q}</span>
                           {openFaq === i ? (
-                            <ChevronUp className="w-5 h-5 shrink-0" style={{ color: '#666' }} />
+                            <ChevronUp size={20} className="flex-shrink-0" style={{ color: '#666' }} />
                           ) : (
-                            <ChevronDown className="w-5 h-5 shrink-0" style={{ color: '#666' }} />
+                            <ChevronDown size={20} className="flex-shrink-0" style={{ color: '#666' }} />
                           )}
                         </button>
                         {openFaq === i && (
@@ -682,63 +657,63 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         </div>
 
         {/* Mobile sidebar elements */}
-        <div className="lg:hidden mt-4">
-          <div className="bg-white rounded-lg p-6">
-            <button className="w-full py-3 rounded-full font-semibold text-sm text-white mb-4" style={{ backgroundColor: '#ED1C24' }}>
+        <div className="d-lg-none mt-4">
+          <div className="bg-white rounded-3 p-6">
+            <button className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0" style={{ backgroundColor: '#ED1C24' }}>
               HOW TO ORDER
             </button>
             <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-              <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 mt-0.5 shrink-0" style={{ color: '#ED1C24' }} />
+              <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
+              <div className="d-flex flex-column gap-3">
+                <div className="d-flex align-items-start gap-3">
+                  <Shield size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
                   <div>
-                    <p className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>Quality Guarantee</p>
+                    <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>Quality Guarantee</p>
                     <p className="text-xs" style={{ color: '#666' }}>100% quality assured products</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
-                  <Truck className="w-5 h-5 mt-0.5 shrink-0" style={{ color: '#ED1C24' }} />
+                <div className="d-flex align-items-start gap-3">
+                  <Truck size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
                   <div>
-                    <p className="text-xs font-semibold" style={{ color: '#0F0F0F' }}>Fast Delivery</p>
+                    <p className="text-xs fw-semibold" style={{ color: '#0F0F0F' }}>Fast Delivery</p>
                     <p className="text-xs" style={{ color: '#666' }}>Express delivery available</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-              <button className="text-xs font-semibold underline" style={{ color: '#ED1C24' }}>
+              <button className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
                 CANCELLATION & REFUND
               </button>
             </div>
             <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-              <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>Have Doubts?</h3>
+              <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>Have Doubts?</h3>
               <a
                 href="tel:+918097695375"
-                className="w-full py-2.5 rounded-full font-semibold text-sm flex items-center justify-center gap-2"
+                className="w-100 py-2 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2 text-decoration-none"
                 style={{ border: '2px solid #ED1C24', color: '#ED1C24', backgroundColor: '#fff' }}
               >
-                <Phone className="w-4 h-4" />
+                <Phone size={16} />
                 Ask Our Experts
               </a>
             </div>
             <div>
-              <h3 className="text-sm font-bold mb-3" style={{ color: '#0F0F0F' }}>Share This Product</h3>
-              <div className="flex items-center gap-3">
-                <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#3b5998' }}>
+              <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>Share This Product</h3>
+              <div className="d-flex align-items-center gap-3">
+                <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#3b5998' }}>
                   <Facebook className="w-4 h-4 text-white" />
                 </button>
-                <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#1da1f2' }}>
+                <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#1da1f2' }}>
                   <Twitter className="w-4 h-4 text-white" />
                 </button>
-                <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#e1306c' }}>
+                <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#e1306c' }}>
                   <Instagram className="w-4 h-4 text-white" />
                 </button>
-                <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#0077b5' }}>
+                <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#0077b5' }}>
                   <Linkedin className="w-4 h-4 text-white" />
                 </button>
-                <button className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#666' }}>
-                  <Share2 className="w-4 h-4 text-white" />
+                <button className="w-8 h-8 rounded-circle d-flex align-items-center justify-content-center border-0" style={{ backgroundColor: '#666' }}>
+                  <Share2 size={16} className="text-white" />
                 </button>
               </div>
             </div>
@@ -747,42 +722,43 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
         {/* Let's Talk Business */}
         <div className="mt-8">
-          <div className="bg-white rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-3" style={{ color: '#0F0F0F' }}>Let&apos;s Talk Business</h2>
+          <div className="bg-white rounded-3 p-6">
+            <h2 className="fs-4 fw-bold mb-3" style={{ color: '#0F0F0F' }}>Let&apos;s Talk Business</h2>
             <p className="text-sm mb-4" style={{ color: '#444' }}>
               Whether you need 100 or 100,000 pieces, we have the capacity and expertise to deliver. Get in touch with our corporate sales team for custom orders, dedicated account management, and exclusive pricing.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-sm text-white"
+              className="d-inline-flex align-items-center gap-2 px-6 py-3 rounded-pill fw-semibold text-sm text-white text-decoration-none"
               style={{ backgroundColor: '#ED1C24' }}
             >
               Contact Us
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight size={16} />
             </Link>
           </div>
         </div>
 
         {/* Related Products */}
         <div className="mt-8">
-          <div className="bg-white rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-6" style={{ color: '#0F0F0F' }}>Related Products</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-3 p-6">
+            <h2 className="fs-4 fw-bold mb-6" style={{ color: '#0F0F0F' }}>Related Products</h2>
+            <div className="row g-4">
               {relatedProducts.map((rp) => (
-                <Link
-                  key={rp.slug}
-                  href={`/products/${rp.slug}`}
-                  className="group rounded-lg overflow-hidden"
-                  style={{ border: '1px solid #eee' }}
-                >
-                  <div className="aspect-square overflow-hidden">
-                    <div className="w-full h-full" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
-                  </div>
-                  <div className="p-3">
-                    <p className="text-sm font-medium truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>
-                    <p className="text-sm font-bold mt-1" style={{ color: '#ED1C24' }}>Starting at ₹{rp.basePrice}</p>
-                  </div>
-                </Link>
+                <div key={rp.slug} className="col-6 col-md-3">
+                  <Link
+                    href={`/products/${rp.slug}`}
+                    className="group rounded-3 overflow-hidden d-block text-decoration-none"
+                    style={{ border: '1px solid #eee' }}
+                  >
+                    <div className="overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                      <div className="w-100 h-100" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
+                    </div>
+                    <div className="p-3">
+                      <p className="text-sm fw-medium text-truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>
+                      <p className="text-sm fw-bold mt-1" style={{ color: '#ED1C24' }}>Starting at ₹{rp.basePrice}</p>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </div>
           </div>
@@ -790,24 +766,25 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
         {/* Recently Viewed */}
         <div className="mt-8 mb-8">
-          <div className="bg-white rounded-lg p-6">
-            <h2 className="text-xl font-bold mb-6" style={{ color: '#0F0F0F' }}>Recently Viewed</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="bg-white rounded-3 p-6">
+            <h2 className="fs-4 fw-bold mb-6" style={{ color: '#0F0F0F' }}>Recently Viewed</h2>
+            <div className="row g-4">
               {recentlyViewed.map((rp) => (
-                <Link
-                  key={rp.slug}
-                  href={`/products/${rp.slug}`}
-                  className="group rounded-lg overflow-hidden"
-                  style={{ border: '1px solid #eee' }}
-                >
-                  <div className="aspect-square overflow-hidden">
-                    <div className="w-full h-full" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
-                  </div>
-                  <div className="p-3">
-                    <p className="text-sm font-medium truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>
-                    <p className="text-sm font-bold mt-1" style={{ color: '#ED1C24' }}>Starting at ₹{rp.basePrice}</p>
-                  </div>
-                </Link>
+                <div key={rp.slug} className="col-6 col-md-3">
+                  <Link
+                    href={`/products/${rp.slug}`}
+                    className="group rounded-3 overflow-hidden d-block text-decoration-none"
+                    style={{ border: '1px solid #eee' }}
+                  >
+                    <div className="overflow-hidden" style={{ aspectRatio: '1/1' }}>
+                      <div className="w-100 h-100" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
+                    </div>
+                    <div className="p-3">
+                      <p className="text-sm fw-medium text-truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>
+                      <p className="text-sm fw-bold mt-1" style={{ color: '#ED1C24' }}>Starting at ₹{rp.basePrice}</p>
+                    </div>
+                  </Link>
+                </div>
               ))}
             </div>
           </div>

@@ -9,12 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@fontsource/inter": "^5.2.8",
-    "@fontsource/poppins": "^5.2.7",
-    "@fontsource/space-grotesk": "^5.2.10",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.108.2",
     "@types/pdfjs-dist": "^2.10.377",
+    "bootstrap": "^5.3.8",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "fabric": "^6.9.1",
@@ -28,18 +26,15 @@
     "react-hook-form": "^7.80.0",
     "react-hot-toast": "^2.6.0",
     "swiper": "^14.0.0",
-    "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
-    "tailwindcss": "^4",
     "typescript": "^5"
   }
 }

@@ -16,11 +16,12 @@ const benefits = [
 
 export default function BulkPrinting() {
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 to-accent/5">
+    <section className="py-5" style={{ background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-accent-rgb), 0.05))' }}>
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="row align-items-center g-4">
           {/* Left - Content */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -32,22 +33,24 @@ export default function BulkPrinting() {
               align="left"
             />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
+            <div className="row g-3 mt-3">
               {benefits.map((benefit, i) => (
                 <motion.div
                   key={benefit.title}
+                  className="col-12 col-sm-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-start gap-3"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <benefit.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold font-heading text-dark text-sm">{benefit.title}</h4>
-                    <p className="text-xs text-muted">{benefit.description}</p>
+                  <div className="d-flex align-items-start gap-3">
+                    <div className="bg-primary rounded-4 d-flex align-items-center justify-content-center flex-shrink-0" style={{ width: '40px', height: '40px', backgroundColor: 'rgba(var(--bs-primary-rgb), 0.1)' }}>
+                      <benefit.icon size={20} className="text-primary" />
+                    </div>
+                    <div>
+                      <h4 className="fw-semibold font-heading text-dark mb-0" style={{ fontSize: '14px' }}>{benefit.title}</h4>
+                      <p className="text-muted mb-0" style={{ fontSize: '12px' }}>{benefit.description}</p>
+                    </div>
                   </div>
                 </motion.div>
               ))}
@@ -57,7 +60,7 @@ export default function BulkPrinting() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-8 flex flex-wrap gap-4"
+              className="mt-4 d-flex flex-wrap gap-3"
             >
               <Link href="/quote/request">
                 <Button variant="primary" size="lg">
@@ -74,33 +77,34 @@ export default function BulkPrinting() {
 
           {/* Right - Stats Card */}
           <motion.div
+            className="col-12 col-lg-6"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
           >
-            <div className="bg-white rounded-3xl p-8 shadow-xl border border-slate-100">
-              <h3 className="text-xl font-bold font-heading text-dark mb-6">Bulk Order Benefits</h3>
-              
-              <div className="space-y-4">
+            <div className="bg-white rounded-4 p-4 shadow-xl border border-light">
+              <h3 className="fs-4 fw-bold font-heading text-dark mb-4">Bulk Order Benefits</h3>
+
+              <div className="d-flex flex-column gap-3">
                 {[
                   { qty: '50-100', discount: '10% OFF' },
                   { qty: '100-500', discount: '20% OFF' },
                   { qty: '500-1000', discount: '30% OFF' },
                   { qty: '1000+', discount: '40% OFF' },
-                ].map((tier, i) => (
-                  <div key={tier.qty} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl">
-                    <span className="text-sm font-medium text-dark">{tier.qty} pieces</span>
-                    <span className="text-sm font-bold text-primary">{tier.discount}</span>
+                ].map((tier) => (
+                  <div key={tier.qty} className="d-flex align-items-center justify-content-between p-3 bg-slate-50 rounded-4">
+                    <span className="fw-medium text-dark" style={{ fontSize: '14px' }}>{tier.qty} pieces</span>
+                    <span className="fw-bold text-primary" style={{ fontSize: '14px' }}>{tier.discount}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-primary/5 rounded-xl">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-primary" />
-                  <span className="font-semibold font-heading text-dark">Enterprise Solutions</span>
+              <div className="mt-4 p-3 rounded-4" style={{ backgroundColor: 'rgba(var(--bs-primary-rgb), 0.05)' }}>
+                <div className="d-flex align-items-center gap-2 mb-2">
+                  <CheckCircle size={20} className="text-primary" />
+                  <span className="fw-semibold font-heading text-dark">Enterprise Solutions</span>
                 </div>
-                <p className="text-sm text-muted">Need 10,000+ pieces? Contact us for custom enterprise pricing and dedicated account management.</p>
+                <p className="text-muted mb-0" style={{ fontSize: '14px' }}>Need 10,000+ pieces? Contact us for custom enterprise pricing and dedicated account management.</p>
               </div>
             </div>
           </motion.div>

@@ -143,22 +143,22 @@ export default function AdminMockupEditorPage() {
   }, [metadata, printArea, corners, uploads]);
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-vh-100" style={{ backgroundColor: '#0f172a' }}>
       {/* Header */}
-      <div className="bg-slate-800 border-b border-slate-700">
+      <div style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
         <Container>
-          <div className="py-4 flex items-center justify-between">
+          <div className="py-4 d-flex align-items-center justify-content-between">
             <div>
-              <Link href="/admin" className="text-xs text-blue-400 hover:underline mb-1 inline-block flex items-center gap-1">
-                <ArrowLeft className="w-3 h-3" /> Back to Admin
+              <Link href="/admin" className="text-xs text-primary hover-underline mb-1 d-inline-flex align-items-center gap-1">
+                <ArrowLeft size={12} /> Back to Admin
               </Link>
-              <h1 className="text-lg font-bold text-white font-heading flex items-center gap-2">
-                <Package className="w-5 h-5 text-blue-400" />
+              <h1 className="text-lg fw-bold text-white font-heading d-flex align-items-center gap-2">
+                <Package size={20} className="text-primary" />
                 Mockup Editor
               </h1>
-              <p className="text-xs text-slate-400">Upload product photos, set printable areas, adjust perspective corners</p>
+              <p className="text-xs" style={{ color: '#94a3b8' }}>Upload product photos, set printable areas, adjust perspective corners</p>
             </div>
-            <span className={`text-[10px] px-2 py-1 rounded-full ${backgroundUrl ? 'bg-green-900/30 text-green-400' : 'bg-slate-700 text-slate-500'}`}>
+            <span className={`px-2 py-1 rounded-pill ${backgroundUrl ? 'bg-success bg-opacity-10 text-success' : 'bg-secondary bg-opacity-10'}`} style={{ color: backgroundUrl ? '#4ade80' : '#64748b' }}>
               {backgroundUrl ? 'Product loaded' : 'No product'}
             </span>
           </div>
@@ -166,9 +166,9 @@ export default function AdminMockupEditorPage() {
       </div>
 
       <Container>
-        <div className="py-6 flex flex-col xl:flex-row gap-6">
+        <div className="py-6 d-flex flex-column flex-xl-row gap-4">
           {/* LEFT: Asset Upload */}
-          <div className="w-full xl:w-64 shrink-0">
+          <div className="w-100" style={{ maxWidth: '256px' }}>
             <AssetPanel
               onBackgroundUpload={handleBackgroundUpload}
               onMaskUpload={handleMaskUpload}
@@ -179,7 +179,7 @@ export default function AdminMockupEditorPage() {
           </div>
 
           {/* CENTER: Canvas Editor */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-grow-1" style={{ minWidth: 0 }}>
             <CanvasEditor
               backgroundUrl={backgroundUrl}
               maskUrl={maskUrl}
@@ -191,20 +191,20 @@ export default function AdminMockupEditorPage() {
 
             {/* Render Preview */}
             {previewUrl && (
-              <div ref={previewRef} className="mt-4 bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
-                <div className="px-4 py-2 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-300">Render Preview</span>
-                  <span className="text-[10px] text-slate-500">{metadata.width}×{metadata.height}px</span>
+              <div ref={previewRef} className="mt-4 rounded-xl overflow-hidden" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+                <div className="px-4 py-2 d-flex align-items-center justify-content-between" style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
+                  <span className="text-xs fw-medium" style={{ color: '#cbd5e1' }}>Render Preview</span>
+                  <span style={{ fontSize: '10px', color: '#64748b' }}>{metadata.width}×{metadata.height}px</span>
                 </div>
                 <div className="p-4">
-                  <img src={previewUrl} alt="Render preview" className="w-full rounded-lg" />
+                  <img src={previewUrl} alt="Render preview" className="w-100 rounded-lg" />
                 </div>
               </div>
             )}
           </div>
 
           {/* RIGHT: Metadata + Controls */}
-          <div className="w-full xl:w-72 shrink-0">
+          <div className="w-100" style={{ maxWidth: '288px' }}>
             <MetadataPanel
               metadata={metadata}
               onChange={updateMetadata}

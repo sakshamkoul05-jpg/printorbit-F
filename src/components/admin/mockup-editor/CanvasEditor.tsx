@@ -36,7 +36,6 @@ export default function CanvasEditor({
     toRemove.forEach(o => c.remove(o));
   }, []);
 
-  // Initialize
   useEffect(() => {
     if (!canvasElRef.current || fabricRef.current) return;
     const c = new Canvas(canvasElRef.current, {
@@ -58,7 +57,6 @@ export default function CanvasEditor({
     return () => { c.dispose(); fabricRef.current = null; };
   }, []);
 
-  // Background image
   useEffect(() => {
     const c = fabricRef.current;
     if (!c) return;
@@ -74,7 +72,6 @@ export default function CanvasEditor({
     }
   }, [backgroundUrl, getByType]);
 
-  // Corner points
   useEffect(() => {
     const c = fabricRef.current;
     if (!c) return;
@@ -111,7 +108,6 @@ export default function CanvasEditor({
     c.renderAll();
   }, [corners, mode, onCornersChange, removeByType]);
 
-  // Printable area
   useEffect(() => {
     const c = fabricRef.current;
     if (!c) return;
@@ -151,45 +147,59 @@ export default function CanvasEditor({
   }, []);
 
   return (
-    <div className="bg-slate-900 rounded-xl border border-slate-700 overflow-hidden">
-      <div className="px-4 py-2 bg-slate-800 border-b border-slate-700 flex items-center justify-between">
-        <div className="flex items-center gap-1">
+    <div className="rounded-3 overflow-hidden" style={{ backgroundColor: '#0f172a', border: '1px solid #334155' }}>
+      <div className="d-flex align-items-center justify-content-between px-3 py-2" style={{ backgroundColor: '#1e293b', borderBottom: '1px solid #334155' }}>
+        <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
           <button onClick={() => setMode('corners')}
-            className={`p-1.5 rounded-lg transition-colors ${mode === 'corners' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-700'}`}>
-            <Crosshair className="w-4 h-4" />
+            className="btn p-1"
+            style={{
+              borderRadius: '0.5rem',
+              transition: 'all 0.15s',
+              backgroundColor: mode === 'corners' ? '#2563eb' : 'transparent',
+              color: mode === 'corners' ? 'var(--bs-white)' : '#94a3b8',
+              border: 'none',
+            }}>
+            <Crosshair size={16} />
           </button>
           <button onClick={() => setMode('area')}
-            className={`p-1.5 rounded-lg transition-colors ${mode === 'area' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white hover:bg-slate-700'}`}>
-            <Move className="w-4 h-4" />
+            className="btn p-1"
+            style={{
+              borderRadius: '0.5rem',
+              transition: 'all 0.15s',
+              backgroundColor: mode === 'area' ? '#2563eb' : 'transparent',
+              color: mode === 'area' ? 'var(--bs-white)' : '#94a3b8',
+              border: 'none',
+            }}>
+            <Move size={16} />
           </button>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-slate-500 mr-2">{Math.round(zoom * 100)}%</span>
-          <button onClick={zoomOut} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><ZoomOut className="w-4 h-4" /></button>
-          <button onClick={zoomIn} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><ZoomIn className="w-4 h-4" /></button>
-          <button onClick={fitToScreen} className="p-1.5 text-slate-400 hover:text-white hover:bg-slate-700 rounded-lg"><Maximize className="w-4 h-4" /></button>
+        <div className="d-flex align-items-center" style={{ gap: '0.25rem' }}>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', marginRight: '0.5rem' }}>{Math.round(zoom * 100)}%</span>
+          <button onClick={zoomOut} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><ZoomOut size={16} /></button>
+          <button onClick={zoomIn} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><ZoomIn size={16} /></button>
+          <button onClick={fitToScreen} className="btn p-1" style={{ color: '#94a3b8', backgroundColor: 'transparent', borderRadius: '0.5rem', border: 'none' }}><Maximize size={16} /></button>
         </div>
       </div>
 
-      <div className="relative" style={{ width: 800, height: 600 }}>
+      <div className="position-relative" style={{ width: 800, height: 600 }}>
         {!backgroundUrl && (
-          <div className="absolute inset-0 flex items-center justify-center text-slate-500 z-10 pointer-events-none">
+          <div className="position-absolute d-flex align-items-center justify-content-center" style={{ inset: 0, color: '#64748b', zIndex: 10, pointerEvents: 'none' }}>
             <div className="text-center">
-              <svg className="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg style={{ width: '3rem', height: '3rem', margin: '0 auto 0.75rem', opacity: 0.5 }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <p className="text-sm">Upload a background image to start</p>
-              <p className="text-xs text-slate-600 mt-1">Drag corner points to set perspective</p>
+              <p style={{ fontSize: '0.875rem' }}>Upload a background image to start</p>
+              <p style={{ fontSize: '0.75rem', color: '#475569', marginTop: '0.25rem' }}>Drag corner points to set perspective</p>
             </div>
           </div>
         )}
         {backgroundUrl && (
-          <img src={backgroundUrl} alt="" className="absolute inset-0 w-full h-full object-contain pointer-events-none opacity-40" style={{ zIndex: 0 }} />
+          <img src={backgroundUrl} alt="" className="position-absolute" style={{ inset: 0, width: '100%', height: '100%', objectFit: 'contain', pointerEvents: 'none', opacity: 0.4, zIndex: 0 }} />
         )}
-        <canvas ref={canvasElRef} width={800} height={600} className="relative" style={{ zIndex: 1 }} />
+        <canvas ref={canvasElRef} width={800} height={600} className="position-relative" style={{ zIndex: 1 }} />
       </div>
 
-      <div className="px-4 py-2 bg-slate-800/50 border-t border-slate-700 text-[10px] text-slate-500 flex items-center gap-4">
+      <div className="d-flex align-items-center gap-3 px-3 py-2" style={{ backgroundColor: 'rgba(30,41,59,0.5)', borderTop: '1px solid #334155', fontSize: '10px', color: '#64748b' }}>
         <span>Scroll to zoom</span>
         <span>Drag corner points to adjust perspective</span>
         <span>Area mode to resize printable area</span>

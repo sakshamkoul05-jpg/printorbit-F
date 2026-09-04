@@ -78,19 +78,19 @@ export default function Hero() {
   return (
     <section className="bg-white">
       {/* Promo Banner */}
-      <div className="bg-slate-900 text-white text-center py-2.5">
+      <div className="bg-slate-900 text-white text-center py-2">
         <Container>
-          <p className="text-sm font-medium flex items-center justify-center gap-2">
-            <span className="w-5 h-5 bg-accent rounded-full flex items-center justify-center text-[10px] font-bold">%</span>
-            Buy More, Save More! Flat 5% OFF on Orders ₹10,000+ | Code: <span className="font-bold text-accent">SAVE5</span>
+          <p className="text-muted fw-medium d-flex align-items-center justify-content-center gap-2 mb-0" style={{ fontSize: '14px' }}>
+            <span className="bg-accent rounded-circle d-flex align-items-center justify-content-center fw-bold text-white" style={{ width: '20px', height: '20px', fontSize: '10px' }}>%</span>
+            Buy More, Save More! Flat 5% OFF on Orders ₹10,000+ | Code: <span className="fw-bold text-accent">SAVE5</span>
           </p>
         </Container>
       </div>
 
       {/* Hero Showcase */}
       <Container>
-        <div className="py-6">
-          <div className="relative rounded-2xl overflow-hidden bg-slate-100 min-h-[420px] md:min-h-[480px]">
+        <div className="py-4">
+          <div className="position-relative rounded-4 overflow-hidden bg-slate-100" style={{ minHeight: '420px' }}>
             <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={current}
@@ -99,39 +99,40 @@ export default function Hero() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction * -100 }}
                 transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="grid grid-cols-1 md:grid-cols-2 h-full"
+                className="row g-0 h-100"
               >
                 {/* Image */}
-                <div className="relative h-[280px] md:h-auto overflow-hidden">
+                <div className="col-12 col-md-6 position-relative" style={{ height: '280px' }}>
                   <img
                     src={slide.image}
                     alt={slide.title}
-                    className="w-full h-full object-cover"
+                    className="w-100 h-100"
+                    style={{ objectFit: 'cover' }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-slate-100/20 hidden md:block" />
+                  <div className="position-absolute inset-0 d-none d-md-block" style={{ background: 'linear-gradient(to right, transparent, rgba(241,245,249,0.2))' }} />
                 </div>
 
                 {/* Content */}
-                <div className="p-8 md:p-12 flex flex-col justify-center bg-white">
+                <div className="col-12 col-md-6 p-4 d-flex flex-column justify-content-center bg-white">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <h2 className="text-3xl md:text-4xl font-bold text-dark font-heading mb-3 leading-tight">
+                    <h2 className="fs-2 fw-bold text-dark font-heading mb-3" style={{ lineHeight: 1.2 }}>
                       {slide.title}
                     </h2>
-                    <p className="text-lg text-slate-600 mb-6">{slide.subtitle}</p>
+                    <p className="fs-5 text-muted mb-4">{slide.subtitle}</p>
                     <Link
                       href={slide.href}
-                      className="inline-flex items-center gap-2 px-7 py-3.5 bg-dark text-white text-sm font-bold rounded-lg hover:bg-slate-800 transition-colors mb-6"
+                      className="d-inline-flex align-items-center gap-2 px-5 py-3 bg-dark text-white text-sm fw-bold rounded-3 text-decoration-none mb-4"
                     >
                       {slide.cta}
-                      <ArrowRight className="w-4 h-4" />
+                      <ArrowRight size={16} />
                     </Link>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="d-flex flex-wrap gap-2">
                       {slide.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-full">
+                        <span key={tag} className="px-3 py-1 bg-slate-100 text-muted rounded-pill" style={{ fontSize: '12px', fontWeight: 500 }}>
                           {tag}
                         </span>
                       ))}
@@ -144,26 +145,32 @@ export default function Hero() {
             {/* Navigation Arrows */}
             <button
               onClick={prev}
-              className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors z-10"
+              className="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg border-0"
+              style={{ left: '16px', top: '50%', transform: 'translateY(-50%)', width: '40px', height: '40px', opacity: 0.9, zIndex: 10 }}
             >
-              <ChevronLeft className="w-5 h-5 text-dark" />
+              <ChevronLeft size={20} className="text-dark" />
             </button>
             <button
               onClick={next}
-              className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg hover:bg-white transition-colors z-10"
+              className="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg border-0"
+              style={{ right: '16px', top: '50%', transform: 'translateY(-50%)', width: '40px', height: '40px', opacity: 0.9, zIndex: 10 }}
             >
-              <ChevronRight className="w-5 h-5 text-dark" />
+              <ChevronRight size={20} className="text-dark" />
             </button>
 
             {/* Dots */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            <div className="position-absolute d-flex gap-2" style={{ bottom: '16px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
               {slides.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
-                  className={`w-2.5 h-2.5 rounded-full transition-all ${
-                    i === current ? 'bg-primary w-6' : 'bg-slate-300 hover:bg-slate-400'
-                  }`}
+                  className="rounded-pill border-0"
+                  style={{
+                    width: i === current ? '24px' : '10px',
+                    height: '10px',
+                    backgroundColor: i === current ? 'var(--bs-primary)' : '#cbd5e1',
+                    transition: 'all 0.3s',
+                  }}
                 />
               ))}
             </div>
@@ -173,21 +180,25 @@ export default function Hero() {
 
       {/* Explore All Categories */}
       <Container>
-        <div className="pb-10">
-          <h2 className="text-2xl font-bold text-dark font-heading mb-6">Explore all categories</h2>
-          <div className="grid grid-cols-5 md:grid-cols-10 gap-3">
+        <div className="pb-4">
+          <h2 className="fs-3 fw-bold text-dark font-heading mb-4">Explore all categories</h2>
+          <div className="row g-3">
             {exploreCategories.map((cat, i) => (
               <motion.div
                 key={cat.name}
+                className="col"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.1 + i * 0.04 }}
               >
-                <Link href={cat.href} className="flex flex-col items-center gap-2 group">
-                  <div className={`w-16 h-16 ${cat.bg} rounded-2xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform border border-slate-100`}>
+                <Link href={cat.href} className="d-flex flex-column align-items-center gap-2 text-decoration-none">
+                  <div
+                    className="bg-slate-50 rounded-4 d-flex align-items-center justify-content-center fs-3 border border-light"
+                    style={{ width: '64px', height: '64px' }}
+                  >
                     {cat.emoji}
                   </div>
-                  <span className="text-[11px] font-medium text-slate-600 text-center leading-tight group-hover:text-primary transition-colors">
+                  <span className="text-center fw-medium text-muted" style={{ fontSize: '11px', lineHeight: 1.2 }}>
                     {cat.name}
                   </span>
                 </Link>
@@ -198,18 +209,18 @@ export default function Hero() {
       </Container>
 
       {/* Trust Bar */}
-      <div className="border-t border-slate-100">
+      <div className="border-top border-light">
         <Container>
-          <div className="py-5 flex items-center justify-center gap-8 flex-wrap">
+          <div className="py-3 d-flex align-items-center justify-content-center gap-4 flex-wrap">
             {[
               { icon: Shield, text: 'Quality Guaranteed' },
               { icon: Truck, text: 'Free Delivery ₹5,000+' },
               { icon: Clock, text: '3-5 Day Turnaround' },
               { icon: Star, text: '4.9/5 Customer Rating' },
             ].map((badge, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-slate-600">
-                <badge.icon className="w-4 h-4 text-primary" />
-                <span className="font-medium">{badge.text}</span>
+              <div key={i} className="d-flex align-items-center gap-2 text-muted">
+                <badge.icon size={16} className="text-primary" />
+                <span className="fw-medium">{badge.text}</span>
               </div>
             ))}
           </div>

@@ -36,46 +36,48 @@ export default function DesignUpload({ onFileSelect, currentFile, onRemove }: De
   const v = currentFile?.validation;
 
   return (
-    <div className="bg-slate-800 rounded-xl border border-slate-700 p-4">
-      <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Your Design</p>
+    <div className="rounded-3 p-3" style={{ backgroundColor: '#1e293b', border: '1px solid #334155' }}>
+      <p className="mb-3" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Design</p>
 
       {currentFile ? (
-        <div className="space-y-3">
-          <div className="relative w-full aspect-[3/2] bg-slate-700 rounded-lg overflow-hidden">
-            <img src={currentFile.dataUrl} alt="design" className="w-full h-full object-contain" />
+        <div className="d-flex flex-column gap-2">
+          <div className="position-relative w-100 rounded overflow-hidden" style={{ aspectRatio: '3/2', backgroundColor: '#334155' }}>
+            <img src={currentFile.dataUrl} alt="design" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             {loading && (
-              <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                <div className="w-6 h-6 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+              <div className="position-absolute d-flex align-items-center justify-content-center" style={{ inset: 0, backgroundColor: 'rgba(0,0,0,0.4)' }}>
+                <div className="rounded-circle" style={{ width: '1.5rem', height: '1.5rem', border: '2px solid #60a5fa', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }} />
               </div>
             )}
           </div>
-          <div className="flex items-center gap-2 text-xs">
-            <File className="w-3.5 h-3.5 text-slate-400" />
-            <span className="text-slate-300 truncate flex-1">{currentFile.name}</span>
+          <div className="d-flex align-items-center gap-2" style={{ fontSize: '0.75rem' }}>
+            <File size={14} style={{ color: '#94a3b8' }} />
+            <span className="text-truncate flex-fill" style={{ color: '#cbd5e1' }}>{currentFile.name}</span>
             {v?.valid ? (
-              <CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0" />
+              <CheckCircle2 size={14} style={{ color: '#4ade80', flexShrink: 0 }} />
             ) : (
-              <AlertCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <AlertCircle size={14} style={{ color: '#fbbf24', flexShrink: 0 }} />
             )}
           </div>
           {v && !v.valid && (
-            <div className="text-[10px] text-red-400 space-y-0.5">
-              {v.errors.map((e, i) => <p key={i}>{e}</p>)}
+            <div style={{ fontSize: '10px', color: '#f87171' }}>
+              {v.errors.map((e, i) => <p key={i} className="mb-0">{e}</p>)}
             </div>
           )}
           {v?.warnings && v.warnings.length > 0 && (
-            <div className="text-[10px] text-amber-400 space-y-0.5">
-              {v.warnings.map((w, i) => <p key={i}>{w}</p>)}
+            <div style={{ fontSize: '10px', color: '#fbbf24' }}>
+              {v.warnings.map((w, i) => <p key={i} className="mb-0">{w}</p>)}
             </div>
           )}
-          <div className="flex gap-2">
+          <div className="d-flex gap-2">
             <button onClick={() => fileRef.current?.click()}
-              className="flex-1 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-white text-xs rounded-lg transition-colors">
+              className="flex-fill btn"
+              style={{ padding: '0.375rem 0.75rem', backgroundColor: '#334155', color: 'var(--bs-white)', fontSize: '0.75rem', borderRadius: '0.5rem', transition: 'background-color 0.15s', border: 'none' }}>
               Replace
             </button>
             <button onClick={onRemove}
-              className="px-3 py-1.5 bg-red-900/50 hover:bg-red-800/50 text-red-300 text-xs rounded-lg transition-colors">
-              <X className="w-3.5 h-3.5" />
+              className="btn"
+              style={{ padding: '0.375rem 0.75rem', backgroundColor: 'rgba(220,38,38,0.5)', color: '#fca5a5', fontSize: '0.75rem', borderRadius: '0.5rem', transition: 'background-color 0.15s', border: 'none' }}>
+              <X size={14} />
             </button>
           </div>
         </div>
@@ -85,23 +87,27 @@ export default function DesignUpload({ onFileSelect, currentFile, onRemove }: De
           onDragLeave={() => setDragOver(false)}
           onDrop={handleDrop}
           onClick={() => fileRef.current?.click()}
-          className={cn(
-            'w-full aspect-[3/2] border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all',
-            dragOver ? 'border-blue-500 bg-blue-500/10' : 'border-slate-600 hover:border-blue-500',
-          )}
+          className="d-flex flex-column align-items-center justify-content-center w-100 rounded"
+          style={{
+            aspectRatio: '3/2',
+            border: `2px dashed ${dragOver ? '#3b82f6' : '#475569'}`,
+            backgroundColor: dragOver ? 'rgba(59,130,246,0.1)' : 'transparent',
+            cursor: 'pointer',
+            transition: 'all 0.15s',
+          }}
         >
           {loading ? (
-            <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
+            <div className="rounded-circle" style={{ width: '2rem', height: '2rem', border: '2px solid #60a5fa', borderTopColor: 'transparent', animation: 'spin 1s linear infinite' }} />
           ) : (
             <>
-              <Upload className={cn('w-8 h-8 mb-2', dragOver ? 'text-blue-400' : 'text-slate-500')} />
-              <p className="text-xs text-slate-400">Drop your design</p>
-              <p className="text-[10px] text-slate-500 mt-1">PNG, JPG, SVG</p>
+              <Upload size={32} style={{ marginBottom: '0.5rem', color: dragOver ? '#60a5fa' : '#64748b' }} />
+              <p className="mb-0" style={{ fontSize: '0.75rem', color: '#94a3b8' }}>Drop your design</p>
+              <p className="mb-0 mt-1" style={{ fontSize: '10px', color: '#64748b' }}>PNG, JPG, SVG</p>
             </>
           )}
         </div>
       )}
-      <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/svg+xml" onChange={handleChange} className="hidden" />
+      <input ref={fileRef} type="file" accept="image/png,image/jpeg,image/svg+xml" onChange={handleChange} className="d-none" />
     </div>
   );
 }
