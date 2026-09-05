@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Star, ChevronRight, ChevronDown, ChevronUp, Minus, Plus,
   Phone, Share2,
@@ -17,15 +18,15 @@ import { getProductBySlug, getAllProducts, type Product } from '@/lib/constants'
 import { useCart } from '@/contexts/CartContext';
 
 const categoryImageMap: Record<string, string> = {
-  'Business Cards': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  'Marketing': 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-  'Apparel': 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-  'Gifts & Mugs': 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-  'Labels & Stickers': 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-  'Packaging': 'linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%)',
-  'Signs & Displays': 'linear-gradient(135deg, #fccb90 0%, #d57eeb 100%)',
-  'Stationery': 'linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%)',
-  'default': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'Business Cards': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&h=600&fit=crop',
+  'Marketing': 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=600&h=600&fit=crop',
+  'Apparel': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=600&fit=crop',
+  'Gifts & Mugs': 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=600&h=600&fit=crop',
+  'Labels & Stickers': 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=600&fit=crop',
+  'Packaging': 'https://images.unsplash.com/photo-1604147706283-d7119b3b860c?w=600&h=600&fit=crop',
+  'Signs & Displays': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&h=600&fit=crop',
+  'Stationery': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=600&h=600&fit=crop',
+  'default': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&h=600&fit=crop',
 };
 
 const reviews = [
@@ -123,8 +124,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
     );
   }
 
-  const gradient = categoryImageMap[product.category] || categoryImageMap['default'];
-  const images = [gradient, gradient, gradient, gradient, gradient];
+  const imageUrl = categoryImageMap[product.category] || categoryImageMap['default'];
+  const images = [imageUrl, imageUrl, imageUrl, imageUrl, imageUrl];
 
   return (
     <div style={{ backgroundColor: '#F4F2EF', minHeight: '100vh' }}>
@@ -157,17 +158,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     <button
                       key={i}
                       onClick={() => setSelectedImageIdx(i)}
-                      className="rounded overflow-hidden border-2 flex-shrink-0"
+                      className="rounded overflow-hidden border-2 flex-shrink-0 position-relative"
                       style={{ width: '5rem', height: '5rem', borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
                     >
-                      <div className="w-100 h-100" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
+                      <Image src={img} alt={`${product.name} thumbnail ${i + 1}`} fill unoptimized style={{ objectFit: 'cover', opacity: selectedImageIdx === i ? 1 : 0.7 }} />
                     </button>
                   ))}
                 </div>
 
                 {/* Main image */}
-                <div className="flex-fill rounded-3 overflow-hidden" style={{ aspectRatio: '1/1' }}>
-                  <div className="w-100 h-100" style={{ background: images[selectedImageIdx] }} />
+                <div className="flex-fill rounded-3 overflow-hidden position-relative" style={{ aspectRatio: '1/1' }}>
+                  <Image src={images[selectedImageIdx]} alt={product.name} fill unoptimized style={{ objectFit: 'cover' }} />
                 </div>
               </div>
 
@@ -177,10 +178,10 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                   <button
                     key={i}
                     onClick={() => setSelectedImageIdx(i)}
-                    className="rounded overflow-hidden border-2 flex-shrink-0"
+                    className="rounded overflow-hidden border-2 flex-shrink-0 position-relative"
                     style={{ width: '4rem', height: '4rem', borderColor: selectedImageIdx === i ? '#ED1C24' : '#e5e5e5' }}
                   >
-                    <div className="w-100 h-100" style={{ background: img, opacity: selectedImageIdx === i ? 1 : 0.7 }} />
+                    <Image src={img} alt={`${product.name} thumbnail ${i + 1}`} fill unoptimized style={{ objectFit: 'cover', opacity: selectedImageIdx === i ? 1 : 0.7 }} />
                   </button>
                 ))}
               </div>
@@ -750,8 +751,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     className="group rounded-3 overflow-hidden d-block text-decoration-none"
                     style={{ border: '1px solid #eee' }}
                   >
-                    <div className="overflow-hidden" style={{ aspectRatio: '1/1' }}>
-                      <div className="w-100 h-100" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
+                    <div className="overflow-hidden position-relative" style={{ aspectRatio: '1/1' }}>
+                      <Image src={categoryImageMap[rp.category] || categoryImageMap['default']} alt={rp.name} fill unoptimized style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="p-3">
                       <p className="text-sm fw-medium text-truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>
@@ -776,8 +777,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                     className="group rounded-3 overflow-hidden d-block text-decoration-none"
                     style={{ border: '1px solid #eee' }}
                   >
-                    <div className="overflow-hidden" style={{ aspectRatio: '1/1' }}>
-                      <div className="w-100 h-100" style={{ background: categoryImageMap[rp.category] || categoryImageMap['default'] }} />
+                    <div className="overflow-hidden position-relative" style={{ aspectRatio: '1/1' }}>
+                      <Image src={categoryImageMap[rp.category] || categoryImageMap['default']} alt={rp.name} fill unoptimized style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="p-3">
                       <p className="text-sm fw-medium text-truncate" style={{ color: '#0F0F0F' }}>{rp.name}</p>

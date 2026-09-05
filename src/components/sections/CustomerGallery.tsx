@@ -1,18 +1,19 @@
 'use client';
 
 import { motion } from 'motion/react';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 const gallery = [
-  { emoji: '💼', label: 'Business Cards' },
-  { emoji: '📦', label: 'Custom Packaging' },
-  { emoji: '🏷️', label: 'Sticker Sheets' },
-  { emoji: '👕', label: 'Branded Apparel' },
-  { emoji: '☕', label: 'Coffee Cups' },
-  { emoji: '🛍️', label: 'Paper Bags' },
-  { emoji: '📋', label: 'Brochures' },
-  { emoji: '🎯', label: 'Flyers' },
+  { label: 'Business Cards', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop' },
+  { label: 'Custom Packaging', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop' },
+  { label: 'Sticker Sheets', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop' },
+  { label: 'Branded Apparel', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop' },
+  { label: 'Coffee Cups', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=400&fit=crop' },
+  { label: 'Paper Bags', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=400&fit=crop' },
+  { label: 'Brochures', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=400&fit=crop' },
+  { label: 'Flyers', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=400&fit=crop' },
 ];
 
 export default function CustomerGallery() {
@@ -35,9 +36,19 @@ export default function CustomerGallery() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
             >
-              <div className="bg-white rounded-4 p-4 text-center border border-light cursor-pointer">
-                <span className="fs-2 mb-2 d-block">{item.emoji}</span>
-                <span className="fw-medium text-muted" style={{ fontSize: '12px' }}>{item.label}</span>
+              <div className="bg-white rounded-4 overflow-hidden border border-light cursor-pointer">
+                <div className="position-relative" style={{ aspectRatio: '1' }}>
+                  <Image
+                    src={item.image}
+                    alt={item.label}
+                    fill
+                    unoptimized
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+                <div className="p-3 text-center">
+                  <span className="fw-medium text-muted" style={{ fontSize: '12px' }}>{item.label}</span>
+                </div>
               </div>
             </motion.div>
           ))}

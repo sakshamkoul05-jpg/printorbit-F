@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Palette, Wand2, Layers, Upload, ArrowRight, Sparkles } from 'lucide-react';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Button from '@/components/ui/Button';
@@ -17,7 +18,6 @@ const features = [
 export default function DesignStudioPreview() {
   return (
     <section className="py-5 bg-dark position-relative overflow-hidden">
-      {/* Background Effects */}
       <div className="position-absolute inset-0">
         <div className="position-absolute top-0 end-0" style={{ width: '500px', height: '500px', background: 'rgba(var(--bs-primary-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
         <div className="position-absolute bottom-0 start-0" style={{ width: '500px', height: '500px', background: 'rgba(var(--bs-accent-rgb), 0.2)', borderRadius: '50%', filter: 'blur(96px)' }} />
@@ -25,7 +25,6 @@ export default function DesignStudioPreview() {
 
       <Container className="position-relative" style={{ zIndex: 10 }}>
         <div className="row align-items-center g-4">
-          {/* Left Content */}
           <motion.div
             className="col-12 col-lg-6"
             initial={{ opacity: 0, x: -50 }}
@@ -74,7 +73,6 @@ export default function DesignStudioPreview() {
             </Link>
           </motion.div>
 
-          {/* Right - Preview */}
           <motion.div
             className="col-12 col-lg-6"
             initial={{ opacity: 0, x: 50 }}
@@ -82,9 +80,7 @@ export default function DesignStudioPreview() {
             viewport={{ once: true }}
           >
             <div className="glass-dark rounded-4 p-3" style={{ boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}>
-              {/* Mock Editor UI */}
               <div className="bg-slate-800 rounded-4 overflow-hidden">
-                {/* Toolbar */}
                 <div className="d-flex align-items-center gap-2 px-3 py-2 border-bottom border-slate-700">
                   <div className="d-flex gap-1">
                     <div className="bg-danger rounded-circle" style={{ width: '12px', height: '12px' }} />
@@ -96,19 +92,18 @@ export default function DesignStudioPreview() {
                   </div>
                 </div>
 
-                {/* Canvas */}
-                <div className="d-flex align-items-center justify-content-center position-relative" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.2), rgba(var(--bs-accent-rgb), 0.2))' }}>
-                  <div className="position-absolute border border-2 border-dashed rounded-3 d-flex align-items-center justify-content-center" style={{ inset: '16px', borderColor: 'rgba(255,255,255,0.2)' }}>
-                    <div className="text-center">
-                      <Palette size={48} className="text-white mx-auto mb-2" style={{ opacity: 0.3 }} />
-                      <p className="text-white" style={{ fontSize: '14px', opacity: 0.5 }}>Your design here</p>
-                    </div>
-                  </div>
+                <div className="position-relative" style={{ aspectRatio: '16/9' }}>
+                  <Image
+                    src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600&h=400&fit=crop"
+                    alt="Design workspace with tools"
+                    fill
+                    unoptimized
+                    style={{ objectFit: 'cover' }}
+                  />
                 </div>
               </div>
             </div>
 
-            {/* Floating Elements */}
             <motion.div
               className="position-absolute glass rounded-4 p-3 shadow-lg"
               style={{ top: '-16px', right: '-16px' }}

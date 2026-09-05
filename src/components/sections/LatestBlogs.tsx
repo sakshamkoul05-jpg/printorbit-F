@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Calendar, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 const posts = [
-  { id: 1, title: 'How to Choose the Perfect Paper for Your Brand', excerpt: 'Different paper types offer unique textures and finishes. Discover which paper elevates your brand.', date: '2026-06-20', tag: 'Design Tips', slug: 'choose-perfect-paper-brand', emoji: '📄' },
-  { id: 2, title: 'The Ultimate Guide to Banner Printing', excerpt: 'From trade shows to storefronts, create banners that command attention.', date: '2026-06-15', tag: 'Products', slug: 'ultimate-guide-banners', emoji: '📣' },
-  { id: 3, title: '5 Print Materials Every Brand Needs', excerpt: 'Print marketing remains powerful. Elevate your brand with these essential materials.', date: '2026-06-10', tag: 'Marketing', slug: '5-print-materials-brand', emoji: '💼' },
+  { id: 1, title: 'How to Choose the Perfect Paper for Your Brand', excerpt: 'Different paper types offer unique textures and finishes. Discover which paper elevates your brand.', date: '2026-06-20', tag: 'Design Tips', slug: 'choose-perfect-paper-brand', image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&h=320&fit=crop' },
+  { id: 2, title: 'The Ultimate Guide to Banner Printing', excerpt: 'From trade shows to storefronts, create banners that command attention.', date: '2026-06-15', tag: 'Products', slug: 'ultimate-guide-banners', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=320&fit=crop' },
+  { id: 3, title: '5 Print Materials Every Brand Needs', excerpt: 'Print marketing remains powerful. Elevate your brand with these essential materials.', date: '2026-06-10', tag: 'Marketing', slug: '5-print-materials-brand', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=320&fit=crop' },
 ];
 
 export default function LatestBlogs() {
@@ -34,8 +35,14 @@ export default function LatestBlogs() {
             >
               <Link href={`/blog/${post.slug}`} className="text-decoration-none">
                 <div className="bg-slate-50 rounded-4 overflow-hidden border border-transparent">
-                  <div className="d-flex align-items-center justify-content-center" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, rgba(var(--bs-primary-rgb), 0.05), rgba(var(--bs-accent-rgb), 0.05))' }}>
-                    <span className="display-6">{post.emoji}</span>
+                  <div className="position-relative" style={{ aspectRatio: '16/9' }}>
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      unoptimized
+                      style={{ objectFit: 'cover' }}
+                    />
                   </div>
                   <div className="p-4">
                     <div className="d-flex align-items-center gap-2 mb-2">

@@ -122,31 +122,31 @@ function getProductCategorySlug(product: Product): string {
 }
 
 const categoryImageMap: Record<string, string> = {
-  'gift-hampers': 'linear-gradient(to bottom right, #fff1f2, #fef3c7)',
-  'visiting-cards': 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
-  'id-cards': 'linear-gradient(to bottom right, #eff6ff, #e0e7ff)',
-  'pens': 'linear-gradient(to bottom right, #f0fdf4, #d1fae5)',
-  'letterheads': 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-  'envelopes': 'linear-gradient(to bottom right, #f8fafc, #f1f5f9)',
-  'diaries-notebooks': 'linear-gradient(to bottom right, #fffbeb, #fef9c3)',
-  'calendars': 'linear-gradient(to bottom right, #fffbeb, #fef9c3)',
-  't-shirts': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
-  'polo-t-shirts': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
-  'jackets-hoodies': 'linear-gradient(to bottom right, #fef2f2, #fce7f3)',
-  'flyers': 'linear-gradient(to bottom right, #faf5ff, #ede9fe)',
-  'brochures': 'linear-gradient(to bottom right, #faf5ff, #ede9fe)',
-  'posters': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
-  'banners': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
-  'stickers': 'linear-gradient(to bottom right, #f0fdfa, #cffafe)',
-  'labels': 'linear-gradient(to bottom right, #f0fdfa, #cffafe)',
-  'custom-boxes': 'linear-gradient(to bottom right, #fff7ed, #fef3c7)',
-  'mugs': 'linear-gradient(to bottom right, #f0f9ff, #dbeafe)',
-  'water-bottles': 'linear-gradient(to bottom right, #f0f9ff, #dbeafe)',
-  'tote-bags': 'linear-gradient(to bottom right, #f7fee7, #dcfce7)',
-  'trophies': 'linear-gradient(to bottom right, #fefce8, #fef3c7)',
-  'keychains': 'linear-gradient(to bottom right, #fdf2f8, #fff1f2)',
-  'coasters': 'linear-gradient(to bottom right, #fafaf9, #f5f5f4)',
-  'photo-albums': 'linear-gradient(to bottom right, #f5f3ff, #ede9fe)',
+  'gift-hampers': 'https://images.unsplash.com/photo-1604147706283-d7119b3b860c?w=400&h=300&fit=crop',
+  'visiting-cards': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop',
+  'id-cards': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop',
+  'pens': 'https://images.unsplash.com/photo-1585336261022-680e295ce3fe?w=400&h=300&fit=crop',
+  'letterheads': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
+  'envelopes': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
+  'diaries-notebooks': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=300&fit=crop',
+  'calendars': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=300&fit=crop',
+  't-shirts': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
+  'polo-t-shirts': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
+  'jackets-hoodies': 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop',
+  'flyers': 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&h=300&fit=crop',
+  'brochures': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
+  'posters': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop',
+  'banners': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop',
+  'stickers': 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop',
+  'labels': 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=400&h=300&fit=crop',
+  'custom-boxes': 'https://images.unsplash.com/photo-1604147706283-d7119b3b860c?w=400&h=300&fit=crop',
+  'mugs': 'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400&h=300&fit=crop',
+  'water-bottles': 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop',
+  'tote-bags': 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=400&h=300&fit=crop',
+  'trophies': 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=400&h=300&fit=crop',
+  'keychains': 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop',
+  'coasters': 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop',
+  'photo-albums': 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=300&fit=crop',
 };
 
 const SIDEBAR_CATEGORIES = [
@@ -368,8 +368,7 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
               <div className="row g-4">
                 {sortedProducts.map((product) => {
                   const catSlug = getProductCategorySlug(product);
-                  const bgStyle = { background: categoryImageMap[catSlug] || 'linear-gradient(to bottom right, #f9fafb, #f3f4f6)' };
-                  const Icon = CATEGORY_ICONS[catSlug] || Package;
+                  const imageUrl = categoryImageMap[catSlug] || 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop';
                   const mrp = Math.round(product.base_price * 1.4);
                   const discount = Math.round(((mrp - product.base_price) / mrp) * 100);
                   const isHovered = hoveredProduct === product.id;
@@ -385,9 +384,7 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
                       >
                         {/* Product Image */}
                         <div className="position-relative" style={{ aspectRatio: '4/3' }}>
-                          <div className="w-100 h-100 d-flex align-items-center justify-content-center" style={bgStyle}>
-                            <Icon size={64} style={{ color: '#d1d5db' }} />
-                          </div>
+                          <Image src={imageUrl} alt={product.name} fill unoptimized style={{ objectFit: 'cover' }} />
                           {/* Quick Actions */}
                           <div className="position-absolute top-3 end-3 d-flex flex-column gap-2" style={{ opacity: isHovered ? 1 : 0, transition: 'opacity 0.2s' }}>
                             <button

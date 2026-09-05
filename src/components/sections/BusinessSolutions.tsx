@@ -2,15 +2,16 @@
 
 import { motion } from 'motion/react';
 import { Briefcase, CreditCard, FileText, Users, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Link from 'next/link';
 
 const solutions = [
-  { icon: Briefcase, title: 'Startup Kit', description: 'Complete branding package for new businesses - cards, letterheads, envelopes', color: 'primary' },
-  { icon: CreditCard, title: 'Corporate Cards', description: 'Premium business cards with special finishes for professionals', color: 'accent' },
-  { icon: FileText, title: 'Marketing Materials', description: 'Flyers, brochures, banners for your marketing campaigns', color: 'success' },
-  { icon: Users, title: 'Event Materials', description: 'Badges, programs, signage for conferences and events', color: 'primary' },
+  { icon: Briefcase, title: 'Startup Kit', description: 'Complete branding package for new businesses - cards, letterheads, envelopes', color: 'primary', image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop' },
+  { icon: CreditCard, title: 'Corporate Cards', description: 'Premium business cards with special finishes for professionals', color: 'accent', image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop' },
+  { icon: FileText, title: 'Marketing Materials', description: 'Flyers, brochures, banners for your marketing campaigns', color: 'success', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop' },
+  { icon: Users, title: 'Event Materials', description: 'Badges, programs, signage for conferences and events', color: 'primary', image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop' },
 ];
 
 export default function BusinessSolutions() {
@@ -33,20 +34,22 @@ export default function BusinessSolutions() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
             >
-              <div className="bg-slate-50 rounded-4 p-4 h-100 border border-transparent">
-                <div className={`rounded-4 d-flex align-items-center justify-content-center mb-3 ${
-                  solution.color === 'primary' ? 'bg-primary' :
-                  solution.color === 'accent' ? 'bg-accent' : 'bg-success'
-                }`} style={{ width: '48px', height: '48px', backgroundColor: solution.color === 'primary' ? 'rgba(var(--bs-primary-rgb), 0.1)' : solution.color === 'accent' ? 'rgba(var(--bs-accent-rgb), 0.1)' : 'rgba(var(--bs-success-rgb), 0.1)' }}>
-                  <solution.icon size={24} className={
-                    solution.color === 'primary' ? 'text-primary' :
-                    solution.color === 'accent' ? 'text-accent' : 'text-success'
-                  } />
+              <div className="bg-slate-50 rounded-4 overflow-hidden h-100 border border-transparent">
+                <div className="position-relative" style={{ aspectRatio: '4/3' }}>
+                  <Image
+                    src={solution.image}
+                    alt={solution.title}
+                    fill
+                    unoptimized
+                    style={{ objectFit: 'cover' }}
+                  />
                 </div>
-                <h3 className="fw-semibold font-heading text-dark mb-2">{solution.title}</h3>
-                <p className="text-muted" style={{ fontSize: '14px', lineHeight: 1.6 }}>{solution.description}</p>
-                <div className="d-flex align-items-center gap-1 mt-3 text-primary fw-medium" style={{ fontSize: '14px' }}>
-                  Learn more <ArrowRight size={16} />
+                <div className="p-4">
+                  <h3 className="fw-semibold font-heading text-dark mb-2">{solution.title}</h3>
+                  <p className="text-muted" style={{ fontSize: '14px', lineHeight: 1.6 }}>{solution.description}</p>
+                  <div className="d-flex align-items-center gap-1 mt-3 text-primary fw-medium" style={{ fontSize: '14px' }}>
+                    Learn more <ArrowRight size={16} />
+                  </div>
                 </div>
               </div>
             </motion.div>

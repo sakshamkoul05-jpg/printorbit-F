@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import {
   Package,
@@ -21,35 +22,35 @@ const heroSlides = [
     subtitle: 'Lock in your bulk orders now and save more. Curated hampers start at ₹599. No minimum required.',
     cta: 'Lock In Your Order',
     href: '/products?category=gift-hampers',
-    bg: 'linear-gradient(to right, #8B0000, #DC143C)',
+    image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=1400&h=640&fit=crop',
   },
   {
     title: 'CUSTOM PRINTING & CORPORATE GIFTING SOLUTIONS',
     subtitle: 'Creative, customisable, and cost-effective',
     cta: 'Explore Corporate Gifts',
     href: '/products?category=corporate-gifts',
-    bg: 'linear-gradient(to right, #1a1a2e, #16213e)',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238f24c?w=1400&h=640&fit=crop',
   },
   {
     title: 'T-SHIRTS & MORE',
     subtitle: 'Your team. Your logo. Your vibe. Tees from ₹345',
     cta: 'Build Your Brand',
     href: '/products?category=apparel',
-    bg: 'linear-gradient(to right, #0F0F0F, #2E2E2E)',
+    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1400&h=640&fit=crop',
   },
   {
     title: 'SIPPERS & WATER BOTTLES',
     subtitle: 'Sip smart, Sip personalised, custom sippers start at ₹245. No minimum required.',
     cta: 'Customise Your Bottle',
     href: '/products?category=drinkware',
-    bg: 'linear-gradient(to right, #1B3A4B, #065A82)',
+    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1400&h=640&fit=crop',
   },
   {
     title: 'DESIGN YOUR OWN',
     subtitle: 'Use our free online design tool',
     cta: 'Open Design Studio',
     href: '/design-studio',
-    bg: 'linear-gradient(to right, #3D0C02, #8B0000)',
+    image: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1400&h=640&fit=crop',
   },
 ];
 
@@ -62,28 +63,28 @@ const trustItems = [
 ];
 
 const popularCategories = [
-  { name: 'APPARELS', href: '/products?category=apparel' },
-  { name: 'DRINKWARE', href: '/products?category=drinkware' },
-  { name: 'BAGS', href: '/products?category=bags' },
-  { name: 'LUNCH BOXES', href: '/products?category=drinkware' },
-  { name: 'ELECTRONIC GADGETS', href: '/products?category=gadgets' },
-  { name: 'DESK ACCESSORIES', href: '/products?category=stationery' },
-  { name: 'AWARDS', href: '/products?category=awards' },
-  { name: 'LAPTOP SLEEVES', href: '/products?category=gadgets' },
+  { name: 'APPARELS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop' },
+  { name: 'DRINKWARE', href: '/products?category=drinkware', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop' },
+  { name: 'BAGS', href: '/products?category=bags', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop' },
+  { name: 'LUNCH BOXES', href: '/products?category=drinkware', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop' },
+  { name: 'ELECTRONIC GADGETS', href: '/products?category=gadgets', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop' },
+  { name: 'DESK ACCESSORIES', href: '/products?category=stationery', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=300&fit=crop' },
+  { name: 'AWARDS', href: '/products?category=awards', image: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&h=300&fit=crop' },
+  { name: 'LAPTOP SLEEVES', href: '/products?category=gadgets', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop' },
 ];
 
 const apparelSubcats = [
-  { name: 'T-SHIRTS', href: '/products?category=apparel' },
-  { name: 'JACKETS & HOODIES', href: '/products?category=apparel' },
-  { name: 'FORMAL SHIRTS', href: '/products?category=apparel' },
-  { name: 'CAPS', href: '/products?category=apparel' },
+  { name: 'T-SHIRTS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop' },
+  { name: 'JACKETS & HOODIES', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300&h=300&fit=crop' },
+  { name: 'FORMAL SHIRTS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop' },
+  { name: 'CAPS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=300&h=300&fit=crop' },
 ];
 
 const promiseItems = [
-  { label: 'Engraving', color: '#ED1C24' },
-  { label: 'Lamination', color: '#0F0F0F' },
-  { label: 'Laser', color: '#2E2E2E' },
-  { label: 'Packaging', color: '#8B0000' },
+  { label: 'Engraving', image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop' },
+  { label: 'Lamination', image: 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop' },
+  { label: 'Laser', image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop' },
+  { label: 'Packaging', image: 'https://images.unsplash.com/photo-1604147706283-d7119b3b860c?w=400&h=300&fit=crop' },
 ];
 
 const trendingCategories = [
@@ -99,17 +100,17 @@ const blogPosts = [
   {
     title: 'A Comprehensive Guide to Paper Types & Printing Essentials',
     readTime: '10 min read',
-    color: '#F5E6D3',
+    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&h=320&fit=crop',
   },
   {
     title: 'How to Design a T-Shirt for Your Brand',
     readTime: '17 min read',
-    color: '#E8D5E0',
+    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=320&fit=crop',
   },
   {
     title: "PrintStop's Comprehensive Guide to Customisation Options",
     readTime: '10 min read',
-    color: '#D5E8D4',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=320&fit=crop',
   },
 ];
 
@@ -162,7 +163,16 @@ export default function Home() {
               transition: 'opacity 0.5s ease-in-out',
             }}
           >
-            <div className="w-100 h-100" style={{ background: slide.bg }} />
+            <div className="position-absolute top-0 start-0 w-100 h-100">
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                unoptimized
+                style={{ objectFit: 'cover' }}
+              />
+            </div>
+            <div className="w-100 h-100" style={{ position: 'absolute', top: 0, left: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.6), rgba(0,0,0,0.2))' }} />
             <div className="container h-100">
               <div className="position-relative h-100 d-flex flex-column justify-content-center" style={{ maxWidth: '42rem', zIndex: 10 }}>
                 <h2 className="fw-bold text-white mb-3" style={{ fontSize: '3.5rem', lineHeight: 1.1 }}>
@@ -254,10 +264,14 @@ export default function Home() {
                   className="text-decoration-none bg-white rounded-3 d-block overflow-hidden"
                   style={{ border: '1px solid #E5E5E5' }}
                 >
-                  <div className="d-flex align-items-center justify-content-center" style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #F5F0E1, #E8E0D0)' }}>
-                    <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 80, height: 80, backgroundColor: '#E5E5E5' }}>
-                      <Package size={32} color="#2E2E2E" />
-                    </div>
+                  <div className="position-relative" style={{ aspectRatio: '4/3' }}>
+                    <Image
+                      src={cat.image}
+                      alt={cat.name}
+                      fill
+                      unoptimized
+                      style={{ objectFit: 'cover' }}
+                    />
                   </div>
                   <div className="p-2 text-center">
                     <h3 className="fw-bold mb-0" style={{ fontSize: '0.875rem', color: '#0F0F0F', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -287,10 +301,14 @@ export default function Home() {
               </Link>
             </div>
             <div className="col-md-6">
-              <div className="rounded-4 d-flex align-items-center justify-content-center" style={{ aspectRatio: '4/3', background: 'linear-gradient(135deg, #F5F0E1, #E8E0D0)', maxWidth: '28rem', marginLeft: 'auto' }}>
-                <div className="d-flex align-items-center justify-content-center rounded-circle" style={{ width: 128, height: 128, backgroundColor: '#E5E5E5' }}>
-                  <Package size={48} color="#2E2E2E" />
-                </div>
+              <div className="rounded-4 overflow-hidden position-relative" style={{ aspectRatio: '4/3', maxWidth: '28rem', marginLeft: 'auto' }}>
+                <Image
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=600&h=450&fit=crop"
+                  alt="Team in branded corporate apparel"
+                  fill
+                  unoptimized
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
             </div>
           </div>
@@ -300,12 +318,23 @@ export default function Home() {
               <div key={cat.name} className="col-6 col-md-3">
                 <Link
                   href={cat.href}
-                  className="text-decoration-none bg-white d-block text-center p-4 rounded-3"
+                  className="text-decoration-none bg-white d-block text-center rounded-3 overflow-hidden"
                   style={{ border: '1px solid #E5E5E5' }}
                 >
-                  <h3 className="fw-bold mb-0" style={{ fontSize: '0.875rem', color: '#0F0F0F', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {cat.name}
-                  </h3>
+                  <div className="position-relative" style={{ aspectRatio: '1/1' }}>
+                    <Image
+                      src={cat.image}
+                      alt={cat.name}
+                      fill
+                      unoptimized
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="fw-bold mb-0" style={{ fontSize: '0.875rem', color: '#0F0F0F', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      {cat.name}
+                    </h3>
+                  </div>
                 </Link>
               </div>
             ))}
@@ -350,7 +379,15 @@ export default function Home() {
             {promiseItems.map((item) => (
               <div key={item.label} className="col-6 col-md-3">
                 <div className="rounded-3 overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-                  <div style={{ aspectRatio: '4/3', backgroundColor: item.color }} />
+                  <div className="position-relative" style={{ aspectRatio: '4/3' }}>
+                    <Image
+                      src={item.image}
+                      alt={item.label}
+                      fill
+                      unoptimized
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
                   <div className="p-3 text-center bg-white">
                     <h3 className="fw-bold mb-0" style={{ fontSize: '0.875rem', color: '#0F0F0F' }}>{item.label}</h3>
                   </div>
@@ -409,7 +446,15 @@ export default function Home() {
             {blogPosts.map((post) => (
               <div key={post.title} className="col-md-4">
                 <article className="bg-white rounded-3 overflow-hidden" style={{ border: '1px solid #E5E5E5' }}>
-                  <div style={{ aspectRatio: '16/10', backgroundColor: post.color }} />
+                  <div className="position-relative" style={{ aspectRatio: '16/10' }}>
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      fill
+                      unoptimized
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </div>
                   <div className="p-4">
                     <p className="mb-2 fw-medium" style={{ fontSize: '0.75rem', color: '#2E2E2E' }}>{post.readTime}</p>
                     <h3 className="fw-bold mb-0" style={{ fontSize: '1rem', color: '#0F0F0F', lineHeight: 1.4 }}>

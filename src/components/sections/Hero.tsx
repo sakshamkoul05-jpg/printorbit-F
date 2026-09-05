@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ArrowRight, Star, Shield, Truck, Clock, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 import Container from '@/components/ui/Container';
 
 const slides = [
@@ -101,18 +102,17 @@ export default function Hero() {
                 transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="row g-0 h-100"
               >
-                {/* Image */}
                 <div className="col-12 col-md-6 position-relative" style={{ height: '280px' }}>
-                  <img
+                  <Image
                     src={slide.image}
                     alt={slide.title}
-                    className="w-100 h-100"
+                    fill
+                    unoptimized
                     style={{ objectFit: 'cover' }}
                   />
                   <div className="position-absolute inset-0 d-none d-md-block" style={{ background: 'linear-gradient(to right, transparent, rgba(241,245,249,0.2))' }} />
                 </div>
 
-                {/* Content */}
                 <div className="col-12 col-md-6 p-4 d-flex flex-column justify-content-center bg-white">
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -142,7 +142,6 @@ export default function Hero() {
               </motion.div>
             </AnimatePresence>
 
-            {/* Navigation Arrows */}
             <button
               onClick={prev}
               className="position-absolute bg-white rounded-circle d-flex align-items-center justify-content-center shadow-lg border-0"
@@ -158,7 +157,6 @@ export default function Hero() {
               <ChevronRight size={20} className="text-dark" />
             </button>
 
-            {/* Dots */}
             <div className="position-absolute d-flex gap-2" style={{ bottom: '16px', left: '50%', transform: 'translateX(-50%)', zIndex: 10 }}>
               {slides.map((_, i) => (
                 <button
@@ -178,7 +176,6 @@ export default function Hero() {
         </div>
       </Container>
 
-      {/* Explore All Categories */}
       <Container>
         <div className="pb-4">
           <h2 className="fs-3 fw-bold text-dark font-heading mb-4">Explore all categories</h2>
@@ -208,7 +205,6 @@ export default function Hero() {
         </div>
       </Container>
 
-      {/* Trust Bar */}
       <div className="border-top border-light">
         <Container>
           <div className="py-3 d-flex align-items-center justify-content-center gap-4 flex-wrap">
