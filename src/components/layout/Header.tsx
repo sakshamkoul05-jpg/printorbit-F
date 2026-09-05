@@ -181,12 +181,14 @@ export default function Header() {
           </div>
         </div>
 
-        {/* ---- department nav -------------------------------------------- */}
+        {/* ---- department nav + mega menu --------------------------------- */}
+        {/* Both live inside navRef so a mousedown on a mega-menu link is not
+            treated as an outside click, which would unmount the link before
+            its click event could navigate. */}
+        <div ref={navRef} onMouseLeave={leaveNav}>
         <div
-          ref={navRef}
           className="d-none d-xl-block border-top"
           style={{ borderColor: '#EFEDE8', backgroundColor: '#FFFFFC' }}
-          onMouseLeave={leaveNav}
         >
           <div className="container">
             <nav className="d-flex align-items-center justify-content-between">
@@ -254,7 +256,6 @@ export default function Header() {
             className="d-none d-xl-block border-top shadow-lg"
             style={{ borderColor: '#EFEDE8', backgroundColor: '#fff' }}
             onMouseEnter={() => enterTab(active.slug)}
-            onMouseLeave={leaveNav}
           >
             <div className="container py-4">
               <div className="row g-4">
@@ -308,6 +309,7 @@ export default function Header() {
             </div>
           </div>
         )}
+        </div>
       </header>
 
       {/* ---- mobile drawer ------------------------------------------------ */}
