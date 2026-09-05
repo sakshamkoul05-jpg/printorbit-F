@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Search, Filter, Grid3X3, Palette, Sparkles } from 'lucide-react';
 import Container from '@/components/ui/Container';
-import { MEGA_MENU_DATA } from '@/lib/constants';
+
 
 const ALL_TEMPLATES = [
   { id: '1', name: 'Modern Minimalist Business Card', product: 'Business Cards', category: 'Business', colors: ['#0B57D0', '#FFFFFF', '#1F2937'], isPremium: false, downloads: 1240 },

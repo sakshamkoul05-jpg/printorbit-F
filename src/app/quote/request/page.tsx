@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Trash2, Plus, Upload, ArrowRight } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { PRODUCT_CATEGORIES } from '@/lib/constants';
+import { ALL_CATEGORIES } from '@/lib/catalog';
 
 interface QuoteItem {
   id: string;
@@ -59,7 +59,7 @@ export default function QuoteRequestPage() {
                 <label className="form-label text-xs fw-medium text-slate-500">Product *</label>
                 <select value={item.product} onChange={(e) => updateItem(item.id, 'product', e.target.value)} className="form-select text-sm">
                   <option value="">Select product</option>
-                  {PRODUCT_CATEGORIES.map((cat) => (
+                  {ALL_CATEGORIES.map((cat) => (
                     <option key={cat.slug} value={cat.slug}>{cat.name}</option>
                   ))}
                 </select>

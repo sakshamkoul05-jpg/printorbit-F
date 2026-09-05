@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { MapPin, Award, Shield, Users, Clock, Building2, CheckCircle } from 'lucide-react';
+import Image from 'next/image';
 import { OFFICES } from '@/lib/constants';
+import { img, pick } from '@/lib/images';
 
 export const metadata: Metadata = {
   title: 'About Us | PrintOrbit',
@@ -29,8 +31,16 @@ export default function AboutPage() {
   return (
     <main className="min-vh-100">
       {/* Hero */}
-      <section className="bg-dark py-16">
-        <div className="max-w-6xl mx-auto px-4 text-center">
+      <section className="position-relative bg-dark py-16">
+        <Image
+          src={img(pick('printing', 0), 1600, 640)}
+          alt="Offset printing press running a production job"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover', opacity: 0.28 }}
+        />
+        <div className="position-relative max-w-6xl mx-auto px-4 text-center">
           <p className="text-primary fw-semibold small text-uppercase mb-3" style={{ letterSpacing: '0.1em' }}>About Us</p>
           <h1 className="display-5 fw-bold text-white mb-4">
             India&apos;s Trusted Printing Partner Since 2007

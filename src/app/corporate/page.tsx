@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import {
   Building, CheckCircle, ArrowRight, Shield, Clock, Truck, Headphones,
@@ -10,6 +11,7 @@ import {
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import { formatPrice } from '@/lib/utils';
+import { img, pick } from '@/lib/images';
 
 const PLANS = [
   {
@@ -55,9 +57,17 @@ export default function CorporatePage() {
   return (
     <div className="min-vh-100 bg-white">
       {/* Hero */}
-      <div className="bg-gradient-to-br from-dark via-dark-light to-primary/90 text-white">
+      <div className="position-relative bg-gradient-to-br from-dark via-dark-light to-primary/90 text-white" style={{ backgroundColor: '#0F0F0F' }}>
+        <Image
+          src={img(pick('joining-kits', 0), 1600, 640)}
+          alt="Branded corporate joining kit laid out on a desk"
+          fill
+          priority
+          sizes="100vw"
+          style={{ objectFit: 'cover', opacity: 0.25 }}
+        />
         <Container>
-          <div className="py-16 py-md-20" style={{ maxWidth: '48rem' }}>
+          <div className="position-relative py-16 py-md-20" style={{ maxWidth: '48rem' }}>
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
               <span className="d-inline-flex align-items-center gap-2 px-3 py-1 bg-white/10 text-white/80 text-xs fw-medium rounded-pill mb-4">
                 <Building size={12} /> Corporate Printing Solutions

@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
+import { img, pick } from '@/lib/images';
 import { Calendar, ArrowRight, Phone } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -14,7 +16,7 @@ const posts = [
     excerpt: 'Explore the wide range of customisation options available at PrintOrbit to create unique branded products for your business.',
     date: 'January 31, 2025',
     slug: 'comprehensive-guide-customisation',
-    image: '/blog/customisation-guide.jpg',
+    image: img(pick('printing', 1), 600, 380),
   },
   {
     id: 2,
@@ -22,7 +24,7 @@ const posts = [
     excerpt: 'Discover why PrintOrbit is rated as the best corporate gifting platform in India for businesses of all sizes.',
     date: 'May 27, 2025',
     slug: 'best-corporate-gifting-website',
-    image: '/blog/corporate-gifting-website.jpg',
+    image: img(pick('gift-hampers', 0), 600, 380),
   },
   {
     id: 3,
@@ -30,7 +32,7 @@ const posts = [
     excerpt: 'Learn how thoughtful corporate gifts boost employee morale, strengthen loyalty, and build a positive workplace culture.',
     date: 'May 13, 2025',
     slug: 'corporate-gifting-employees',
-    image: '/blog/employee-gifting.jpg',
+    image: img(pick('joining-kits', 0), 600, 380),
   },
   {
     id: 4,
@@ -38,7 +40,7 @@ const posts = [
     excerpt: 'Stay ahead with our curated list of the top 10 corporate gifting trends that will make your brand stand out in 2025.',
     date: 'October 1, 2025',
     slug: 'top-10-corporate-gifts-2025',
-    image: '/blog/top-10-gifts.jpg',
+    image: img(pick('gift-hampers', 1), 600, 380),
   },
   {
     id: 5,
@@ -46,7 +48,7 @@ const posts = [
     excerpt: 'A step-by-step guide to selecting the ideal corporate gift that leaves a lasting impression on clients and partners.',
     date: 'September 25, 2025',
     slug: 'perfect-corporate-gift',
-    image: '/blog/perfect-gift.jpg',
+    image: img(pick('gift-boxes', 0), 600, 380),
   },
   {
     id: 6,
@@ -54,7 +56,7 @@ const posts = [
     excerpt: 'Make this Diwali memorable with our top corporate gift ideas that blend tradition with modern branding.',
     date: 'August 11, 2025',
     slug: 'diwali-gift-ideas',
-    image: '/blog/diwali-gifts.jpg',
+    image: img(pick('festive', 0), 600, 380),
   },
   {
     id: 7,
@@ -62,7 +64,7 @@ const posts = [
     excerpt: 'A complete guide to designing custom t-shirts that perfectly represent your brand identity and leave a mark.',
     date: 'May 5, 2025',
     slug: 'design-tshirt-brand',
-    image: '/blog/tshirt-design.jpg',
+    image: img(pick('printing', 0), 600, 380),
   },
   {
     id: 8,
@@ -70,7 +72,7 @@ const posts = [
     excerpt: 'Understand what a corporate gifting platform offers and how it can streamline your gifting strategy for maximum impact.',
     date: 'March 14, 2025',
     slug: 'what-is-corporate-gifting-platform',
-    image: '/blog/gifting-platform.jpg',
+    image: img(pick('printing', 0), 600, 380),
   },
 ];
 
@@ -112,12 +114,16 @@ export default function BlogPage() {
                 }}
               >
                 <div
-                  className="w-100 d-flex align-items-center justify-content-center"
+                  className="position-relative w-100 img-zoom"
                   style={{ height: '12rem', background: '#F4F2EF' }}
                 >
-                  <span className="text-sm" style={{ color: '#9CA3AF' }}>
-                    Image Placeholder
-                  </span>
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    style={{ objectFit: 'cover' }}
+                  />
                 </div>
                 <div className="p-5">
                   <div className="d-flex align-items-center gap-2 mb-3">
@@ -203,7 +209,7 @@ export default function BlogPage() {
             Personalised Gifts
           </Link>
           <Link
-            href="/corporate/diwali-gifts"
+            href="/shop/gift-hampers"
             className="d-inline-flex align-items-center px-5 py-3 rounded text-sm fw-medium border"
             style={{
               background: '#FFFFFF',

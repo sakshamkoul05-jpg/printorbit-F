@@ -15,42 +15,43 @@ import {
   Quote,
   ArrowRight,
 } from 'lucide-react';
+import { img, pick } from '@/lib/images';
 
 const heroSlides = [
   {
     title: 'DIWALI GIFT HAMPERS',
     subtitle: 'Lock in your bulk orders now and save more. Curated hampers start at ₹599. No minimum required.',
     cta: 'Lock In Your Order',
-    href: '/products?category=gift-hampers',
-    image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=1400&h=640&fit=crop',
+    href: '/shop/gift-hampers',
+    image: img(pick('festive', 0), 1600, 720),
   },
   {
     title: 'CUSTOM PRINTING & CORPORATE GIFTING SOLUTIONS',
     subtitle: 'Creative, customisable, and cost-effective',
     cta: 'Explore Corporate Gifts',
-    href: '/products?category=corporate-gifts',
-    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238f24c?w=1400&h=640&fit=crop',
+    href: '/shop/kits-hampers',
+    image: img(pick('printing', 0), 1600, 720),
   },
   {
     title: 'T-SHIRTS & MORE',
     subtitle: 'Your team. Your logo. Your vibe. Tees from ₹345',
     cta: 'Build Your Brand',
-    href: '/products?category=apparel',
-    image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1400&h=640&fit=crop',
+    href: '/shop/custom-clothing',
+    image: img(pick('round-neck-t-shirts', 1), 1600, 720),
   },
   {
     title: 'SIPPERS & WATER BOTTLES',
-    subtitle: 'Sip smart, Sip personalised, custom sippers start at ₹245. No minimum required.',
+    subtitle: 'Sip smart, Sip personalised. Custom sippers start at ₹245. No minimum required.',
     cta: 'Customise Your Bottle',
-    href: '/products?category=drinkware',
-    image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=1400&h=640&fit=crop',
+    href: '/category/everyday-bottles',
+    image: img(pick('everyday-bottles', 2), 1600, 720),
   },
   {
-    title: 'DESIGN YOUR OWN',
-    subtitle: 'Use our free online design tool',
-    cta: 'Open Design Studio',
-    href: '/design-studio',
-    image: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1400&h=640&fit=crop',
+    title: 'VISITING CARDS FROM ₹179',
+    subtitle: 'High-definition printing on premium stocks, delivered in 3 days.',
+    cta: 'Order Visiting Cards',
+    href: '/category/visiting-cards',
+    image: img(pick('visiting-cards', 2), 1600, 720),
   },
 ];
 
@@ -63,54 +64,54 @@ const trustItems = [
 ];
 
 const popularCategories = [
-  { name: 'APPARELS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=300&fit=crop' },
-  { name: 'DRINKWARE', href: '/products?category=drinkware', image: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=300&fit=crop' },
-  { name: 'BAGS', href: '/products?category=bags', image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400&h=300&fit=crop' },
-  { name: 'LUNCH BOXES', href: '/products?category=drinkware', image: 'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?w=400&h=300&fit=crop' },
-  { name: 'ELECTRONIC GADGETS', href: '/products?category=gadgets', image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=300&fit=crop' },
-  { name: 'DESK ACCESSORIES', href: '/products?category=stationery', image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400&h=300&fit=crop' },
-  { name: 'AWARDS', href: '/products?category=awards', image: 'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400&h=300&fit=crop' },
-  { name: 'LAPTOP SLEEVES', href: '/products?category=gadgets', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=300&fit=crop' },
+  { name: 'APPARELS', href: '/shop/custom-clothing', image: img(pick('polo-t-shirts', 0), 480, 360) },
+  { name: 'DRINKWARE', href: '/shop/drinkware-lunchboxes', image: img(pick('insulated-bottles-flasks', 0), 480, 360) },
+  { name: 'BAGS', href: '/shop/bags', image: img(pick('laptop-bags', 0), 480, 360) },
+  { name: 'LUNCH BOXES', href: '/category/lunch-boxes', image: img(pick('lunch-boxes', 0), 480, 360) },
+  { name: 'ELECTRONIC GADGETS', href: '/shop/gadgets-accessories', image: img(pick('bluetooth-speakers', 0), 480, 360) },
+  { name: 'DESK ACCESSORIES', href: '/category/desk-accessories', image: img(pick('desk-accessories', 0), 480, 360) },
+  { name: 'AWARDS', href: '/shop/awards-trophies', image: img(pick('trophies', 0), 480, 360) },
+  { name: 'LAPTOP SLEEVES', href: '/category/laptop-sleeves', image: img(pick('laptop-sleeves', 0), 480, 360) },
 ];
 
 const apparelSubcats = [
-  { name: 'T-SHIRTS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop' },
-  { name: 'JACKETS & HOODIES', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=300&h=300&fit=crop' },
-  { name: 'FORMAL SHIRTS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=300&h=300&fit=crop' },
-  { name: 'CAPS', href: '/products?category=apparel', image: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=300&h=300&fit=crop' },
+  { name: 'T-SHIRTS', href: '/category/round-neck-t-shirts', image: img(pick('round-neck-t-shirts', 0), 400, 400) },
+  { name: 'JACKETS & HOODIES', href: '/category/jackets-hoodies', image: img(pick('jackets-hoodies', 0), 400, 400) },
+  { name: 'SPORTSWEAR', href: '/category/sports-apparel', image: img(pick('sports-apparel', 0), 400, 400) },
+  { name: 'FORMAL SHIRTS', href: '/category/shirts', image: img(pick('shirts', 0), 400, 400) },
 ];
 
 const promiseItems = [
-  { label: 'Engraving', image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=300&fit=crop' },
-  { label: 'Lamination', image: 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400&h=300&fit=crop' },
-  { label: 'Laser', image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=400&h=300&fit=crop' },
-  { label: 'Packaging', image: 'https://images.unsplash.com/photo-1604147706283-d7119b3b860c?w=400&h=300&fit=crop' },
+  { label: 'Engraving', image: img(pick('trophies', 2), 480, 360) },
+  { label: 'Lamination', image: img(pick('flyers-brochures', 1), 480, 360) },
+  { label: 'Laser', image: img(pick('printing', 1), 480, 360) },
+  { label: 'Packaging', image: img(pick('gift-boxes', 0), 480, 360) },
 ];
 
 const trendingCategories = [
-  { name: 'Office Supplies', icon: '📦' },
-  { name: 'Kits & Hampers', icon: '🎁' },
-  { name: 'Apparel', icon: '👕' },
-  { name: 'Gadgets', icon: '🔌' },
-  { name: 'Corporate Gifts', icon: '💼' },
-  { name: 'Drinkware', icon: '🥤' },
+  { name: 'Office Supplies', href: '/shop/office-stationery', icon: '📦' },
+  { name: 'Kits & Hampers', href: '/shop/kits-hampers', icon: '🎁' },
+  { name: 'Apparel', href: '/shop/custom-clothing', icon: '👕' },
+  { name: 'Gadgets', href: '/shop/gadgets-accessories', icon: '🔌' },
+  { name: 'Corporate Gifts', href: '/shop/gift-hampers', icon: '💼' },
+  { name: 'Drinkware', href: '/shop/drinkware-lunchboxes', icon: '🥤' },
 ];
 
 const blogPosts = [
   {
     title: 'A Comprehensive Guide to Paper Types & Printing Essentials',
     readTime: '10 min read',
-    image: 'https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&h=320&fit=crop',
+    image: img(pick('printing', 3), 600, 380),
   },
   {
     title: 'How to Design a T-Shirt for Your Brand',
     readTime: '17 min read',
-    image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=320&fit=crop',
+    image: img(pick('round-neck-t-shirts', 3), 600, 380),
   },
   {
     title: "PrintOrbit's Comprehensive Guide to Customisation Options",
     readTime: '10 min read',
-    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=320&fit=crop',
+    image: img(pick('gift-boxes', 1), 600, 380),
   },
 ];
 
@@ -415,7 +416,7 @@ export default function Home() {
                 {trendingCategories.map((cat) => (
                   <div key={cat.name} className="col-6">
                     <Link
-                      href={`/products?category=${cat.name.toLowerCase().replace(/ & /g, '-').replace(/ /g, '-')}`}
+                      href={cat.href}
                       className="d-flex align-items-center gap-3 bg-white text-decoration-none rounded-3 px-4 py-3"
                       style={{ border: '1px solid #E5E5E5' }}
                     >

@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "verify:images": "node scripts/verify-images.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "check:page-images": "node scripts/check-page-images.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.0",

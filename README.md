@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# PrintOrbit
 
-## Getting Started
+Online printing, branded merchandise and corporate gifting storefront, built with
+Next.js 16 (App Router), React 19, Bootstrap 5 and Zustand.
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Catalogue
 
-## Learn More
+`src/lib/catalog.ts` is the single source of truth for everything the storefront
+sells. It is organised as **department → category → product**:
 
-To learn more about Next.js, take a look at the following resources:
+- 14 departments (the nav tabs)
+- ~60 categories
+- ~390 products
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Everything downstream reads from it — the mega menu, department pages, category
+listings, product pages, search, the quote form and the footer. Adding a product
+means adding one entry to a `products` array; no other file needs to change.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Prices are modelled the way a real print quote works: each product has quantity
+tiers with progressively better unit economics, plus option groups (paper /
+lamination / corner for print, branding / placement for apparel, branding /
+packaging for merchandise) that add to the tier price.
 
-## Deploy on Vercel
+### Images
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+`src/lib/images.ts` holds a curated photo library keyed by category. Every entry
+is an Unsplash photo id chosen so the subject matches its category, and every id
+is load-checked against the public Unsplash CDN.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> Unsplash+ (paid) photos 404 on `images.unsplash.com`, so they cannot be used
+> here. Always run the verifier after adding ids.
+
+```bash
+npm run verify:images
+```
+
+### Routes
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Homepage |
+| `/shop/[department]` | Department landing — category grid + most loved |
+| `/category/[slug]` | Product listing with price / sort / size / label filters |
+| `/products/[slug]` | Product detail — configurator, tier pricing, order summary |
+| `/products` | All departments + best sellers |
+| `/search?q=` | Product search |
+| `/policies/[slug]` | Returns, privacy, terms |
+
+## Verification
+
+With the dev server running:
+
+```bash
+npm run verify:images                              # every photo id resolves
+npm run check:links http://localhost:3000          # crawl for broken internal links
+npm run check:page-images http://localhost:3000    # every image on a page resolves
+```
+
+## Local development note
+
+If the Next.js image optimiser fails with `UNABLE_TO_VERIFY_LEAF_SIGNATURE`,
+antivirus TLS interception (Avast, Kaspersky and similar) is re-signing HTTPS
+traffic and Node does not trust the interception CA. Those tools usually export
+a certificate and set `NODE_EXTRA_CA_CERTS`; make sure the dev server process
+inherits that environment variable. This only affects local development —
+hosted builds fetch Unsplash directly.
