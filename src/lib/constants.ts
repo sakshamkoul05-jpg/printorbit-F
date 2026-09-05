@@ -751,7 +751,7 @@ export interface Product {
 
 export const ALL_PRODUCTS: Product[] = [
   {
-    slug: 'standard-business-cards', name: 'Standard Business Cards', brand: 'PRINTSTOP', category: 'Business Cards', subcategory: 'Visiting Cards',
+    slug: 'standard-business-cards', name: 'Standard Business Cards', brand: 'PRINTORBIT', category: 'Business Cards', subcategory: 'Visiting Cards',
     description: 'Classic business cards printed on 300gsm cardstock.', longDescription: 'Our standard business cards are printed on 300gsm cardstock with full-color digital printing. Perfect for everyday networking and professional use. Affordable, fast turnaround, and available in matte or glossy finish. These cards feature sharp text and vibrant colors that leave a lasting impression on your clients and partners.',
     basePrice: 299, originalPrice: 450, minQty: 100, maxQty: 50000, rating: 4.6, reviewCount: 384, sku: 'BC-STD-001',
     materials: [{ name: '300gsm Cardstock', price_modifier: 0 }, { name: '350gsm Cardstock', price_modifier: 30 }],
@@ -767,7 +767,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'premium-matte-business-cards', name: 'Premium Matte Business Cards', brand: 'PRINTSTOP', category: 'Business Cards', subcategory: 'Visiting Cards',
+    slug: 'premium-matte-business-cards', name: 'Premium Matte Business Cards', brand: 'PRINTORBIT', category: 'Business Cards', subcategory: 'Visiting Cards',
     description: 'Thick 400gsm matte cards with a luxurious feel.', longDescription: 'Our premium matte business cards are printed on 400gsm cardstock with a soft-touch matte lamination. These cards make a lasting impression with their substantial weight and smooth finish. Ideal for professionals, executives, and anyone who wants to convey quality and sophistication.',
     basePrice: 499, originalPrice: 750, minQty: 100, maxQty: 10000, rating: 4.8, reviewCount: 247, sku: 'BC-PM-002',
     materials: [{ name: '350gsm', price_modifier: -50 }, { name: '400gsm', price_modifier: 0 }, { name: '450gsm', price_modifier: 50 }],
@@ -783,7 +783,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'a5-flyers', name: 'A5 Double-Sided Flyers', brand: 'PRINTSTOP', category: 'Marketing', subcategory: 'Flyers',
+    slug: 'a5-flyers', name: 'A5 Double-Sided Flyers', brand: 'PRINTORBIT', category: 'Marketing', subcategory: 'Flyers',
     description: 'Vibrant full-color A5 flyers on premium 170gsm art paper.', longDescription: 'Our A5 double-sided flyers are printed on premium 170gsm art paper with full-color digital printing. Perfect for promotions, events, and marketing campaigns. Available in matte or glossy finish.',
     basePrice: 299, originalPrice: 400, minQty: 100, maxQty: 50000, rating: 4.7, reviewCount: 412, sku: 'FL-A5-001',
     materials: [{ name: '130gsm Art', price_modifier: -30 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 60 }],
@@ -799,7 +799,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'cotton-tshirts', name: 'Custom Cotton T-Shirts', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'T-Shirts',
+    slug: 'cotton-tshirts', name: 'Custom Cotton T-Shirts', brand: 'PRINTORBIT', category: 'Apparel', subcategory: 'T-Shirts',
     description: 'Premium 100% cotton t-shirts with custom print.', longDescription: 'Get custom printed t-shirts on premium 100% cotton fabric. Available in screen print, DTG (direct-to-garment), and sublimation printing. Perfect for events, teams, businesses, and promotional giveaways.',
     basePrice: 399, originalPrice: 600, minQty: 20, maxQty: 5000, rating: 4.5, reviewCount: 312, sku: 'AP-TS-001',
     materials: [{ name: '100% Cotton', price_modifier: 0 }, { name: 'Poly-Cotton', price_modifier: -30 }, { name: 'Organic Cotton', price_modifier: 50 }],
@@ -815,7 +815,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'ceramic-mugs', name: 'Custom Ceramic Mugs', brand: 'PRINTSTOP', category: 'Gifts & Mugs', subcategory: 'Mugs',
+    slug: 'ceramic-mugs', name: 'Custom Ceramic Mugs', brand: 'PRINTORBIT', category: 'Gifts & Mugs', subcategory: 'Mugs',
     description: 'Classic ceramic mugs with custom print. Great for gifts.', longDescription: 'Our custom ceramic mugs are printed with vibrant, long-lasting colors. Available in standard 11oz and large 15oz sizes. Choose standard print or upgrade to our magic heat-reveal mug that changes color when hot liquid is poured.',
     basePrice: 299, originalPrice: 450, minQty: 10, maxQty: 5000, rating: 4.7, reviewCount: 278, sku: 'GF-MG-001',
     materials: [{ name: 'Ceramic', price_modifier: 0 }, { name: 'Glass', price_modifier: 50 }],
@@ -831,7 +831,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'tri-fold-brochures', name: 'Tri-Fold Brochures', brand: 'PRINTSTOP', category: 'Marketing', subcategory: 'Brochures',
+    slug: 'tri-fold-brochures', name: 'Tri-Fold Brochures', brand: 'PRINTORBIT', category: 'Marketing', subcategory: 'Brochures',
     description: 'Popular tri-fold format perfect for marketing and information.', longDescription: 'Our tri-fold brochures are the most popular format for marketing collateral. Printed on premium 170gsm art paper with full-color printing. The tri-fold design gives you 6 panels to showcase your business, products, and services.',
     basePrice: 599, originalPrice: 800, minQty: 50, maxQty: 10000, rating: 4.8, reviewCount: 201, sku: 'BR-TF-001',
     materials: [{ name: '130gsm Art', price_modifier: -50 }, { name: '170gsm Art', price_modifier: 0 }, { name: '250gsm Art', price_modifier: 100 }],
@@ -847,7 +847,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'die-cut-stickers', name: 'Die-Cut Vinyl Stickers', brand: 'PRINTSTOP', category: 'Labels & Stickers', subcategory: 'Stickers',
+    slug: 'die-cut-stickers', name: 'Die-Cut Vinyl Stickers', brand: 'PRINTORBIT', category: 'Labels & Stickers', subcategory: 'Stickers',
     description: 'Custom die-cut stickers in any shape. Waterproof vinyl.', longDescription: 'Create custom die-cut stickers in any shape you want. Printed on premium waterproof vinyl with strong adhesive. Perfect for product labels, branding, laptops, water bottles, and more.',
     basePrice: 199, originalPrice: 300, minQty: 50, maxQty: 10000, rating: 4.8, reviewCount: 523, sku: 'LB-DC-001',
     materials: [{ name: 'White Vinyl', price_modifier: 0 }, { name: 'Clear Vinyl', price_modifier: 30 }, { name: 'Holographic', price_modifier: 80 }],
@@ -863,7 +863,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'mailer-boxes', name: 'Custom Mailer Boxes', brand: 'PRINTSTOP', category: 'Packaging', subcategory: 'Custom Boxes',
+    slug: 'mailer-boxes', name: 'Custom Mailer Boxes', brand: 'PRINTORBIT', category: 'Packaging', subcategory: 'Custom Boxes',
     description: 'Branded corrugated mailer boxes with full-color printing.', longDescription: 'Elevate your unboxing experience with custom printed mailer boxes. Full-color printing on corrugated board with easy fold assembly. Available in kraft, white, or laminated finish.',
     basePrice: 149, originalPrice: 250, minQty: 50, maxQty: 10000, rating: 4.7, reviewCount: 89, sku: 'PK-MB-001',
     materials: [{ name: 'E-Flute', price_modifier: 0 }, { name: 'B-Flute', price_modifier: 30 }],
@@ -879,7 +879,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'vinyl-banners', name: 'Vinyl Banner 3x6ft', brand: 'PRINTSTOP', category: 'Signs & Displays', subcategory: 'Banners',
+    slug: 'vinyl-banners', name: 'Vinyl Banner 3x6ft', brand: 'PRINTORBIT', category: 'Signs & Displays', subcategory: 'Banners',
     description: 'Durable vinyl banner for indoor and outdoor use.', longDescription: 'Our vinyl banners are printed on premium 13oz or 18oz vinyl with eco-solvent inks. Weather-resistant and UV-protected, these banners are perfect for events, storefronts, and exhibitions. Includes hemmed edges and grommets.',
     basePrice: 599, originalPrice: 900, minQty: 1, maxQty: 100, rating: 4.6, reviewCount: 156, sku: 'SD-VB-001',
     materials: [{ name: '13oz Vinyl', price_modifier: 0 }, { name: '18oz Vinyl', price_modifier: 200 }],
@@ -895,7 +895,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'a4-letterheads', name: 'A4 Corporate Letterheads', brand: 'PRINTSTOP', category: 'Stationery', subcategory: 'Letterheads',
+    slug: 'a4-letterheads', name: 'A4 Corporate Letterheads', brand: 'PRINTORBIT', category: 'Stationery', subcategory: 'Letterheads',
     description: 'Professional A4 letterheads for businesses.', longDescription: 'Our A4 corporate letterheads are printed on premium 120gsm uncoated paper. Perfect for official correspondence, invoices, and business communication. Full-color printing with your logo and branding.',
     basePrice: 399, originalPrice: 550, minQty: 100, maxQty: 10000, rating: 4.6, reviewCount: 178, sku: 'ST-LH-001',
     materials: [{ name: '100gsm', price_modifier: -30 }, { name: '120gsm', price_modifier: 0 }, { name: '160gsm', price_modifier: 40 }],
@@ -911,7 +911,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'polo-tshirts', name: 'Custom Polo T-Shirts', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'Polo T-Shirts',
+    slug: 'polo-tshirts', name: 'Custom Polo T-Shirts', brand: 'PRINTORBIT', category: 'Apparel', subcategory: 'Polo T-Shirts',
     description: 'Premium polo shirts with custom embroidery or print.', longDescription: 'Get custom polo shirts for your team, events, or brand. Available in cotton pique, dry-fit, and premium pique fabrics. Choose screen print, DTG, or embroidery for your logo.',
     basePrice: 499, originalPrice: 750, minQty: 20, maxQty: 5000, rating: 4.6, reviewCount: 234, sku: 'AP-PT-001',
     materials: [{ name: 'Cotton Pique', price_modifier: 0 }, { name: 'Dry-Fit', price_modifier: 30 }, { name: 'Premium Pique', price_modifier: 50 }],
@@ -927,7 +927,7 @@ export const ALL_PRODUCTS: Product[] = [
     image: '',
   },
   {
-    slug: 'custom-caps', name: 'Custom Caps & Headwear', brand: 'PRINTSTOP', category: 'Apparel', subcategory: 'Caps',
+    slug: 'custom-caps', name: 'Custom Caps & Headwear', brand: 'PRINTORBIT', category: 'Apparel', subcategory: 'Caps',
     description: 'Custom embroidered caps, beanies, and visors.', longDescription: 'Brand your team with custom caps and headwear. Available in baseball caps, snapbacks, beanies, and visors. Premium embroidery and print options for your logo.',
     basePrice: 199, originalPrice: 350, minQty: 20, maxQty: 5000, rating: 4.5, reviewCount: 178, sku: 'AP-CP-001',
     materials: [{ name: 'Cotton', price_modifier: 0 }, { name: 'Polyester', price_modifier: -10 }, { name: 'Wool Blend', price_modifier: 30 }],

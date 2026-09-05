@@ -194,7 +194,7 @@ export default function Header() {
                 {activeTab.categories.map((cat) => (
                   <div key={cat.slug}>
                     <Link
-                      href={`/products/${cat.slug}`}
+                      href={`/products?category=${cat.slug}`}
                       className="d-block mb-2 text-decoration-none"
                       style={{ fontSize: '0.875rem', fontWeight: 700, color: '#212529' }}
                     >
@@ -204,7 +204,7 @@ export default function Header() {
                       {cat.items.map((item) => (
                         <li key={item.slug} className="mb-1">
                           <Link
-                            href={`/products/${item.slug}`}
+                            href={`/products?category=${item.slug}`}
                             className="text-decoration-none d-block"
                             style={{ fontSize: '0.875rem', color: '#6c757d' }}
                           >
@@ -265,7 +265,7 @@ export default function Header() {
                     {tab.categories.map((cat) => (
                       <div key={cat.slug}>
                         <Link
-                          href={`/products/${cat.slug}`}
+                          href={`/products?category=${cat.slug}`}
                           className="d-block px-3 py-1 text-decoration-none"
                           style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6c757d', textTransform: 'uppercase', letterSpacing: '0.05em' }}
                           onClick={() => setMobileOpen(false)}
@@ -276,7 +276,7 @@ export default function Header() {
                           {cat.items.map((item) => (
                             <Link
                               key={item.slug}
-                              href={`/products/${item.slug}`}
+                              href={`/products?category=${item.slug}`}
                               className="d-block px-3 py-1 text-decoration-none"
                               style={{ fontSize: '0.875rem', color: '#6c757d' }}
                               onClick={() => setMobileOpen(false)}

@@ -22,7 +22,7 @@ export default function CartPage() {
   const total = subtotal + shipping - discount;
 
   const handleApplyCoupon = () => {
-    if (couponCode.toUpperCase() === 'PRINTSTOP10') {
+    if (couponCode.toUpperCase() === 'PRINTORBIT10') {
       setCouponApplied(true);
       setCouponDiscount(Math.round(subtotal * 0.1));
     }
@@ -245,10 +245,10 @@ export default function CartPage() {
 
               {/* Important Points */}
               <div className="mb-4" style={{ borderTop: '1px solid #E5E5E5', paddingTop: '16px' }}>
-                <button className="d-flex align-items-center gap-2 text-sm fw-semibold w-100 border-0 bg-transparent text-start" style={{ color: '#0F0F0F' }}>
-                  <Info size={16} style={{ color: '#6B7280' }} />
+                <h3 className="text-sm fw-semibold" style={{ color: '#0F0F0F' }}>
+                  <Info size={16} className="d-inline me-2" style={{ color: '#6B7280' }} />
                   Important Points
-                </button>
+                </h3>
                 <ul className="mt-2 list-unstyled d-flex flex-column gap-1">
                   <li className="text-xs d-flex align-items-start gap-2" style={{ color: '#6B7280' }}>
                     <span className="mt-1">•</span>

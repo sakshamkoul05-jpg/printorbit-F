@@ -46,7 +46,7 @@ export default function RegisterPage() {
               <span className="text-white fw-bold fs-5">P</span>
             </div>
           </Link>
-          <h1 className="fs-3 fw-bold" style={{ color: '#0F0F0F' }}>Sign Up for PrintStop</h1>
+          <h1 className="fs-3 fw-bold" style={{ color: '#0F0F0F' }}>Sign Up for PrintOrbit</h1>
         </div>
 
         {/* Card */}
@@ -115,9 +115,9 @@ export default function RegisterPage() {
               />
               <span className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
                 I agree to the{' '}
-                <Link href="/terms" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Terms of Service</Link>
+                <Link href="/about" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Terms of Service</Link>
                 {' '}and{' '}
-                <Link href="/privacy" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
+                <Link href="/about" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
               </span>
             </label>
 

@@ -108,7 +108,7 @@ const blogPosts = [
     image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500&h=320&fit=crop',
   },
   {
-    title: "PrintStop's Comprehensive Guide to Customisation Options",
+    title: "PrintOrbit's Comprehensive Guide to Customisation Options",
     readTime: '10 min read',
     image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=320&fit=crop',
   },
@@ -116,7 +116,7 @@ const blogPosts = [
 
 const testimonials = [
   {
-    quote: 'PrintStop delivered exceptional quality corporate gifts for our annual event. The team was incredibly helpful and delivered on time. Highly recommended!',
+    quote: 'PrintOrbit delivered exceptional quality corporate gifts for our annual event. The team was incredibly helpful and delivered on time. Highly recommended!',
     name: 'Priya Sharma',
     company: 'Marketing Head, TechVista',
   },
@@ -360,12 +360,12 @@ export default function Home() {
         </div>
       </div>
 
-      {/* PRINTSTOP'S PROMISE */}
+      {/* PRINTORBIT'S PROMISE */}
       <div className="bg-white">
         <div className="container py-5">
           <div className="text-center mb-4">
             <h2 className="fs-3 fw-bold mb-3" style={{ color: '#0F0F0F' }}>
-              PrintStop&apos;s Promise: Printing at its Best. Period.
+              The PrintOrbit Promise: Printing at its Best. Period.
             </h2>
             <p style={{ color: '#2E2E2E', maxWidth: '48rem', margin: '0 auto', lineHeight: 1.6 }}>
               We use the latest technology and highest quality materials to deliver products that exceed your expectations.
@@ -438,7 +438,7 @@ export default function Home() {
               Print Tales &amp; Pro Tips
             </h2>
             <Link href="/blog" className="d-inline-flex align-items-center gap-1 text-decoration-none fw-semibold" style={{ color: '#ED1C24', fontSize: '0.875rem' }}>
-              Read PS Blogs <ArrowRight size={16} />
+              Read Our Blogs <ArrowRight size={16} />
             </Link>
           </div>
 
@@ -534,7 +534,7 @@ export default function Home() {
                 Corporate Gifting, Printing &amp; Merchandise for Businesses
               </h2>
               <p style={{ fontSize: '0.875rem', color: '#2E2E2E', lineHeight: 1.6 }}>
-                PrintStop is India&apos;s leading online platform for corporate gifting, custom printing, and branded merchandise. We offer a wide range of products including customised apparel, drinkware, bags, electronic gadgets, desk accessories, and more. Whether you need bulk orders for employee onboarding, festival gifting, or promotional events, PrintStop has you covered with premium quality products at competitive prices.
+                PrintOrbit is India&apos;s leading online platform for corporate gifting, custom printing, and branded merchandise. We offer a wide range of products including customised apparel, drinkware, bags, electronic gadgets, desk accessories, and more. Whether you need bulk orders for employee onboarding, festival gifting, or promotional events, PrintOrbit has you covered with premium quality products at competitive prices.
               </p>
             </div>
             <div className="mb-4">
@@ -542,7 +542,7 @@ export default function Home() {
                 Why Buy Corporate Diwali Gifts from PrintOrbit?
               </h2>
               <p style={{ fontSize: '0.875rem', color: '#2E2E2E', lineHeight: 1.6 }}>
-                Diwali is the perfect occasion to strengthen relationships with employees, clients, and business partners through thoughtful gifting. PrintStop offers a curated collection of Diwali gift hampers that combine traditional warmth with modern branding. From premium chocolate boxes to customised drinkware sets, our hampers start at just ₹599 with no minimum order required.
+                Diwali is the perfect occasion to strengthen relationships with employees, clients, and business partners through thoughtful gifting. PrintOrbit offers a curated collection of Diwali gift hampers that combine traditional warmth with modern branding. From premium chocolate boxes to customised drinkware sets, our hampers start at just ₹599 with no minimum order required.
               </p>
             </div>
             <div>
@@ -550,7 +550,7 @@ export default function Home() {
                 Bulk Printing and Merchandise Delivery Across Multiple Locations in India
               </h2>
               <p style={{ fontSize: '0.875rem', color: '#2E2E2E', lineHeight: 1.6 }}>
-                PrintStop provides seamless bulk printing and merchandise delivery services across multiple locations in India. Whether your team is spread across Mumbai, Delhi, Bangalore, Chennai, Hyderabad, or any other city, we ensure consistent quality and timely delivery to all your offices.
+                PrintOrbit provides seamless bulk printing and merchandise delivery services across multiple locations in India. Whether your team is spread across Mumbai, Delhi, Bangalore, Chennai, Hyderabad, or any other city, we ensure consistent quality and timely delivery to all your offices.
               </p>
             </div>
           </div>

@@ -15,7 +15,7 @@ const Twitter = ({ className = "w-5 h-5" }: { className?: string }) => <svg view
 const Instagram = ({ className = "w-5 h-5" }: { className?: string }) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>;
 const Linkedin = ({ className = "w-5 h-5" }: { className?: string }) => <svg viewBox="0 0 24 24" fill="currentColor" className={className}><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>;
 import { getProductBySlug, getAllProducts, type Product } from '@/lib/constants';
-import { useCart } from '@/contexts/CartContext';
+import { useCartStore } from '@/store/cart';
 
 const categoryImageMap: Record<string, string> = {
   'Business Cards': 'https://images.unsplash.com/photo-1562408590-e32931084e23?w=600&h=600&fit=crop',
@@ -57,7 +57,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
   const [selectedLamination, setSelectedLamination] = useState('');
   const [selectedCorner, setSelectedCorner] = useState('');
 
-  const { addToCart, items } = useCart();
+  const addToCart = useCartStore((s) => s.addItem);
+  const items = useCartStore((s) => s.items);
 
   useEffect(() => {
     params.then(p => {
@@ -211,9 +212,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               </div>
 
               {/* Get best price */}
-              <button className="text-xs fw-semibold text-decoration-underline mb-3 border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
+              <Link href="/contact" className="text-xs fw-semibold text-decoration-underline mb-3 d-inline-block text-decoration-none" style={{ color: '#ED1C24' }}>
                 Get best price for bulk orders
-              </button>
+              </Link>
 
               {/* Rating */}
               <div className="d-flex align-items-center gap-2 mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
@@ -386,12 +387,13 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 >
                   Select Options
                 </button>
-                <button
-                  className="w-100 py-3 rounded-pill fw-semibold text-sm border-0"
+                <Link
+                  href="/sample-kit"
+                  className="w-100 py-3 rounded-pill fw-semibold text-sm text-center text-decoration-none"
                   style={{ border: '2px solid #ED1C24', color: '#ED1C24', backgroundColor: '#fff' }}
                 >
                   Request Sample
-                </button>
+                </Link>
                 <Link
                   href={`/design-studio?product=${slug}`}
                   className="w-100 py-3 rounded-pill fw-semibold text-white text-sm d-none d-md-flex align-items-center justify-content-center gap-2 text-decoration-none"
@@ -399,13 +401,14 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
                 >
                   Personalise
                 </Link>
-                <button
-                  className="w-100 py-3 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2 border bg-transparent"
-                  style={{ borderColor: '#ddd', color: '#0F0F0F' }}
+                <Link
+                  href="/design-studio"
+                  className="w-100 py-3 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2 text-decoration-none"
+                  style={{ borderColor: '#ddd', color: '#0F0F0F', backgroundColor: '#fff', border: '1px solid #ddd' }}
                 >
                   <Upload size={16} />
                   Upload Design
-                </button>
+                </Link>
                 <button
                   onClick={handleAddToCart}
                   className="w-100 py-3 rounded-pill fw-semibold text-sm d-flex align-items-center justify-content-center gap-2"
@@ -420,13 +423,17 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
             {/* Sticky sidebar below configurator */}
             <div className="bg-white rounded-3 mt-4 p-6 d-none d-lg-block" style={{ position: 'sticky', top: '20px' }}>
               {/* HOW TO ORDER */}
-              <button className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0" style={{ backgroundColor: '#ED1C24' }}>
+              <button
+                onClick={() => setActiveTab('bulk')}
+                className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0"
+                style={{ backgroundColor: '#ED1C24' }}
+              >
                 HOW TO ORDER
               </button>
 
-              {/* PRINTSTOP ADVANTAGE */}
+              {/* PRINTORBIT ADVANTAGE */}
               <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
+                <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTORBIT ADVANTAGE</h3>
                 <div className="d-flex flex-column gap-3">
                   <div className="d-flex align-items-start gap-3">
                     <Shield size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
@@ -454,7 +461,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
 
               {/* CANCELLATION & REFUND */}
               <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-                <button className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
+                <button
+                  onClick={() => setActiveTab('overview')}
+                  className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0"
+                  style={{ color: '#ED1C24' }}
+                >
                   CANCELLATION & REFUND
                 </button>
               </div>
@@ -660,11 +671,15 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
         {/* Mobile sidebar elements */}
         <div className="d-lg-none mt-4">
           <div className="bg-white rounded-3 p-6">
-            <button className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0" style={{ backgroundColor: '#ED1C24' }}>
+            <button
+              onClick={() => setActiveTab('bulk')}
+              className="w-100 py-3 rounded-pill fw-semibold text-sm text-white mb-4 border-0"
+              style={{ backgroundColor: '#ED1C24' }}
+            >
               HOW TO ORDER
             </button>
             <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-              <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTSTOP ADVANTAGE</h3>
+              <h3 className="text-sm fw-bold mb-3" style={{ color: '#0F0F0F' }}>PRINTORBIT ADVANTAGE</h3>
               <div className="d-flex flex-column gap-3">
                 <div className="d-flex align-items-start gap-3">
                   <Shield size={20} className="mt-1 flex-shrink-0" style={{ color: '#ED1C24' }} />
@@ -683,7 +698,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ slug: 
               </div>
             </div>
             <div className="mb-4 pb-4" style={{ borderBottom: '1px solid #eee' }}>
-              <button className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0" style={{ color: '#ED1C24' }}>
+              <button
+                onClick={() => setActiveTab('overview')}
+                className="text-xs fw-semibold text-decoration-underline border-0 bg-transparent p-0"
+                style={{ color: '#ED1C24' }}
+              >
                 CANCELLATION & REFUND
               </button>
             </div>

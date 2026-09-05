@@ -4,19 +4,19 @@ import { Star, Phone, Trophy } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Testimonials | PrintOrbit',
-  description: 'Looking for quick and reliable printing services? Read what our happy customers say about PrintStop.',
+  description: 'Looking for quick and reliable printing services? Read what our happy customers say about PrintOrbit.',
 };
 
 const featuredTestimonials = [
   {
     id: 1,
-    quote: 'In an age of instant service and customisation, PrintStop stands out with its commitment to quality and reliability. Their ability to deliver bespoke solutions at scale has made them our go-to partner for all corporate gifting needs.',
+    quote: 'In an age of instant service and customisation, PrintOrbit stands out with its commitment to quality and reliability. Their ability to deliver bespoke solutions at scale has made them our go-to partner for all corporate gifting needs.',
     author: 'Priya Pandey',
     designation: 'Motilal Oswal',
   },
   {
     id: 2,
-    quote: 'PrintStop helped with a crucial and last-minute request with remarkable speed and precision. Their professionalism and attention to detail truly impressed our entire team.',
+    quote: 'PrintOrbit helped with a crucial and last-minute request with remarkable speed and precision. Their professionalism and attention to detail truly impressed our entire team.',
     author: 'Arun K.',
     designation: 'Accenture',
   },
@@ -76,7 +76,7 @@ export default function TestimonialsPage() {
 
         <div className="mt-8">
           <a
-            href="https://www.google.com/search?q=printstop+reviews"
+            href="https://www.google.com/search?q=printorbit+reviews"
             target="_blank"
             rel="noopener noreferrer"
             className="d-inline-flex align-items-center px-6 py-3 rounded text-white fw-semibold text-sm"

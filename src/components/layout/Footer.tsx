@@ -9,23 +9,23 @@ const Facebook = ({ className = "" }: { className?: string }) => <svg viewBox="0
 import { OFFICES } from '@/lib/constants';
 
 const HELPFUL_LINKS = [
-  { label: 'Help Centre', href: '/help' },
+  { label: 'Help Centre', href: '/faq' },
   { label: 'FAQs', href: '/faq' },
-  { label: 'Return & Refund Policy', href: '/refund-policy' },
-  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'Return & Refund Policy', href: '/faq' },
+  { label: 'Privacy Policy', href: '/about' },
 ];
 
 const SERVICES = [
   { label: 'Design Studio', href: '/design-studio' },
   { label: 'Templates', href: '/templates' },
-  { label: 'Corporate Gifts', href: '/corporate-gifts' },
+  { label: 'Corporate Gifts', href: '/products?category=corporate-gifts' },
 ];
 
 const COMPANY_INFO = [
   { label: 'About Us', href: '/about' },
   { label: 'Blog', href: '/blog' },
   { label: 'Contact Us', href: '/contact' },
-  { label: 'Careers', href: '/careers' },
+  { label: 'Careers', href: '/contact' },
 ];
 
 const SOCIAL_LINKS = [
@@ -156,13 +156,13 @@ export default function Footer() {
         <div className="container py-4">
           <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3">
             <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
-              &copy; 2024 PrintOrbit. All rights reserved.
+              &copy; 2025 PrintOrbit. All rights reserved.
             </span>
             <div className="d-flex align-items-center gap-4">
-              <Link href="/privacy-policy" className="text-decoration-none" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
+              <Link href="/about" className="text-decoration-none" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-decoration-none" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
+              <Link href="/about" className="text-decoration-none" style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.3)' }}>
                 Terms of Service
               </Link>
             </div>

@@ -130,9 +130,9 @@ export default function ContactPage() {
                     <Phone size={16} className="text-primary flex-shrink-0" />
                     +91 98765 43210
                   </a>
-                  <a href="mailto:info@printstop.in" className="d-flex align-items-center gap-3 text-sm text-text-secondary hover:text-primary text-decoration-none">
+                  <a href="mailto:info@printorbit.in" className="d-flex align-items-center gap-3 text-sm text-text-secondary hover:text-primary text-decoration-none">
                     <Mail size={16} className="text-primary flex-shrink-0" />
-                    info@printstop.in
+                    info@printorbit.in
                   </a>
                   <div className="d-flex align-items-center gap-3 text-sm text-text-secondary">
                     <Clock size={16} className="text-primary flex-shrink-0" />

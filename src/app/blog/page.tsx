@@ -10,16 +10,16 @@ export const metadata: Metadata = {
 const posts = [
   {
     id: 1,
-    title: "PrintStop's Comprehensive Guide to Customisation Options",
-    excerpt: 'Explore the wide range of customisation options available at PrintStop to create unique branded products for your business.',
+    title: "PrintOrbit's Comprehensive Guide to Customisation Options",
+    excerpt: 'Explore the wide range of customisation options available at PrintOrbit to create unique branded products for your business.',
     date: 'January 31, 2025',
     slug: 'comprehensive-guide-customisation',
     image: '/blog/customisation-guide.jpg',
   },
   {
     id: 2,
-    title: 'PrintStop: The Best Corporate Gifting Website in India',
-    excerpt: 'Discover why PrintStop is rated as the best corporate gifting platform in India for businesses of all sizes.',
+    title: 'PrintOrbit: The Best Corporate Gifting Website in India',
+    excerpt: 'Discover why PrintOrbit is rated as the best corporate gifting platform in India for businesses of all sizes.',
     date: 'May 27, 2025',
     slug: 'best-corporate-gifting-website',
     image: '/blog/corporate-gifting-website.jpg',
@@ -226,24 +226,24 @@ export default function BlogPage() {
             Corporate gifting has evolved from a simple courtesy into a strategic tool for building and
             maintaining meaningful business relationships. In today&apos;s competitive landscape, companies
             that invest in thoughtful, customised gifts see measurable improvements in employee engagement,
-            client retention, and brand loyalty. At PrintStop, we understand that every gift tells a story
+            client retention, and brand loyalty. At PrintOrbit, we understand that every gift tells a story
             about your brand, and we are committed to helping you make that story count.
           </p>
           <p className="text-sm leading-relaxed mb-4" style={{ color: '#505050' }}>
             Whether you are looking to appreciate your employees, strengthen relationships with clients, or
             create a memorable brand experience at events, our extensive range of corporate gifts covers every
             occasion. From premium desk accessories and tech gadgets to personalised apparel and gourmet
-            hampers, PrintStop offers thousands of products that can be customised with your logo, brand
+            hampers, PrintOrbit offers thousands of products that can be customised with your logo, brand
             colours, and messaging. Our state-of-the-art printing and engraving technology ensures that every
             product reflects the quality and professionalism your brand stands for.
           </p>
           <p className="text-sm leading-relaxed" style={{ color: '#505050' }}>
-            What sets PrintStop apart as the best corporate gifting platform in India is our end-to-end
+            What sets PrintOrbit apart as the best corporate gifting platform in India is our end-to-end
             service approach. We handle everything from design consultation and product sampling to bulk
             production and timely delivery across the country. Our dedicated account managers work closely
             with you to understand your gifting objectives, recommend the best products within your budget,
             and ensure a seamless ordering experience from start to finish. With over 1000 satisfied corporate
-            clients and a 4.8-star rating on Google, PrintStop has earned the trust of leading companies
+            clients and a 4.8-star rating on Google, PrintOrbit has earned the trust of leading companies
             across industries including IT, finance, manufacturing, and healthcare.
           </p>
         </div>

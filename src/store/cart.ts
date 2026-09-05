@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { CartItem } from '@/types';
 
 interface CartState {
@@ -11,63 +12,68 @@ interface CartState {
   getItemCount: () => number;
 }
 
-export const useCartStore = create<CartState>((set, get) => ({
-  items: [],
+export const useCartStore = create<CartState>()(
+  persist(
+    (set, get) => ({
+      items: [],
 
-  addItem: (item) => {
-    set((state) => {
-      const existing = state.items.find(
-        (i) =>
-          i.product_id === item.product_id &&
-          i.material === item.material &&
-          i.size === item.size &&
-          i.finish === item.finish
-      );
-      if (existing) {
-        return {
-          items: state.items.map((i) =>
-            i === existing ? { ...i, quantity: i.quantity + item.quantity } : i
+      addItem: (item) => {
+        set((state) => {
+          const existing = state.items.find(
+            (i) =>
+              i.product_id === item.product_id &&
+              i.material === item.material &&
+              i.size === item.size &&
+              i.finish === item.finish
+          );
+          if (existing) {
+            return {
+              items: state.items.map((i) =>
+                i === existing ? { ...i, quantity: i.quantity + item.quantity } : i
+              ),
+            };
+          }
+          return { items: [...state.items, item] };
+        });
+      },
+
+      removeItem: (productId, material, size, finish) => {
+        set((state) => ({
+          items: state.items.filter(
+            (i) =>
+              !(
+                i.product_id === productId &&
+                i.material === material &&
+                i.size === size &&
+                i.finish === finish
+              )
           ),
-        };
-      }
-      return { items: [...state.items, item] };
-    });
-  },
+        }));
+      },
 
-  removeItem: (productId, material, size, finish) => {
-    set((state) => ({
-      items: state.items.filter(
-        (i) =>
-          !(
+      updateQuantity: (productId, material, size, finish, quantity) => {
+        if (quantity <= 0) {
+          get().removeItem(productId, material, size, finish);
+          return;
+        }
+        set((state) => ({
+          items: state.items.map((i) =>
             i.product_id === productId &&
             i.material === material &&
             i.size === size &&
             i.finish === finish
-          )
-      ),
-    }));
-  },
+              ? { ...i, quantity }
+              : i
+          ),
+        }));
+      },
 
-  updateQuantity: (productId, material, size, finish, quantity) => {
-    if (quantity <= 0) {
-      get().removeItem(productId, material, size, finish);
-      return;
-    }
-    set((state) => ({
-      items: state.items.map((i) =>
-        i.product_id === productId &&
-        i.material === material &&
-        i.size === size &&
-        i.finish === finish
-          ? { ...i, quantity }
-          : i
-      ),
-    }));
-  },
+      clearCart: () => set({ items: [] }),
 
-  clearCart: () => set({ items: [] }),
+      getTotal: () => get().items.reduce((sum, i) => sum + i.unit_price * i.quantity, 0),
 
-  getTotal: () => get().items.reduce((sum, i) => sum + i.unit_price * i.quantity, 0),
-
-  getItemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
-}));
+      getItemCount: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+    }),
+    { name: 'printorbit-cart' }
+  )
+);

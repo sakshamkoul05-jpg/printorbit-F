@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   ChevronDown, ChevronRight, Share2, Heart, Star, Truck, ShoppingBag, Palette, Tag,
@@ -202,6 +203,8 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
   const [expandedSidebar, setExpandedSidebar] = useState(true);
   const [hoveredProduct, setHoveredProduct] = useState<string | null>(null);
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams.get('q') || '';
 
   useEffect(() => {
     setActiveCategory(initialCategory);
@@ -213,6 +216,10 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
       if (slug !== activeCategory) return false;
     }
     return true;
+  }).filter((p) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return p.name.toLowerCase().includes(q) || (p.description ?? '').toLowerCase().includes(q);
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -405,7 +412,7 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
                         {/* Product Info */}
                         <div className="p-3">
                           <p className="fw-semibold text-uppercase mb-1" style={{ fontSize: '0.65rem', color: '#9CA3AF', letterSpacing: '0.05em' }}>
-                            PrintStop
+                            PrintOrbit
                           </p>
                           <h3 className="text-sm fw-semibold leading-snug mb-2 text-truncate" style={{ color: '#0F0F0F', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                             {product.name}
@@ -518,7 +525,7 @@ function ProductsPageClient({ initialCategory }: { initialCategory: string }) {
               <div className="row g-3">
                 {ARTICLES.map((article, i) => (
                   <div key={i} className="col-12 col-md-4">
-                    <Link href="#" className="group text-decoration-none">
+                    <Link href="/blog" className="group text-decoration-none">
                       <div className="rounded-3 mb-3 d-flex align-items-center justify-content-center" style={{ aspectRatio: '16/9', background: 'linear-gradient(to bottom right, #f3f4f6, #e5e7eb)' }}>
                         <FileText size={32} style={{ color: '#d1d5db' }} />
                       </div>

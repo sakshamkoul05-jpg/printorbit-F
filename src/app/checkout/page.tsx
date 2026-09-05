@@ -148,9 +148,9 @@ export default function CheckoutPage() {
                   />
                   <span className="text-xs leading-relaxed" style={{ color: '#6B7280' }}>
                     I agree to the{' '}
-                    <Link href="/terms" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Terms & Conditions</Link>
+                    <Link href="/about" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Terms & Conditions</Link>
                     {' '}and{' '}
-                    <Link href="/privacy" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
+                    <Link href="/about" className="text-decoration-underline" style={{ color: '#ED1C24' }}>Privacy Policy</Link>
                   </span>
                 </label>
               </div>

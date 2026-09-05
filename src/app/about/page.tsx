@@ -3,8 +3,8 @@ import { MapPin, Award, Shield, Users, Clock, Building2, CheckCircle } from 'luc
 import { OFFICES } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'About Us | PrintStop',
-  description: 'Learn about PrintStop - India\'s trusted printing partner for 19 years, serving 5000+ clients with ISO-certified quality.',
+  title: 'About Us | PrintOrbit',
+  description: 'Learn about PrintOrbit - India\'s trusted printing partner for 19 years, serving 5000+ clients with ISO-certified quality.',
 };
 
 const stats = [
@@ -36,7 +36,7 @@ export default function AboutPage() {
             India&apos;s Trusted Printing Partner Since 2007
           </h1>
           <p className="text-warm-300 mx-auto text-sm leading-relaxed" style={{ maxWidth: '40rem' }}>
-            PrintStop has been delivering high-quality corporate printing solutions to businesses,
+            PrintOrbit has been delivering high-quality corporate printing solutions to businesses,
             industries, and organizations across India for over 19 years.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function AboutPage() {
               <h2 className="fs-3 fw-bold text-dark mb-5">Our Story</h2>
               <div className="d-flex flex-column gap-4 text-sm text-text-secondary leading-relaxed">
                 <p>
-                  Founded in 2007, PrintStop began with a simple mission: to provide businesses with
+                  Founded in 2007, PrintOrbit began with a simple mission: to provide businesses with
                   high-quality printing services at competitive prices. What started as a small print
                   shop has grown into one of India&apos;s most trusted full-service printing solutions providers.
                 </p>
@@ -83,7 +83,7 @@ export default function AboutPage() {
             </div>
             <div className="col-12 col-lg-6">
               <div className="bg-white rounded-3 p-6 border border-warm-100">
-                <h3 className="fs-5 fw-bold text-dark mb-4">Why Choose PrintStop?</h3>
+                <h3 className="fs-5 fw-bold text-dark mb-4">Why Choose PrintOrbit?</h3>
                 <ul className="d-flex flex-column gap-3 list-unstyled">
                   {[
                     'Premium quality printing with latest technology',

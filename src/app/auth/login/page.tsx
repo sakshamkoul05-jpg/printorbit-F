@@ -56,7 +56,7 @@ export default function LoginPage() {
               <span className="text-white fw-bold fs-5">P</span>
             </div>
           </Link>
-          <h1 className="fs-3 fw-bold" style={{ color: '#0F0F0F' }}>Login to PrintStop</h1>
+          <h1 className="fs-3 fw-bold" style={{ color: '#0F0F0F' }}>Login to PrintOrbit</h1>
         </div>
 
         {/* Card */}
@@ -241,9 +241,9 @@ export default function LoginPage() {
         <div className="mt-4 text-center">
           <p className="text-xs" style={{ color: '#9CA3AF' }}>
             By continuing, you agree to our{' '}
-            <Link href="/terms" className="text-decoration-underline" style={{ color: '#6B7280' }}>Terms of Service</Link>
+            <Link href="/about" className="text-decoration-underline" style={{ color: '#6B7280' }}>Terms of Service</Link>
             {' '}and{' '}
-            <Link href="/privacy" className="text-decoration-underline" style={{ color: '#6B7280' }}>Privacy Policy</Link>
+            <Link href="/about" className="text-decoration-underline" style={{ color: '#6B7280' }}>Privacy Policy</Link>
           </p>
         </div>
       </div>
